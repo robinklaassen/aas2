@@ -91,7 +91,6 @@ Homestead.json
 #Laravel Specific files
 /vendor
 .env
-/public/.htaccess
 /storage
 storage/*.key
 /node_modules
