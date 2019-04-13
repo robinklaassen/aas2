@@ -98,4 +98,4 @@ storage/*.key
 
 #AAS2 specifics
 /public/img
-/public/declarations
+/public/uploads
