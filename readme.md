@@ -3,7 +3,7 @@
 Custom administratiesysteem voor vereniging Anderwijs, www.anderwijs.nl.  
 Gebouwd april-mei 2015 door Robin Klaassen. Gebaseerd op Laravel 5.
 
-## Draai de code
+## Draai de code lokaal
 
 - Installeer WAMP
 - Installeer Composer
@@ -13,16 +13,16 @@ Gebouwd april-mei 2015 door Robin Klaassen. Gebaseerd op Laravel 5.
 - `$ composer update` haalt de dependencies binnen van de source code
 
 
-_Protip: [Laravel IDE helper generator](https://en.wikipedia.org/wiki/Same-origin_policy) zou vermoedelijke je IDE significant kunnen verbeteren, o.a. code completion, linking van variablen in verschillende soorten bestanden._
+_Protip: [Laravel IDE helper generator](https://en.wikipedia.org/wiki/Same-origin_policy) zou vermoedelijk je IDE significant kunnen verbeteren, o.a. code completion, linking van variablen in verschillende soorten bestanden._
 
 ## Database verbinden
-- Maak een nieuwe gebruiker met eigen database aan in myPhpAdmin
+- Maak een nieuwe gebruiker met eigen database aan in PhpMyAdmin
 - Schrijf de inloggegevens in `.env` in de projectfolder
 - Vul de tabel met:  
 `$ php artisan migrate`  
-`$ php artisan seeds`
+`$ php artisan db:seed`
 
 ## Testdata updaten
 
 `$ php artisan migrate:refresh`  
-`$ php artisan seeds`
+`$ php artisan db:seed`
