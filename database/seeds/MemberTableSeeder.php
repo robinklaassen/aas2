@@ -27,15 +27,18 @@ class MemberTableSeeder extends Seeder {
 			'telefoon' => '0612345678',
 			'email' => 'r@spookjes.nl',
 			'email_anderwijs' => 'ranonkeltje@anderwijs.nl',
+			'iban' => 'NL23ASNB0983238911',
 			'soort' => 'normaal',
 			'eindexamen' => 'VWO',
 			'studie' => 'Spookjeskunde',
 			'afgestudeerd' => '1',
+			'rijbewijs' => '1',
 			'hoebij' => 'Awesomeheid',
 			'kmg' => '1',
 			'ranonkeltje' => '1',
 			'vog' => '1',
 			'ervaren_trainer' => '1',
+			'incasso' => '1',
 			'opmerkingen' => 'Ik ben het allergaafste spookje ooit! En ook nog eens heel bescheiden.',
 			'opmerkingen_admin' => 'Wauw wat is zij tof inderdaad.'
 		]);

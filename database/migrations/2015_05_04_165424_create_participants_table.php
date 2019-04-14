@@ -24,11 +24,12 @@ class CreateParticipantsTable extends Migration {
 			$table->string('postcode');
 			$table->string('plaats');
 			$table->string('telefoon_deelnemer');
-			$table->string('telefoon_ouder');
+			$table->string('telefoon_ouder_vast');
+			$table->string('telefoon_ouder_mobiel');
 			$table->string('email_deelnemer');
 			$table->string('email_ouder');
+			$table->boolean('mag_gemaild')->default(1);
 			$table->integer('inkomen');
-			//$table->date('inkomensverklaring')->default('0000-00-00');
 			$table->date('inkomensverklaring')->nullable();
 			$table->string('school');
 			$table->enum('niveau', ['VMBO', 'HAVO', 'VWO']);

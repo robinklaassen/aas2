@@ -17,6 +17,9 @@ class CreateEventMemberTable extends Migration {
 			$table->integer('event_id')->unsigned();
 			$table->integer('member_id')->unsigned();
 			$table->timestamps();
+			$table->boolean('wissel')->default(0);
+			$table->date('wissel_datum_start')->nullable();
+			$table->date('wissel_datum_eind')->nullable();
 			
 			$table->foreign('event_id')
 					->references('id')

@@ -13,16 +13,13 @@ Gebouwd april-mei 2015 door Robin Klaassen. Gebaseerd op Laravel 5.
 - `$ composer update` haalt de dependencies binnen van de source code
 
 
-_Protip: [Laravel IDE helper generator](https://en.wikipedia.org/wiki/Same-origin_policy) zou vermoedelijk je IDE significant kunnen verbeteren, o.a. code completion, linking van variablen in verschillende soorten bestanden._
+_Protip: [Laravel IDE helper generator](https://github.com/barryvdh/laravel-ide-helper) zou vermoedelijk je IDE significant kunnen verbeteren, o.a. code completion, linking van variablen in verschillende soorten bestanden._
 
 ## Database verbinden
 - Maak een nieuwe gebruiker met eigen database aan in PhpMyAdmin
 - Schrijf de inloggegevens in `.env` in de projectfolder
-- Vul de tabel met:  
-`$ php artisan migrate`  
-`$ php artisan db:seed`
+- Vul de tabel met: `$ php artisan migrate --seed`  
 
 ## Testdata updaten
 
-`$ php artisan migrate:refresh`  
-`$ php artisan db:seed`
+`$ php artisan migrate:refresh --seed`

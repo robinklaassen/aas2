@@ -26,15 +26,18 @@ class CreateMembersTable extends Migration {
 			$table->string('telefoon');
 			$table->string('email');
 			$table->string('email_anderwijs');
+			$table->string('iban')->nullable();
 			$table->enum('soort', ['normaal','aspirant','info','oud'])->default('aspirant');
 			$table->enum('eindexamen', ['VMBO', 'HAVO', 'VWO']);
 			$table->string('studie');
 			$table->boolean('afgestudeerd');
+			$table->boolean('rijbewijs')->default(0);
 			$table->string('hoebij');
 			$table->boolean('kmg')->default(0);
 			$table->boolean('ranonkeltje')->default(1);
 			$table->boolean('vog')->default(0);
 			$table->boolean('ervaren_trainer')->default(0);
+			$table->boolean('incasso')->default(0);
 			$table->date('datum_af')->nullable();
 			$table->text('opmerkingen')->nullable();
 			$table->text('opmerkingen_admin')->nullable();

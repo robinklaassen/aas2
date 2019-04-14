@@ -21,9 +21,14 @@ class EventTableSeeder extends Seeder {
 			'type' => 'kamp',
 			'datum_voordag' => '2015-05-01',
 			'datum_start' => '2015-05-03',
+			'tijd_start' => '13:00:00',
 			'datum_eind' => '2015-05-10',
+			'tijd_eind' => '17:00:00',
 			'location_id' => 1,
 			'prijs' => 400,
+			'streeftal' => 8,
+			'vol' => '1',
+			'beschrijving' => 'Ga mee op kamp!',
 			'opmerkingen' => 'Beste kamp ooit!'
 		]);
 		
@@ -36,6 +41,7 @@ class EventTableSeeder extends Seeder {
 			'datum_eind' => '2015-08-08',
 			'location_id' => 2,
 			'prijs' => 350,
+			'openbaar' => '0',
 			'opmerkingen' => 'Dit gaat natuurlijk nooit goed.'
 		]);
 		

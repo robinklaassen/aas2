@@ -41,6 +41,7 @@ class CreateReviewsTable extends Migration
             $table->string('allervervelendst');
             $table->double('cijfer');
             $table->string('nogeens');
+            $table->string('kampkeuze')->nullable();
             $table->string('tip')->nullable();
             $table->string('verder')->nullable();
             $table->timestamps();
