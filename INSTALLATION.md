@@ -79,8 +79,9 @@
   - Fill in `root` after `DB_USERNAME=`
 
 - Open a terminal
-  - Run `composer install`
+  - In VC Code the shortcut is: `ctrl+``` 
+  - Type `composer install` <enter>
   - Wait a bit.
-  - Run `composer update`
+  - Type `composer update` <enter>
 
 - Open a browser and navigate to `http://{your-vhost-name}` where `{your-vhost-name}` is replaced by the name you entered in the step above.
