@@ -4,6 +4,7 @@
 
   - Download the WAMP server. [direct download](https://downloads.sourceforge.net/project/wampserver/WampServer%203/WampServer%203.0.0/wampserver3.1.7_x64.exe?r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fwampserver%2Ffiles%2FWampServer%25203%2FWampServer%25203.0.0%2Fwampserver3.1.7_x64.exe%2Fdownload&ts=1555748835).
   - Install WAMP, you can leave everything as default.
+  - You might need some extra things, if you start wamp and have an error about a missing Msvcr110.dll [this windows update package thingy](https://www.microsoft.com/en-us/download/details.aspx?id=30679)
 
 - Startup WAMP and ensure it is on php `7.1.x`
 
