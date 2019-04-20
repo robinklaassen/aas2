@@ -47,7 +47,7 @@
   - Open phpmyadmin
   - Login with root and an empty password
   - Click on `New` or you local equivelent.
-  - Fill in an name for the dabase, dont use spaces or special characters, just keep it simple
+  - Fill in an name for the dabase, dont use spaces or special characters, just keep it simple (exmaple: `aas2`)
   - Click `Create`
 - Create an virtual host
 
