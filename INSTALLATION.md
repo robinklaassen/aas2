@@ -49,20 +49,21 @@
   - Click on `New` or you local equivelent.
   - Fill in an name for the dabase, dont use spaces or special characters, just keep it simple (exmaple: `aas2`)
   - Click `Create`
+  - Close phpmyadmin, that's it.
+  
 - Create an virtual host
 
   - Ensure WAMP runs (the system tray should be green)
   - Open up your favorite browser
   - Navigate to http://localhost/
   - Click `Add a Virtual Host`
-  - Fill in a short name for aas, dont use spaces or special characters, just keep it simple
+  - Fill in a short name for aas, dont use spaces or special characters, just keep it simple (example `aas2`)
   - Fill in the path to the public folder of the project you cloned from github.
   - Press the big button
   - Wait until WAMP is done
   - Right mouse click on the WAMP icon in the system tray
   - Goto tools -> Restart DNS
-  - Wait a sec or go get a coffee.
-  - Open a browser and navigate to `http://{your-vhost-name}` where `{your-vhost-name}` is replaced by the name you entered in the step above.
+  
 
 - copy the .env.example and rename it to .env
 
@@ -74,4 +75,5 @@
   - Run `composer install`
   - Wait a bit.
   - Run `composer update`
-  -
+
+- Open a browser and navigate to `http://{your-vhost-name}` where `{your-vhost-name}` is replaced by the name you entered in the step above.
