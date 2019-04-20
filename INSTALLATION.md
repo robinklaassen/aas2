@@ -78,10 +78,23 @@
   - Remove the password
   - Fill in `root` after `DB_USERNAME=`
 
+- For some reason composer doesn't include the creation of some folders it actually needs, so lets create them for it.
+- Goto the folder `storage` in the root of the repo
+ - Create a folder named `framework`
+ - Navigate into the newly created folder
+ - Create a folder named sessions
+ - Create a folder name cache
+ - Create a folder named views
+
 - Open a terminal
   - In VC Code the shortcut is: ``` ctrl+` ```  
+  - 
   - Type `composer install` <enter>
   - Wait a bit.
+  - Wait a bit longer
+  - Get yourselve some coffee
   - Type `composer update` <enter>
-
+  - Type `php artisan key:generate` <enter>
+  - Type `php artisan migrate --seed` <enter>
+ 
 - Open a browser and navigate to `http://{your-vhost-name}` where `{your-vhost-name}` is replaced by the name you entered in the step above.
