@@ -79,7 +79,7 @@
   - Fill in `root` after `DB_USERNAME=`
 
 - Open a terminal
-  - In VC Code the shortcut is: `ctrl+``` 
+  - In VC Code the shortcut is: `ctrl+\`` 
   - Type `composer install` <enter>
   - Wait a bit.
   - Type `composer update` <enter>
