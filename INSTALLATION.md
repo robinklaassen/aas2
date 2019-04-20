@@ -21,7 +21,7 @@
   - Install composer. You can leave most as default see below.
     - There is a page to select the proper PHP version. select 7.1.x in the dropdown
 
-* Install a GitHub
+* Install a Git environment. Either one of the below should do fine (NOT BOTH)
   - Github for windows (should be dummy proof, but never used it)
     - Download GitHub for windows. [direct download](https://desktop.github.com/)
     - Install GitHub
