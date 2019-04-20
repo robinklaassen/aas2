@@ -66,6 +66,12 @@
   
 
 - Open the GitHub repo in your favorite editor (for example VSCode)
+  - Open vscode
+  - goto File
+  - select `open folder`
+  - navigate to the GitHub repo
+  - Press open
+  
 - copy the .env.example and rename it to .env
 
   - Fill in the database name you used after `DB_DATABASE=`
