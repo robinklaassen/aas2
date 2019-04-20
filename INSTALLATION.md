@@ -18,7 +18,8 @@
 * Install Composer
 
   - Download composer. [direct download](https://getcomposer.org/Composer-Setup.exe)
-  - Install composer. You can leave everything as default.
+  - Install composer. You can leave most as default see below.
+    - There is a page to select the proper PHP version. select 7.1.x in the dropdown
 
 * Install a GitHub
   - Github for windows (should be dummy proof, but never used it)
