@@ -178,8 +178,13 @@
 			<a role="button" class="btn btn-info btn-sm" href="{{ url('/events', [$event->id, 'night-register']) }}"><span class="glyphicon glyphicon-tent" aria-hidden="true"></span>  Nachtregister</a>
 			<a role="button" class="btn btn-success btn-sm" href="{{ url('/events', [$event->id, 'budget']) }}"><span class="glyphicon glyphicon-euro" aria-hidden="true"></span>  Kampbudget</a>
 			<a role="button" class="btn btn-success btn-sm" href="{{ url('/events', [$event->id, 'payments']) }}"><span class="glyphicon glyphicon-usd" aria-hidden="true"></span>  Betalingsoverzicht</a>
+			<a role="button" class="btn btn-primary btn-sm" href="{{ url('/enquete',[$event->id]) }}"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span>  Enqu&ecirc;te</a>
 			<a role="button" class="btn btn-primary btn-sm" href="{{ url('/events', [$event->id, 'send']) }}"><span class="glyphicon glyphicon-send" aria-hidden="true"></span>  Plaatsen</a>
 			<a role="button" class="btn btn-primary btn-sm" href="{{ url('/events', [$event->id, 'export']) }}"><span class="glyphicon glyphicon-file" aria-hidden="true"></span>  Export</a>
+		</div>
+	@elseif (\Auth::user()->profile_type == "App\Member")
+		<div style="display: flex; flex-wrap: wrap; justify-content: flex-end;">
+			<a role="button" class="btn btn-primary btn-sm" href="{{ url('/enquete',[$event->id]) }}"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span>  Enqu&ecirc;te</a>		
 		</div>
 	@endif
 
