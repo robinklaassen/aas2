@@ -95,6 +95,7 @@ Homestead.json
 storage/*.key
 /node_modules
 
+
 #AAS2 specifics
 /public/img
 /public/uploads

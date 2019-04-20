@@ -1,0 +1,75 @@
+# Install prerequisite
+
+- Install WAMP
+
+  - Download the WAMP server. [direct download](https://downloads.sourceforge.net/project/wampserver/WampServer%203/WampServer%203.0.0/wampserver3.1.7_x64.exe?r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fwampserver%2Ffiles%2FWampServer%25203%2FWampServer%25203.0.0%2Fwampserver3.1.7_x64.exe%2Fdownload&ts=1555748835).
+  - Install WAMP, you can leave everything as default.
+
+- Startup WAMP and ensure it is on php `7.1.x`
+
+  - Open WAMP
+  - Change the PHP CLI version to `7.1.x`
+    - In the system-tray, right click on the WAMP logo
+    - goto `Tools`
+    - goto `Change PHP CLI version`
+    - Select `7.1.x`
+
+* Install Composer
+
+  - Download composer. [direct download](https://getcomposer.org/Composer-Setup.exe)
+  - Install composer. You can leave everything as default.
+
+* Install a GitHub
+  - Github for windows (should be dummy proof, but never used it)
+    - Download GitHub for windows. [direct download](https://desktop.github.com/)
+    - Install GitHub
+    - TODO: I dont use github for windows, can someone fill this in?
+  - Git bash
+    - Download git bash. [Direct download](https://github.com/git-for-windows/git/releases/download/v2.21.0.windows.1/Git-2.21.0-64-bit.exe)
+    - Install it, you can leave everything as default
+    - Congrats, you can now open `git bash` and feel like an absolute hackerman
+
+# Getting aas
+
+- Getting the sources
+
+  - Either use the github for windows to clone this repo
+  - or use some CLI magic `git clone https://github.com/robinklaassen/aas2.git <dest-folder>`
+
+# Setting everything up
+
+- Creating an empty database
+  - Ensure WAMP runs (the system tray should be green)
+  - Open up your favorite browser
+  - Navigate to http://localhost/
+  - Open phpmyadmin
+  - Login with root and an empty password
+  - Click on `New` or you local equivelent.
+  - Fill in an name for the dabase, dont use spaces or special characters, just keep it simple
+  - Click `Create`
+- Create an virtual host
+
+  - Ensure WAMP runs (the system tray should be green)
+  - Open up your favorite browser
+  - Navigate to http://localhost/
+  - Click `Add a Virtual Host`
+  - Fill in a short name for aas, dont use spaces or special characters, just keep it simple
+  - Fill in the path to the public folder of the project you cloned from github.
+  - Press the big button
+  - Wait until WAMP is done
+  - Right mouse click on the WAMP icon in the system tray
+  - Goto tools -> Restart DNS
+  - Wait a sec or go get a coffee.
+  - Open a browser and navigate to `http://{your-vhost-name}` where `{your-vhost-name}` is replaced by the name you entered in the step above.
+
+- copy the .env.example and rename it to .env
+
+  - Fill in the database name you used after `DB_DATABASE=`
+  - Remove the password
+  - Fill in `root` after `DB_USERNAME=`
+
+- Open a terminal
+  - Run `composer install`
+  - Wait a bit.
+  - Run `composer update`
+  -
