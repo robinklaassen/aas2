@@ -74,7 +74,7 @@
   
 - copy the .env.example and rename it to .env
 
-  - Fill in the database name you used after `DB_DATABASE=`
+  - After `DB_DATABASE=` fill in the database name you used 
   - Remove the password
   - Fill in `root` after `DB_USERNAME=`
 
