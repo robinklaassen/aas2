@@ -25,7 +25,7 @@
   - Github for windows (should be dummy proof, but never used it)
     - Download GitHub for windows. [direct download](https://desktop.github.com/)
     - Install GitHub
-    - TODO: I dont use github for windows, can someone fill this in?
+    - Log into the GitHub for windows
   - Git bash
     - Download git bash. [Direct download](https://github.com/git-for-windows/git/releases/download/v2.21.0.windows.1/Git-2.21.0-64-bit.exe)
     - Install it, you can leave everything as default
