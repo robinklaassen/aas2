@@ -40,4 +40,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		return $this->morphTo();
 	}
 
+	public function roles() {
+		return $this->belongsToMany('App\Role');
+	}
+
 }
