@@ -93,8 +93,8 @@
   - Wait a bit.
   - Wait a bit longer
   - Get yourselve some coffee
-  - Type `composer update` <enter>
-  - Type `php artisan key:generate` <enter>
-  - Type `php artisan migrate --seed` <enter>
+  - Type `composer update <enter>`
+  - Type `php artisan key:generate <enter>`
+  - Type `php artisan migrate --seed <enter>`
  
 - Open a browser and navigate to `http://{your-vhost-name}` where `{your-vhost-name}` is replaced by the name you entered in the step above.
