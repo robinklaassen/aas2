@@ -19,7 +19,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
 	// Add last login to Carbon dates
 	protected $dates = ['last_login'];
-	
+
 	/**
 	 * The attributes that are mass assignable.
 	 *
@@ -33,7 +33,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 * @var array
 	 */
 	protected $hidden = ['password', 'remember_token'];
-	
+
 	# Polymorphic relation to either member or participant profile
 	public function profile()
 	{
@@ -42,6 +42,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
 	public function roles() {
 		return $this->belongsToMany('App\Role', 'user_role');
+	}
+
+	public function hasRole($title) {
+		return $this->roles()->where("title", "=", $title)->count() > 0;
 	}
 
 }

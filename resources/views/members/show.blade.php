@@ -49,7 +49,7 @@
 
 	<!-- Linker kolom -->
 	<div class="col-md-6">
-		
+
 		<!-- Profielfoto -->
 		<div style="text-align:center; margin-bottom:10px;">
 			@if ($viewType == 'profile')
@@ -64,7 +64,7 @@
 			</a>
 			@endif
 		</div>
-		
+
 		<!-- Profieltabel -->
 		<table class="table table-hover">
 			<caption>Profiel</caption>
@@ -129,10 +129,10 @@
 				<td style="white-space:pre-wrap;">{{ $member->opmerkingen }}</td>
 			</tr>
 		</table>
-		
-		
+
+
 	</div>
-	
+
 	<!-- Rechter kolom -->
 	<div class="col-md-6">
 		<!-- Puntensysteem vak -->
@@ -165,10 +165,10 @@
 				<a data-toggle="modal" data-target="#actions" style="cursor:pointer;">Lijst met acties</a>
 			</div>
 		</div>
-		
+
 		<hr/>
-		
-		
+
+
 		<!-- Administratietabel -->
 		<table class="table table-hover">
 			<caption>Administratie</caption>
@@ -201,10 +201,9 @@
 			<tr>
 				<td>Rollen</td>
 				<td>
-					@foreach ($member->user()->first()->roles() as $role)
+					@foreach ($member->user()->first()->roles as $role)
 					<span class="label label-info">{{ $role->title }}</span>
 					@endforeach
-					<!-- <span class="label label-info">Kamp-Co</span> -->
 				</td>
 			</tr>
 			<!--
@@ -244,9 +243,9 @@
 			</tr>
 			@endif
 		</table>
-		
+
 		<p><a data-toggle="modal" data-target="#fellows" style="cursor:pointer;">Met wie ben ik allemaal op kamp geweest?</a></p>
-		
+
 		<!-- Vakken van dit lid -->
 		<table class="table table-hover">
 			<caption>
@@ -290,9 +289,9 @@
 				<tr><td>Geen vakken gevonden</td></tr>
 			@endforelse
 		</table>
-		
+
 	</div>
-	
+
 </div>
 
 <hr/>
