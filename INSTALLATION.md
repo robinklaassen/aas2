@@ -79,12 +79,12 @@
   - Fill in `root` after `DB_USERNAME=`
 
 - For some reason composer doesn't include the creation of some folders it actually needs, so lets create them for it.
-- Goto the folder `storage` in the root of the repo
- - Create a folder named `framework`
- - Navigate into the newly created folder
- - Create a folder named sessions
- - Create a folder name cache
- - Create a folder named views
+  - Goto the folder `storage` in the root of the repo
+  - Create a folder named `framework`
+  - Navigate into the newly created folder
+  - Create a folder named sessions
+  - Create a folder name cache
+  - Create a folder named views
 
 - Open a terminal
   - In VC Code the shortcut is: ``` ctrl+` ```  
