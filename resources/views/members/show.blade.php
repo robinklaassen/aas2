@@ -198,6 +198,15 @@
 				<td>Automatische incasso</td>
 				<td>{{ $member->incasso == '1' ? 'Ja' : 'Nee' }}</td>
 			</tr>
+			<tr>
+				<td>Rollen</td>
+				<td>
+					@foreach ($member->user()->first()->roles() as $role)
+					<span class="label label-info">{{ $role->title }}</span>
+					@endforeach
+					<!-- <span class="label label-info">Kamp-Co</span> -->
+				</td>
+			</tr>
 			<!--
 			<tr>
 				<td>Aantal punten</td>

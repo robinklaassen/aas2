@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder {
 		$this->call('ParticipantTableSeeder');
 		$this->call('EventParticipantPivotSeeder');
 		$this->call('CourseEventParticipantPivotSeeder');
+		$this->call('RoleTableSeeder');
 		$this->call('UserTableSeeder');
 	}
 

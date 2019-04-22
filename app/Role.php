@@ -6,9 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Role extends Model
 {
-    protected $guarded = ['role_id'];
+	public $timestamps = false;
+	protected $guarded = ['id'];
 
 	public function users() {
-		return $this->belongsToMany('App\User')->withTimestamps()->using("App\UserRole");
+		return $this->belongsToMany('App\User');
 	}    
 }
