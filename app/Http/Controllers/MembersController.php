@@ -13,7 +13,7 @@ class MembersController extends Controller {
 		$this->middleware('auth');
 		$this->middleware('admin', ['except' => ['index']]);
 	}
-	
+
 	# Index page
 	public function index()
 	{
@@ -21,7 +21,7 @@ class MembersController extends Controller {
 		if (\Auth::user()->profile_type != "App\Member") {
 			return back();
 		}
-		
+
 		if (\Auth::user()->is_admin) {
 			// Show standard index
 			$current_members = Member::orderBy('voornaam', 'asc')->whereIn('soort',['normaal', 'aspirant','info'])->get();
@@ -32,56 +32,61 @@ class MembersController extends Controller {
 			$members = Member::orderBy('voornaam', 'asc')->whereIn('soort',['normaal', 'aspirant','info'])->get();
 			return view('members.list', compact('members'));
 		}
-		
+
 	}
-	
+
 	# Member details page
 	public function show(Member $member)
 	{
 		$viewType = 'admin';
-		
+
 		return view('members.show', compact('member', 'viewType', 'fellows'));
 	}
-	
+
 	# Create new member
 	public function create()
 	{
 		$viewType = 'admin';
 		return view('members.create', compact('viewType'));
 	}
-	
+
 	# Store new member
 	public function store(Requests\MemberRequest $request)
 	{
-		
+
 		Member::create($request->all());
 		return redirect('members')->with([
 			'flash_message' => 'Het lid is aangemaakt!'
 		]);
 	}
-	
+
 	# Edit member form
 	public function edit(Member $member)
 	{
 		$viewType = 'admin';
 		return view('members.edit', compact('member','viewType'));
 	}
-	
+
 	# Update member in DB
 	public function update(Member $member, Requests\MemberRequest $request)
 	{
-		$member->update($request->all());
+		$member->update($request->except("roles"));
+		$user = $member->user()->first();
+		if($user) {
+			$user->roles()->sync($request->input("roles"));
+		}
+
 		return redirect('members/'.$member->id)->with([
 			'flash_message' => 'Het lid is bewerkt!'
 		]);
 	}
-	
+
 	# Delete confirmation
 	public function delete(Member $member)
 	{
 		return view('members.delete', compact('member'));
 	}
-	
+
 	# Remove member from database
 	public function destroy(Member $member)
 	{
@@ -91,13 +96,13 @@ class MembersController extends Controller {
 			'flash_message' => 'Het lid is verwijderd!'
 		]);
 	}
-	
+
 	# Send member on event (form)
 	public function onEvent(Member $member)
 	{
 		return view('members.onEvent', compact('member'));
 	}
-	
+
 	# Send member on event (update database)
 	public function onEventSave(Member $member)
 	{
@@ -108,14 +113,14 @@ class MembersController extends Controller {
 			'flash_message' => $message
 		]);
 	}
-	
+
 	# Add course for this member (form)
 	public function addCourse(Member $member)
 	{
 		$viewType = 'admin';
 		return view('members.addCourse', compact('member', 'viewType'));
 	}
-	
+
 	# Add course for this member (update database)
 	public function addCourseSave(Member $member)
 	{
@@ -130,7 +135,7 @@ class MembersController extends Controller {
 			'flash_message' => $message
 		]);
 	}
-	
+
 	# Edit course for this member (form)
 	public function editCourse(Member $member, $course_id)
 	{
@@ -138,7 +143,7 @@ class MembersController extends Controller {
 		$viewType = 'admin';
 		return view('members.editCourse', compact('member', 'course', 'viewType'));
 	}
-	
+
 	# Edit course for this member (update database)
 	public function editCourseSave(Member $member, $course_id)
 	{
@@ -147,7 +152,7 @@ class MembersController extends Controller {
 			'flash_message' => 'Het vak is bewerkt!'
 		]);
 	}
-	
+
 	# Remove (detach) a course from this member (form)
 	public function removeCourseConfirm(Member $member, $course_id)
 	{
@@ -155,7 +160,7 @@ class MembersController extends Controller {
 		$viewType = 'admin';
 		return view('members.removeCourse', compact('member', 'course', 'viewType'));
 	}
-	
+
 	# Remove (detach) a course from this member (update database)
 	public function removeCourse(Member $member, $course_id)
 	{
@@ -164,26 +169,26 @@ class MembersController extends Controller {
 			'flash_message' => 'Het vak is van dit lid verwijderd!'
 		]);
 	}
-	
+
 	# Export all members to Excel
 	public function export()
 	{
 		// Specificy columns in order to exclude 'opmerkingen_geheim'
 		$members = Member::get(['id', 'voornaam', 'tussenvoegsel', 'achternaam', 'geslacht', 'geboortedatum', 'adres', 'postcode', 'plaats', 'telefoon', 'email', 'email_anderwijs', 'iban', 'soort', 'eindexamen', 'studie', 'afgestudeerd', 'hoebij', 'kmg', 'ranonkeltje', 'vog', 'ervaren_trainer', 'incasso', 'datum_af', 'opmerkingen', 'opmerkingen_admin', 'created_at', 'updated_at']);
-		
+
 		\Excel::create(date('Y-m-d').' AAS Leden', function($excel) use($members) {
 			$excel->sheet('leden', function($sheet) use($members) {
 				$sheet->fromModel($members);
 			});
 		})->export('xlsx');
-		
+
 	}
-	
+
 	# Show all members on a Google Map
 	public function map()
 	{
 		$members = Member::where('soort', '<>', 'oud')->orderBy('soort')->get();
-		
+
 		// Create member data for map
 		foreach ($members as $member)
 		{
@@ -199,35 +204,35 @@ class MembersController extends Controller {
 					$markerURL .= 'blue-dot.png';
 					break;
 			}
-			
+
 			$memberData[] = [
 				'address' => $member->adres . ', ' . $member->plaats,
 				'name' => str_replace('  ', ' ', $member->voornaam . ' ' . $member->tussenvoegsel . ' ' . $member->achternaam),
 				'markerURL' => $markerURL
 			];
 		}
-		
+
 		$memberJSON = json_encode($memberData);
-		
+
 		return view('members.map', compact('memberJSON'));
 	}
-	
+
 	# Search members by coverage
 	public function search(\Illuminate\Http\Request $request)
 	{
 		$courses = $request->input('courses', []);
 		$vog = $request->input('vog', 0);
-	
+
 		$courseList = \App\Course::orderBy('naam')->lists('naam','id')->toArray();
 		$courseCodes = \App\Course::lists('code','id')->toArray();
-		
+
 		$allMembers = \App\Member::where('soort','<>','oud')->where('vog','>=',$vog)->orderBy('voornaam')->get();
-		
+
 		$members = [];
 
 		foreach ($allMembers as $member) {
 			$status = true;
-			
+
 			foreach ($courses as $course_id) {
 				if ($member->courses->find($course_id) == null) {
 					$status = false;
@@ -235,11 +240,11 @@ class MembersController extends Controller {
 					$level[$member->id][$course_id] = $member->courses->find($course_id)->pivot->klas;
 				}
 			}
-			
+
 			if ($status) { $members[] = $member; }
-			
+
 		}
-		
+
 		/*
 		$members = \DB::table('course_member')
 			->whereIn('course_id', $courses)

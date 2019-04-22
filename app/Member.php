@@ -255,7 +255,7 @@ class Member extends Model {
 	}
 
 	public function hasRole($title) {
-		return $this.has("user.roles.title", "=", $title)->count() > 0;
-
+		$user = $this->user()->first();
+		return $user ? $user->hasRole($title) : false;
 	}
 }

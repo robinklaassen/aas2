@@ -201,9 +201,11 @@
 			<tr>
 				<td>Rollen</td>
 				<td>
-					@foreach ($member->user()->first()->roles as $role)
-					<span class="label label-info">{{ $role->title }}</span>
-					@endforeach
+					@if($member->user()->first())
+						@foreach ($member->user()->first()->roles as $role)
+						<span class="label label-info">{{ $role->title }}</span>
+						@endforeach
+					@endif
 				</td>
 			</tr>
 			<!--
