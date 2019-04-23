@@ -44,8 +44,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		return $this->belongsToMany('App\Role', 'user_role');
 	}
 
-	public function hasRole($title) {
-		return $this->roles()->where("title", "=", $title)->count() > 0;
+	public function hasRole($tag) {
+		return $this->roles()->where("tag", "=", $tag)->count() > 0;
 	}
 
 }

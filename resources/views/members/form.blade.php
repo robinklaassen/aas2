@@ -165,6 +165,7 @@
 			<label class="form-check-label">
 			{!! Form::checkbox('roles[]', $role->id, isset($member) ? $member->hasRole($role->title) : false, ['class' => 'form-check-input']) !!}
 			{{ $role->title }}
+			@if (\Auth::user()->hasRole("admin+"))  ({{ $role->tag }}) @endif
 			</label>
 		</div>
 	@endforeach

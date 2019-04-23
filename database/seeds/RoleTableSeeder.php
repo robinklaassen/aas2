@@ -14,19 +14,22 @@ class RoleTableSeeder extends Seeder {
 	public function run()
 	{
 		DB::table('roles')->delete();
-		
+
 		Role::create([
-			'title' => "AAS-Baas"
-        ]);
-        
-		Role::create([
-			'title' => "Bestuur"
+			'title' => 'AAS-Baas',
+			'tag' => 'admin+'
         ]);
 
 		Role::create([
-			'title' => "KampCI"
+			'title' => 'Bestuur',
+			'tag' => 'admin'
         ]);
-        
+
+		Role::create([
+			'title' => 'KampCI',
+			'tag' => 'kamp-ci'
+        ]);
+
 	}
 
 }
