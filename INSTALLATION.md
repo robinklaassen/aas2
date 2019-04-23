@@ -1,25 +1,27 @@
-# Install prerequisite
+# Creating local development environment on Windows
+
+## Install prerequisites
 
 - Install WAMP
 
   - Download the WAMP server. [direct download](https://downloads.sourceforge.net/project/wampserver/WampServer%203/WampServer%203.0.0/wampserver3.1.7_x64.exe?r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fwampserver%2Ffiles%2FWampServer%25203%2FWampServer%25203.0.0%2Fwampserver3.1.7_x64.exe%2Fdownload&ts=1555748835).
   - Install WAMP, you can leave everything as default.
-  - You might need some extra things, if you start wamp and have an error about a missing Msvcr110.dll [this windows update package thingy](https://www.microsoft.com/en-us/download/details.aspx?id=30679) (if you are not sure which to download, you propably need the x64 one)
+  - You might need some extra things, if you start WAMP and have an error about a missing Msvcr110.dll [this windows update package thingy](https://www.microsoft.com/en-us/download/details.aspx?id=30679) (if you are not sure which to download, you propably need the x64 one)
 
 - Startup WAMP and ensure it is on php `7.1.x`
 
   - Open WAMP
   - Change the PHP CLI version to `7.1.x`
-    - In the system-tray, right click on the WAMP logo
-    - goto `Tools`
-    - goto `Change PHP CLI version`
+    - In the system tray, right click on the WAMP logo
+    - Go to `Tools`
+    - Go to `Change PHP CLI version`
     - Select `7.1.x`
 
 * Install Composer
 
   - Download composer. [direct download](https://getcomposer.org/Composer-Setup.exe)
   - Install composer. You can leave most as default see below.
-    - There is a page to select the proper PHP version. select 7.1.x in the dropdown
+    - There is a page to select the proper PHP version. Select 7.1.x in the dropdown.
 
 * Install a Git environment. Either one of the below should do fine (NOT BOTH)
   - Github for windows (should be dummy proof, but never used it)
@@ -31,14 +33,14 @@
     - Install it, you can leave everything as default
     - Congrats, you can now open `git bash` and feel like an absolute hackerman
 
-# Getting aas
+## Getting AAS code
 
 - Getting the sources
 
   - Either use the github for windows to clone this repo
   - or use some CLI magic `git clone https://github.com/robinklaassen/aas2.git <dest-folder>`
 
-# Setting everything up
+## Setting everything up
 
 - Creating an empty database
   - Ensure WAMP runs (the system tray should be green)
@@ -46,8 +48,8 @@
   - Navigate to http://localhost/
   - Open phpmyadmin
   - Login with root and an empty password
-  - Click on `New` or you local equivelent.
-  - Fill in an name for the dabase, dont use spaces or special characters, just keep it simple (exmaple: `aas2`)
+  - Click on `New` or you local equivalent.
+  - Fill in an name for the database, don't use spaces or special characters, just keep it simple (example: `aas2`)
   - Click `Create`
   - Close phpmyadmin, that's it.
   
@@ -57,12 +59,12 @@
   - Open up your favorite browser
   - Navigate to http://localhost/
   - Click `Add a Virtual Host`
-  - Fill in a short name for aas, dont use spaces or special characters, just keep it simple (example `aas2`)
+  - Fill in a short name for aas, don't use spaces or special characters, just keep it simple (example `aas2`)
   - Fill in the path to the public folder of the project you cloned from github.
   - Press the big button
   - Wait until WAMP is done
   - Right mouse click on the WAMP icon in the system tray
-  - Goto tools -> Restart DNS
+  - Go to `Tools` -> `Restart DNS`
   
 
 - Open the GitHub repo in your favorite editor (for example VSCode)
@@ -80,6 +82,7 @@
 
 - For some reason composer doesn't include the creation of some folders it actually needs, so lets create them for it.
   - Goto the folder `storage` in the root of the repo
+  - Navigate into the newly created folder
   - Create a folder named `framework`
   - Navigate into the newly created folder
   - Create a folder named `sessions`
@@ -90,9 +93,9 @@
   - In VC Code the shortcut is: ``` ctrl+` ```  
   - 
   - Type `composer install` <enter>
-  - Wait a bit.
+  - Wait a bit
   - Wait a bit longer
-  - Get yourselve some coffee
+  - Get yourself some coffee, tea or a beer
   - Type `composer update <enter>`
   - Type `php artisan key:generate <enter>`
   - Type `php artisan migrate --seed <enter>`
