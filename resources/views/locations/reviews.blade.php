@@ -20,7 +20,7 @@
 		
 		<h4>Waarom?</h4>
 		<ul>
-			@foreach ($event->reviews()->get()->shuffle()->lists('kh-slaap-wrm') as $m)
+			@foreach ($event->reviews()->get()->shuffle()->pluck('kh-slaap-wrm') as $m)
 				@unless ($m == '')
 					<li>{{ $m }}</li>
 				@endunless
@@ -35,7 +35,7 @@
 		
 		<h4>Waarom?</h4>
 		<ul>
-			@foreach ($event->reviews()->get()->shuffle()->lists('kh-bijspijker-wrm') as $m)
+			@foreach ($event->reviews()->get()->shuffle()->pluck('kh-bijspijker-wrm') as $m)
 				@unless ($m == '')
 					<li>{{ $m }}</li>
 				@endunless
@@ -54,7 +54,7 @@
 		
 		<h4>Waarom?</h4>
 		<ul>
-			@foreach ($event->reviews()->get()->shuffle()->lists('kh-geheel-wrm') as $m)
+			@foreach ($event->reviews()->get()->shuffle()->pluck('kh-geheel-wrm') as $m)
 				@unless ($m == '')
 					<li>{{ $m }}</li>
 				@endunless

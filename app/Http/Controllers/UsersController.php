@@ -86,7 +86,7 @@ class UsersController extends Controller {
 			// Create username
 			$thename = strtolower(substr($member->voornaam,0,1) . str_replace(' ', '', $member->achternaam));
 			$username = $thename;
-			$nameList = \DB::table('users')->lists('username');
+			$nameList = \DB::table('users')->pluck('username');
 			$i = 0;
 			while (in_array($username, $nameList))
 			{
@@ -138,7 +138,7 @@ class UsersController extends Controller {
 			// Create username
 			$thename = strtolower(substr($participant->voornaam,0,1) . str_replace(' ', '', $participant->achternaam));
 			$username = $thename;
-			$nameList = \DB::table('users')->lists('username')->toArray();
+			$nameList = \DB::table('users')->pluck('username')->toArray();
 			$i = 0;
 			while (in_array($username, $nameList))
 			{

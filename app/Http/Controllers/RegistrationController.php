@@ -36,7 +36,7 @@ class RegistrationController extends Controller {
 		}
 		
 		// List of courses
-		$course_options = Course::orderBy('naam')->lists('naam', 'id')->toArray();
+		$course_options = Course::orderBy('naam')->pluck('naam', 'id')->toArray();
 		$course_options = [0 => '-kies vak-'] + $course_options;
 		
 		// List of 'hoe bij Anderwijs' options (without 'anders, namelijk'!)
@@ -100,7 +100,7 @@ class RegistrationController extends Controller {
 		// Create username
 		$thename = strtolower(substr($member->voornaam,0,1) . str_replace(' ', '', $member->achternaam));
 		$username = $thename;
-		$nameList = \DB::table('users')->lists('username');
+		$nameList = \DB::table('users')->pluck('username');
 		$i = 0;
 		while (in_array($username, $nameList))
 		{
@@ -157,7 +157,7 @@ class RegistrationController extends Controller {
 		}
 		
 		// List of courses
-		$course_options = Course::orderBy('naam')->lists('naam', 'id')->toArray();
+		$course_options = Course::orderBy('naam')->pluck('naam', 'id')->toArray();
 		$course_options = [0 => '-kies vak-'] + $course_options;
 		
 		// List of 'hoe bij Anderwijs' options (without 'anders, namelijk'!)
@@ -228,7 +228,7 @@ class RegistrationController extends Controller {
 		// Create username
 		$thename = strtolower(substr($participant->voornaam,0,1) . str_replace(' ', '', $participant->achternaam));
 		$username = $thename;
-		$nameList = \DB::table('users')->lists('username');
+		$nameList = \DB::table('users')->pluck('username');
 		$i = 0;
 		while (in_array($username, $nameList))
 		{

@@ -42,7 +42,7 @@ class Event extends Model {
 		if (!$this->has("reviews"))
 			return null;
 		
-		return round($this->reviews()->lists("cijfer")->avg(), 1);
+		return round($this->reviews()->pluck("cijfer")->avg(), 1);
 	}
 	
 }

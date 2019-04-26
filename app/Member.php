@@ -244,7 +244,7 @@ class Member extends Model {
 		$fellow_ids = [];
 		foreach ($events as $event)
 		{
-			$fellow_ids = array_merge($fellow_ids, $event->members()->lists('id')->toArray());
+			$fellow_ids = array_merge($fellow_ids, $event->members()->pluck('id')->toArray());
 		}
 		$fellow_ids = array_unique($fellow_ids);
 		if(($key = array_search($this->id, $fellow_ids)) !== false) {

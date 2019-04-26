@@ -64,7 +64,7 @@ class EventsController extends Controller {
 	{
 		// Redirect the viewer if the user profile is not attached to this event
 		$profile = \Auth::user()->profile;
-		if (!in_array($event->id, $profile->events->lists('id')->toArray()) && !(\Auth::user()->is_admin))
+		if (!in_array($event->id, $profile->events->pluck('id')->toArray()) && !(\Auth::user()->is_admin))
 		{
 			return redirect('profile');
 		}
@@ -307,7 +307,7 @@ class EventsController extends Controller {
 		}
 		
 		$courses = \App\Course::orderBy('naam')->get();
-		$memberIDs = $camp->members->lists('id')->toArray();
+		$memberIDs = $camp->members->pluck('id')->toArray();
 		
 		// Loop through all courses
 		foreach ($courses as $course)
@@ -343,7 +343,7 @@ class EventsController extends Controller {
 			// Filter out unplaced participants, if requested
 			if ($type == 'placed')
 			{
-				$unplaced = $camp->participants()->where('geplaatst',0)->lists('id')->toArray();
+				$unplaced = $camp->participants()->where('geplaatst',0)->pluck('id')->toArray();
 				$result = array_where($result, function($key, $value) use ($unplaced) {
 					return !in_array($value->id, $unplaced);
 				});
@@ -482,7 +482,7 @@ class EventsController extends Controller {
 	# Send all participants on camp (execute)
 	public function send(Event $event) {
 		
-		$ids = $event->participants()->lists('id')->toArray();
+		$ids = $event->participants()->pluck('id')->toArray();
 		
 		foreach ($ids as $id) {
 			$event->participants()->updateExistingPivot($id, ['geplaatst' => 1]);

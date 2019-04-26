@@ -31,7 +31,7 @@ class PagesController extends Controller {
 			// Member homepage
 			
 			// Today's birthdays
-			$bdates = \App\Member::where('soort', '<>', 'oud')->lists('geboortedatum', 'id')->toArray();
+			$bdates = \App\Member::where('soort', '<>', 'oud')->pluck('geboortedatum', 'id')->toArray();
 			$m = date('m'); $d = date('d');
 			$today = [];
 			foreach ($bdates as $id => $date) {
@@ -64,7 +64,7 @@ class PagesController extends Controller {
 				// Admins and members who go on camp can click the link
 				$klikbaar = false;
 				
-				$events = \Auth::user()->profile->events->lists('id')->toArray();
+				$events = \Auth::user()->profile->events->pluck('id')->toArray();
 				//dd($events);
 				
 				if (\Auth::user()->is_admin) {
@@ -119,7 +119,7 @@ class PagesController extends Controller {
 	}
 	
 	# Useful lists
-	public function lists()
+	public function pluck()
 	{
 		// Stats
 		$stats = [];
@@ -253,8 +253,8 @@ class PagesController extends Controller {
 			$m = $camp->members()->count();
 			$m_m = $camp->members()->where('geslacht','M')->count();
 			$m_f = $camp->members()->where('geslacht','V')->count();
-			$mids = $camp->members()->lists('id')->toArray();
-			$pids = $camp->participants()->lists('id')->toArray();
+			$mids = $camp->members()->pluck('id')->toArray();
+			$pids = $camp->participants()->pluck('id')->toArray();
 			$p = $camp->participants()->count();
 			$p_m = $camp->participants()->where('geslacht','M')->count();
 			$p_f = $camp->participants()->where('geslacht','V')->count();
@@ -330,7 +330,7 @@ class PagesController extends Controller {
 		{
 			preg_match('/\d{4}/', $training->code, $matches); // obtains the year string from the camp code, e.g. '1415'
 			$year = $matches[0];
-			$mids = $training->members()->lists('id')->toArray();
+			$mids = $training->members()->pluck('id')->toArray();
 			$t = $training->members()->count();
 			
 			// New trainers
@@ -416,7 +416,7 @@ class PagesController extends Controller {
 		
 		// Analysis of participants' preference for camp type (from reviews)
 		$camp_prefs = [];
-		$revs = \App\Review::whereNotNull('kampkeuze')->lists('kampkeuze')->toArray();
+		$revs = \App\Review::whereNotNull('kampkeuze')->pluck('kampkeuze')->toArray();
 		$prefs_rev_count = count($revs);
 		foreach ($revs as $opts) {
 			foreach ($opts as $opt) {
@@ -631,7 +631,7 @@ class PagesController extends Controller {
 	# Place for scripting
 	public function runScript()
 	{
-		echo "Average rating per reviewer: " . round(\App\Review::lists("cijfer")->avg(), 2) . " out of " . \App\Review::lists("id")->count() . " total reviews";
+		echo "Average rating per reviewer: " . round(\App\Review::pluck("cijfer")->avg(), 2) . " out of " . \App\Review::pluck("id")->count() . " total reviews";
 		
 		echo "<br/><br/>";
 		
@@ -653,7 +653,7 @@ class PagesController extends Controller {
 			$list = [];
 			foreach ($member->events()->where('type', 'kamp')->get() as $event)
 			{
-				$list = array_merge($list, $event->participants()->where('geplaatst', 1)->lists('id')->toArray());
+				$list = array_merge($list, $event->participants()->where('geplaatst', 1)->pluck('id')->toArray());
 			}
 			$rank[$member->volnaam] = count($list);
 			$rank_unique[$member->volnaam] = count(array_unique($list));
@@ -684,7 +684,7 @@ class PagesController extends Controller {
 			$fellow_ids = [];
 			foreach ($events as $event)
 			{
-				$fellow_ids = array_merge($fellow_ids, $event->members()->lists('id')->toArray());
+				$fellow_ids = array_merge($fellow_ids, $event->members()->pluck('id')->toArray());
 			}
 			$fellow_ids = array_unique($fellow_ids);
 			if(($key = array_search($member->id, $fellow_ids)) !== false) {

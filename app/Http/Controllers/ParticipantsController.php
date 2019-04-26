@@ -218,7 +218,7 @@ class ParticipantsController extends Controller {
 		$pids = []; $campnames = [];
 		foreach ($camps as $camp) 
 		{
-			$pids = array_merge($pids, $camp->participants()->lists('id')->toArray());
+			$pids = array_merge($pids, $camp->participants()->pluck('id')->toArray());
 			$campnames[] = $camp->naam . ' ' . $camp->datum_start->format('Y');
 		}
 		

@@ -39,7 +39,7 @@ class ProfileController extends Controller {
 			$fellow_ids = [];
 			foreach ($events as $event)
 			{
-				$fellow_ids = array_merge($fellow_ids, $event->members()->lists('id')->toArray());
+				$fellow_ids = array_merge($fellow_ids, $event->members()->pluck('id')->toArray());
 			}
 			$fellow_ids = array_unique($fellow_ids);
 			if(($key = array_search($member->id, $fellow_ids)) !== false) {
@@ -361,7 +361,7 @@ class ProfileController extends Controller {
 		}
 		
 		// List of courses
-		$course_options = \App\Course::orderBy('naam')->lists('naam','id')->toArray();
+		$course_options = \App\Course::orderBy('naam')->pluck('naam','id')->toArray();
 		$course_options = [0 => '-geen vak-'] + $course_options;
 		
 		return view('profile.onCamp', compact('profile', 'camp_options', 'camp_full', 'course_options'));
@@ -523,7 +523,7 @@ class ProfileController extends Controller {
 		
 		$participant = \Auth::user()->profile;
 		$event = \App\Event::findOrFail($event_id);
-		$course_options = \App\Course::orderBy('naam')->lists('naam', 'id')->toArray();
+		$course_options = \App\Course::orderBy('naam')->pluck('naam', 'id')->toArray();
 		$course_options = [0 => '-geen vak-'] + $course_options;
 		$result = \DB::table('course_event_participant')->select('course_id', 'info')->whereParticipantIdAndEventId($participant->id, $event_id)->get();
 		$retrieved_courses = [];

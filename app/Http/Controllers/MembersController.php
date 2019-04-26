@@ -218,8 +218,8 @@ class MembersController extends Controller {
 		$courses = $request->input('courses', []);
 		$vog = $request->input('vog', 0);
 	
-		$courseList = \App\Course::orderBy('naam')->lists('naam','id')->toArray();
-		$courseCodes = \App\Course::lists('code','id')->toArray();
+		$courseList = \App\Course::orderBy('naam')->pluck('naam','id')->toArray();
+		$courseCodes = \App\Course::pluck('code','id')->toArray();
 		
 		$allMembers = \App\Member::where('soort','<>','oud')->where('vog','>=',$vog)->orderBy('voornaam')->get();
 		
