@@ -7,11 +7,7 @@ class Member extends Model {
 	protected $guarded = ['id', 'created_at', 'updated_at'];
 	
 	protected $dates = ['created_at', 'updated_at', 'geboortedatum'];
-	// // Carbon dates
-	// public function getDates()
-	// {
-	// 	return array('created_at', 'updated_at', 'geboortedatum');
-	// }
+
 	
 	// Full name
 	public function getVolnaamAttribute() {
