@@ -41,7 +41,7 @@ a.list-group-item h4.list-group-item-heading {
 			</a>
 		</div>
 		<div class="col-md-6 list-group">
-			<a href="https://aas2.anderwijs.nl/auth/login" class="list-group-item">
+			<a href="https://aas2.anderwijs.nl/login" class="list-group-item">
 				<h4 class="list-group-item-heading text-left">
 					Eerder meegeweest
 				</h4>

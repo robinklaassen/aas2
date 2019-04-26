@@ -11,7 +11,7 @@
 */
 
 # Root page refers to login
-Route::get('/', 'Auth\LoginController@getLogin');
+Route::get('/', 'Auth\LoginController@showLoginForm');
 
 # iDeal integration
 Route::post('iDeal-webhook', 'iDealController@webhook');
