@@ -13,6 +13,8 @@ return [
 	|
 	*/
 
+	'env' => env('APP_ENV', 'production'),
+	
 	'debug' => env('APP_DEBUG'),
 
 	/*
@@ -118,7 +120,6 @@ return [
 		'Illuminate\Bus\BusServiceProvider',
 		'Illuminate\Cache\CacheServiceProvider',
 		'Illuminate\Foundation\Providers\ConsoleSupportServiceProvider',
-		'Illuminate\Routing\ControllerServiceProvider',
 		'Illuminate\Cookie\CookieServiceProvider',
 		'Illuminate\Database\DatabaseServiceProvider',
 		'Illuminate\Encryption\EncryptionServiceProvider',
@@ -135,7 +136,7 @@ return [
 		'Illuminate\Translation\TranslationServiceProvider',
 		'Illuminate\Validation\ValidationServiceProvider',
 		'Illuminate\View\ViewServiceProvider',
-		'Illuminate\Html\HtmlServiceProvider',
+		'Collective\Html\HtmlServiceProvider',
 		'Barryvdh\DomPDF\ServiceProvider',
 		'Maatwebsite\Excel\ExcelServiceProvider',
 		'Khill\Lavacharts\Laravel\LavachartsServiceProvider',
@@ -198,8 +199,8 @@ return [
 		'URL'       => 'Illuminate\Support\Facades\URL',
 		'Validator' => 'Illuminate\Support\Facades\Validator',
 		'View'      => 'Illuminate\Support\Facades\View',
-		'Form'		=> 'Illuminate\Html\FormFacade',
-		'Html'		=> 'Illuminate\Html\HtmlFacade',
+		'Form'		=> 'Collective\Html\FormFacade',
+		'Html'		=> 'Collective\Html\HtmlFacade',
 		'PDF' 		=> 'Barryvdh\DomPDF\Facade',
 		'Excel' 	=> 'Maatwebsite\Excel\Facades\Excel',
 		'Lava' 		=> 'Khill\Lavacharts\Laravel\LavachartsFacade',

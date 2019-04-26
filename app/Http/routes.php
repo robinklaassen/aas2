@@ -11,7 +11,7 @@
 */
 
 # Root page refers to login
-Route::get('/', 'Auth\AuthController@getLogin');
+Route::get('/', 'Auth\LoginController@getLogin');
 
 # iDeal integration
 Route::post('iDeal-webhook', 'iDealController@webhook');
@@ -179,4 +179,7 @@ Route::get('enquete/{events}', 'ReviewsController@review');
 Route::post('enquete/{events}', 'ReviewsController@reviewPost');
 
 # Laravel standard registration and login things (customised)
-Route::controllers(['auth' => 'Auth\AuthController', 'password' => 'Auth\PasswordController', ]);
+Route::get('password/fogot', 'Auth\PasswordController@forgot');
+Route::post('password/reset', 'Auth\PasswordController@reset');
+
+Auth::routes();

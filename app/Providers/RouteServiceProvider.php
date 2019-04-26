@@ -1,6 +1,7 @@
 <?php namespace App\Providers;
 
 use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
 
 class RouteServiceProvider extends ServiceProvider {
@@ -20,19 +21,19 @@ class RouteServiceProvider extends ServiceProvider {
 	 * @param  \Illuminate\Routing\Router  $router
 	 * @return void
 	 */
-	public function boot(Router $router)
+	public function boot()
 	{
-		parent::boot($router);
+		parent::boot();
 
 		// Route model bindings
-		$router->model('participants', 'App\Participant');
-		$router->model('members', 'App\Member');
-		$router->model('events', 'App\Event');
-		$router->model('locations', 'App\Location');
-		$router->model('courses', 'App\Course');
-		$router->model('actions', 'App\Action');
-		$router->model('declarations', 'App\Declaration');
-		$router->model('users', 'App\User');
+		Route::model('participants', 'App\Participant');
+		Route::model('members', 'App\Member');
+		Route::model('events', 'App\Event');
+		Route::model('locations', 'App\Location');
+		Route::model('courses', 'App\Course');
+		Route::model('actions', 'App\Action');
+		Route::model('declarations', 'App\Declaration');
+		Route::model('users', 'App\User');
 	}
 
 	/**
