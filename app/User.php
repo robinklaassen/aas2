@@ -5,10 +5,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Notifications\Notifiable;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract {
 
-	use Authenticatable, CanResetPassword;
+	use Authenticatable, CanResetPassword, Notifiable ;
 
 	/**
 	 * The database table used by the model.
@@ -19,7 +20,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
 	// Add last login to Carbon dates
 	protected $dates = ['last_login'];
-	
+
 	/**
 	 * The attributes that are mass assignable.
 	 *
@@ -33,7 +34,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	 * @var array
 	 */
 	protected $hidden = ['password', 'remember_token'];
-	
+
 	# Polymorphic relation to either member or participant profile
 	public function profile()
 	{

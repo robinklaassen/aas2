@@ -7,7 +7,7 @@
     'timezone' => 'Europe/Amsterdam',
     'locale' => 'nl',
     'fallback_locale' => 'en',
-    'key' => 'WlpzaZhMYf2MXzHBEfbxUciNfF4KkbE6',
+    'key' => 'lWdsdJOssmJpWCRe5xyxFx3biXRj1Tad',
     'cipher' => 'AES-256-CBC',
     'log' => 'daily',
     'providers' => 
@@ -146,7 +146,7 @@
       'file' => 
       array (
         'driver' => 'file',
-        'path' => 'C:\\Users\\Vincent\\Git\\aas-git\\storage/framework/cache',
+        'path' => 'C:\\Users\\Vincent\\Documents\\GitHub\\aas2\\storage/framework/cache',
       ),
       'memcached' => 
       array (
@@ -173,11 +173,11 @@
   array (
     'files' => 
     array (
-      0 => 'C:\\Users\\Vincent\\Git\\aas-git\\app\\Providers\\AppServiceProvider.php',
-      1 => 'C:\\Users\\Vincent\\Git\\aas-git\\app\\Providers\\BusServiceProvider.php',
-      2 => 'C:\\Users\\Vincent\\Git\\aas-git\\app\\Providers\\ConfigServiceProvider.php',
-      3 => 'C:\\Users\\Vincent\\Git\\aas-git\\app\\Providers\\EventServiceProvider.php',
-      4 => 'C:\\Users\\Vincent\\Git\\aas-git\\app\\Providers\\RouteServiceProvider.php',
+      0 => 'C:\\Users\\Vincent\\Documents\\GitHub\\aas2\\app\\Providers\\AppServiceProvider.php',
+      1 => 'C:\\Users\\Vincent\\Documents\\GitHub\\aas2\\app\\Providers\\BusServiceProvider.php',
+      2 => 'C:\\Users\\Vincent\\Documents\\GitHub\\aas2\\app\\Providers\\ConfigServiceProvider.php',
+      3 => 'C:\\Users\\Vincent\\Documents\\GitHub\\aas2\\app\\Providers\\EventServiceProvider.php',
+      4 => 'C:\\Users\\Vincent\\Documents\\GitHub\\aas2\\app\\Providers\\RouteServiceProvider.php',
     ),
     'providers' => 
     array (
@@ -192,14 +192,14 @@
       'sqlite' => 
       array (
         'driver' => 'sqlite',
-        'database' => 'C:\\Users\\Vincent\\Git\\aas-git\\storage/database.sqlite',
+        'database' => 'C:\\Users\\Vincent\\Documents\\GitHub\\aas2\\storage/database.sqlite',
         'prefix' => '',
       ),
       'mysql' => 
       array (
         'driver' => 'mysql',
-        'host' => '127.0.0.1',
-        'database' => 'aas',
+        'host' => 'localhost',
+        'database' => 'aas2',
         'username' => 'root',
         'password' => '',
         'charset' => 'utf8',
@@ -210,8 +210,8 @@
       'pgsql' => 
       array (
         'driver' => 'pgsql',
-        'host' => '127.0.0.1',
-        'database' => 'aas',
+        'host' => 'localhost',
+        'database' => 'aas2',
         'username' => 'root',
         'password' => '',
         'charset' => 'utf8',
@@ -221,8 +221,8 @@
       'sqlsrv' => 
       array (
         'driver' => 'sqlsrv',
-        'host' => '127.0.0.1',
-        'database' => 'aas',
+        'host' => 'localhost',
+        'database' => 'aas2',
         'username' => 'root',
         'password' => '',
         'prefix' => '',
@@ -246,10 +246,10 @@
     'orientation' => 'portrait',
     'defines' => 
     array (
-      'DOMPDF_FONT_DIR' => 'C:\\Users\\Vincent\\Git\\aas-git\\storage\\fonts/',
-      'DOMPDF_FONT_CACHE' => 'C:\\Users\\Vincent\\Git\\aas-git\\storage\\fonts/',
+      'DOMPDF_FONT_DIR' => 'C:\\Users\\Vincent\\Documents\\GitHub\\aas2\\storage\\fonts/',
+      'DOMPDF_FONT_CACHE' => 'C:\\Users\\Vincent\\Documents\\GitHub\\aas2\\storage\\fonts/',
       'DOMPDF_TEMP_DIR' => 'C:\\Users\\Vincent\\AppData\\Local\\Temp',
-      'DOMPDF_CHROOT' => 'C:\\Users\\Vincent\\Git\\aas-git',
+      'DOMPDF_CHROOT' => 'C:\\Users\\Vincent\\Documents\\GitHub\\aas2',
       'DOMPDF_UNICODE_ENABLED' => true,
       'DOMPDF_ENABLE_FONTSUBSETTING' => false,
       'DOMPDF_PDF_BACKEND' => 'CPDF',
@@ -274,7 +274,7 @@
       'local' => 
       array (
         'driver' => 'local',
-        'root' => 'C:\\Users\\Vincent\\Git\\aas-git\\storage/app',
+        'root' => 'C:\\Users\\Vincent\\Documents\\GitHub\\aas2\\storage/app',
       ),
       's3' => 
       array (
@@ -394,7 +394,7 @@
     'lifetime' => 30,
     'expire_on_close' => true,
     'encrypt' => false,
-    'files' => 'C:\\Users\\Vincent\\Git\\aas-git\\storage/framework/sessions',
+    'files' => 'C:\\Users\\Vincent\\Documents\\GitHub\\aas2\\storage/framework/sessions',
     'connection' => NULL,
     'table' => 'sessions',
     'lottery' => 
@@ -411,9 +411,9 @@
   array (
     'paths' => 
     array (
-      0 => 'C:\\Users\\Vincent\\Git\\aas-git\\resources\\views',
+      0 => 'C:\\Users\\Vincent\\Documents\\GitHub\\aas2\\resources\\views',
     ),
-    'compiled' => 'C:\\Users\\Vincent\\Git\\aas-git\\storage\\framework\\views',
+    'compiled' => 'C:\\Users\\Vincent\\Documents\\GitHub\\aas2\\storage\\framework\\views',
   ),
   'image' => 
   array (

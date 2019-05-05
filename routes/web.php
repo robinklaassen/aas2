@@ -74,6 +74,7 @@ Route::put('participants/{participants}/edit-event/{event}',
 Route::get('participants/{participants}/delete', 'ParticipantsController@delete');
 Route::get('participants/export', 'ParticipantsController@export');
 Route::get('participants/map', 'ParticipantsController@map');
+// Route::get('participants/{participant}', 'ParticipantsController@show');
 Route::resource('participants', 'ParticipantsController');
 
 # Member things
@@ -96,36 +97,36 @@ Route::get('members/map', 'MembersController@map');
 Route::resource('members', 'MembersController');
 
 # Event things
-Route::get('events/{events}/delete', 'EventsController@delete');
-Route::get('events/{events}/remove-member/{member}',
+Route::get('events/{event}/delete', 'EventsController@delete');
+Route::get('events/{event}/remove-member/{member}',
     'EventsController@removeMemberConfirm');
-Route::delete('events/{events}/remove-member/{member}',
+Route::delete('events/{event}/remove-member/{member}',
     'EventsController@removeMember');
-Route::get('events/{events}/edit-member/{member}', 'EventsController@editMember');
-Route::put('events/{events}/edit-member/{member}',
+Route::get('events/{event}/edit-member/{member}', 'EventsController@editMember');
+Route::put('events/{event}/edit-member/{member}',
     'EventsController@editMemberSave');
-Route::get('events/{events}/edit-participant/{participant}',
+Route::get('events/{event}/edit-participant/{participant}',
     'EventsController@editParticipant');
-Route::put('events/{events}/edit-participant/{participant}',
+Route::put('events/{event}/edit-participant/{participant}',
     'EventsController@editParticipantSave');
-Route::get('events/{events}/remove-participant/{participant}',
+Route::get('events/{event}/remove-participant/{participant}',
     'EventsController@removeParticipantConfirm');
-Route::delete('events/{events}/remove-participant/{participant}',
+Route::delete('events/{event}/remove-participant/{participant}',
     'EventsController@removeParticipant');
-Route::get('events/{events}/export', 'EventsController@export');
-Route::get('events/{events}/check/{type}', 'EventsController@check');
-Route::get('events/{events}/budget', 'EventsController@budget');
-Route::get('events/{events}/email', 'EventsController@email');
-Route::get('events/{events}/send', 'EventsController@sendConfirm');
-Route::put('events/{events}/send', 'EventsController@send');
-Route::get('events/{events}/payments', 'EventsController@payments');
-Route::get('events/{events}/night-register', 'EventsController@nightRegister');
+Route::get('events/{event}/export', 'EventsController@export');
+Route::get('events/{event}/check/{type}', 'EventsController@check');
+Route::get('events/{event}/budget', 'EventsController@budget');
+Route::get('events/{event}/email', 'EventsController@email');
+Route::get('events/{event}/send', 'EventsController@sendConfirm');
+Route::put('events/{event}/send', 'EventsController@send');
+Route::get('events/{event}/payments', 'EventsController@payments');
+Route::get('events/{event}/night-register', 'EventsController@nightRegister');
 Route::get('events/icalendar', 'EventsController@iCalendar');
-Route::get('events/{events}/join-members', 'EventsController@joinMembers');
-Route::put('events/{events}/join-members', 'EventsController@joinMembersSave');
-Route::get('events/{events}/reviews', 'EventsController@reviews');
-Route::get('events/{events}/move-participant/{participant}', 'EventsController@moveParticipant');
-Route::put('events/{events}/move-participant/{participant}', 'EventsController@moveParticipantSave');
+Route::get('events/{event}/join-members', 'EventsController@joinMembers');
+Route::put('events/{event}/join-members', 'EventsController@joinMembersSave');
+Route::get('events/{event}/reviews', 'EventsController@reviews');
+Route::get('events/{event}/move-participant/{participant}', 'EventsController@moveParticipant');
+Route::put('events/{event}/move-participant/{participant}', 'EventsController@moveParticipantSave');
 Route::resource('events', 'EventsController');
 
 # Location things

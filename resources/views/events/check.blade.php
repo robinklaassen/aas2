@@ -1,12 +1,12 @@
 @extends ('master')
 
 @section ('title')
-	Vakdekking {{$camp->naam}}
+	Vakdekking {{$event->naam}}
 @endsection
 
 @section ('content')
-<h1>Vakdekking {{ $camp->naam }} ({{ $camp->code }})</h1>
-<h4>{{ ($type == 'all') ? 'Alle deelnemers' : 'Alleen geplaatste deelnemers' }} (<a href="{{ url('/events', [$camp->id, 'check']) }}/{{ ($type == 'all') ? 'placed' : 'all' }}">wisselen</a>)</h4>
+<h1>Vakdekking {{ $event->naam }} ({{ $event->code }})</h1>
+<h4>{{ ($type == 'all') ? 'Alle deelnemers' : 'Alleen geplaatste deelnemers' }} (<a href="{{ url('/events', [$event->id, 'check']) }}/{{ ($type == 'all') ? 'placed' : 'all' }}">wisselen</a>)</h4>
 <h4 class="changeable">Alleen gevraagde vakken (<a href="#" onclick="changeView()">wisselen</a>)</h4>
 <h4 class="changeable" style="display:none;">Alle vakken (<a href="#" onclick="changeView()">wisselen</a>)</h4>
 
@@ -29,11 +29,11 @@
 		@foreach ($courses as $course)
 			<tr @if ($numbers[$course->id]['p'] == 0) class="changeable" style="display:none;" @endif >
 				<td>{{ $course->naam }}</td>
-				
+
 				<td><span data-toggle="tooltip" data-html="true" data-placement="right" title="{{ $tooltips[$course->id]['p'] }}">{{ $numbers[$course->id]['p'] }}</span></td>
-				
+
 				<td><span data-toggle="tooltip" data-html="true" data-placement="right" title="{{ $tooltips[$course->id]['m'] }}">{{ $numbers[$course->id]['m'] }}</span></td>
-				
+
 				<td>
 					@if ($status[$course->id] == 'ok')
 						<span data-toggle="tooltip" data-placement="right" title="OK!" class="glyphicon glyphicon-ok"></span>

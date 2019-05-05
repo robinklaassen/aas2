@@ -14,7 +14,7 @@ return [
 	*/
 
 	'env' => env('APP_ENV', 'production'),
-	
+
 	'debug' => env('APP_DEBUG'),
 
 	/*
@@ -140,6 +140,7 @@ return [
 		'Barryvdh\DomPDF\ServiceProvider',
 		'Maatwebsite\Excel\ExcelServiceProvider',
 		'Khill\Lavacharts\Laravel\LavachartsServiceProvider',
+		'Illuminate\Notifications\NotificationServiceProvider',
 
 
 		/*
