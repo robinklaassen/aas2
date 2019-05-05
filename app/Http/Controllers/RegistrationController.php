@@ -23,7 +23,12 @@ class RegistrationController extends Controller {
 	public function registerMember()
 	{
 		// List of future camps that are not full
-		$camps = Event::where('type', 'kamp')->where('datum_voordag','>',date('Y-m-d'))->where('openbaar', 1)->orderBy('datum_start', 'asc')->get();
+		$camps = Event::where('type', 'kamp')
+						->where('datum_voordag','>',date('Y-m-d'))
+						->where('openbaar', 1)
+						->orderBy('datum_start', 'asc')
+						->get();
+		$camp_options = array();
 		foreach ($camps as $camp)
 		{
 			$camp_options[$camp->id] = $camp->naam . ' ' . substr($camp->datum_start,0,4) . ' te ' . $camp->location->plaats . ' (' . $camp->datum_voordag->format('d-m-Y') . ')';
@@ -145,6 +150,7 @@ class RegistrationController extends Controller {
 	{
 		// List of future camps that are not full
 		$camps = Event::where('type', 'kamp')->where('datum_start','>',date('Y-m-d'))->where('openbaar', 1)->orderBy('datum_start', 'asc')->get();
+		$camp_options = array();
 		foreach ($camps as $camp)
 		{
 			$camp_options[$camp->id] = $camp->naam . ' ' . substr($camp->datum_start,0,4) . ' te ' . $camp->location->plaats . ' (' . $camp->datum_start->format('d-m-Y') . ')';
