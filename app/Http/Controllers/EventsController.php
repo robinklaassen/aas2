@@ -6,7 +6,9 @@ use App\Participant;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Khill\Lavacharts\Lavacharts;
-
+use App\Exports\EventNightRegisterReport;
+use App\Exports\EventPaymentReport;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 
 class EventsController extends Controller {
@@ -25,10 +27,10 @@ class EventsController extends Controller {
 	 */
 	public function index()
 	{
-		$camps = Event::where('type','kamp')->get();
+		$events = Event::where('type','kamp')->get();
 		$trainings = Event::where('type','training')->get();
 		$others = Event::where('type','overig')->get();
-		return view('events.index', compact('camps','trainings','others'));
+		return view('events.index', compact('events','trainings','others'));
 	}
 
 	/**
@@ -495,98 +497,12 @@ class EventsController extends Controller {
 
 	# Generate payments overview
 	public function payments(Event $event) {
-		// Fill data array
-		$data = [];
-		foreach ($event->participants()->orderBy('voornaam')->get() as $p) {
-
-			// Payment amount
-			switch ($p->inkomen)
-			{
-				case 0:
-					$toPay = $event->prijs;
-					break;
-
-				case 1:
-					$toPay = round((0.85 * $event->prijs)/5) * 5;
-					break;
-
-				case 2:
-					$toPay = round((0.7 * $event->prijs)/5) * 5;
-					break;
-
-				case 3:
-					$toPay = round((0.5 * $event->prijs)/5) * 5;
-					break;
-			}
-
-			// Date of payment is not Carbon :(
-			$x = $p->pivot->datum_betaling;
-			$betaling = substr($x,8,2) . '-' . substr($x,5,2) . '-' . substr($x,0,4);
-
-			// Declaration of income only when asked for
-			//dd($p->inkomensverklaring->year);
-			$i = ($p->inkomensverklaring->year > 0) ? $p->inkomensverklaring->format('d-m-Y') : null;
-			if ($p->inkomen == 0) {$i = 'x';}
-
-			$data[] = [
-				'Naam' => str_replace('  ',' ',$p->voornaam . ' ' . $p->tussenvoegsel . ' ' . $p->achternaam),
-				'Bedrag' => $toPay,
-				'Inschrijving' => $p->pivot->created_at->format('d-m-Y'),
-				'Betaling' => $betaling,
-				'Inkomensverklaring' => $i,
-				'Correct' => null,
-				'Opmerking' => null
-			];
-		}
-
-		// Create and export Excel sheet from data
-		\Excel::create(date('Y-m-d') . ' Betalingsoverzicht ' . $event->code, function($excel) use($data) {
-			$excel->sheet('Overzicht', function($sheet) use($data) {
-				$sheet->fromArray($data);
-			});
-		})->export('xlsx');
-
+		return Excel::download(new EventPaymentReport($event), date('Y-m-d') . ' Betalingsoverzicht ' . $event->code . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
 	}
 
 	# Generate night register
 	public function nightRegister(Event $event) {
-		// Fill data array for participants
-		$pdata = [];
-		foreach ($event->participants()->orderBy('voornaam')->get() as $p) {
-			$pdata[] = [
-				'Voornaam' => $p->voornaam,
-				'Tussenvoegsel' => $p->tussenvoegsel,
-				'Achternaam' => $p->achternaam,
-				'Geboortedatum' => $p->geboortedatum->format('d-m-Y'),
-				'Adres' => $p->adres,
-				'Postcode' => $p->postcode,
-				'Plaats' => $p->plaats
-			];
-		}
-
-		// Fill data array for members
-		$mdata = [];
-		foreach ($event->members()->orderBy('voornaam')->get() as $m) {
-			$mdata[] = [
-				'Voornaam' => $m->voornaam,
-				'Tussenvoegsel' => $m->tussenvoegsel,
-				'Achternaam' => $m->achternaam,
-				'Geboortedatum' => $m->geboortedatum->format('d-m-Y'),
-				'Adres' => $m->adres,
-				'Postcode' => $m->postcode,
-				'Plaats' => $m->plaats
-			];
-		}
-
-		// Create and export Excel sheet from data
-		\Excel::create(date('Y-m-d') . ' Nachtregister ' . $event->location->plaats . ' ' . $event->code, function($excel) use($pdata,$mdata) {
-			$excel->sheet('Deelnemers', function($sheet) use($pdata) {
-				$sheet->fromArray($pdata);
-			});
-			$excel->sheet('Leiding', function($sheet) use($mdata) {
-				$sheet->fromArray($mdata);
-			});
-		})->export('xlsx');
+		return Excel::download(new EventNightRegisterReport($event), date('Y-m-d') . ' Nachtregister ' . $event->location->plaats . ' ' . $event->code . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
 	}
 
 	# Generate iCal stream of events
