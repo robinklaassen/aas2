@@ -120,15 +120,19 @@ class ReviewsController extends Controller {
 		}
 		
 		// Implode camp choice
-		$orig = $request->kampkeuze;
+		$choice_array = $request->kampkeuze;
 
-		$k = array_search("0", $orig);
-		if ($k !== FALSE) {
-			$orig[$k] = $request->kampkeuze_anders;
+		if ($choice_array !== null) {
+			$k = array_search("0", $choice_array);
+			if ($k !== FALSE) {
+				$choice_array[$k] = $request->kampkeuze_anders;
+			}
+	
+			$kampkeuze_string = implode(", ", $choice_array);
+		} else {
+			$kampkeuze_string = "";
 		}
 
-		$kampkeuze_string = implode(", ", $orig);
-		
 		$request->merge(array('kampkeuze' => $kampkeuze_string));
 		
 		// Store
