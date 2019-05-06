@@ -4,16 +4,29 @@ use Illuminate\Database\Eloquent\Model;
 
 class Participant extends Model {
 
+	const INCOME_DESCRIPTION_TABLE = [
+		0 => 'Meer dan € 3400 (geen korting)',
+		1 => 'Tussen € 2200 en € 3400 (korting: 15%)',
+		2 => 'Tussen € 1300 en € 2200 (korting: 30%)',
+		3 => 'Minder dan € 1300 (korting: 50%)'
+	];
+	const INCOME_DISCOUNT_TABLE = [
+		0 => 1.0,
+		1 => 0.85,
+		2 => 0.7,
+		3 => 0.5
+	];
+
 	protected $guarded = ['id', 'created_at', 'updated_at'];
-	
+
 	// Carbon dates
 	protected $dates = ['geboortedatum', 'inkomensverklaring'];
-	
+
 	// Full name
 	public function getVolnaamAttribute() {
 		return str_replace('  ', ' ', $this->voornaam . ' ' . $this->tussenvoegsel . ' ' . $this->achternaam);
 	}
-	
+
 	// Postcode mutator
 	public function setPostcodeAttribute($value)
 	{
@@ -27,7 +40,7 @@ class Participant extends Model {
 			$this->attributes['postcode'] = $value;
 		}
 	}
-	
+
 	// A participant belongs to many events
 	public function events()
 	{
@@ -38,5 +51,13 @@ class Participant extends Model {
 	public function user()
 	{
 		return $this->morphOne('App\User', 'profile');
+	}
+
+	public function incomeDescription() {
+		return $this::INCOME_DESCRIPTION_TABLE[$this->inkomen];
+	}
+
+	public function incomeBasedDiscount(): float {
+		return $this::INCOME_DISCOUNT_TABLE[$this->inkomen];
 	}
 }
