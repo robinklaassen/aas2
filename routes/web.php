@@ -15,7 +15,7 @@ Route::get('/', 'Auth\LoginController@showLoginForm');
 
 # iDeal integration
 Route::post('iDeal-webhook', 'iDealController@webhook');
-Route::get('iDeal-response/{participants}/{events}', 'iDealController@response');
+Route::get('iDeal-response/{participant}/{event}', 'iDealController@response');
 
 # Custom password reset
 Route::get('forgot-password', 'PasswordController@forgot');

@@ -29,11 +29,11 @@ class ProfileController extends Controller {
 	public function show()
 	{
 		$viewType = 'profile';
-		
+
 		if (\Auth::user()->profile_type=="App\Member")
 		{
 			$member = \Auth::user()->profile;
-			
+
 			// Who has this member been on camp with?
 			$events = $member->events()->where('type', 'kamp')->where('datum_eind', '<', date('Y-m-d'))->get();
 			$fellow_ids = [];
@@ -46,10 +46,10 @@ class ProfileController extends Controller {
 				unset($fellow_ids[$key]);
 			}
 			$fellows = \App\Member::whereIn('id', $fellow_ids)->orderBy('voornaam')->get();
-			
+
 			return view('members.show', compact('member', 'viewType', 'fellows'));
 		}
-		
+
 		if (\Auth::user()->profile_type=="App\Participant")
 		{
 			$participant = \Auth::user()->profile;
@@ -80,13 +80,13 @@ class ProfileController extends Controller {
 	public function edit()
 	{
 		$viewType = 'profile';
-		
+
 		if (\Auth::user()->profile_type=="App\Member")
 		{
 			$member = \Auth::user()->profile;
 			return view('members.edit', compact('member', 'viewType'));
 		}
-		
+
 		if (\Auth::user()->profile_type=="App\Participant")
 		{
 			$participant = \Auth::user()->profile;
@@ -113,24 +113,24 @@ class ProfileController extends Controller {
 			'plaats' => 'required',
 			'hoebij' => 'required'
 		]);
-		
+
 		// Required fields for members
 		$v->sometimes(['telefoon', 'email', 'studie', 'afgestudeerd'], 'required', function($input)
 		{
 			return (\Auth::user()->profile_type == 'App\Member');
 		});
-		
+
 		// Required fields for participants
 		$v->sometimes(['email_ouder', 'school', 'niveau', 'klas'], 'required', function($input)
 		{
 			return (\Auth::user()->profile_type == 'App\Participant');
 		});
-		
+
 		if ($v->fails())
 		{
 			return redirect()->back()->withErrors($v->errors());
 		}
-		
+
 		$profile = \Auth::user()->profile;
 		$profile->update($request->all());
 
@@ -138,7 +138,7 @@ class ProfileController extends Controller {
 			'flash_message' => 'Je profiel is bewerkt!'
 		]);
 	}
-	
+
 	# Upload photo
 	public function upload(Request $request)
 	{
@@ -147,20 +147,20 @@ class ProfileController extends Controller {
 			if ($file->isValid()) {
 				//dd('yes, this is a good file, with extension '.$file->getClientOriginalExtension());
 				$profile = \Auth::user()->profile;
-				
+
 				// Move the file to storage
 				$destPath = public_path() . '/img/profile/full/';
 				$fName = $profile->id . '.' . $file->getClientOriginalExtension();
 				$file->move($destPath, $fName);
-				
+
 				// Leave the cropping for now, just redirect to the profile page
 				return redirect('profile')->with([
 					'flash_message' => 'Je foto is geupload! Hard refresh je browser (ctrl + F5) om hem te kunnen zien'
 				]);
-				
+
 				/*
 				sleep(2);
-				
+
 				return view('profile.cropPhoto', compact('fName'));
 				*/
 			} else {
@@ -172,7 +172,7 @@ class ProfileController extends Controller {
 			return redirect()->back();
 		}
 	}
-	
+
 	# Set new password
 	public function password()
 	{
@@ -180,22 +180,22 @@ class ProfileController extends Controller {
 		$viewType = 'profile';
 		return view('users.password', compact('user', 'viewType'));
 	}
-	
+
 	public function passwordSave(Request $request)
 	{
 		$user = \Auth::user();
 		$this->validate($request, [
 			'password' => 'required|confirmed'
 		]);
-		
+
 		$user->password = bcrypt($request->password);
 		$user->save();
-		
+
 		return redirect('profile')->with([
 			'flash_message' => 'Het nieuwe wachtwoord is ingesteld!'
 		]);
 	}
-	
+
 	# Add course (member) (form)
 	public function addCourse()
 	{
@@ -203,7 +203,7 @@ class ProfileController extends Controller {
 		$viewType = 'profile';
 		return view('members.addCourse', compact('member', 'viewType'));
 	}
-	
+
 	# Add course (member) (update database)
 	public function addCourseSave()
 	{
@@ -211,12 +211,12 @@ class ProfileController extends Controller {
 		$course_id = Input::get('selected_course');
 		$course = \App\Course::find($course_id);
 		$courseLevelFrom = 0;
-		
+
 		if ($event_id = goesOnCamp($member)) {
 			$camp = \App\Event::findOrFail($event_id);
 			$statusBefore = checkCoverage($camp, $course_id);
 		}
-		
+
 		$status = $member->courses()->sync([$course_id], false);
 		if ($status['attached']==[]) {
 			$message = 'Vak reeds toegevoegd!';
@@ -228,28 +228,28 @@ class ProfileController extends Controller {
 				$courseLevelTo = Input::get('klas');
 				$member->courses()->updateExistingPivot($course_id, ['klas' => $courseLevelTo]);
 				$statusAfter = checkCoverage($camp, $course_id);
-				
+
 				// If coverage status changes, send email to camp committe
 				if ($statusBefore != $statusAfter) {
-					
+
 					\Mail::send('emails.coverageChangeNotification', compact('member', 'camp', 'course', 'courseLevelFrom', 'courseLevelTo', 'statusAfter'), function($message)
 					{
 						$message->to('kamp@anderwijs.nl', 'Kampcommissie Anderwijs')->subject('AAS 2.0 - Vakdekking gewijzigd');
 					});
 				}
-				
+
 			} else {
 				// If not, just update the course
 				$member->courses()->updateExistingPivot($course_id, ['klas' => Input::get('klas')]);
 			}
-			
+
 			$message = 'Vak toegevoegd!';
 		}
 		return redirect('profile')->with([
 			'flash_message' => $message
 		]);
 	}
-	
+
 	# Edit course (member) (form)
 	public function editCourse($course_id)
 	{
@@ -258,14 +258,14 @@ class ProfileController extends Controller {
 		$viewType = 'profile';
 		return view('members.editCourse', compact('member', 'course', 'viewType'));
 	}
-	
+
 	# Edit course (member) (update database)
 	public function editCourseSave($course_id)
 	{
 		$member = \Auth::user()->profile;
 		$course = \App\Course::find($course_id);
 		$courseLevelFrom = $member->courses()->whereId($course_id)->first()->pivot->klas;
-		
+
 		// Check if member goes on camp in near future
 		if ($event_id = goesOnCamp($member)) {
 			$camp = \App\Event::findOrFail($event_id);
@@ -274,26 +274,26 @@ class ProfileController extends Controller {
 			$courseLevelTo = Input::get('klas');
 			$member->courses()->updateExistingPivot($course_id, ['klas' => $courseLevelTo]);
 			$statusAfter = checkCoverage($camp, $course_id);
-			
+
 			// If coverage status changes, send email to camp committe
 			if ($statusBefore != $statusAfter) {
-				
+
 				\Mail::send('emails.coverageChangeNotification', compact('member', 'camp', 'course', 'courseLevelFrom', 'courseLevelTo', 'statusAfter'), function($message)
 				{
 					$message->to('kamp@anderwijs.nl', 'Kampcommissie Anderwijs')->subject('AAS 2.0 - Vakdekking gewijzigd');
 				});
 			}
-			
+
 		} else {
 			// If not, just update the course
 			$member->courses()->updateExistingPivot($course_id, ['klas' => Input::get('klas')]);
 		}
-		
+
 		return redirect('profile')->with([
 			'flash_message' => 'Het vak is gewijzigd!'
 		]);
 	}
-	
+
 	# Remove (detach) a course from this member (form)
 	public function removeCourseConfirm($course_id)
 	{
@@ -302,14 +302,14 @@ class ProfileController extends Controller {
 		$viewType = 'profile';
 		return view('members.removeCourse', compact('member', 'course', 'viewType'));
 	}
-	
+
 	# Remove (detach) a course from this member (update database)
 	public function removeCourse($course_id)
 	{
 		$member = \Auth::user()->profile;
 		$course = \App\Course::find($course_id);
 		$courseLevelFrom = $member->courses()->whereId($course_id)->first()->pivot->klas;
-		
+
 		// Check if member goes on camp in near future
 		if ($event_id = goesOnCamp($member)) {
 			$camp = \App\Event::findOrFail($event_id);
@@ -318,31 +318,31 @@ class ProfileController extends Controller {
 			$courseLevelTo = 0;
 			$member->courses()->detach($course_id);
 			$statusAfter = checkCoverage($camp, $course_id);
-			
+
 			// If coverage status changes, send email to camp committe
 			if ($statusBefore != $statusAfter) {
-				
+
 				\Mail::send('emails.coverageChangeNotification', compact('member', 'camp', 'course', 'courseLevelFrom', 'courseLevelTo', 'statusAfter'), function($message)
 				{
 					$message->to('kamp@anderwijs.nl', 'Kampcommissie Anderwijs')->subject('AAS 2.0 - Vakdekking gewijzigd');
 				});
 			}
-			
+
 		} else {
 			// If not, just update the course
 			$member->courses()->detach($course_id);
 		}
-		
+
 		return redirect('profile')->with([
 			'flash_message' => 'Het vak is verwijderd!'
 		]);
 	}
-	
+
 	# Go on camp (form)
 	public function onCamp()
 	{
 		$profile = \Auth::user()->profile;
-		
+
 		// List of future camps that are not full
 		$camps = \App\Event::where('type', 'kamp')
 							->where('openbaar', 1)
@@ -359,14 +359,14 @@ class ProfileController extends Controller {
 				$camp_full[$camp->id] = 0;
 			}
 		}
-		
+
 		// List of courses
 		$course_options = \App\Course::orderBy('naam')->pluck('naam','id')->toArray();
 		$course_options = [0 => '-geen vak-'] + $course_options;
-		
+
 		return view('profile.onCamp', compact('profile', 'camp_options', 'camp_full', 'course_options'));
 	}
-	
+
 	# Go on camp (update database)
 	public function onCampSave(Request $request)
 	{
@@ -384,25 +384,25 @@ class ProfileController extends Controller {
 			else
 			{
 				$camp = \App\Event::findOrFail($request->selected_camp);
-				
+
 				// Send update to camp committee
 				\Mail::send('emails.memberOnCampNotification', ['member' => $member, 'camp' => $camp], function($message)
 				{
 					$message->to('kamp@anderwijs.nl', 'Kampcommissie Anderwijs')->subject('AAS 2.0 - Lid op kamp');
 				});
-				
+
 				// Send confirmation to member
 				\Mail::send('emails.memberOnCampConfirmation', ['member' => $member, 'camp' => $camp], function($message) use ($member)
 				{
 					$message->to($member->email_anderwijs, $member->voornaam . ' ' . $member->tussenvoegsel . ' ' . $member->achternaam)->subject('AAS 2.0 - Aangemeld voor kamp');
 				});
-				
+
 				return redirect('profile')->with([
 					'flash_message' => 'Je gaat op kamp!'
 				]);
 			}
 
-		} 
+		}
 		elseif (\Auth::user()->profile_type == 'App\Participant')
 		{
 			$participant = \Auth::user()->profile;
@@ -427,7 +427,7 @@ class ProfileController extends Controller {
 						$givenCourses[] = ['naam' => \App\Course::find($course_id)->naam, 'info' => $request->vakinfo[$key]];
 					}
 				}
-				
+
 				// Income table
 				$incomeTable = [
 					0 => 'Meer dan € 3400 (geen korting)',
@@ -435,7 +435,7 @@ class ProfileController extends Controller {
 					2 => 'Tussen € 1300 en € 2200 (korting: 30%)',
 					3 => 'Minder dan € 1300 (korting: 50%)'
 				];
-				
+
 				// Obtain camp and cost information
 				$camp = \App\Event::findOrFail($request->selected_camp);
 				switch ($participant->inkomen)
@@ -443,45 +443,45 @@ class ProfileController extends Controller {
 					case 0:
 						$toPay = $camp->prijs;
 						break;
-					
+
 					case 1:
 						$toPay = round((0.85 * $camp->prijs)/5) * 5;
 						break;
-						
+
 					case 2:
 						$toPay = round((0.7 * $camp->prijs)/5) * 5;
 						break;
-						
+
 					case 3:
 						$toPay = round((0.5 * $camp->prijs)/5) * 5;
 						break;
 				}
-				
-				
+
+
 				// Send update to office committee
 				\Mail::send('emails.participantOnCampNotification', ['participant' => $participant, 'camp' => $camp], function($message)
 				{
 					$message->to('kantoor@anderwijs.nl', 'Kantoorcommissie Anderwijs')->subject('AAS 2.0 - Deelnemer op kamp');
 				});
-				
-				
+
+
 				$iDeal = $request->iDeal;
 				$type = "existing";
-				
+
 				// Send confirmation email to parent
 				Mail::send('emails.participantOnCampConfirm', compact('participant', 'camp', 'givenCourses', 'incomeTable', 'toPay', 'iDeal', 'type'), function($message) use ($participant)
 				{
 					$message->from('kantoor@anderwijs.nl', 'Kantoorcommissie Anderwijs');
-					
+
 					$message->to($participant->email_ouder, 'dhr./mw. ' . $participant->tussenvoegsel . ' ' . $participant->achternaam)->subject('ANDERWIJS - Bevestiging van aanmelding');
 				});
-				
+
 				// If they want to pay with iDeal, set up the payment now
 				if ($iDeal == '1' && $camp->prijs != 0)
 				{
 					// Initialize Mollie (with API key)
 					include "MollieSet.php";
-					
+
 					// Create the payment
 					$payment = $mollie->payments->create(array(
 						"amount"      => $toPay,
@@ -492,11 +492,11 @@ class ProfileController extends Controller {
 							"camp_id" => $camp->id,
 							"type" => "existing"
 						),
-						"webhookUrl"  => "https://aas2.anderwijs.nl/iDeal-webhook",
-						"redirectUrl" => "https://aas2.anderwijs.nl/iDeal-response/{$participant->id}/{$camp->id}",
+						"webhookUrl"  => url("iDeal-webhook"),
+						"redirectUrl" => url("/iDeal-response/{$participant->id}/{$camp->id}"),
 						"method" => \Mollie_API_Object_Method::IDEAL,
 					));
-					
+
 					// Direct to Mollie payment site
 					return redirect($payment->getPaymentUrl());
 				}
@@ -508,10 +508,10 @@ class ProfileController extends Controller {
 					]);
 				}
 
-			}	
+			}
 		}
 	}
-	
+
 	# Edit camp (participant) (form)
 	public function editCamp($event_id)
 	{
@@ -520,7 +520,7 @@ class ProfileController extends Controller {
 		{
 			return redirect('profile');
 		}
-		
+
 		$participant = \Auth::user()->profile;
 		$event = \App\Event::findOrFail($event_id);
 		$course_options = \App\Course::orderBy('naam')->pluck('naam', 'id')->toArray();
@@ -533,7 +533,7 @@ class ProfileController extends Controller {
 		}
 		return view('profile.editCamp', compact('participant', 'event', 'course_options', 'retrieved_courses'));
 	}
-	
+
 	# Edit camp (participant) (save)
 	public function editCampSave(Request $request, $event_id)
 	{
@@ -545,7 +545,7 @@ class ProfileController extends Controller {
 
 		// Delete all current courses
 		\DB::table('course_event_participant')->whereParticipantIdAndEventId($participant->id, $event_id)->delete();
-		
+
 		// Insert new courses
 		foreach (array_unique($request->vak) as $key => $course_id)
 		{
@@ -556,40 +556,40 @@ class ProfileController extends Controller {
 				);
 			}
 		}
-		
+
 		$camp = \App\Event::findOrFail($event_id);
-		
+
 		// Send update to office committee
 		\Mail::send('emails.participantEditedCampNotification', ['participant' => $participant, 'camp' => $camp], function($message)
 		{
 			$message->to('kantoor@anderwijs.nl', 'Kantoorcommissie')->subject('AAS 2.0 - Vakken voor kamp bewerkt');
 		});
-		
+
 		return redirect('profile')->with([
 			'flash_message' => 'De vakken voor dit kamp zijn bewerkt!'
 		]);
 	}
-	
+
 	# Declaration (form)
 	public function declareForm() {
 
 		return view('profile.declare');
 
 	}
-	
-	
+
+
 	# Declaration (submit)
 	public function declareSubmit(Request $request) {
-		
+
 		// Member profile
 		$member = \Auth::user()->profile;
-		
+
 		// Create destination folder if not exists
 		$destination = public_path() . '/img/declarations/' . $member->id . '/';
 		if (!file_exists($destination)) {
 			mkdir($destination);
 		}
-		
+
 		// Check and move files
 		$file_numbers = []; $file_names = [];
 		for ($i=0;$i<count($request->get('denotion'));$i++) {
@@ -598,13 +598,13 @@ class ProfileController extends Controller {
 				$file = $request->file('uploaded'.($i+1));
 				$filename = $file->getClientOriginalName();
 				$newFilename = date('Y-m-d') . ' - ' . ($i+1) . ' - ' . $filename;
-				
+
 				$file->move($destination, $newFilename);
-				
+
 				$file_names[] = $newFilename;
 			}
 		}
-		
+
 		// Obtain other inputs and check
 		$fileNumberArray = $request->get('fileNumber');
 		$dateArray = $request->get('date');
@@ -612,13 +612,13 @@ class ProfileController extends Controller {
 		$amountArray = $request->get('amount');
 		$giftArray = $request->get('gift'); // Watch it, not complete array, only has keys for checked
 		$totalAmount = $request->get('totalAmount');
-		
+
 		$inputData = [];
 		foreach ($fileNumberArray as $key => $fileNumber) {
 			if ($fileNumber!="") {
-				
+
 				$gift = (isset($giftArray[$key])) ? 1 : 0;
-				
+
 				$inputData[] = [
 					'fileNumber' => $fileNumber,
 					'date' => $dateArray[$key],
@@ -628,13 +628,13 @@ class ProfileController extends Controller {
 				];
 			}
 		}
-		
+
 		if ($inputData == []) {
 			return redirect('profile')->with([
 				'flash_error' => 'Geen informatie opgegeven, declaratie is niet verstuurd!'
 			]);
 		} else {
-			
+
 			// Create pdf of declaration info
 			$formFilePath = $destination . date('Y-m-d') . ' declaratieformulier.pdf';
 			$pdf = \PDF::loadView('profile.declarePDF', compact('member', 'inputData', 'totalAmount'))
@@ -642,9 +642,9 @@ class ProfileController extends Controller {
 				//->setOrientation('landscape')
 				->setWarnings(true)
 				->save($formFilePath);
-			
+
 			//return $pdf->stream();
-			
+
 			// Send email with data and files to treasurer and uploader
 			\Mail::send('emails.declaration', compact('member', 'inputData', 'totalAmount'), function($message) use ($member, $destination, $file_names, $formFilePath)
 			{
@@ -653,26 +653,26 @@ class ProfileController extends Controller {
 						//->bcc('aasman@anderwijs.nl', 'De geweldige AASman')
 						->from($member->email_anderwijs, $member->voornaam . ' ' . $member->tussenvoegsel . ' ' . $member->achternaam)
 						->subject('AAS 2.0 - Nieuwe declaratie');
-				
+
 				$message->attach($formFilePath);
-				
+
 				foreach ($file_names as $filename) {
 					$message->attach($destination . $filename);
 				}
 			});
-		
+
 			return redirect('profile')->with([
 				'flash_message' => 'De declaratie is verstuurd!'
 			]);
 		}
 
 	}
-	
+
 	# Show reviews of specified camp
 	public function reviews($event_id) {
 		$member = \Auth::user()->profile;
 		$event = Event::findOrFail($event_id);
-		
+
 		$options = [
 			1 => 'Zeer slecht',
 			2 => 'Slecht',
@@ -680,18 +680,18 @@ class ProfileController extends Controller {
 			4 => 'Goed',
 			5 => 'Zeer goed'
 		];
-		
+
 		createReviewChart($event, 'stof', $options, $member);
-		
+
 		$options = [
 			1 => 'Te weinig',
 			2 => 'Weinig',
 			3 => 'Voldoende',
 			4 => 'Veel'
 		];
-		
+
 		createReviewChart($event, 'aandacht', $options, $member);
-		
+
 		$options = [
 			1 => 'Zeer vervelend',
 			2 => 'Vervelend',
@@ -699,18 +699,18 @@ class ProfileController extends Controller {
 			4 => 'Prettig',
 			5 => 'Zeer prettig'
 		];
-		
+
 		createReviewChart($event, 'mening', $options, $member);
-		
+
 		$options = [
 			1 => 'Erg ontevreden',
 			2 => 'Een beetje ontevreden',
 			3 => 'Een beetje tevreden',
 			4 => 'Erg tevreden'
 		];
-		
+
 		createReviewChart($event, 'tevreden', $options, $member);
-		
+
 		return view('profile.reviews', compact('event', 'member'));
 	}
 }

@@ -64,12 +64,12 @@ class PagesController extends Controller {
 				// Admins and members who go on camp can click the link
 				$klikbaar = false;
 
-				$events = \Auth::user()->profile->events->pluck('id')->toArray();
+				$events = \Auth::user()->profile->events->pluck('id');
 				//dd($events);
 
 				if (\Auth::user()->is_admin) {
 					$klikbaar = true;
-				} else if (in_array($id, $events)) {
+				} else if ($events->contains($id)) {
 					$klikbaar = true;
 				}
 

@@ -66,7 +66,7 @@ class EventsController extends Controller {
 	{
 		// Redirect the viewer if the user profile is not attached to this event
 		$profile = \Auth::user()->profile;
-		if (!in_array($event->id, $profile->events->pluck('id')->toArray()) && !(\Auth::user()->is_admin))
+		if ($profile->events->contains('id', $event->id) && !(\Auth::user()->is_admin))
 		{
 			return redirect('profile');
 		}
@@ -343,11 +343,10 @@ class EventsController extends Controller {
 				->get();
 
 			// Filter out unplaced participants, if requested
-			if ($type == 'placed')
-			{
-				$unplaced = $event->participants()->where('geplaatst',0)->pluck('id')->toArray();
-				$result = array_where($result, function($key, $value) use ($unplaced) {
-					return !in_array($value->id, $unplaced);
+			if ($type == 'placed') {
+				$unplaced = $event->participants()->where('geplaatst', 0)->get();
+				$result = $result->filter(function($value, $key) use ($unplaced) {
+					return !$unplaced->contains($value);
 				});
 			}
 
@@ -553,7 +552,7 @@ class EventsController extends Controller {
 		if (!(\Auth::user()->is_admin)) {
 
 			$is_member = (\Auth::user()->profile_type == "App\Member");
-			$on_camp = \Auth::user()->profile->events->contains($event->id);
+			$on_camp = \Auth::user()->profile->events->contains("id", $event->id);
 
 			if (!($is_member && $on_camp)) {
 				return redirect()->back();

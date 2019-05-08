@@ -14,7 +14,7 @@ class EventTableSeeder extends Seeder {
 	public function run()
 	{
 		DB::table('events')->delete();
-		
+
 		Event::create([
 			'naam' => 'Meikamp',
 			'code' => 'M1415',
@@ -31,7 +31,7 @@ class EventTableSeeder extends Seeder {
 			'beschrijving' => 'Ga mee op kamp!',
 			'opmerkingen' => 'Beste kamp ooit!'
 		]);
-		
+
 		Event::create([
 			'naam' => 'Zomerkamp 1',
 			'code' => 'Z1415-1',
@@ -44,7 +44,8 @@ class EventTableSeeder extends Seeder {
 			'openbaar' => '0',
 			'opmerkingen' => 'Dit gaat natuurlijk nooit goed.'
 		]);
-		
+
+
 		Event::create([
 			'naam' => 'Training Meikamp',
 			'code' => 'TM1415',
@@ -54,7 +55,7 @@ class EventTableSeeder extends Seeder {
 			'location_id' => 2,
 			'opmerkingen' => 'Wat een vette training!'
 		]);
-		
+
 		Event::create([
 			'naam' => 'VW zomer 2015',
 			'code' => 'VWZ1415',
@@ -64,7 +65,22 @@ class EventTableSeeder extends Seeder {
 			'location_id' => 1,
 			'opmerkingen' => 'Dit is geen kamp en ook geen training.'
 		]);
-		
+
+
+		Event::create([
+			'naam' => 'Het nieuwjaarskamp 2019',
+			'code' => 'Z2019-1',
+			'type' => 'kamp',
+			'datum_voordag' => '2019-12-29',
+			'datum_start' => '2019-12-30',
+			'datum_eind' => '2020-01-01',
+			'location_id' => 2,
+			'prijs' => 1000,
+			'streeftal' => 10,
+			'openbaar' => '1',
+			'opmerkingen' => 'Dit gaat natuurlijk nooit goed.'
+		]);
+
 	}
 
 }
