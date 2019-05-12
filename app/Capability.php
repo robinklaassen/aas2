@@ -6,10 +6,21 @@ use Illuminate\Database\Eloquent\Model;
 
 class Capability extends Model
 {
-    protected $guarded = ['id'];
-    protected $timestamps = false;    
+    public static function findByName($n)
+    {
+        return Capability::where("name", "=", $n)->get();
+    }
 
-    public function roles() {
+    public static function findByNames($n)
+    {
+        return Capability::whereIn("name", $n)->get();
+    }
+
+    public $timestamps = false;
+    protected $guarded = ['id'];
+
+    public function roles()
+    {
         return $this->belongsToMany('App\Role', 'role_capability');
     }
 }

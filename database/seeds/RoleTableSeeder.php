@@ -3,8 +3,10 @@
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 use App\Role;
+use App\Capability;
 
-class RoleTableSeeder extends Seeder {
+class RoleTableSeeder extends Seeder
+{
 
 	/**
 	 * Run the database seeds.
@@ -15,21 +17,40 @@ class RoleTableSeeder extends Seeder {
 	{
 		DB::table('roles')->delete();
 
-		Role::create([
+		$r = Role::create([
 			'title' => 'AAS-Baas',
 			'tag' => 'admin+'
-        ]);
+		]);
+		$r->capabilities()->sync(Capability::all());
 
-		Role::create([
+		$r = Role::create([
 			'title' => 'Bestuur',
 			'tag' => 'admin'
-        ]);
+		]);
+		$r->capabilities()->sync(Capability::all());
 
-		Role::create([
+		$r = Role::create([
 			'title' => 'KampCI',
 			'tag' => 'kamp-ci'
-        ]);
+		]);
+		$r->capabilities()->sync(
+			Capability::findByNames([
+				'export-event-participants',
+				'create-event',
+				'edit-event',
+				'show-member-kmg',
+			])
+		);
 
+		$r = Role::create([
+			'title' => 'KantoorCI',
+			'tag' => 'kantoor-ci'
+		]);
+
+		$r->capabilities()->sync(
+			Capability::findByNames([
+				'edit-participant',
+			])
+		);
 	}
-
 }

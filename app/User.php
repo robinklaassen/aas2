@@ -6,7 +6,8 @@ use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 
-class User extends Model implements AuthenticatableContract, CanResetPasswordContract {
+class User extends Model implements AuthenticatableContract, CanResetPasswordContract
+{
 
 	use Authenticatable, CanResetPassword;
 
@@ -40,12 +41,13 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		return $this->morphTo();
 	}
 
-	public function roles() {
+	public function roles()
+	{
 		return $this->belongsToMany('App\Role', 'user_role');
 	}
 
-	public function hasRole($tag) {
-		return $this->roles()->where("tag", "=", $tag)->count() > 0;
+	public function hasRole($tag)
+	{
+		return $this->roles()->with("tag", "=", $tag)->count() > 0;
 	}
-
 }
