@@ -63,15 +63,15 @@ Route::delete('profile/remove-course/{course}', 'ProfileController@removeCourse'
 Route::get('profile/reviews/{event}', 'ProfileController@reviews');
 
 # Participant things
-Route::get('participants/{participants}/on-event',
+Route::get('participants/{participant}/on-event',
     'ParticipantsController@onEvent');
-Route::put('participants/{participants}/on-event',
+Route::put('participants/{participant}/on-event',
     'ParticipantsController@onEventSave');
-Route::get('participants/{participants}/edit-event/{event}',
+Route::get('participants/{participant}/edit-event/{event}',
     'ParticipantsController@editEvent');
-Route::put('participants/{participants}/edit-event/{event}',
+Route::put('participants/{participant}/edit-event/{event}',
     'ParticipantsController@editEventSave');
-Route::get('participants/{participants}/delete', 'ParticipantsController@delete');
+Route::get('participants/{participant}/delete', 'ParticipantsController@delete');
 Route::get('participants/export', 'ParticipantsController@export');
 Route::get('participants/map', 'ParticipantsController@map');
 // Route::get('participants/{participant}', 'ParticipantsController@show');
@@ -79,19 +79,19 @@ Route::resource('participants', 'ParticipantsController');
 
 # Member things
 Route::get('members/search', 'MembersController@search');
-Route::get('members/{members}/on-event', 'MembersController@onEvent');
-Route::put('members/{members}/on-event', 'MembersController@onEventSave');
-Route::get('members/{members}/add-course', 'MembersController@addCourse');
-Route::put('members/{members}/add-course', 'MembersController@addCourseSave');
-Route::get('members/{members}/edit-course/{course}',
+Route::get('members/{member}/on-event', 'MembersController@onEvent');
+Route::put('members/{member}/on-event', 'MembersController@onEventSave');
+Route::get('members/{member}/add-course', 'MembersController@addCourse');
+Route::put('members/{member}/add-course', 'MembersController@addCourseSave');
+Route::get('members/{member}/edit-course/{course}',
     'MembersController@editCourse');
-Route::put('members/{members}/edit-course/{course}',
+Route::put('members/{member}/edit-course/{course}',
     'MembersController@editCourseSave');
-Route::get('members/{members}/remove-course/{course}',
+Route::get('members/{member}/remove-course/{course}',
     'MembersController@removeCourseConfirm');
-Route::delete('members/{members}/remove-course/{course}',
+Route::delete('members/{member}/remove-course/{course}',
     'MembersController@removeCourse');
-Route::get('members/{members}/delete', 'MembersController@delete');
+Route::get('members/{member}/delete', 'MembersController@delete');
 Route::get('members/export', 'MembersController@export');
 Route::get('members/map', 'MembersController@map');
 Route::resource('members', 'MembersController');
@@ -130,24 +130,24 @@ Route::put('events/{event}/move-participant/{participant}', 'EventsController@mo
 Route::resource('events', 'EventsController');
 
 # Location things
-Route::get('locations/{locations}/delete', 'LocationsController@delete');
-Route::get('locations/{locations}/reviews/{events}', 'LocationsController@reviews');
+Route::get('locations/{location}/delete', 'LocationsController@delete');
+Route::get('locations/{location}/reviews/{events}', 'LocationsController@reviews');
 Route::resource('locations', 'LocationsController');
 
 # Course things
-Route::get('courses/{courses}/delete', 'CoursesController@delete');
+Route::get('courses/{course}/delete', 'CoursesController@delete');
 Route::resource('courses', 'CoursesController');
 
 # Action things
-Route::get('actions/{actions}/delete', 'ActionsController@delete');
+Route::get('actions/{action}/delete', 'ActionsController@delete');
 Route::resource('actions', 'ActionsController');
 
 # User things
-Route::get('users/{users}/admin', 'UsersController@admin');
-Route::put('users/{users}/admin', 'UsersController@adminSave');
-Route::get('users/{users}/password', 'UsersController@password');
-Route::put('users/{users}/password', 'UsersController@passwordSave');
-Route::get('users/{users}/delete', 'UsersController@delete');
+Route::get('users/{user}/admin', 'UsersController@admin');
+Route::put('users/{user}/admin', 'UsersController@adminSave');
+Route::get('users/{user}/password', 'UsersController@password');
+Route::put('users/{user}/password', 'UsersController@passwordSave');
+Route::get('users/{user}/delete', 'UsersController@delete');
 Route::get('users/create-for-member', 'UsersController@createForMember');
 Route::post('users/create-for-member', 'UsersController@storeForMember');
 Route::get('users/create-for-participant',
@@ -157,18 +157,18 @@ Route::post('users/create-for-participant',
 Route::resource('users', 'UsersController');
 
 # Declaration things
-Route::get('declarations/process/{members}',
+Route::get('declarations/process/{member}',
     'DeclarationsController@confirmProcess');
-Route::post('declarations/process/{members}', 'DeclarationsController@process');
+Route::post('declarations/process/{member}', 'DeclarationsController@process');
 Route::get('declarations/admin', 'DeclarationsController@admin');
-Route::get('declarations/files/{files}/delete',
+Route::get('declarations/files/{file}/delete',
     'DeclarationsController@fileDelete');
-Route::delete('declarations/files/{files}', 'DeclarationsController@fileDestroy');
+Route::delete('declarations/files/{file}', 'DeclarationsController@fileDestroy');
 Route::get('declarations/files', 'DeclarationsController@showFiles');
-Route::get('declarations/{declarations}/delete', 'DeclarationsController@delete');
-Route::delete('declarations/{declarations}', 'DeclarationsController@destroy');
-Route::get('declarations/{declarations}/edit', 'DeclarationsController@edit');
-Route::patch('declarations/{declarations}', 'DeclarationsController@update');
+Route::get('declarations/{declaration}/delete', 'DeclarationsController@delete');
+Route::delete('declarations/{declaration}', 'DeclarationsController@destroy');
+Route::get('declarations/{declaration}/edit', 'DeclarationsController@edit');
+Route::patch('declarations/{declaration}', 'DeclarationsController@update');
 Route::get('declarations/upload', 'DeclarationsController@upload');
 Route::post('declarations/create', 'DeclarationsController@create');
 Route::post('declarations', 'DeclarationsController@store');
@@ -176,8 +176,8 @@ Route::get('declarations', 'DeclarationsController@index');
 //Route::resource('declarations', 'DeclarationsController');
 
 # Review things
-Route::get('enquete/{events}', 'ReviewsController@review');
-Route::post('enquete/{events}', 'ReviewsController@reviewPost');
+Route::get('enquete/{event}', 'ReviewsController@review');
+Route::post('enquete/{event}', 'ReviewsController@reviewPost');
 
 # Laravel standard registration and login things (customised)
 Route::get('password/forgot', 'Auth\PasswordController@forgot');

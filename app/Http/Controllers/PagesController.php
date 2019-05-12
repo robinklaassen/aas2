@@ -479,6 +479,8 @@ class PagesController extends Controller {
 								->orderBy('datum_start','asc')
 								->where('openbaar', 1)
 								->get();
+		} else {
+			return null;
 		}
 
 		$k = 1;
