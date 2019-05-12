@@ -14,16 +14,19 @@ class DatabaseSeeder extends Seeder {
 	{
 		Model::unguard();
 
-		$this->call('MemberTableSeeder');
-		$this->call('LocationTableSeeder');
-		$this->call('EventTableSeeder');
-		$this->call('CourseTableSeeder');
-		$this->call('EventMemberPivotSeeder');
-		$this->call('CourseMemberPivotSeeder');
-		$this->call('ParticipantTableSeeder');
-		$this->call('EventParticipantPivotSeeder');
-		$this->call('CourseEventParticipantPivotSeeder');
-		$this->call('UserTableSeeder');
+		$this->call([
+			MemberTableSeeder::class,
+			LocationTableSeeder::class,
+			EventTableSeeder::class,
+			CourseTableSeeder::class,
+			EventMemberPivotSeeder::class,
+			CourseMemberPivotSeeder::class,
+			ParticipantTableSeeder::class,
+			EventParticipantPivotSeeder::class,
+			CourseEventParticipantPivotSeeder::class,
+			UserTableSeeder::class,
+			ActionTableSeeder::class
+		]);
 	}
 
 }
