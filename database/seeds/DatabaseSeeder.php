@@ -15,20 +15,6 @@ class DatabaseSeeder extends Seeder
 	{
 		Model::unguard();
 
-<<<<<<< HEAD
-		$this->call('MemberTableSeeder');
-		$this->call('LocationTableSeeder');
-		$this->call('EventTableSeeder');
-		$this->call('CourseTableSeeder');
-		$this->call('EventMemberPivotSeeder');
-		$this->call('CourseMemberPivotSeeder');
-		$this->call('ParticipantTableSeeder');
-		$this->call('EventParticipantPivotSeeder');
-		$this->call('CourseEventParticipantPivotSeeder');
-		$this->call('CapabilitiesSeeder');
-		$this->call('RoleTableSeeder');
-		$this->call('UserTableSeeder');
-=======
 		$this->call([
 			MemberTableSeeder::class,
 			LocationTableSeeder::class,
@@ -44,6 +30,5 @@ class DatabaseSeeder extends Seeder
 			ReviewTableSeeder::class,
 			MemberReviewPivotSeeder::class
 		]);
->>>>>>> change/upgrade
 	}
 }
