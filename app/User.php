@@ -60,4 +60,14 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 			);
 		});
 	}
+
+	public function isMember()
+	{
+		return $this->profile_type === "App\Member";
+	}
+
+	public function isParticipant()
+	{
+		return $this->profile_type === "App\Participant";
+	}
 }
