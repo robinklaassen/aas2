@@ -25,7 +25,9 @@ class DatabaseSeeder extends Seeder {
 			EventParticipantPivotSeeder::class,
 			CourseEventParticipantPivotSeeder::class,
 			UserTableSeeder::class,
-			ActionTableSeeder::class
+			ActionTableSeeder::class,
+			ReviewTableSeeder::class,
+			MemberReviewPivotSeeder::class
 		]);
 	}
 

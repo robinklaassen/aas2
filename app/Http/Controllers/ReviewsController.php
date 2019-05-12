@@ -19,9 +19,9 @@ class ReviewsController extends Controller {
 			return redirect('/');
 		}
 		
-		// No access outside of a useful time period around the camp
+		// No live access outside of a useful time period around the camp
 		$now = new Carbon();
-		if (($now < $event->datum_voordag->subDays(15)) || ($event->datum_eind->addDays(15) < $now) ) {
+		if ((env('APP_ENV') != 'local') && (($now < $event->datum_voordag->subDays(15)) || ($event->datum_eind->addDays(15) < $now)) ) {
 			return redirect('/');
 		}
 		
