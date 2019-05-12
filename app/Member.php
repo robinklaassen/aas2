@@ -2,18 +2,17 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class Member extends Model {
+class Member extends Model
+{
 
 	protected $guarded = ['id', 'created_at', 'updated_at'];
 
-	// Carbon dates
-	public function getDates()
-	{
-		return array('created_at', 'updated_at', 'geboortedatum');
-	}
+	protected $dates = ['created_at', 'updated_at', 'geboortedatum'];
+
 
 	// Full name
-	public function getVolnaamAttribute() {
+	public function getVolnaamAttribute()
+	{
 		return str_replace('  ', ' ', $this->voornaam . ' ' . $this->tussenvoegsel . ' ' . $this->achternaam);
 	}
 
@@ -21,12 +20,9 @@ class Member extends Model {
 	public function setPostcodeAttribute($value)
 	{
 		$value = strtoupper($value);
-		if (preg_match('/\d{4}[A-Z]{2}/', $value))
-		{
-			$this->attributes['postcode'] = substr($value,0,4) . ' ' . substr($value,4,2);
-		}
-		else
-		{
+		if (preg_match('/\d{4}[A-Z]{2}/', $value)) {
+			$this->attributes['postcode'] = substr($value, 0, 4) . ' ' . substr($value, 4, 2);
+		} else {
 			$this->attributes['postcode'] = $value;
 		}
 	}
@@ -65,11 +61,11 @@ class Member extends Model {
 	public function reviews()
 	{
 		return $this->belongsToMany('App\Review')
-				->withPivot('stof')
-				->withPivot('aandacht')
-				->withPivot('mening')
-				->withPivot('tevreden')
-				->withPivot('bericht');
+			->withPivot('stof')
+			->withPivot('aandacht')
+			->withPivot('mening')
+			->withPivot('tevreden')
+			->withPivot('bericht');
 	}
 
 	// Custom getter for the 'straight flush' - a member having done 5 or more unique types of camp (gets 3 bonus points)
@@ -78,17 +74,17 @@ class Member extends Model {
 		$startDate = '2014-09-01';
 		$endDate = date('Y-m-d');
 
-		$camps = $this->events()->where('type', 'kamp')->where('datum_start','>',$startDate)->where('datum_eind','<',$endDate)->where('wissel',0)->get();
+		$camps = $this->events()->where('type', 'kamp')->where('datum_start', '>', $startDate)->where('datum_eind', '<', $endDate)->where('wissel', 0)->get();
 
 		$list = [];
 		foreach ($camps as $camp) {
-			$list[] = substr($camp->code,0,1);
+			$list[] = substr($camp->code, 0, 1);
 		}
 
 		$ulist = array_unique($list);
 
 		// Filter K and N to 1
-		if (in_array('K',$ulist) && in_array('N',$ulist)) {
+		if (in_array('K', $ulist) && in_array('N', $ulist)) {
 			$ulist = array_diff($ulist, ['K']);
 		}
 
@@ -103,17 +99,19 @@ class Member extends Model {
 		$startDate = '2014-09-01';
 		$endDate = date('Y-m-d');
 
-		$camps_full = $this->events()->where('type', 'kamp')->where('datum_start','>',$startDate)->where('datum_eind','<',$endDate)->where('wissel',0)->count();
+		$camps_full = $this->events()->where('type', 'kamp')->where('datum_start', '>', $startDate)->where('datum_eind', '<', $endDate)->where('wissel', 0)->count();
 
-		$camps_partial = $this->events()->where('type', 'kamp')->where('datum_start','>',$startDate)->where('datum_eind','<',$endDate)->where('wissel',1)->count();
+		$camps_partial = $this->events()->where('type', 'kamp')->where('datum_start', '>', $startDate)->where('datum_eind', '<', $endDate)->where('wissel', 1)->count();
 
-		$trainings = $this->events()->where('type', 'training')->where('datum_start','>',$startDate)->where('datum_eind','<',$endDate)->count();
+		$trainings = $this->events()->where('type', 'training')->where('datum_start', '>', $startDate)->where('datum_eind', '<', $endDate)->count();
 
-		$other = $this->actions()->where('date','<=',$endDate)->sum('points');
+		$other = $this->actions()->where('date', '<=', $endDate)->sum('points');
 
 		$points = $camps_full * 3 + $camps_partial * 1 + $trainings * 2 + $other;
 
-		if ($this->hasstraightflush) {$points += 3;}
+		if ($this->hasstraightflush) {
+			$points += 3;
+		}
 
 		return $points;
 	}
@@ -123,7 +121,7 @@ class Member extends Model {
 	{
 		$points = $this->points;
 
-		$ranks = [0,3,10,20,35,50,70,100]; // this array is also in the view composer for member.show
+		$ranks = [0, 3, 10, 20, 35, 50, 70, 100]; // this array is also in the view composer for member.show
 		//$rank = 0;
 		foreach ($ranks as $level => $number) {
 			if ($points >= $number) $rank = $level;
@@ -140,7 +138,7 @@ class Member extends Model {
 		$data = [];
 
 		// First the event data
-		$events = $this->events()->whereIn('type',['kamp', 'training'])->where('datum_start','>',$startDate)->where('datum_eind','<',$endDate)->orderBy('datum_start','asc')->get();
+		$events = $this->events()->whereIn('type', ['kamp', 'training'])->where('datum_start', '>', $startDate)->where('datum_eind', '<', $endDate)->orderBy('datum_start', 'asc')->get();
 
 		foreach ($events as $event) {
 
@@ -165,7 +163,7 @@ class Member extends Model {
 		}
 
 		// Then the action data
-		$actions = $this->actions()->where('date','<=',$endDate)->orderBy('date','asc')->get();
+		$actions = $this->actions()->where('date', '<=', $endDate)->orderBy('date', 'asc')->get();
 
 		foreach ($actions as $action) {
 			$data[] = [
@@ -176,7 +174,7 @@ class Member extends Model {
 		}
 
 		// Then sort and return
-		$data = array_sort($data, function($item) {
+		$data = array_sort($data, function ($item) {
 			return $item['date'];
 		});
 
@@ -189,9 +187,9 @@ class Member extends Model {
 		$startDate = '2014-09-01';
 		$endDate = date('Y-m-d');
 
-		$lastEvent = $this->events()->whereIn('type',['kamp', 'training'])->where('datum_start','>',$startDate)->where('datum_eind','<',$endDate)->orderBy('datum_start','desc')->first();
+		$lastEvent = $this->events()->whereIn('type', ['kamp', 'training'])->where('datum_start', '>', $startDate)->where('datum_eind', '<', $endDate)->orderBy('datum_start', 'desc')->first();
 
-		$lastAction = $this->actions()->where('date','<',$endDate)->orderBy('date','desc')->first();
+		$lastAction = $this->actions()->where('date', '<', $endDate)->orderBy('date', 'desc')->first();
 
 		$e = $lastEvent !== null;
 		$a = $lastAction !== null;
@@ -206,7 +204,7 @@ class Member extends Model {
 			$result = null;
 		}
 
-		switch ($result ) {
+		switch ($result) {
 			case 'e':
 				if ($lastEvent->type == 'training') {
 					$points = 2;
@@ -242,19 +240,19 @@ class Member extends Model {
 	{
 		$events = $this->events()->where('type', 'kamp')->where('datum_eind', '<', date('Y-m-d'))->get();
 		$fellow_ids = [];
-		foreach ($events as $event)
-		{
-			$fellow_ids = array_merge($fellow_ids, $event->members()->lists('id')->toArray());
+		foreach ($events as $event) {
+			$fellow_ids = array_merge($fellow_ids, $event->members()->pluck('id')->toArray());
 		}
 		$fellow_ids = array_unique($fellow_ids);
-		if(($key = array_search($this->id, $fellow_ids)) !== false) {
+		if (($key = array_search($this->id, $fellow_ids)) !== false) {
 			unset($fellow_ids[$key]);
 		}
 		$fellows = \App\Member::whereIn('id', $fellow_ids)->orderBy('voornaam')->get();
 		return $fellows;
 	}
 
-	public function hasRole($title) {
+	public function hasRole($title)
+	{
 		$user = $this->user()->first();
 		return $user ? $user->hasRole($title) : false;
 	}

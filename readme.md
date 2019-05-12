@@ -3,6 +3,8 @@
 Custom administratiesysteem voor vereniging Anderwijs, www.anderwijs.nl.  
 Gebouwd april-mei 2015 door Robin Klaassen. Gebaseerd op Laravel 5.
 
+Hieronder globale informatie over het opzetten van een lokale ontwikkelomgeving. Voor een uitgebreider stappenplan in het Engels, zie de file `INSTALLATION.md`.
+
 ## Draai de code lokaal
 
 - Installeer WAMP

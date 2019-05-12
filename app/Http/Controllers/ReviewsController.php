@@ -19,9 +19,9 @@ class ReviewsController extends Controller {
 			return redirect('/');
 		}
 		
-		// No access outside of a useful time period around the camp
+		// No live access outside of a useful time period around the camp
 		$now = new Carbon();
-		if (($now < $event->datum_voordag->subDays(15)) || ($event->datum_eind->addDays(15) < $now) ) {
+		if ((env('APP_ENV') != 'local') && (($now < $event->datum_voordag->subDays(15)) || ($event->datum_eind->addDays(15) < $now)) ) {
 			return redirect('/');
 		}
 		
@@ -120,15 +120,19 @@ class ReviewsController extends Controller {
 		}
 		
 		// Implode camp choice
-		$orig = $request->kampkeuze;
+		$choice_array = $request->kampkeuze;
 
-		$k = array_search("0", $orig);
-		if ($k !== FALSE) {
-			$orig[$k] = $request->kampkeuze_anders;
+		if ($choice_array !== null) {
+			$k = array_search("0", $choice_array);
+			if ($k !== FALSE) {
+				$choice_array[$k] = $request->kampkeuze_anders;
+			}
+	
+			$kampkeuze_string = implode(", ", $choice_array);
+		} else {
+			$kampkeuze_string = "";
 		}
 
-		$kampkeuze_string = implode(", ", $orig);
-		
 		$request->merge(array('kampkeuze' => $kampkeuze_string));
 		
 		// Store

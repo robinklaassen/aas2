@@ -15,15 +15,6 @@
 
 {!! Form::open(['url' => 'participants/'.$participant->id.'/edit-event/'.$event->id, 'method' => 'PUT']) !!}
 
-<!--
-<div class="row">
-	<div class="col-sm-4 form-group">
-		{!! Form::label('selected_courses', 'Vakken:') !!}
-		{!! Form::select('selected_courses[]', $course_options, $retrieved_courses, ['multiple',  'id' => 'courseSelect', 'class' => 'form-control']) !!}
-	</div>
-</div>
--->
-
 <p><b>Vakken:</b></p>
 
 @for ($i = 0; $i < 6; $i++)

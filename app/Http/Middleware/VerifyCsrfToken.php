@@ -1,32 +1,19 @@
-<?php namespace App\Http\Middleware;
+<?php
 
-use Closure;
-use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as BaseVerifier;
+namespace App\Http\Middleware;
 
-class VerifyCsrfToken extends BaseVerifier {
+use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken as Middleware;
 
-	/**
-	 * Handle an incoming request.
-	 *
-	 * @param  \Illuminate\Http\Request  $request
-	 * @param  \Closure  $next
-	 * @return mixed
-	 */
-	public function handle($request, Closure $next)
-	{
-		# Custom CSRF skip, initially for iDeal webhook
-		$skip = [
-			'iDeal-webhook',
-			'declare'
-		];
-		
-		foreach ($skip as $key => $route) {
-			if ($request->is($route)) {
-				return parent::addCookieToResponse($request, $next($request));
-			}
-		}
-		
-		return parent::handle($request, $next);
-	}
-
+class VerifyCsrfToken extends Middleware
+{
+    /**
+     * The URIs that should be excluded from CSRF verification.
+     *
+     * @var array
+     */
+    protected $except = [
+		'iDeal-webhook',
+		'declare'
+        //
+    ];
 }

@@ -14,7 +14,7 @@ function goesOnCamp($member)
 {
 	$result = false;
 	
-	$dates = $member->events()->where('type', 'kamp')->orderBy('datum_start')->lists('datum_start','id')->toArray();
+	$dates = $member->events()->where('type', 'kamp')->orderBy('datum_start')->pluck('datum_start','id')->toArray();
 
 	foreach ($dates as $id => $date) {
 		if (strtotime($date) > time() ) {
@@ -30,7 +30,7 @@ function goesOnCamp($member)
 function checkCoverage($camp, $course_id)
 {
 
-	$memberIDs = $camp->members->lists('id')->toArray();
+	$memberIDs = $camp->members->pluck('id')->toArray();
 
 	// Obtain members that have this course
 	$result = \DB::table('course_member')
@@ -111,13 +111,13 @@ function createReviewChart($event, $name, $options, $member = NULL) {
 		$q = $event->reviews()
 				->select($name, \DB::raw('count(*) as total'))
 				->groupBy($name)
-				->lists('total', $name)->toArray();
+				->pluck('total', $name)->toArray();
 	} else {
 		$q = $member->reviews()
 				->where('event_id', $event->id)
 				->select($name, \DB::raw('count(*) as total'))
 				->groupBy($name)
-				->lists('total', $name)->toArray();
+				->pluck('total', $name)->toArray();
 	}
 	
 	foreach ($options as $n => $t) {

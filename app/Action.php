@@ -7,10 +7,7 @@ class Action extends Model {
 	protected $guarded = ['id', 'created_at', 'updated_at'];
 	
 	// Carbon dates
-	public function getDates()
-	{
-		return array('date');
-	}
+	protected $dates = ['date'];
 	
 	// An action belongs to one member
 	
