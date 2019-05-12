@@ -50,4 +50,14 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	{
 		return $this->roles()->with("tag", "=", $tag)->count() > 0;
 	}
+
+	public function capabilities()
+	{
+		return Capability::whereHas("roles", function ($q) {
+			$q->whereIn(
+				"role_id",
+				Auth::user()->roles()->lists('id')
+			);
+		});
+	}
 }

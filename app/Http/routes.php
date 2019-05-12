@@ -1,4 +1,5 @@
 <?php
+use App\Capability;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,11 +64,6 @@ Route::get('profile/edit-camp/{event}', 'ProfileController@editCamp');
 Route::put('profile/edit-camp/{event}', 'ProfileController@editCampSave');
 Route::delete('profile/remove-course/{course}', 'ProfileController@removeCourse');
 Route::get('profile/reviews/{event}', 'ProfileController@reviews');
-
-Route::get("test", function () {
-
-    dd(Auth::user()->roles()->with("capabilities");
-});
 
 # Participant things
 Route::get(
