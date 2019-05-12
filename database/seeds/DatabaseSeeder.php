@@ -25,6 +25,8 @@ class DatabaseSeeder extends Seeder
 			ParticipantTableSeeder::class,
 			EventParticipantPivotSeeder::class,
 			CourseEventParticipantPivotSeeder::class,
+			RoleTableSeeder::class,
+			CapabilitiesSeeder::class,
 			UserTableSeeder::class,
 			ActionTableSeeder::class,
 			ReviewTableSeeder::class,

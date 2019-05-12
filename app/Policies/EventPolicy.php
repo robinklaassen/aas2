@@ -4,7 +4,7 @@ namespace App\Policies;
 
 use Illuminate\Auth\Access\HandlesAuthorization;
 use App\User;
-use App\Events\Event;
+use App\Event;
 
 class EventPolicy
 {
@@ -20,20 +20,20 @@ class EventPolicy
         //
     }
 
-    public function viewParticipants(User $user, Event $event)
-    {
-        return $user->capabilities()->contains("view-event-participants") || ($user->isMember() && $user->profile()->events()->contains($event));
-    }
+    // public function viewParticipants(User $user, Event $event)
+    // {
+    //     return $user->capabilities()->contains("view-event-participants") || ($user->isMember() && $user->profile()->events()->contains($event));
+    // }
 
-    public function create(User $user)
-    {
-        return $user->capabilities()->contains("create-event");
-    }
+    // public function create(User $user)
+    // {
+    //     return $user->capabilities()->contains("create-event");
+    // }
 
-    public function update(User $user, Event $event)
-    {
-        return $user->capabilities()->contains("edit-event") && $event->datum_einde < Carbon::now();
-    }
+    // public function update(User $user, Event $event)
+    // {
+    //     return $user->capabilities()->contains("edit-event") && $event->datum_einde < Carbon::now();
+    // }
 
     public function exportParticipants(User $user, Event $event)
     {

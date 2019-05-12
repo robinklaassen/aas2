@@ -10,7 +10,7 @@ use Illuminate\Notifications\Notifiable;
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract
 {
 
-	use Authenticatable, CanResetPassword, Notifiable ;
+	use Authenticatable, CanResetPassword, Notifiable;
 
 	/**
 	 * The database table used by the model.
@@ -54,12 +54,13 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
 	public function capabilities()
 	{
-		return Capability::whereHas("roles", function ($q) {
+		$roles = $this->roles()->pluck('id');
+		return Capability::whereHas("roles", function ($q) use ($roles) {
 			$q->whereIn(
 				"role_id",
-				Auth::user()->roles()->lists('id')
+				$roles
 			);
-		});
+		})->get();
 	}
 
 	public function isMember()
