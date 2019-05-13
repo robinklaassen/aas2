@@ -3,11 +3,16 @@ language: php
 php:
   - 7.2
 
+services:
+  - mysql
+
 before_script:
   - cp .env.travis .env
+  - mysql -e 'create database aas2;'
   - composer self-update
   - composer install --no-interaction
+  - php artisan key:generate
+  - php artisan migrate --seed
 
 script:
-  - php artisan key:generate
   - vendor/bin/phpunit
