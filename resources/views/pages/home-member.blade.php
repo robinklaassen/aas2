@@ -37,10 +37,8 @@
 @section('content')
 
 <div class="jumbotron">
-	@if (Auth::user()->profile_type == 'App\Member')
 	<div class="row">
 	<div class="col-md-8">
-	@endif
 		<h1>Welkom, {{ Auth::user()->profile->voornaam }}!</h1>
 		<p>
 			Leuk je weer te zien. 
@@ -59,7 +57,6 @@
 				@endforeach
 			</ul>
 		@endif
-	@if (Auth::user()->profile_type == 'App\Member')
 	</div>
 	<div class="col-md-4 progress-container">
 		@foreach ($thermo as $c)
@@ -91,7 +88,6 @@
 		@endforeach
 	</div>
 	</div>
-	@endif
 </div>
 
 @endsection
