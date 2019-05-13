@@ -2,16 +2,14 @@
 
 use App\Event;
 use App\Member;
-use App\Participant;
 use App\Http\Requests;
-use App\Http\Controllers\Controller;
-use Khill\Lavacharts\Lavacharts;
 use App\Exports\EventNightRegisterReport;
 use App\Exports\EventPaymentReport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 
-class EventsController extends Controller {
+class EventsController extends Controller
+{
 
 	public function __construct()
 	{
@@ -27,10 +25,10 @@ class EventsController extends Controller {
 	 */
 	public function index()
 	{
-		$events = Event::where('type','kamp')->get();
-		$trainings = Event::where('type','training')->get();
-		$others = Event::where('type','overig')->get();
-		return view('events.index', compact('events','trainings','others'));
+		$events = Event::where('type', 'kamp')->get();
+		$trainings = Event::where('type', 'training')->get();
+		$others = Event::where('type', 'overig')->get();
+		return view('events.index', compact('events', 'trainings', 'others'));
 	}
 
 	/**
@@ -40,6 +38,7 @@ class EventsController extends Controller {
 	 */
 	public function create()
 	{
+		$this->authorize("create");
 		return view('events.create');
 	}
 
@@ -50,6 +49,7 @@ class EventsController extends Controller {
 	 */
 	public function store(Requests\EventRequest $request)
 	{
+		$this->authorize("create");
 		Event::create($request->all());
 		return redirect('events')->with([
 			'flash_message' => 'Het evenement is aangemaakt!'
@@ -64,10 +64,10 @@ class EventsController extends Controller {
 	 */
 	public function show(Event $event)
 	{
+		$this->authorize("view", $event);
 		// Redirect the viewer if the user profile is not attached to this event
 		$profile = \Auth::user()->profile;
-		if ($profile->events->contains('id', $event->id) && !(\Auth::user()->is_admin))
-		{
+		if ($profile->events->contains('id', $event->id) && !(\Auth::user()->is_admin)) {
 			return redirect('profile');
 		}
 
@@ -85,7 +85,7 @@ class EventsController extends Controller {
 				$x .= $r->code . ' ';
 			}
 
-			$participantCourseString[$p->id] = substr($x,0,strlen($x)-1);
+			$participantCourseString[$p->id] = substr($x, 0, strlen($x) - 1);
 		}
 
 		// Check which participants are 'new'
@@ -97,16 +97,15 @@ class EventsController extends Controller {
 
 		// Check if all information should be shown (not to unplaced participant profile)
 		$showAll = true;
-		if (\Auth::user()->profile_type == "App\Participant" && !($profile->events()->find($event->id)->pivot->geplaatst) ) {
+		if (\Auth::user()->profile_type == "App\Participant" && !($profile->events()->find($event->id)->pivot->geplaatst)) {
 			$showAll = false;
-
 		}
 
 		// Check number of participants to show
 		if (\Auth::user()->is_admin) {
 			$numberOfParticipants = $event->participants->count();
 		} else {
-			$numberOfParticipants = $event->participants()->wherePivot('geplaatst',1)->count();
+			$numberOfParticipants = $event->participants()->wherePivot('geplaatst', 1)->count();
 		}
 
 		return view('events.show', compact('event', 'participantCourseString', 'participantIsNew', 'showAll', 'numberOfParticipants'));
@@ -120,6 +119,7 @@ class EventsController extends Controller {
 	 */
 	public function edit(Event $event)
 	{
+		$this->authorize("update", $event);
 		return view('events.edit', compact('event'));
 	}
 
@@ -131,8 +131,9 @@ class EventsController extends Controller {
 	 */
 	public function update(Event $event, Requests\EventRequest $request)
 	{
+		$this->authorize("update", $event);
 		$event->update($request->all());
-		return redirect('events/'.$event->id)->with([
+		return redirect('events/' . $event->id)->with([
 			'flash_message' => 'Het evenement is bewerkt!'
 		]);
 	}
@@ -146,11 +147,13 @@ class EventsController extends Controller {
 
 	public function delete(Event $event)
 	{
+		$this->authorize("delete", $event);
 		return view('events.delete', compact('event'));
 	}
 
 	public function destroy(Event $event)
 	{
+		$this->authorize("delete", $event);
 		$event->delete();
 		return redirect('events')->with([
 			'flash_message' => 'Het evenement is verwijderd!'
@@ -168,7 +171,7 @@ class EventsController extends Controller {
 	{
 		$event->members()->updateExistingPivot($member_id, ['wissel' => $request->wissel, 'wissel_datum_start' => $request->wissel_datum_start, 'wissel_datum_eind' => $request->wissel_datum_eind]);
 
-		return redirect('events/'.$event->id)->with([
+		return redirect('events/' . $event->id)->with([
 			'flash_message' => 'De leiding op dit evenement is bewerkt!'
 		]);
 	}
@@ -183,7 +186,7 @@ class EventsController extends Controller {
 	public function removeMember(Event $event, $member_id)
 	{
 		$event->members()->detach($member_id);
-		return redirect('events/'.$event->id)->with([
+		return redirect('events/' . $event->id)->with([
 			'flash_message' => 'Het lid is van dit evenement verwijderd!'
 		]);
 	}
@@ -193,10 +196,9 @@ class EventsController extends Controller {
 	{
 		$participant = $event->participants->find($participant_id);
 
-		$result = \DB::table('course_event_participant')->select('course_id','info')->whereParticipantIdAndEventId($participant_id, $event->id)->get();
+		$result = \DB::table('course_event_participant')->select('course_id', 'info')->whereParticipantIdAndEventId($participant_id, $event->id)->get();
 		$retrieved_courses = [];
-		foreach ($result as $row)
-		{
+		foreach ($result as $row) {
 			$retrieved_courses[] = ['id' => $row->course_id, 'info' => $row->info];
 		}
 
@@ -212,17 +214,15 @@ class EventsController extends Controller {
 		\DB::table('course_event_participant')->whereParticipantIdAndEventId($participant_id, $event->id)->delete();
 
 		// Insert new courses
-		foreach (array_unique($request->vak) as $key => $course_id)
-		{
-			if ($course_id)
-			{
+		foreach (array_unique($request->vak) as $key => $course_id) {
+			if ($course_id) {
 				\DB::table('course_event_participant')->insert(
 					['course_id' => $course_id, 'event_id' => $event->id, 'participant_id' => $participant_id, 'info' => $request->vakinfo[$key]]
 				);
 			}
 		}
 
-		return redirect('events/'.$event->id)->with([
+		return redirect('events/' . $event->id)->with([
 			'flash_message' => 'De deelnemer op dit evenement is bewerkt!'
 		]);
 	}
@@ -238,7 +238,7 @@ class EventsController extends Controller {
 	{
 		$event->participants()->detach($participant_id);
 		\DB::table('course_event_participant')->where('event_id', $event->id)->where('participant_id', $participant_id)->delete();
-		return redirect('events/'.$event->id)->with([
+		return redirect('events/' . $event->id)->with([
 			'flash_message' => 'De deelnemer is van dit evenement verwijderd!'
 		]);
 	}
@@ -246,9 +246,10 @@ class EventsController extends Controller {
 	# Export participant info for this camp
 	public function export(Event $event)
 	{
+		$this->authorize("exportParticipants");
+
 		// Redirect if not camp
-		if ($event->type != 'kamp')
-		{
+		if ($event->type != 'kamp') {
 			return redirect('events');
 		}
 
@@ -262,22 +263,21 @@ class EventsController extends Controller {
 			->join('courses', 'course_event_participant.course_id', '=', 'courses.id')
 			->orderBy('courses.naam')
 			->get();
-		foreach ($result as $row)
-		{
+		foreach ($result as $row) {
 			$participantCourses[$row->participant_id][] = ['naam' => $row->naam, 'info' => $row->info];
 		}
 
 		// Some more or less useful statistics
-		$stats['num_males'] = $event->participants()->where('geslacht','M')->count();
-		$stats['num_females'] = $event->participants()->where('geslacht','V')->count();
-		$stats['num_VMBO'] = $event->participants()->where('niveau','VMBO')->count();
-		$stats['num_HAVO'] = $event->participants()->where('niveau','HAVO')->count();
-		$stats['num_VWO'] = $event->participants()->where('niveau','VWO')->count();
+		$stats['num_males'] = $event->participants()->where('geslacht', 'M')->count();
+		$stats['num_females'] = $event->participants()->where('geslacht', 'V')->count();
+		$stats['num_VMBO'] = $event->participants()->where('niveau', 'VMBO')->count();
+		$stats['num_HAVO'] = $event->participants()->where('niveau', 'HAVO')->count();
+		$stats['num_VWO'] = $event->participants()->where('niveau', 'VWO')->count();
 
 		// And age distribution and if new or not
-		$stats['num_new'] = 0; $stats['num_old'] = 0;
-		foreach ($participants as $participant)
-		{
+		$stats['num_new'] = 0;
+		$stats['num_old'] = 0;
+		foreach ($participants as $participant) {
 			$ages[] = $participant->geboortedatum->diffInYears($event->datum_start);
 
 			$num = $participant->events()->where('datum_eind', '<', $event->datum_start)->count();
@@ -289,7 +289,7 @@ class EventsController extends Controller {
 		// And number of final year students (exam candidates)
 		$stats['num_exam'] = 0;
 		foreach ($participants as $p) {
-			if(in_array($p->klas . $p->niveau, ['4VMBO', '5HAVO', '6VWO'])) {
+			if (in_array($p->klas . $p->niveau, ['4VMBO', '5HAVO', '6VWO'])) {
 				$stats['num_exam']++;
 			}
 		}
@@ -303,8 +303,7 @@ class EventsController extends Controller {
 	public function check(Event $event, $type)
 	{
 		// Redirect if not camp
-		if ($event->type != 'kamp')
-		{
+		if ($event->type != 'kamp') {
 			return redirect('events');
 		}
 
@@ -312,8 +311,7 @@ class EventsController extends Controller {
 		$memberIDs = $event->members->pluck('id')->toArray();
 
 		// Loop through all courses
-		foreach ($courses as $course)
-		{
+		foreach ($courses as $course) {
 			// Obtain members that have this course
 			$result = \DB::table('course_member')
 				->whereIn('member_id', $memberIDs)
@@ -326,8 +324,7 @@ class EventsController extends Controller {
 			$numbers[$course->id]['m'] = count($result);
 			$tooltips[$course->id]['m'] = '';
 			$levels['m'] = [];
-			foreach ($result as $row)
-			{
+			foreach ($result as $row) {
 				$tooltips[$course->id]['m'] .= $row->voornaam . ' (' . $row->klas . ')<br/>';
 				$levels['m'][] = $row->klas;
 			}
@@ -345,7 +342,7 @@ class EventsController extends Controller {
 			// Filter out unplaced participants, if requested
 			if ($type == 'placed') {
 				$unplaced = $event->participants()->where('geplaatst', 0)->get();
-				$result = $result->filter(function($value, $key) use ($unplaced) {
+				$result = $result->filter(function ($value, $key) use ($unplaced) {
 					return !$unplaced->contains($value);
 				});
 			}
@@ -353,8 +350,7 @@ class EventsController extends Controller {
 			$numbers[$course->id]['p'] = count($result);
 			$tooltips[$course->id]['p'] = '';
 			$levels['p'] = [];
-			foreach ($result as $row)
-			{
+			foreach ($result as $row) {
 				$tooltips[$course->id]['p'] .= $row->voornaam . ' (' . $row->klas . ')<br/>';
 				$levels['p'][] = $row->klas;
 			}
@@ -363,18 +359,14 @@ class EventsController extends Controller {
 			$status[$course->id] = 'ok';
 
 			// Start by checking if just the number of members is sufficient
-			if (3 * $numbers[$course->id]['m'] < $numbers[$course->id]['p'])
-			{
+			if (3 * $numbers[$course->id]['m'] < $numbers[$course->id]['p']) {
 				$status[$course->id] = 'badquota';
-			}
-			else
-			{
+			} else {
 				// If the number of members is sufficient, then check if their levels are
 
 				// Create 'triple-array' for member levels
 				$m = [];
-				foreach ($levels['m'] as $val)
-				{
+				foreach ($levels['m'] as $val) {
 					$m[] = $val;
 					$m[] = $val;
 					$m[] = $val;
@@ -387,10 +379,8 @@ class EventsController extends Controller {
 				rsort($p, SORT_NUMERIC);
 
 				// Compare element-wise
-				foreach ($p as $key => $value)
-				{
-					if ($value > $m[$key])
-					{
+				foreach ($p as $key => $value) {
+					if ($value > $m[$key]) {
 						$status[$course->id] = 'badlevel';
 					}
 				}
@@ -401,7 +391,8 @@ class EventsController extends Controller {
 	}
 
 	# Calculate camp budget
-	public function budget(Event $event) {
+	public function budget(Event $event)
+	{
 
 		$data = new \StdClass();
 
@@ -438,15 +429,18 @@ class EventsController extends Controller {
 		$data->total = ((($data->num_m * $data->days_m) + ($data->num_p * $data->days_p)) * $data->pppd) + $wbd;
 
 		return view('events.budget', compact('event', 'data', 'wissel'));
-
 	}
 
 	# Output email addresses as plain text list
-	public function email(Event $event) {
+	public function email(Event $event)
+	{
 
-		$email['members'] = ""; $num['members'] = 0;
-		$email['kids'] = ""; $num['kids'] = 0;
-		$email['parents'] = ""; $num['parents'] = 0;
+		$email['members'] = "";
+		$num['members'] = 0;
+		$email['kids'] = "";
+		$num['kids'] = 0;
+		$email['parents'] = "";
+		$num['parents'] = 0;
 
 		foreach ($event->members()->orderBy('voornaam')->get() as $member) {
 			if ($member->email_anderwijs) {
@@ -465,7 +459,6 @@ class EventsController extends Controller {
 				$email['parents'] .= $participant->email_ouder . ', ';
 				$num['parents']++;
 			}
-
 		}
 
 		$email['members'] = rtrim($email['members'], ', ');
@@ -476,12 +469,14 @@ class EventsController extends Controller {
 	}
 
 	# Send all participants on camp (confirm)
-	public function sendConfirm(Event $event) {
+	public function sendConfirm(Event $event)
+	{
 		return view('events.sendAll', compact('event'));
 	}
 
 	# Send all participants on camp (execute)
-	public function send(Event $event) {
+	public function send(Event $event)
+	{
 
 		$ids = $event->participants()->pluck('id')->toArray();
 
@@ -489,23 +484,26 @@ class EventsController extends Controller {
 			$event->participants()->updateExistingPivot($id, ['geplaatst' => 1]);
 		}
 
-		return redirect('events/'.$event->id)->with([
+		return redirect('events/' . $event->id)->with([
 			'flash_message' => 'Alle deelnemers zijn geplaatst!'
 		]);
 	}
 
 	# Generate payments overview
-	public function payments(Event $event) {
+	public function payments(Event $event)
+	{
 		return Excel::download(new EventPaymentReport($event), date('Y-m-d') . ' Betalingsoverzicht ' . $event->code . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
 	}
 
 	# Generate night register
-	public function nightRegister(Event $event) {
+	public function nightRegister(Event $event)
+	{
 		return Excel::download(new EventNightRegisterReport($event), date('Y-m-d') . ' Nachtregister ' . $event->location->plaats . ' ' . $event->code . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
 	}
 
 	# Generate iCal stream of events
-	public function iCalendar() {
+	public function iCalendar()
+	{
 		$events = Event::orderBy('datum_start', 'asc')->where('openbaar', 1)->get();
 		$members = Member::whereIn('soort', ['normaal', 'aspirant'])->get();
 
@@ -516,37 +514,40 @@ class EventsController extends Controller {
 			}
 			$fullname .= $member->achternaam;
 			//$fullname = html_entity_decode($fullname, ENT_QUOTES | ENT_HTML401, 'UTF-8');
-			$fullname = iconv('UTF-8','ASCII//TRANSLIT',$fullname);
+			$fullname = iconv('UTF-8', 'ASCII//TRANSLIT', $fullname);
 			$members[$key]->naam = $fullname;
 		}
 
 		return response()
 			->view('events.ical', compact('events', 'members'))
 			//->header('Content-Type','text/plain; charset=utf-8');
-			->header('Content-Type','text/calendar; charset=utf-8')
+			->header('Content-Type', 'text/calendar; charset=utf-8')
 			->header('Content-Disposition', 'inline; filename=anderwijs.ics');
 	}
 
 	# Join members to event (form)
-	public function joinMembers(Event $event) {
+	public function joinMembers(Event $event)
+	{
 		$members = Member::where('soort', '<>', 'oud')->orderBy('voornaam')->get();
 
 		return view('events.join-members', compact('event', 'members'));
 	}
 
 	# Join members to event (save)
-	public function joinMembersSave(Event $event, Request $request) {
+	public function joinMembersSave(Event $event, Request $request)
+	{
 		foreach ($request->members as $member_id) {
 			$event->members()->attach($member_id);
 		}
 
-		return redirect('events/'.$event->id)->with([
+		return redirect('events/' . $event->id)->with([
 			'flash_message' => 'De leden zijn gekoppeld!'
 		]);
 	}
 
 	# Show review results
-	public function reviews(Event $event) {
+	public function reviews(Event $event)
+	{
 
 		// Auth: either have to be admin or have gone on this camp as a member
 		if (!(\Auth::user()->is_admin)) {
@@ -557,7 +558,6 @@ class EventsController extends Controller {
 			if (!($is_member && $on_camp)) {
 				return redirect()->back();
 			}
-
 		}
 
 		// Repeatedly set options and create charts using a helper function based on LavaCharts
@@ -633,6 +633,5 @@ class EventsController extends Controller {
 		return redirect('events')->with([
 			'flash_message' => 'De deelnemer is verplaatst!'
 		]);
-
 	}
 }

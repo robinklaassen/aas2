@@ -208,6 +208,17 @@
 					@endif
 				</td>
 			</tr>
+			@if(Auth::user()->hasRole("admin+"))
+			<tr>
+				<td>Rechten</td>
+				<td>
+					@foreach ($member->user()->first()->capabilities() as $capa)
+					<span class="label label-default ">{{ $capa->name }}</span>
+					@endforeach
+
+				</td>
+			</tr>
+			@endif
 			<!--
 			<tr>
 				<td>Aantal punten</td>

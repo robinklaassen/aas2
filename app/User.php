@@ -55,12 +55,18 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	public function capabilities()
 	{
 		$roles = $this->roles()->pluck('id');
+
 		return Capability::whereHas("roles", function ($q) use ($roles) {
 			$q->whereIn(
-				"role_id",
+				"id",
 				$roles
 			);
 		})->get();
+	}
+
+	public function hasCapability($name)
+	{
+		return $this->capabilities()->pluck("name")->contains($name);
 	}
 
 	public function isMember()
