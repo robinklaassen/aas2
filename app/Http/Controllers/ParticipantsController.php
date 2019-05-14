@@ -3,11 +3,14 @@
 use App\Participant;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Exports\ParticipantsExport;
 
 use Input;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
-class ParticipantsController extends Controller {
+class ParticipantsController extends Controller
+{
 
 	public function __construct()
 	{
@@ -69,8 +72,7 @@ class ParticipantsController extends Controller {
 			->join('courses', 'course_event_participant.course_id', '=', 'courses.id')
 			->orderBy('courses.naam')
 			->get();
-		foreach ($result as $row)
-		{
+		foreach ($result as $row) {
 			$courseOnCamp[$row->event_id][] = ['id' => $row->course_id, 'naam' => $row->naam, 'code' => $row->code];
 		}
 
@@ -98,7 +100,7 @@ class ParticipantsController extends Controller {
 	public function update(Participant $participant, Requests\ParticipantRequest $request)
 	{
 		$participant->update($request->all());
-		return redirect('participants/'.$participant->id)->with([
+		return redirect('participants/' . $participant->id)->with([
 			'flash_message' => 'De deelnemer is bewerkt!'
 		]);
 	}
@@ -135,21 +137,18 @@ class ParticipantsController extends Controller {
 	{
 		// Sync 'event_participant' pivot table
 		$status = $participant->events()->sync([$request->selected_event], false);
-		if ($status['attached']!=[])
-		{
+		if ($status['attached'] != []) {
 			// Insert courses
-			foreach (array_unique($request->vak) as $key => $course_id)
-			{
-				if ($course_id)
-				{
+			foreach (array_unique($request->vak) as $key => $course_id) {
+				if ($course_id) {
 					\DB::table('course_event_participant')->insert(
 						['course_id' => $course_id, 'event_id' => $request->selected_event, 'participant_id' => $participant->id, 'info' => $request->vakinfo[$key]]
 					);
 				}
 			}
 		}
-		$message = ($status['attached']==[]) ? 'De deelnemer is reeds op dit evenement gestuurd!' : 'De deelnemer is op evenement gestuurd!';
-		return redirect('participants/'.$participant->id)->with([
+		$message = ($status['attached'] == []) ? 'De deelnemer is reeds op dit evenement gestuurd!' : 'De deelnemer is op evenement gestuurd!';
+		return redirect('participants/' . $participant->id)->with([
 			'flash_message' => $message
 		]);
 	}
@@ -160,8 +159,7 @@ class ParticipantsController extends Controller {
 		$event = \App\Event::findOrFail($event_id);
 		$result = \DB::table('course_event_participant')->select('course_id', 'info')->whereParticipantIdAndEventId($participant->id, $event_id)->get();
 		$retrieved_courses = [];
-		foreach ($result as $row)
-		{
+		foreach ($result as $row) {
 			$retrieved_courses[] = ['id' => $row->course_id, 'info' => $row->info];
 		}
 		return view('participants.editEvent', compact('participant', 'event', 'retrieved_courses'));
@@ -174,17 +172,15 @@ class ParticipantsController extends Controller {
 		\DB::table('course_event_participant')->whereParticipantIdAndEventId($participant->id, $event_id)->delete();
 
 		// Insert new courses
-		foreach (array_unique($request->vak) as $key => $course_id)
-		{
-			if ($course_id)
-			{
+		foreach (array_unique($request->vak) as $key => $course_id) {
+			if ($course_id) {
 				\DB::table('course_event_participant')->insert(
 					['course_id' => $course_id, 'event_id' => $event_id, 'participant_id' => $participant->id, 'info' => $request->vakinfo[$key]]
 				);
 			}
 		}
 
-		return redirect('participants/'.$participant->id)->with([
+		return redirect('participants/' . $participant->id)->with([
 			'flash_message' => 'De vakken voor dit kamp zijn bewerkt!'
 		]);
 	}
@@ -192,14 +188,7 @@ class ParticipantsController extends Controller {
 	# Export all participants to Excel
 	public function export()
 	{
-		$participants = Participant::all();
-
-		\Excel::create(date('Y-m-d').' AAS Deelnemers', function($excel) use($participants) {
-			$excel->sheet('deelnemers', function($sheet) use($participants) {
-				$sheet->fromModel($participants);
-			});
-		})->export('xlsx');
-
+		return Excel::download(new ParticipantsExport, date('Y-m-d') . ' AAS Deelnemers.xlsx');
 	}
 
 	# Show all last years participants on a Google Map
@@ -214,9 +203,9 @@ class ParticipantsController extends Controller {
 		$camps = \App\Event::where('type', 'kamp')->where('datum_eind', '>', $yearago)->where('datum_eind', '<', $nowf)->get();
 
 		// Get participant id's and make list of camp names
-		$pids = []; $campnames = [];
-		foreach ($camps as $camp)
-		{
+		$pids = [];
+		$campnames = [];
+		foreach ($camps as $camp) {
 			$pids = array_merge($pids, $camp->participants()->pluck('id')->toArray());
 			$campnames[] = $camp->naam . ' ' . $camp->datum_start->format('Y');
 		}
@@ -227,8 +216,7 @@ class ParticipantsController extends Controller {
 		$amount = count($pidfreq);
 
 		// Create participant data for map
-		foreach ($pidfreq as $pid => $freq)
-		{
+		foreach ($pidfreq as $pid => $freq) {
 			$p = Participant::find($pid);
 
 			$markerURL = 'http://maps.google.com/mapfiles/ms/icons/';
