@@ -1,8 +1,14 @@
 language: php
+
 php:
 - 7.2
+
 services:
 - mysql
+
+addons:
+  ssh_known_hosts: ssh.pcextreme.nl
+
 before_script:
 - cp .env.travis .env
 - mkdir -p bootstrap/cache
@@ -10,11 +16,25 @@ before_script:
 - composer install --no-interaction
 - php artisan key:generate
 - php artisan migrate --seed
+
 script:
 - vendor/bin/phpunit
+
+before_deploy:
+- openssl aes-256-cbc -K $encrypted_2197a3ced061_key -iv $encrypted_2197a3ced061_iv
+  -in deploy_rsa.enc -out /tmp/deploy_rsa -d
+- eval "$(ssh-agent -s)"
+- chmod 600 /tmp/deploy_rsa
+- ssh-add /tmp/deploy_rsa
+
+deploy:
+  provider: script
+  skip_cleanup: true
+  script: ssh anderwijs-nl@ssh.pcextreme.nl 'touch domains/anderwijs.nl/htdocs/travis-was-here'
+  #rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR/<dir> <ssh-user>@<deploy-host>:path/to/files
+  #on:
+  #  branch: master
+
 cache:
   directories:
   - vendor
-before_install:
-- openssl aes-256-cbc -K $encrypted_2197a3ced061_key -iv $encrypted_2197a3ced061_iv
-  -in deploy_rsa.enc -out deploy_rsa -d
