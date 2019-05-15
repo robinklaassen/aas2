@@ -26,14 +26,14 @@ before_deploy:
 - eval "$(ssh-agent -s)"
 - chmod 600 /tmp/deploy_rsa
 - ssh-add /tmp/deploy_rsa
+- chmod a+x deploy_prd.sh
 
 deploy:
   provider: script
   skip_cleanup: true
-  script: ssh anderwijs-nl@ssh.pcextreme.nl 'touch domains/anderwijs.nl/htdocs/travis-was-here'
-  #rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR/<dir> <ssh-user>@<deploy-host>:path/to/files
+  script: ./deploy_prd.sh
   on:
-    branch: feature/travis
+    branch: master
 
 cache:
   directories:
