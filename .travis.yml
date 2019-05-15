@@ -32,8 +32,8 @@ deploy:
   skip_cleanup: true
   script: ssh anderwijs-nl@ssh.pcextreme.nl 'touch domains/anderwijs.nl/htdocs/travis-was-here'
   #rsync -r --delete-after --quiet $TRAVIS_BUILD_DIR/<dir> <ssh-user>@<deploy-host>:path/to/files
-  #on:
-  #  branch: master
+  on:
+    branch: feature/travis
 
 cache:
   directories:
