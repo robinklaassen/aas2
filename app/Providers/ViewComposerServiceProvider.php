@@ -77,14 +77,14 @@ class ViewComposerServiceProvider extends ServiceProvider {
 		// Composer for the 'add course' form (includes all courses sorted alphabetically)
 		view()->composer('members.addCourse', function($view)
 		{
-			$course_options = \App\Course::orderBy('naam')->lists('naam', 'id')->toArray();
+			$course_options = \App\Course::orderBy('naam')->pluck('naam', 'id')->toArray();
 			$view->with('course_options', $course_options);
 		});
 		
 		// Composer for the 'participants.onEvent' form (includes all courses sorted alphabetically)
 		view()->composer('participants.onEvent', function($view)
 		{
-			$course_options = \App\Course::orderBy('naam')->lists('naam', 'id')->toArray();
+			$course_options = \App\Course::orderBy('naam')->pluck('naam', 'id')->toArray();
 			$course_options = [0 => '-geen vak-'] + $course_options;
 			$view->with('course_options', $course_options);
 		});
@@ -92,7 +92,7 @@ class ViewComposerServiceProvider extends ServiceProvider {
 		// Composer for the 'participants.editEvent' form (includes all courses sorted alphabetically)
 		view()->composer('participants.editEvent', function($view)
 		{
-			$course_options = \App\Course::orderBy('naam')->lists('naam', 'id')->toArray();
+			$course_options = \App\Course::orderBy('naam')->pluck('naam', 'id')->toArray();
 			$course_options = [0 => '-geen vak-'] + $course_options;
 			$view->with('course_options', $course_options);
 		});
@@ -100,7 +100,7 @@ class ViewComposerServiceProvider extends ServiceProvider {
 		// Composer for the 'events.editParticipant' form (includes all courses sorted alphabetically)
 		view()->composer('events.editParticipant', function($view)
 		{
-			$course_options = \App\Course::orderBy('naam')->lists('naam', 'id')->toArray();
+			$course_options = \App\Course::orderBy('naam')->pluck('naam', 'id')->toArray();
 			$course_options = [0 => '-geen vak-'] + $course_options;
 			$view->with('course_options', $course_options);
 		});

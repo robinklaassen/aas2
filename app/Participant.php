@@ -5,15 +5,15 @@ use Illuminate\Database\Eloquent\Model;
 class Participant extends Model {
 
 	protected $guarded = ['id', 'created_at', 'updated_at'];
-	
+
 	// Carbon dates
 	protected $dates = ['geboortedatum', 'inkomensverklaring'];
-	
+
 	// Full name
 	public function getVolnaamAttribute() {
 		return str_replace('  ', ' ', $this->voornaam . ' ' . $this->tussenvoegsel . ' ' . $this->achternaam);
 	}
-	
+
 	// Postcode mutator
 	public function setPostcodeAttribute($value)
 	{
@@ -27,7 +27,7 @@ class Participant extends Model {
 			$this->attributes['postcode'] = $value;
 		}
 	}
-	
+
 	// A participant belongs to many events
 	public function events()
 	{

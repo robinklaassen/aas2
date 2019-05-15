@@ -16,10 +16,10 @@ class PagesController extends Controller {
 		// You need to be logged in to access
 		$this->middleware('auth', ['except' => ['iDealWebhook', 'cal', 'campInfo', 'campsReport', 'referrer']]);
 		$this->middleware('admin',['only' => ['lists', 'graphs']]);
-		
+
 		// Guest access
 		$this->middleware('guest', ['only' => 'referrer']);
-		
+
 		// Cross-Origin Resource Sharing for API
 		$this->middleware('cors', ['only' => 'cal']);
 	}
@@ -29,16 +29,16 @@ class PagesController extends Controller {
 	{
 		if (\Auth::user()->profile_type == "App\Member") {
 			// Member homepage
-			
+
 			// Today's birthdays
-			$bdates = \App\Member::where('soort', '<>', 'oud')->lists('geboortedatum', 'id')->toArray();
+			$bdates = \App\Member::where('soort', '<>', 'oud')->pluck('geboortedatum', 'id')->toArray();
 			$m = date('m'); $d = date('d');
 			$today = [];
 			foreach ($bdates as $id => $date) {
 				if (substr($date, 5) == $m.'-'.$d) { $today[] = $id; }
 			}
 			//$today = ['147', '168']; // testing purposes
-			
+
 			foreach ($today as $k => $id) {
 				$member = \App\Member::find($id);
 				$member->leeftijd = date('Y') - $member->geboortedatum->year;
@@ -48,7 +48,7 @@ class PagesController extends Controller {
 				}
 				$today[$k] = $member;
 			}
-			
+
 			// Camp thermometer
 			$camps = \App\Event::where('type','kamp')
 								->where('datum_eind', '>=', date('Y-m-d'))
@@ -60,19 +60,19 @@ class PagesController extends Controller {
 			foreach ($camps as $camp) {
 				$naam = $camp->naam;
 				$id = $camp->id;
-				
+
 				// Admins and members who go on camp can click the link
 				$klikbaar = false;
-				
-				$events = \Auth::user()->profile->events->lists('id')->toArray();
+
+				$events = \Auth::user()->profile->events->pluck('id');
 				//dd($events);
-				
+
 				if (\Auth::user()->is_admin) {
 					$klikbaar = true;
-				} else if (in_array($id, $events)) {
+				} else if ($events->contains($id)) {
 					$klikbaar = true;
 				}
-				
+
 				$streef_L = $camp->streeftal;
 				$streef_D = ($streef_L - 1) * 3;
 
@@ -80,50 +80,50 @@ class PagesController extends Controller {
 				if ($id == 129) {
 					$streef_L = 12; $streef_D = 28;
 				}
-				
+
 				$num_L_goed = $camp->members()->wherePivot('wissel',0)->where('vog',1)->count();
 				$num_L_bijna = $camp->members()->wherePivot('wissel',0)->where('vog',0)->count();
-				
+
 				$num_D_goed = $camp->participants()->wherePivot('datum_betaling','>','0000-00-00')->count();
 				$num_D_bijna = $camp->participants()->wherePivot('datum_betaling','0000-00-00')->count();
-				
+
 				$perc_L_goed = ($num_L_goed > $streef_L) ? 100 : ($num_L_goed / $streef_L) * 100;
 				$perc_D_goed = ($num_D_goed > $streef_D) ? 100 : ($num_D_goed / $streef_D) * 100;
-				
+
 				$perc_L_bijna = ($num_L_goed + $num_L_bijna > $streef_L) ? 100 - $perc_L_goed : ($num_L_bijna / $streef_L) * 100;
 				$perc_D_bijna = ($num_D_goed + $num_D_bijna > $streef_D) ? 100 - $perc_D_goed : ($num_D_bijna / $streef_D) * 100;
-				
+
 				$thermo[] = compact('naam', 'id', 'klikbaar', 'streef_L', 'streef_D', 'num_L_goed', 'perc_L_goed', 'num_L_bijna', 'perc_L_bijna', 'num_D_goed', 'perc_D_goed', 'num_D_bijna', 'perc_D_bijna');
 			}
-			
+
 			return view('pages.home-member', compact('congrats', 'today', 'thermo'));
 		} else {
 			// Participant homepage
-			
+
 			// Birthday check!
 			$bday = \Auth::user()->profile->geboortedatum;
 			$congrats = ($bday->day == date('d') && $bday->month == date('m')) ? 1 : 0;
-			
+
 			return view('pages.home-participant', compact('congrats'));
 		}
-		
-		
-		
+
+
+
 
 	}
-	
+
 	# Info page
 	public function info()
 	{
 		return view('pages.info');
 	}
-	
+
 	# Useful lists
 	public function lists()
 	{
 		// Stats
 		$stats = [];
-		
+
 		$stats['most'] = [];
 		$types = [
 			'kamp' => 'kampen',
@@ -139,7 +139,8 @@ class PagesController extends Controller {
 				->orderBy('count', 'desc')
 				->get();
 			$highest_count = $most[0]->count;
-			$mosts = array_filter($most, function($el) use ($highest_count) {
+			$mosts = $most
+			->filter(function($el) use ($highest_count) {
 				return $el->count == $highest_count;
 			});
 
@@ -153,14 +154,14 @@ class PagesController extends Controller {
 				'members' => $members
 			];
 		}
-		
+
 		// Ranonkeltje
 		$ranonkeltjePapier = \App\Member::whereIn('ranonkeltje',['papier', 'beide'])->orderBy('voornaam','asc')->get();
 		$ranonkeltjeDigitaal = \App\Member::whereIn('ranonkeltje', ['digitaal', 'beide'])->orderBy('voornaam', 'asc')->get();
-		
+
 		// Ervaren trainers
 		$trainerList = \App\Member::where('ervaren_trainer',1)->orderBy('voornaam','asc')->get();
-		
+
 		// Niet betaalde deelnemers
 		$unpaidList = \DB::table('event_participant')
 			->select('participant_id', 'voornaam', 'tussenvoegsel', 'achternaam', 'event_id', 'naam', 'code', 'event_participant.created_at as inschrijving')
@@ -168,23 +169,23 @@ class PagesController extends Controller {
 			->join('events', 'event_participant.event_id', '=', 'events.id')
 			->join('participants', 'event_participant.participant_id', '=', 'participants.id')
 			->get();
-		
+
 		// Leden zonder KMG
 		$kmgList = \App\Member::where('kmg',0)->orderBy('voornaam')->get();
-		
+
 		// Aspiranten
 		$aspirantList = \App\Member::where('soort','aspirant')->orderBy('voornaam')->get();
-		
+
 		// Verjaardagen
 		$members = \App\Member::whereIn('soort', ['normaal', 'aspirant'])->get();
 		foreach ($members as $member) {
 			$datum = $member->geboortedatum;
 			$dag = $datum->day;
 			$maand = $datum->month;
-			
+
 			$vandaag = ($dag == date('d') && $maand == date('m')) ? 1 : 0;
 			$leeftijd = $datum->age;
-			
+
 			$birthdayList[] = [
 				'id' => $member->id,
 				'naam' => str_replace('  ',' ',$member->voornaam . ' ' . $member->tussenvoegsel . ' ' . $member->achternaam),
@@ -195,11 +196,11 @@ class PagesController extends Controller {
 				'leeftijd' => $leeftijd
 			];
 		}
-		
+
 		$birthdayList = array_values(array_sort($birthdayList, function($member) {
 			return (100 * $member['maand'] + $member['dag']);
 		}));
-		
+
 		// Maanden (voor verjaardagen)
 		$monthName = [
 			1 => 'januari',
@@ -215,23 +216,23 @@ class PagesController extends Controller {
 			11 => 'november',
 			12 => 'december'
 		];
-		
+
 		// Leden en deelnemers zonder gekoppelde kampen
 		$membersWithoutEvents = \App\Member::where('soort', '<>', 'oud')->orderBy('created_at')->get()->filter(function($member){
 			return $member->events->count() == 0;
 		});
-		
+
 		$participantsWithoutCamps = \App\Participant::orderBy('created_at')->get()->filter(function($part){
 			return $part->events->count() == 0;
 		});
-		
+
 		// Mailadressen voor een deelnemermailing (bijv. bij kortingsacties)
 		$startDate = Carbon::now()->subYears(19);
 		$participantMailingList = \App\Participant::where('mag_gemaild', 1)->where('geboortedatum', '>', $startDate->toDateString())->get();
-		
+
 		return view('pages.lists', compact('stats', 'types', 'ranonkeltjePapier', 'ranonkeltjeDigitaal', 'trainerList', 'unpaidList', 'kmgList', 'aspirantList', 'birthdayList', 'courses', 'monthName', 'membersWithoutEvents', 'participantsWithoutCamps', 'participantMailingList'));
 	}
-	
+
 	# Analytical graphs
 	public function graphs()
 	{
@@ -253,26 +254,26 @@ class PagesController extends Controller {
 			$m = $camp->members()->count();
 			$m_m = $camp->members()->where('geslacht','M')->count();
 			$m_f = $camp->members()->where('geslacht','V')->count();
-			$mids = $camp->members()->lists('id')->toArray();
-			$pids = $camp->participants()->lists('id')->toArray();
+			$mids = $camp->members()->pluck('id')->toArray();
+			$pids = $camp->participants()->pluck('id')->toArray();
 			$p = $camp->participants()->count();
 			$p_m = $camp->participants()->where('geslacht','M')->count();
 			$p_f = $camp->participants()->where('geslacht','V')->count();
-			
+
 			// New members
 			$m_n = 0;
 			foreach ($camp->members as $member) {
 				$num = $member->events()->where('type','kamp')->where('datum_eind', '<', $camp->datum_start)->count();
 				if ($num == 0) { $m_n++; }
 			}
-			
+
 			// New participants
 			$p_n = 0;
 			foreach ($camp->participants as $participant) {
 				$num = $participant->events()->where('datum_eind', '<', $camp->datum_start)->count();
 				if ($num == 0) { $p_n++; }
 			}
-			
+
 			if (array_key_exists($year, $num_members)) {
 				$num_members[$year] += $m;
 				$num_members_new[$year] += $m_n;
@@ -296,9 +297,9 @@ class PagesController extends Controller {
 				$member_ids[$year] = $mids;
 				$participant_ids[$year] = $pids;
 			}
-			
+
 		}
-		
+
 		$data['membGrowth'][] = ['Jaar', 'Totaal', 'Uniek', 'Nieuw'];
 		$data['partGrowth'][] = ['Jaar', 'Totaal', 'Uniek', 'Nieuw'];
 		$data['percNew'][] = ['Jaar', 'Leiding', 'Deelnemers'];
@@ -317,7 +318,7 @@ class PagesController extends Controller {
 				if ($num_members_female[$k] > 0 && $num_participants_female[$k] > 0) { $data['maleFemaleRatio'][] = [$year, round($num_members_male[$k] / $num_members_female[$k], 3), round($num_participants_male[$k] / $num_participants_female[$k], 3)]; }
 			}
 		}
-		
+
 		// Same round for trainings
 		$trainings = \App\Event::where('type','training')
 								->where('datum_start', '>=', $minDate)
@@ -325,14 +326,14 @@ class PagesController extends Controller {
 								->orderBy('datum_start')
 								->get();
 		$member_ids = [];
-		
+
 		foreach ($trainings as $training)
 		{
 			preg_match('/\d{4}/', $training->code, $matches); // obtains the year string from the camp code, e.g. '1415'
 			$year = $matches[0];
-			$mids = $training->members()->lists('id')->toArray();
+			$mids = $training->members()->pluck('id')->toArray();
 			$t = $training->members()->count();
-			
+
 			// New trainers
 			$t_n = 0;
 			foreach ($training->members as $member) {
@@ -361,25 +362,25 @@ class PagesController extends Controller {
 				$data['aveNumTrainings'][] = [$year, round(count($v) / count(array_unique($v)), 3)];
 			}
 		}
-		
+
 		// Analysis of participant registration
 		$graphStart = -90;
 		$camps = \App\Event::where('type', 'kamp')->where('datum_start','>','2012-11-01')->orderBy('datum_start','asc')->get();
 		$registration_series = [];
-		
+
 		foreach ($camps as $camp) {
-			
+
 			// Make an array of the registration days for this camp
-			$daysArray = []; 
+			$daysArray = [];
 			foreach ($camp->participants()->get() as $participant) {
 				$daysArray[] = - $camp->datum_start->diffInDays($participant->pivot->created_at);
 			}
 			sort($daysArray);
-			
+
 			// Create the data series
 			$data_series = [];
 			$p = 0;
-			
+
 			foreach ($daysArray as $days) {($days <= $graphStart) ? $p++ : null;}
 			$data_series[] = [$graphStart, $p];
 
@@ -389,7 +390,7 @@ class PagesController extends Controller {
 					$data_series[] = [$i, $p];
 				}
 			}
-			
+
 			$var = - Carbon::now()->diffInDays($camp->datum_start);
 			if ($camp->datum_start <= date('Y-m-d')) {
 				$data_series[] = [0, $p];
@@ -411,12 +412,12 @@ class PagesController extends Controller {
 				],
 				'data' => $data_series
 			];
-			
+
 		}
-		
+
 		// Analysis of participants' preference for camp type (from reviews)
 		$camp_prefs = [];
-		$revs = \App\Review::whereNotNull('kampkeuze')->lists('kampkeuze')->toArray();
+		$revs = \App\Review::whereNotNull('kampkeuze')->pluck('kampkeuze')->toArray();
 		$prefs_rev_count = count($revs);
 		foreach ($revs as $opts) {
 			foreach ($opts as $opt) {
@@ -427,15 +428,15 @@ class PagesController extends Controller {
 				}
 			}
 		}
-		
+
 		$dt = \Lava::DataTable();
 		$dt->addStringColumn('Optie');
 		$dt->addNumberColumn('Aantal');
-		
+
 		foreach ($camp_prefs as $type => $count) {
 			$dt->addRow([$type, $count]);
 		}
-		
+
 		\Lava::BarChart("kampkeuze", $dt, [
 			'width' => '100%',
 			'height' => '450',
@@ -456,32 +457,34 @@ class PagesController extends Controller {
 				'position' => 'none'
 			]
 		]);
-		
+
 		return view('pages.graphs', compact('data', 'registration_series', 'camp_prefs', 'prefs_rev_count'));
 	}
-	
+
 	# Exposes upcoming events as JSON for website integration
 	public function cal($type)
 	{
 		$data = [];
-		
+
 		if ($type == 'part') {
 			// Only coming camps, for participants and their parents
 			$events = \App\Event::where('type','kamp')
 								->where('datum_eind','>=',date('Y-m-d'))
 								->where('openbaar', 1)
 								->orderBy('datum_start','asc')
-								->get();	
+								->get();
 		} elseif ($type == 'full') {
 			// All coming events, for members
 			$events = \App\Event::where('datum_eind','>=',date('Y-m-d'))
 								->orderBy('datum_start','asc')
 								->where('openbaar', 1)
 								->get();
+		} else {
+			return null;
 		}
-		
+
 		$k = 1;
-		
+
 		foreach ($events as $event) {
 			// Determine background color
 			switch ($event->type) {
@@ -495,25 +498,25 @@ class PagesController extends Controller {
 					$color = '#AA1E58';
 					break;
 			}
-			
+
 			// Add '(VOL)' to camp name if camp is full
 			$naam = $event->naam;
 			if ($type == 'part' && $event->vol) { $naam .= ' (VOL)'; }
-			
+
 			// Determine the 'price' table cells
 			$pr = $event->prijs;
 			$pr15 = round((0.85 * $pr)/5) * 5;
 			$pr30 = round((0.7 * $pr)/5) * 5;
 			$pr50 = round((0.5 * $pr)/5) * 5;
-			
+
 			$prijs_html = "<td style='white-space: nowrap;'>Prijs";
-			
+
 			if ($pr == 0) {
 				$prijs_html .= "</td><td>Wordt nog vastgesteld</td>";
 			} else {
 				$prijs_html .= "<br/>- 15% korting<br/>- 30% korting<br/>- 50% korting</td><td>€ " . $pr . "<br/>€ " . $pr15 . "<br/>€ " . $pr30 . "<br/>€ " . $pr50 . "</td>";
 			}
-			
+
 			// Create a string with Google Maps hyperlink for the members agenda
 			$adres = $event->location->adres;
 			$plaats = $event->location->plaats;
@@ -523,7 +526,7 @@ class PagesController extends Controller {
 				$string = str_replace(" ", "+", $adres . " " . $plaats);
 				$kamphuis_link = "<a href='https://www.google.com/maps?q=" . $string . "' target='_blank'>" . $plaats . "</a>";
 			}
-			
+
 			// Weekday table
 			$weekdays = [
 				"",
@@ -535,7 +538,7 @@ class PagesController extends Controller {
 				"Zaterdag",
 				"Zondag"
 			];
-			
+
 			// Create data array to return
 			$data[] = [
 				'id' => $k,
@@ -544,7 +547,7 @@ class PagesController extends Controller {
 				'voordag' => ($event->datum_voordag->year > 0) ? '<tr><td>Voordag:</td><td>' . $event->datum_voordag->format('d-m-Y') . '</td></tr>' : null,
 				'voordag_tekst' => ($event->type == 'kamp') ? 'Voordag:<br/>' : null,
 				'datum_voordag' => ($event->type == 'kamp') ? $event->datum_voordag->format('d-m-Y') . '<br/>' : null,
-				'tijd_voordag' => ($event->type == 'kamp') ? 
+				'tijd_voordag' => ($event->type == 'kamp') ?
 				'&nbsp;<br/>' : null,
 				'weekdag_start' => $weekdays[$event->datum_start->format('N')],
 				'datum_start' => $event->datum_start->format('d-m-Y'),
@@ -566,23 +569,23 @@ class PagesController extends Controller {
 			];
 			$k++;
 		}
-			
+
 		return response()->json($data);
 	}
-	
+
 	# Exposes information about one camp (by ID) for website integration
 	public function campInfo($camp_id) {
-		
+
 		$camp = Event::find($camp_id);
-		
+
 		if ($camp->type != 'kamp') {return null;}
-		
+
 		$data = [
 			'id' => $camp->id,
 			'naam' => $camp->naam,
 			'prijs' => $camp->prijs
 		];
-		
+
 		return response()->json($data);
 	}
 
@@ -597,14 +600,14 @@ class PagesController extends Controller {
 
 		$data = [];
 		foreach ($camps as $c) {
-			
+
 			$aantal_leiding_vol = $c->members()->where('wissel',0)->count();
 			$aantal_leiding_wissel = $c->members()->where('wissel',1)->count();
 			$leiding_string = (string) $aantal_leiding_vol;
 			if ($aantal_leiding_wissel > 0) {
 				$leiding_string .= " + " . $aantal_leiding_wissel;
 			}
-			
+
 			$data[] = [
 				'id' => $c->id,
 				'naam' => $c->naam,
@@ -621,31 +624,31 @@ class PagesController extends Controller {
 
 		return response()->json($data);
 	}
-	
+
 	# Referrer page for registrations
 	public function referrer()
 	{
 		return view('pages.referrer');
 	}
-	
+
 	# Place for scripting
 	public function runScript()
 	{
-		echo "Average rating per reviewer: " . round(\App\Review::lists("cijfer")->avg(), 2) . " out of " . \App\Review::lists("id")->count() . " total reviews";
-		
+		echo "Average rating per reviewer: " . round(\App\Review::pluck("cijfer")->avg(), 2) . " out of " . \App\Review::pluck("id")->count() . " total reviews";
+
 		echo "<br/><br/>";
-		
+
 		echo "Average camp ratings:<br/><br/>";
-		
+
 		foreach (Event::where("type", "kamp")->orderBy("datum_start")->has("reviews")->get() as $event)
 		{
 			echo $event->naam . " " . $event->datum_start->year . " - " . $event->averageRating . "<br/>";
 		}
-		
+
 		echo "<br/><br/>";
-		
+
 		echo "Members with most participants on camp<br/><br/>";
-		
+
 		$rank = [];
 		$rank_unique = [];
 		foreach (\App\Member::where('soort', '<>', 'oud')->has('events')->get() as $member)
@@ -653,14 +656,14 @@ class PagesController extends Controller {
 			$list = [];
 			foreach ($member->events()->where('type', 'kamp')->get() as $event)
 			{
-				$list = array_merge($list, $event->participants()->where('geplaatst', 1)->lists('id')->toArray());
+				$list = array_merge($list, $event->participants()->where('geplaatst', 1)->pluck('id')->toArray());
 			}
 			$rank[$member->volnaam] = count($list);
 			$rank_unique[$member->volnaam] = count(array_unique($list));
 		}
 		arsort($rank);
 		arsort($rank_unique);
-		
+
 		echo "Cumulative<br/>";
 		foreach ($rank as $m => $v) {
 			echo $m . ": " . $v . "<br/>";
@@ -670,13 +673,13 @@ class PagesController extends Controller {
 		foreach ($rank_unique as $m => $v) {
 			echo $m . ": " . $v . "<br/>";
 		}
-		
+
 		echo "<br/><br/>";
-		
+
 		echo "Most other unique members on camp" . "<br/><br/>";
 		$res = [];
 		$res2 = [];
-		
+
 		foreach (\App\Member::where('soort', '<>', 'oud')->has('events')->get() as $member)
 		{
 			// Who has this member been on camp with?
@@ -684,7 +687,7 @@ class PagesController extends Controller {
 			$fellow_ids = [];
 			foreach ($events as $event)
 			{
-				$fellow_ids = array_merge($fellow_ids, $event->members()->lists('id')->toArray());
+				$fellow_ids = array_merge($fellow_ids, $event->members()->pluck('id')->toArray());
 			}
 			$fellow_ids = array_unique($fellow_ids);
 			if(($key = array_search($member->id, $fellow_ids)) !== false) {
@@ -698,22 +701,22 @@ class PagesController extends Controller {
 			} else {
 				$res2[$member->volnaam] = "-";
 			}
-			
+
 		}
-		
+
 		arsort($res);
 		foreach ($res as $m => $v) {
 			echo $m . ": " . $v . "<br/>";
 		}
-		
+
 		echo "<br/><br/>";
 		echo "And now normalized per camp" . "<br/><br/>";
-		
+
 		arsort($res2);
 		foreach ($res2 as $m => $v) {
 			echo $m . ": " . round($v, 2) . "<br/>";
 		}
-		
+
 	}
-	
+
 }

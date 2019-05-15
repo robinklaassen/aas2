@@ -7,10 +7,7 @@ class Event extends Model {
 	protected $guarded = ['id', 'created_at', 'updated_at'];
 	
 	// Carbon dates
-	public function getDates()
-	{
-		return array('created_at', 'updated_at', 'datum_voordag', 'datum_start', 'datum_eind');
-	}
+	protected $dates = ['created_at', 'updated_at', 'datum_voordag', 'datum_start', 'datum_eind'];
 	
 	// A camp belongs to many members
 	public function members()
@@ -42,7 +39,7 @@ class Event extends Model {
 		if (!$this->has("reviews"))
 			return null;
 		
-		return round($this->reviews()->lists("cijfer")->avg(), 1);
+		return round($this->reviews()->pluck("cijfer")->avg(), 1);
 	}
 	
 }

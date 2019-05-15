@@ -15,7 +15,7 @@ class UsersController extends Controller {
 		$this->middleware('auth');
 		$this->middleware('admin');
 	}
-	
+
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -44,10 +44,10 @@ class UsersController extends Controller {
 				$profile_options[$member->id] = $member->voornaam . ' ' . $member->tussenvoegsel . ' ' . $member->achternaam;
 			}
 		}
-		
+
 		return view('users.create', compact('type', 'profile_options'));
 	}
-	
+
 	public function createForParticipant()
 	{
 		$type = 'participant';
@@ -59,7 +59,7 @@ class UsersController extends Controller {
 				$profile_options[$participant->id] = $participant->voornaam . ' ' . $participant->tussenvoegsel . ' ' . $participant->achternaam;
 			}
 		}
-		
+
 		return view('users.create', compact('type', 'profile_options'));
 	}
 
@@ -74,9 +74,9 @@ class UsersController extends Controller {
 			'profile_id' => 'required',
 			'is_admin' => 'required'
 		]);
-		
+
 		$member = \App\Member::find($request->profile_id);
-		
+
 		// Check if user account for this member already exists!
 		if ($member->user) {
 			return redirect('users')->with([
@@ -86,49 +86,49 @@ class UsersController extends Controller {
 			// Create username
 			$thename = strtolower(substr($member->voornaam,0,1) . str_replace(' ', '', $member->achternaam));
 			$username = $thename;
-			$nameList = \DB::table('users')->lists('username');
+			$nameList = \DB::table('users')->pluck('username');
 			$i = 0;
-			while (in_array($username, $nameList))
+			while ($nameList->contains($username))
 			{
 				$i++;
 				$username = $thename . $i;
 			}
-			
+
 			// Create password
 			$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 			$password = substr( str_shuffle( $chars ), 0, 10 );
-			
+
 			// Attach account
 			$user = new \App\User;
 			$user->username = $username;
 			$user->password = bcrypt($password);
 			$user->is_admin = $request->is_admin;
 			$member->user()->save($user);
-			
+
 			// Send email
 			Mail::send('emails.newUserMember', compact('member', 'username', 'password'), function($message) use ($member)
 			{
 				$message->from('kamp@anderwijs.nl', 'Kampcommissie Anderwijs');
-				
+
 				$message->to($member->email, $member->voornaam . ' ' . $member->tussenvoegsel . ' ' . $member->achternaam);
-				
+
 				$message->subject('ANDERWIJS - Gebruikersaccount aangemaakt');
 			});
-			
+
 			return redirect('users')->with([
 				'flash_message' => 'De gebruiker is aangemaakt!'
 			]);
 		}
 	}
-	
+
 	public function storeForParticipant(Request $request)
 	{
 		$this->validate($request, [
 			'profile_id' => 'required'
 		]);
-		
+
 		$participant = \App\Participant::find($request->profile_id);
-		
+
 		// Check if user account for this participant already exists!
 		if ($participant->user) {
 			return redirect('users')->with([
@@ -138,38 +138,38 @@ class UsersController extends Controller {
 			// Create username
 			$thename = strtolower(substr($participant->voornaam,0,1) . str_replace(' ', '', $participant->achternaam));
 			$username = $thename;
-			$nameList = \DB::table('users')->lists('username')->toArray();
+			$nameList = \DB::table('users')->pluck('username');
 			$i = 0;
-			while (in_array($username, $nameList))
+			while ($nameList->contains($username))
 			{
 				$i++;
 				$username = $thename . $i;
 			}
-			
+
 			// Create password
 			$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 			$password = substr( str_shuffle( $chars ), 0, 10 );
-			
+
 			// Attach account
 			$user = new \App\User;
 			$user->username = $username;
 			$user->password = bcrypt($password);
 			$participant->user()->save($user);
-			
+
 			// Send email
 			Mail::send('emails.newUserParticipant', compact('participant', 'username', 'password'), function($message) use ($participant)
 			{
 				$message->from('kantoor@anderwijs.nl', 'Kantoorcommissie Anderwijs');
-			
+
 				$message->to($participant->email_ouder, 'dhr./mw. ' . $participant->tussenvoegsel . ' ' . $participant->achternaam)->subject('ANDERWIJS - Gebruikersaccount aangemaakt');
 			});
-		
+
 			return redirect('users')->with([
 				'flash_message' => 'De gebruiker is aangemaakt!'
 			]);
-		}		
+		}
 	}
-	
+
 	/**
 	 * Display the specified resource.
 	 *
@@ -182,7 +182,7 @@ class UsersController extends Controller {
 		return view('users.show', compact('user'));
 	}
 	*/
-	
+
 	# Grant or revoke admin access
 	public function admin(User $user)
 	{
@@ -190,10 +190,10 @@ class UsersController extends Controller {
 		{
 			return redirect('users');
 		}
-		
+
 		return view('users.admin', compact('user'));
 	}
-	
+
 	public function adminSave(User $user)
 	{
 		// Check if this user is member! (participants can never be admins)
@@ -204,7 +204,7 @@ class UsersController extends Controller {
 			return redirect('users')->with([
 				'flash_message' => 'Admin-rechten gewijzigd!'
 			]);
-		} 
+		}
 		else
 		{
 			return redirect('users');
@@ -217,16 +217,16 @@ class UsersController extends Controller {
 		$viewType = 'admin';
 		return view('users.password', compact('user', 'viewType'));
 	}
-	
+
 	public function passwordSave(User $user, Request $request)
 	{
 		$this->validate($request, [
 			'password' => 'required|confirmed'
 		]);
-		
+
 		$user->password = bcrypt(\Input::get('password'));
 		$user->save();
-		
+
 		return redirect('users')->with([
 			'flash_message' => 'Het nieuwe wachtwoord is ingesteld!'
 		]);
@@ -242,7 +242,7 @@ class UsersController extends Controller {
 	{
 		return view('users.delete', compact('user'));
 	}
-	
+
 	public function destroy(User $user)
 	{
 		$user->delete();
