@@ -22,14 +22,6 @@
 	</div>
 </div>
 
-<!--
-<div class="row">
-	<div class="col-sm-4 form-group">
-		{!! Form::label('selected_courses', 'Vakken:') !!}
-		{!! Form::select('selected_courses[]', $course_options, null, ['multiple',  'id' => 'courseSelect', 'class' => 'form-control']) !!}
-	</div>
-</div>
--->
 <p><b>Vakken:</b></p>
 
 @for ($i = 0; $i < 6; $i++)

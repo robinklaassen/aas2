@@ -42,23 +42,23 @@
 					<th>Leiding</th>
 				</tr>
 			</thead>
-			
+
 			<tbody>
-				@foreach ($camps as $camp)
+				@foreach ($events as $event)
 					<tr>
-						<td><a href="{{ url('/events', $camp->id) }}">{{ $camp->naam }}</a></td>
-						<td>{{ $camp->code }}</td>
-						<td>{{ $camp->datum_start->toDateString() }}</td>
-						<td>{{ $camp->datum_eind->toDateString() }}</td>
-						<td>{{ $camp->location->plaats }}</td>
-						<td>{{ $camp->participants->count() }}</td>
-						<td>{{ $camp->members->count() }}</td>
+						<td><a href="{{ url('/events', $event->id) }}">{{ $event->naam }}</a></td>
+						<td>{{ $event->code }}</td>
+						<td>{{ $event->datum_start->toDateString() }}</td>
+						<td>{{ $event->datum_eind->toDateString() }}</td>
+						<td>{{ $event->location->plaats }}</td>
+						<td>{{ $event->participants->count() }}</td>
+						<td>{{ $event->members->count() }}</td>
 					</tr>
 				@endforeach
 			</tbody>
 		</table>
 	</div>
-	
+
 	<div role="tabpanel" class="tab-pane" id="trainingen">
 		<!-- Trainingentabel -->
 		<table class="table table-hover" id="trainingsTable" data-page-length="25">
@@ -72,7 +72,7 @@
 					<th>Aantal trainers</th>
 				</tr>
 			</thead>
-			
+
 			<tbody>
 				@foreach ($trainings as $training)
 					<tr>
@@ -87,7 +87,7 @@
 			</tbody>
 		</table>
 	</div>
-	
+
 	<div role="tabpanel" class="tab-pane" id="overig">
 		<!-- Overige activiteiten -->
 		<table class="table table-hover" id="othersTable" data-page-length="25">
@@ -101,7 +101,7 @@
 					<th>Aantal leden</th>
 				</tr>
 			</thead>
-			
+
 			<tbody>
 				@foreach ($others as $other)
 					<tr>
@@ -135,7 +135,7 @@ $( document ).ready(function() {
 			{'orderable':false}
 		]
 	});
-	
+
 	$('#trainingsTable').DataTable({
 		order: [[ 2, "desc" ]],
 		columns: [
@@ -147,7 +147,7 @@ $( document ).ready(function() {
 			{'orderable':false}
 		]
 	});
-	
+
 	$('#othersTable').DataTable({
 		order: [[ 2, "desc" ]],
 		columns: [

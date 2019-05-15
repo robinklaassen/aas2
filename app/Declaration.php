@@ -7,10 +7,7 @@ class Declaration extends Model {
 	protected $guarded = ['id', 'created_at', 'updated_at'];
 	
 	// Carbon dates
-	public function getDates()
-	{
-		return array('created_at', 'updated_at', 'closed_at', 'date');
-	}
+	protected $dates = ['created_at', 'updated_at', 'closed_at', 'date'];
 	
 	// A declaration belongs to one member
 	public function member()

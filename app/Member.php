@@ -6,11 +6,8 @@ class Member extends Model {
 
 	protected $guarded = ['id', 'created_at', 'updated_at'];
 	
-	// Carbon dates
-	public function getDates()
-	{
-		return array('created_at', 'updated_at', 'geboortedatum');
-	}
+	protected $dates = ['created_at', 'updated_at', 'geboortedatum'];
+
 	
 	// Full name
 	public function getVolnaamAttribute() {
@@ -244,7 +241,7 @@ class Member extends Model {
 		$fellow_ids = [];
 		foreach ($events as $event)
 		{
-			$fellow_ids = array_merge($fellow_ids, $event->members()->lists('id')->toArray());
+			$fellow_ids = array_merge($fellow_ids, $event->members()->pluck('id')->toArray());
 		}
 		$fellow_ids = array_unique($fellow_ids);
 		if(($key = array_search($this->id, $fellow_ids)) !== false) {

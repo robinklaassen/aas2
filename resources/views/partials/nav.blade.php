@@ -36,7 +36,7 @@
 					
 						<li class="{{ substr(Request::path(),0,7) == 'profile' ? 'active' : ''}}"><a href="{{ url('/profile') }}">Mijn profiel</a></li>
 						
-						<li><a href="{{ url('/auth/logout') }}">Uitloggen</a></li>
+						<li><a href="{{ url('/logout') }}">Uitloggen</a></li>
 						
 					</ul>
 				</div>

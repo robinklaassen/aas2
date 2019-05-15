@@ -160,10 +160,10 @@
 		<p>Denk eraan, adressen <strong>altijd in de BCC</strong> zetten!</p>
 		
 		<h4>Emailadressen ouders</h4>
-		<p>{{ implode(", ", $participantMailingList->lists('email_ouder')->toArray()) }}</p>
+		<p>{{ implode(", ", $participantMailingList->pluck('email_ouder')->toArray()) }}</p>
 		
 		<h4>Emailadressen deelnemers</h4>
-		<p>{{ implode(", ", $participantMailingList->lists('email_deelnemer')->toArray()) }}</p>
+		<p>{{ implode(", ", $participantMailingList->pluck('email_deelnemer')->toArray()) }}</p>
 	</div>
 	
 	<div role="tabpanel" class="tab-pane" id="aspirant">
@@ -240,7 +240,7 @@
 		</table>
 
 		<h4>Mailinglijst</h4>
-		<p>{{ implode(', ', $ranonkeltjeDigitaal->lists('email_anderwijs')->toArray()) }}</p>
+		<p>{{ implode(', ', $ranonkeltjeDigitaal->pluck('email_anderwijs')->toArray()) }}</p>
 	</div>
 	
 	<div role="tabpanel" class="tab-pane" id="trainers">
