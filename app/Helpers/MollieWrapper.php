@@ -2,21 +2,24 @@
 namespace App\Helpers;
 
 
-class MollieWrapper {
+class MollieWrapper
+{
     const CURRENCY = "EUR";
     protected $mollie;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->mollie = new \Mollie\Api\MollieApiClient();
-        $this->mollie->setApiKey(env('MOLLIE_KEY'));
+        $this->mollie->setApiKey(env('MOLLIE_API_KEY'));
     }
 
-    public function api() {
+    public function api()
+    {
         return $this->mollie;
     }
 
-    public function eventPayment(): MolliePayment {
+    public function eventPayment(): MollieEventPayment
+    {
         return new MollieEventPayment($this);
     }
-
 }
