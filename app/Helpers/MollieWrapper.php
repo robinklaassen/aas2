@@ -1,9 +1,16 @@
 <?php
 namespace App\Helpers;
 
+use App\Helpers\MollieEventPayment;
 
 class MollieWrapper
 {
+
+    public static function roundPrice(float $amount)
+    {
+        return round($amount / 5) * 5;
+    }
+
     const CURRENCY = "EUR";
     protected $mollie;
 

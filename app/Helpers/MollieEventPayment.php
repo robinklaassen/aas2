@@ -1,5 +1,7 @@
 <?php
 
+namespace App\Helpers;
+
 use App\Participant;
 use App\Event;
 
@@ -10,7 +12,7 @@ class MollieEventPayment
     protected $event;
     protected $participant;
     protected $participant_type = "new";
-    protected $amount;
+    protected $price;
     protected $currency = "EUR";
 
     public function __construct(MollieWrapper $mollie)
@@ -28,6 +30,7 @@ class MollieEventPayment
     public function event(Event $event): MollieEventPayment
     {
         $this->event = $event;
+        $this->price($event->prijs);
         return $this;
     }
 
@@ -37,10 +40,20 @@ class MollieEventPayment
         return $this;
     }
 
-    public function amount(float $d): MollieEventPayment
+    public function price(float $d): MollieEventPayment
     {
-        $this->amount = $d;
+        $this->price = $d;
         return $this;
+    }
+
+    public function getTotalAmount(): float
+    {
+        return MollieWrapper::roundPrice($this->price * $this->participant->incomeBasedDiscount());
+    }
+
+    public function getTotalAmountString(): string
+    {
+        return number_format($this->getTotalAmount(), 2, '.', '');
     }
 
     public function finalize()
@@ -59,7 +72,7 @@ class MollieEventPayment
         return $this->mollie->api()->payments->create(array(
             "amount"      => [
                 "currency" => $this->currency,
-                "value" => $this->amount * $this->participant->incomeBasedDiscount()
+                "value" => $this->getTotalAmountString(),
             ],
             "description" => $descr,
             "metadata"      => array(
