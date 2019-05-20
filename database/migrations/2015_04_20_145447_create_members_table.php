@@ -34,7 +34,7 @@ class CreateMembersTable extends Migration {
 			$table->boolean('rijbewijs')->default(0);
 			$table->string('hoebij');
 			$table->boolean('kmg')->default(0);
-			$table->boolean('ranonkeltje')->default(1);
+			$table->enum('ranonkeltje', ['geen', 'digitaal', 'papier', 'beide'])->default('digitaal');
 			$table->boolean('vog')->default(0);
 			$table->boolean('ervaren_trainer')->default(0);
 			$table->boolean('incasso')->default(0);

@@ -1,12 +1,12 @@
 @extends('master')
 
 @section('title')
-	Emailadressen {{$camp->naam}}
+	Emailadressen {{$event->naam}}
 @endsection
 
 @section('content')
 
-<h1>Emailadressen {{$camp->naam}}</h1>
+<h1>Emailadressen {{$event->naam}}</h1>
 
 <hr/>
 

@@ -1,7 +1,7 @@
 @extends('master')
 
 @section('title')
-	Budget {{$camp->naam}}
+	Budget {{$event->naam}}
 @endsection
 
 @section('header')
@@ -15,7 +15,7 @@
 @section('content')
 
 
-<h1>Budget {{$camp->naam}}</h1>
+<h1>Budget {{$event->naam}}</h1>
 
 <hr/>
 
@@ -25,7 +25,7 @@
 		<p>
 			<strong>Let op!</strong> Deze tool rekent op dit moment alleen met <b>hele</b> kampdagen, terwijl de begroting ook halve dagen kent. In de toekomst komt een nieuwe versie die beter aansluit op de werkelijkheid.
 		</p>
-	
+
 		<table class="table">
 			<thead>
 				<tr>
@@ -36,7 +36,7 @@
 					<th class="txt-r">Totaal</th>
 				</tr>
 			</thead>
-			
+
 			<tbody>
 				<tr>
 					<th>Leiding (vol)</th>
@@ -70,7 +70,7 @@
 				</tr>
 			</tbody>
 		</table>
-		
+
 	</div>
 </div>
 

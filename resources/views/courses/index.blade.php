@@ -21,8 +21,6 @@
 
 <hr/>
 
-<button type="button" class="btn btn-link btn-sm" data-toggle="modal" data-target="#privacyModal">Test privacy venster</button>
-
 <div class="row">
 	<div class="col-sm-6">
 		<!-- Vakkentabel -->

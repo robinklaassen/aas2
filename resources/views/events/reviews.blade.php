@@ -50,7 +50,7 @@
 		
 		<h4>Zo ja, hoe vond je dit?</h4>
 		<ul>
-			@foreach ($event->reviews()->get()->shuffle()->lists('bs-manier-mening') as $m)
+			@foreach ($event->reviews()->get()->shuffle()->pluck('bs-manier-mening') as $m)
 				@unless ($m == '')
 					<li>{{ $m }}</li>
 				@endunless
@@ -66,7 +66,7 @@
 		
 		<h4>Zo ja, waarover, en wat vond je ervan?</h4>
 		<ul>
-			@foreach ($event->reviews()->get()->shuffle()->lists('bs-thema-wat') as $w)
+			@foreach ($event->reviews()->get()->shuffle()->pluck('bs-thema-wat') as $w)
 				@unless ($w == '')
 					<li>{{ $w }}</li>
 				@endunless
@@ -85,7 +85,7 @@
 
 		<h4>Wat vond je van de leidingploeg?</h4>
 		<ul>
-			@foreach ($event->reviews()->get()->shuffle()->lists('leidingploeg') as $w)
+			@foreach ($event->reviews()->get()->shuffle()->pluck('leidingploeg') as $w)
 				@unless ($w == '')
 					<li>{{ $w }}</li>
 				@endunless
@@ -94,7 +94,7 @@
 
 		<h4>Wat vond je van het eten tijdens het kamp?</h4>
 		<ul>
-			@foreach ($event->reviews()->get()->shuffle()->lists('eten') as $w)
+			@foreach ($event->reviews()->get()->shuffle()->pluck('eten') as $w)
 				@unless ($w == '')
 					<li>{{ $w }}</li>
 				@endunless
@@ -110,7 +110,7 @@
 
 		<h4>Als je (veel te) weinig tijd had om te slapen, hoe kwam dat dan?</h4>
 		<ul>
-			@foreach ($event->reviews()->get()->shuffle()->lists('slaaptijd-hoe') as $w)
+			@foreach ($event->reviews()->get()->shuffle()->pluck('slaaptijd-hoe') as $w)
 				@unless ($w == '')
 					<li>{{ $w }}</li>
 				@endunless
@@ -123,7 +123,7 @@
 
 		<h4>Waarom?</h4>
 		<ul>
-			@foreach ($event->reviews()->get()->shuffle()->lists('kamplengte-wrm') as $w)
+			@foreach ($event->reviews()->get()->shuffle()->pluck('kamplengte-wrm') as $w)
 				@unless ($w == '')
 					<li>{{ $w }}</li>
 				@endunless
@@ -138,7 +138,7 @@
 	<div class="col-md-6">
 		<h4>Welk avondprogramma vond je het leukst en waarom?</h4>
 		<ul>
-			@foreach ($event->reviews()->get()->shuffle()->lists('avond-leukst') as $w)
+			@foreach ($event->reviews()->get()->shuffle()->pluck('avond-leukst') as $w)
 				@unless ($w == '')
 					<li>{{ $w }}</li>
 				@endunless
@@ -147,7 +147,7 @@
 		
 		<h4>Welk avondprogramma vond je het minst leuk en waarom?</h4>
 		<ul>
-			@foreach ($event->reviews()->get()->shuffle()->lists('avond-minst') as $w)
+			@foreach ($event->reviews()->get()->shuffle()->pluck('avond-minst') as $w)
 				@unless ($w == '')
 					<li>{{ $w }}</li>
 				@endunless
@@ -158,7 +158,7 @@
 	<div class="col-md-6">
 		<h4>Wat is het allerleukste dat je hebt gedaan of dat is gebeurd tijdens het kamp?</h4>
 		<ul>
-			@foreach ($event->reviews()->get()->shuffle()->lists('allerleukst') as $w)
+			@foreach ($event->reviews()->get()->shuffle()->pluck('allerleukst') as $w)
 				@unless ($w == '')
 					<li>{{ $w }}</li>
 				@endunless
@@ -167,7 +167,7 @@
 		
 		<h4>Wat is het allervervelendste dat is gebeurd tijdens het kamp?</h4>
 		<ul>
-			@foreach ($event->reviews()->get()->shuffle()->lists('allervervelendst') as $w)
+			@foreach ($event->reviews()->get()->shuffle()->pluck('allervervelendst') as $w)
 				@unless ($w == '')
 					<li>{{ $w }}</li>
 				@endunless
@@ -183,7 +183,7 @@
 	
 		<h4>Zou je nog eens mee willen op kamp (en waarom)?</h4>
 		<ul>
-			@foreach ($event->reviews()->get()->shuffle()->lists('nogeens') as $w)
+			@foreach ($event->reviews()->get()->shuffle()->pluck('nogeens') as $w)
 				@unless ($w == '')
 					<li>{{ $w }}</li>
 				@endunless
@@ -196,7 +196,7 @@
 	
 		<h4>Heb je nog een tip voor Anderwijs als organisatie?</h4>
 		<ul>
-			@foreach ($event->reviews()->get()->shuffle()->lists('tip') as $w)
+			@foreach ($event->reviews()->get()->shuffle()->pluck('tip') as $w)
 				@unless ($w == '')
 					<li>{{ $w }}</li>
 				@endunless
@@ -209,7 +209,7 @@
 
 <h4>Wil je verder nog iets kwijt?</h4>
 <ul>
-	@foreach ($event->reviews()->get()->shuffle()->lists('verder') as $w)
+	@foreach ($event->reviews()->get()->shuffle()->pluck('verder') as $w)
 		@unless ($w == '')
 			<li>{{ $w }}</li>
 		@endunless

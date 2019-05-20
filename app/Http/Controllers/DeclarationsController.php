@@ -222,7 +222,7 @@ class DeclarationsController extends Controller {
 	# Admin dashboard view
 	public function admin()
 	{
-		$m_ids = \DB::table('declarations')->distinct()->lists('member_id')->toArray();
+		$m_ids = \DB::table('declarations')->distinct()->pluck('member_id')->toArray();
 		$members = [];
 		foreach ($m_ids as $id) {
 			$members[] = \App\Member::find($id);
@@ -263,7 +263,7 @@ class DeclarationsController extends Controller {
 						->open()
 						->select('filename')
 						->distinct()
-						->lists('filename')->toArray();
+						->pluck('filename')->toArray();
 
 		$files = array_filter($files);
 
