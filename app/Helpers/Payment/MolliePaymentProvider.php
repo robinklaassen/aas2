@@ -23,8 +23,8 @@ class MolliePaymentProvider implements PaymentProvider
 
     public function process(PaymentInterface $payment)
     {
-        $keyString = implode('/', $payment->getKeys);
-        $p = $this->mollie->api()->payments->create(array(
+        $keyString = implode('/', $payment->getKeys());
+        $p = $this->api()->payments->create(array(
             "amount"      => [
                 "currency" => $payment->getCurrency(),
                 "value" => number_format($payment->getTotalAmount(), 2, '.', '')
