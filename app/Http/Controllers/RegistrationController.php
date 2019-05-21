@@ -8,9 +8,9 @@ use App\Member;
 use App\Participant;
 use App\Event;
 use App\Course;
-use Illuminate\Http\Request;
 use Mail;
-use App\Facades\MollieWrapper;
+use App\Helpers\Payment\EventPayment;
+use App\Facades\Mollie;
 
 class RegistrationController extends Controller
 {
@@ -249,7 +249,7 @@ class RegistrationController extends Controller
 
 		// Obtain camp and cost information
 		$camp = Event::findOrFail($request->selected_camp);
-		$payment = MollieWrapper::eventPayment()
+		$payment = (new EventPayment())
 			->event($camp)
 			->participant($participant)
 			->existing(false);
@@ -272,25 +272,7 @@ class RegistrationController extends Controller
 
 		// If they want to pay with iDeal, set up the payment now
 		if ($iDeal == '1' && $camp->prijs != 0) {
-			// Initialize Mollie (with API key)
-
-			// // Create the payment
-			// $payment = $mollie->payments->create(array(
-			// 	"amount"      => $toPay,
-			// 	"description" => $camp->code . " - " . str_replace("  ", " ", $participant->voornaam . " " . $participant->tussenvoegsel . " " . $participant->achternaam),
-			// 	"metadata"	  => array(
-			// 		//"order_id" => $order_id
-			// 		"participant_id" => $participant->id,
-			// 		"camp_id" => $camp->id,
-			// 		"type" => "new"
-			// 	),
-			// 	"webhookUrl"  => url("iDeal-webhook"),
-			// 	"redirectUrl" => url("/iDeal-response/{$participant->id}/{$camp->id}"),
-			// 	"method" => \Mollie_API_Object_Method::IDEAL,
-			// ));
-
-			// Direct to Mollie payment site
-			return redirect($payment->finalize()->getCheckoutUrl());
+			return Mollie::process($payment);
 		} else {
 			// Return closing view
 			return view('registration.participantStored', compact('participant', 'camp', 'toPay', 'incomeTable'));

@@ -10,11 +10,9 @@
 | and give it the controller to call when that URI is requested.
 */
 
-use \App\Helpers\MollieWrapper;
-
 // test
-Route::get("/mollie/test", function (MollieWrapper $w) {
-    dd($w->api()->payments->page());
+Route::get("/mollie/test", function () {
+    dd(Mollie::api()->payments->page());
 });
 
 # Root page refers to login

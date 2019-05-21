@@ -206,7 +206,7 @@ return [
 		'PDF' 		=> 'Barryvdh\DomPDF\Facade',
 		'Excel' 	=> 'Maatwebsite\Excel\Facades\Excel',
 		'Lava' 		=> 'Khill\Lavacharts\Laravel\LavachartsFacade',
-		'Mollie'	=> App\Facades\MollieWrapper::class
+		'Mollie'	=> App\Facades\Mollie::class
 	],
 
 ];
