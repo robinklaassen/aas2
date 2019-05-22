@@ -69,7 +69,9 @@ class PaymentTest extends TestCase
     public function testEventPaymentPrice()
     {
         $this->assertEquals($this->event->prijs, $this->payment->getTotalAmount());
-
+    }
+    public function testEventPaymentPriceWithDiscount()
+    {
         $partWithDiscount = Participant::findOrFail(2);
         $this->payment->participant($partWithDiscount);
         $this->assertEquals($this->event->prijs * $partWithDiscount->incomeBasedDiscount(), $this->payment->getTotalAmount());
