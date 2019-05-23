@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use App\Helpers\Payment\MolliePaymentProvider;
 
 class RegistationTest extends TestCase
 {
@@ -51,6 +52,23 @@ class RegistationTest extends TestCase
 
     public function testParticipantRegistrationWithIDeal()
     {
+        $this->instance(MolliePaymentProvider::class, Mockery::mock(MolliePaymentProvider::class, function ($mock) {
+            $mock->shouldReceive('process')->once();
+        }));
+
+        $this->data->iDeal = "1";
+        $response = $this->post('/register-participant', $this->data);
+
+        $response->assertStatus(200);
+    }
+
+    public function testParticipantRegistrationWithoutIDeal()
+    {
+        $this->instance(MolliePaymentProvider::class, Mockery::mock(MolliePaymentProvider::class, function ($mock) {
+            $mock->shouldNotReceive('process')->once();
+        }));
+
+        $this->data->iDeal = "1";
         $response = $this->post('/register-participant', $this->data);
 
         $response->assertStatus(200);
