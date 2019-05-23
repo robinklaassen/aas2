@@ -94,7 +94,7 @@ class RegistrationController extends Controller {
 
 		foreach (array_unique($courseInput) as $i => $course)
 		{
-			if ($course != '0')
+			if ($course !== null && $course != '0')
 			{
 				$member->courses()->sync([$course], false);
 				$member->courses()->updateExistingPivot($course, ['klas' => $levelInput[$i]]);
