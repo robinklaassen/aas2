@@ -6,12 +6,14 @@ use Mockery;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use App\Helpers\Payment\MolliePaymentProvider;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Illuminate\Support\Facades\Mail;
 
 class RegistationTest extends TestCase
 {
-    use RefreshDatabase;
+    use DatabaseTransactions;
     use WithoutMiddleware;
 
     private $data = [
@@ -36,15 +38,15 @@ class RegistationTest extends TestCase
         "klas" => "2",
         "vak0" => "3",
         "vakinfo0" => "zoiets",
-        "vak1" => "3",
+        "vak1" => 3,
         "vakinfo1" => "Daar snap ik toch geen kut van joh, iets met E=MC2",
-        "vak2" => "0",
+        "vak2" => 0,
         "vakinfo2" => "",
-        "vak3" => "0",
+        "vak3" => 0,
         "vakinfo3" => "",
-        "vak4" => "0",
+        "vak4" => 0,
         "vakinfo4" => "",
-        "vak5" => "0",
+        "vak5" => 0,
         "vakinfo5" => "",
         "iDeal" => "1",
         "hoebij" => ["Nieuwsbrief school"],
@@ -68,6 +70,8 @@ class RegistationTest extends TestCase
 
     public function testParticipantRegistrationWithoutIDeal()
     {
+        Mail::fake();
+
         $this->instance(MolliePaymentProvider::class, Mockery::mock(MolliePaymentProvider::class, function ($mock) {
             $mock->shouldNotReceive('process')->once();
         }));
