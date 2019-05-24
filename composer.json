@@ -23,7 +23,8 @@
     "symfony/css-selector": "^4.0",
     "phpunit/phpunit": "^7.0",
     "phpspec/phpspec": "~4.0",
-    "filp/whoops": "~2.0"
+    "filp/whoops": "~2.0",
+    "mockery/mockery": "^1.2"
   },
   "autoload": {
     "classmap": [
