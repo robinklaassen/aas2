@@ -10,6 +10,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use App\Helpers\Payment\MolliePaymentProvider;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\DB;
 
 class RegistationTest extends TestCase
 {
@@ -56,6 +57,11 @@ class RegistationTest extends TestCase
         "privacy" => "1"
     ];
 
+    protected function tearDown(): void
+    {
+        // DB::statement('delete from users u where profile_type = '' ");
+    }
+
     // public function testParticipantRegistrationWithIDeal()
     // {
     //     $this->instance(MolliePaymentProvider::class, Mockery::mock(MolliePaymentProvider::class, function ($mock) {
@@ -80,7 +86,6 @@ class RegistationTest extends TestCase
 
         $response = $this->post('/register-participant', $this->data);
 
-        $this->assertEquals('', $response->getContent());
         $response->assertStatus(200);
 
         $username = strtolower(substr($this->data["voornaam"], 0, 1) . $this->data["achternaam"]);
