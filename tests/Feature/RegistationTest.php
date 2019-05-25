@@ -7,35 +7,32 @@ use Tests\TestCase;
 use App\Event;
 use App\Participant;
 use App\Helpers\Payment\PaymentInterface;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use App\Helpers\Payment\MolliePaymentProvider;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
 
-function contains($needle, $haystack)
-{
-    return strpos($haystack, $needle) !== false;
-}
 
-function clearDB()
-{
-    DB::statement("
-    delete from users
-     where profile_type = 'App\Participant'
-       and profile_id in (select p.id from participants p where p.achternaam = 'Test' )
-    ");
-    DB::statement("
-    delete from participants
-     where achternaam = 'Test'
-
-    ");
-}
 
 class RegistationTest extends TestCase
 {
+    private static function clearDB()
+    {
+        DB::statement("
+        delete from users
+         where profile_type = 'App\Participant'
+           and profile_id in (select p.id from participants p where p.achternaam = 'Test' )
+        ");
+        DB::statement("
+        delete from event_participant
+         where participant_id in (select p.id from participants p where p.achternaam = 'Test' )
+        ");
+        DB::statement("
+        delete from participants
+         where achternaam = 'Test'
+        ");
+    }
     use DatabaseTransactions;
     use WithoutMiddleware;
 
@@ -85,7 +82,7 @@ class RegistationTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        clearDB();
+        RegistationTest::clearDB();
         $this->event = Event::findOrFail($this->data["selected_camp"]);
         $this->participantData = [
             "voornaam" => $this->data["voornaam"],
@@ -117,7 +114,7 @@ class RegistationTest extends TestCase
 
     protected function tearDown(): void
     {
-        clearDB();
+        RegistationTest::clearDB();
         parent::tearDown();
     }
 
@@ -130,12 +127,16 @@ class RegistationTest extends TestCase
                 ->once()
                 ->with(Mockery::on(function (PaymentInterface $arg) {
 
+                    $contains = function ($needle, $haystack) {
+                        return strpos($haystack, $needle) !== false;
+                    };
+
                     $descr = $arg->getDescription();
                     return $arg->getCurrency() == "EUR"
                         && $arg->getTotalAmount() == 1000.00
-                        && contains($this->event->code, $descr)
-                        && contains($this->data["voornaam"], $descr)
-                        && contains($this->data["achternaam"], $descr);
+                        && $contains($this->event->code, $descr)
+                        && $contains($this->data["voornaam"], $descr)
+                        && $contains($this->data["achternaam"], $descr);
                 }))
                 ->andReturns(redirect("https://mollie-backend"));
         }));

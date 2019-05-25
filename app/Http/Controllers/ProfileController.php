@@ -2,15 +2,17 @@
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Helpers\Payment\EventPayment;
+use App\Facades\Mollie;
 
 use Illuminate\Http\Request;
 use Input;
+use Mail;
 
 use App\Member;
 use App\Participant;
 use App\Event;
 use App\Course;
-use Mail;
 
 class ProfileController extends Controller
 {
@@ -355,6 +357,8 @@ class ProfileController extends Controller
 	# Go on camp (update database)
 	public function onCampSave(Request $request)
 	{
+		$camp = \App\Event::findOrFail($request->selected_camp);
+
 		// Check if member or participant that's logged in
 		if (\Auth::user()->profile_type == 'App\Member') {
 			$member = \Auth::user()->profile;
@@ -364,7 +368,6 @@ class ProfileController extends Controller
 					'flash_message' => 'Je bent al op dit kamp!'
 				]);
 			} else {
-				$camp = \App\Event::findOrFail($request->selected_camp);
 
 				// Send update to camp committee
 				\Mail::send('emails.memberOnCampNotification', ['member' => $member, 'camp' => $camp], function ($message) {

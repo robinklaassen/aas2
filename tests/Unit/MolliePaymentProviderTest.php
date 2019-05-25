@@ -6,7 +6,6 @@ use Tests\TestCase;
 use \Mockery;
 use App\Facades\Mollie;
 use App\Helpers\Payment\PaymentInterface;
-use App\Helpers\Payment\MolliePaymentProvider;
 use App\Event;
 use App\Participant;
 
