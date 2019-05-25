@@ -3,10 +3,7 @@
 namespace Tests\Unit;
 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\Helpers\Payment\EventPayment;
-use App\Helpers\Payment\MolliePaymentProvider;
 use App\Event;
 use App\Participant;
 

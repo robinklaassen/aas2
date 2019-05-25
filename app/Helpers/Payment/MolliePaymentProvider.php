@@ -1,6 +1,7 @@
 <?php
 namespace App\Helpers\Payment;
 
+use \Mockery;
 use App\Helpers\Payment\PaymentProvider;
 use App\Helpers\Payment\PaymentInterface;
 
@@ -19,6 +20,18 @@ class MolliePaymentProvider implements PaymentProvider
     public function api()
     {
         return $this->mollie;
+    }
+
+    public function fakeApi()
+    {
+        $this->mollie = Mockery::mock($this->mollie);
+        return $this->mollie;
+    }
+
+    public function fakePayments()
+    {
+        $this->mollie->payments = Mockery::mock($this->mollie->payments);
+        return $this->mollie->payments;
     }
 
     public function process(PaymentInterface $payment)
