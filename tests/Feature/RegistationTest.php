@@ -73,52 +73,15 @@ class RegistationTest extends TestCase
         "privacy" => 1
     ];
     private $event;
+    private $participantData;
+    private $userData;
 
     protected function setUp(): void
     {
         parent::setUp();
         clearDB();
         $this->event = Event::findOrFail($this->data["selected_camp"]);
-    }
-
-    protected function tearDown(): void
-    {
-        clearDB();
-        parent::tearDown();
-    }
-
-    // public function testParticipantRegistrationWithIDeal()
-    // {
-    //     $this->instance(MolliePaymentProvider::class, Mockery::mock(MolliePaymentProvider::class, function ($mock) {
-    //         $mock->shouldReceive('process')->once();
-    //     }));
-
-    //     $this->data["iDeal"] = "1";
-    //     $response = $this->post('/register-participant', $this->data);
-
-    //     $response->assertStatus(200);
-    // }
-
-    public function testParticipantRegistrationWithoutIDeal()
-    {
-        Mail::fake();
-
-        $this->instance(MolliePaymentProvider::class, Mockery::mock(MolliePaymentProvider::class, function ($mock) {
-            $mock->shouldNotReceive('process');
-        }));
-
-        $this->data["iDeal"] = "0";
-
-        $response = $this->post('/register-participant', $this->data);
-
-        // check db
-        $username = strtolower(substr($this->data["voornaam"], 0, 1) . $this->data["achternaam"]);
-        $this->assertDatabaseHas('users', [
-            "username" => $username,
-            "is_admin" => 0
-        ]);
-
-        $this->assertDatabaseHas('participants', [
+        $this->participantData = [
             "voornaam" => $this->data["voornaam"],
             "tussenvoegsel" => $this->data["tussenvoegsel"],
             "achternaam" => $this->data["achternaam"],
@@ -138,7 +101,47 @@ class RegistationTest extends TestCase
             "niveau" => $this->data["niveau"],
             "klas" => $this->data["klas"],
             "inkomensverklaring" => null
-        ]);
+        ];
+        $username = strtolower(substr($this->data["voornaam"], 0, 1) . $this->data["achternaam"]);
+        $this->userData = [
+            "username" => $username,
+            "is_admin" => 0
+        ];
+    }
+
+    protected function tearDown(): void
+    {
+        clearDB();
+        parent::tearDown();
+    }
+
+    public function testParticipantRegistrationWithIDeal()
+    {
+        $this->instance(MolliePaymentProvider::class, Mockery::mock(MolliePaymentProvider::class, function ($mock) {
+            $mock->shouldReceive('process')->once();
+        }));
+
+        $this->data["iDeal"] = "1";
+        $response = $this->post('/register-participant', $this->data);
+
+        $response->assertStatus(200);
+    }
+
+    public function testParticipantRegistrationWithoutIDeal()
+    {
+        Mail::fake();
+
+        $this->instance(MolliePaymentProvider::class, Mockery::mock(MolliePaymentProvider::class, function ($mock) {
+            $mock->shouldNotReceive('process');
+        }));
+
+        $this->data["iDeal"] = "0";
+
+        $response = $this->post('/register-participant', $this->data);
+
+        // check db
+        $this->assertDatabaseHas('users', $this->userData);
+        $this->assertDatabaseHas('participants', $this->participantData);
 
         // Check output
         $response->assertStatus(200);
