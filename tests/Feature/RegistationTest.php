@@ -117,6 +117,8 @@ class RegistationTest extends TestCase
 
     public function testParticipantRegistrationWithIDeal()
     {
+        Mail::fake();
+
         $this->instance(MolliePaymentProvider::class, Mockery::mock(MolliePaymentProvider::class, function ($mock) {
             $mock->shouldReceive('process')->once();
         }));
@@ -124,7 +126,12 @@ class RegistationTest extends TestCase
         $this->data["iDeal"] = "1";
         $response = $this->post('/register-participant', $this->data);
 
-        $response->assertStatus(200);
+
+        // check db
+        $this->assertDatabaseHas('users', $this->userData);
+        $this->assertDatabaseHas('participants', $this->participantData);
+        // redirect
+        $response->assertStatus(302);
     }
 
     public function testParticipantRegistrationWithoutIDeal()
