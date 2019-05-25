@@ -6,6 +6,7 @@ use Mockery;
 use Tests\TestCase;
 use App\Event;
 use App\Participant;
+use App\Helpers\Payment\PaymentInterface;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -13,6 +14,11 @@ use App\Helpers\Payment\MolliePaymentProvider;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
+
+function contains($needle, $haystack)
+{
+    return strpos($haystack, $needle) !== false;
+}
 
 function clearDB()
 {
@@ -120,18 +126,29 @@ class RegistationTest extends TestCase
         Mail::fake();
 
         $this->instance(MolliePaymentProvider::class, Mockery::mock(MolliePaymentProvider::class, function ($mock) {
-            $mock->shouldReceive('process')->once();
+            $mock->shouldReceive('process')
+                ->once()
+                ->with(Mockery::on(function (PaymentInterface $arg) {
+
+                    $descr = $arg->getDescription();
+                    return $arg->getCurrency() == "EUR"
+                        && $arg->getTotalAmount() == 1000.00
+                        && contains($this->event->code, $descr)
+                        && contains($this->data["voornaam"], $descr)
+                        && contains($this->data["achternaam"], $descr);
+                }))
+                ->andReturns(redirect("https://mollie-backend"));
         }));
 
-        $this->data["iDeal"] = "1";
+        $this->data["iDeal"] = '1';
         $response = $this->post('/register-participant', $this->data);
-
 
         // check db
         $this->assertDatabaseHas('users', $this->userData);
         $this->assertDatabaseHas('participants', $this->participantData);
         // redirect
         $response->assertStatus(302);
+        $response->assertRedirect("https://mollie-backend");
     }
 
     public function testParticipantRegistrationWithoutIDeal()
@@ -142,7 +159,7 @@ class RegistationTest extends TestCase
             $mock->shouldNotReceive('process');
         }));
 
-        $this->data["iDeal"] = "0";
+        $this->data["iDeal"] = 0;
 
         $response = $this->post('/register-participant', $this->data);
 
@@ -152,6 +169,7 @@ class RegistationTest extends TestCase
 
         // Check output
         $response->assertStatus(200);
+        $response->assertViewIs('registration.participantStored');
         $response->assertSee("€ " . $this->event->prijs);
         $response->assertSee("NL68 TRIO 0198 4197 83");
         $response->assertSee("naam deelnemer + deze kampcode: " . $this->event->code);
