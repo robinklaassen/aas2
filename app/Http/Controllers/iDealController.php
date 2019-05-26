@@ -13,13 +13,6 @@ use Illuminate\Http\Request;
 class iDealController extends Controller
 {
 
-	public function __construct()
-	{
-		// You need to be logged in to access
-		//$this->middleware('auth', ['except' => 'iDealWebhook']);
-		//$this->middleware('admin',['only' => ['lists', 'graphs']]);
-	}
-
 	# iDeal webhook
 	public function webhook(Request $request)
 	{

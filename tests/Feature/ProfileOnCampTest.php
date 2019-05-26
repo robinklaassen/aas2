@@ -7,17 +7,14 @@ use Tests\TestCase;
 use App\User;
 use App\Helpers\Payment\MolliePaymentProvider;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use App\Event;
-use App\Helpers\Payment\PaymentInterface;
 use App\Helpers\Payment\EventPayment;
 
 
 class ProfileNewCampTest extends TestCase
 {
-    use DatabaseTransactions;
     use WithoutMiddleware;
 
 
