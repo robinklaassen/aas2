@@ -8,11 +8,12 @@ use App\Member;
 use App\Participant;
 use App\Event;
 use App\Course;
-use Illuminate\Http\Request;
 use Mail;
 use App\Mail\ParticipantRegistrationConfirmation;
 use Illuminate\Support\Facades\Config;
 use App\Mail\internal\NewParticipantNotification;
+use App\Helpers\Payment\EventPayment;
+use App\Facades\Mollie;
 
 class RegistrationController extends Controller
 {
@@ -247,32 +248,16 @@ class RegistrationController extends Controller
 		$participant->user()->save($user);
 
 		// Income table
-		$incomeTable = [
-			0 => 'Meer dan € 3400 (geen korting)',
-			1 => 'Tussen € 2200 en € 3400 (korting: 15%)',
-			2 => 'Tussen € 1300 en € 2200 (korting: 30%)',
-			3 => 'Minder dan € 1300 (korting: 50%)'
-		];
+		$incomeTable = Participant::INCOME_DESCRIPTION_TABLE;
 
 		// Obtain camp and cost information
 		$camp = Event::findOrFail($request->selected_camp);
-		switch ($participant->inkomen) {
-			case 0:
-				$toPay = $camp->prijs;
-				break;
-
-			case 1:
-				$toPay = round((0.85 * $camp->prijs) / 5) * 5;
-				break;
-
-			case 2:
-				$toPay = round((0.7 * $camp->prijs) / 5) * 5;
-				break;
-
-			case 3:
-				$toPay = round((0.5 * $camp->prijs) / 5) * 5;
-				break;
-		}
+		$payment = (new EventPayment())
+			->event($camp)
+			->participant($participant)
+			->existing(false);
+		$toPay = $payment->getTotalAmount();
+		$iDeal = $request->iDeal;
 
 		// Send update to office committee
 		Mail::to([
@@ -283,8 +268,6 @@ class RegistrationController extends Controller
 				$camp
 			)
 		);
-
-		$iDeal = $request->iDeal;
 
 		// Send confirmation email to newly registered participant's parent
 		Mail::to([
@@ -302,26 +285,7 @@ class RegistrationController extends Controller
 
 		// If they want to pay with iDeal, set up the payment now
 		if ($iDeal == '1' && $camp->prijs != 0) {
-			// Initialize Mollie (with API key)
-			include "MollieSet.php";
-
-			// Create the payment
-			$payment = $mollie->payments->create(array(
-				"amount"      => $toPay,
-				"description" => $camp->code . " - " . str_replace("  ", " ", $participant->voornaam . " " . $participant->tussenvoegsel . " " . $participant->achternaam),
-				"metadata"	  => array(
-					//"order_id" => $order_id
-					"participant_id" => $participant->id,
-					"camp_id" => $camp->id,
-					"type" => "new"
-				),
-				"webhookUrl"  => url("iDeal-webhook"),
-				"redirectUrl" => url("/iDeal-response/{$participant->id}/{$camp->id}"),
-				"method" => \Mollie_API_Object_Method::IDEAL,
-			));
-
-			// Direct to Mollie payment site
-			return redirect($payment->getPaymentUrl());
+			return Mollie::process($payment);
 		} else {
 			// Return closing view
 			return view('registration.participantStored', compact('participant', 'camp', 'toPay', 'incomeTable'));
