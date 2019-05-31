@@ -121,4 +121,19 @@ return [
 
 	'pretend' => false,
 
+	'addresses' => [
+		'aas' => [
+			"email" => "aas@anderwijs.nl",
+			"name" => "Anderwijs - AAS"
+		],
+		'kantoor' => [
+			"email" => "kantoor@anderwijs.nl",
+			"name"  => "Kantoorcommissie Anderwijs"
+		],
+		"kamp" => [
+			"email" => "kamp@anderwijs.nl",
+			"name" => "Kampcommissie Anderwijs"
+		]
+	]
+
 ];

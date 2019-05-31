@@ -2,7 +2,8 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class Participant extends Model {
+class Participant extends Model
+{
 
 	protected $guarded = ['id', 'created_at', 'updated_at'];
 
@@ -10,7 +11,8 @@ class Participant extends Model {
 	protected $dates = ['geboortedatum', 'inkomensverklaring'];
 
 	// Full name
-	public function getVolnaamAttribute() {
+	public function getVolnaamAttribute()
+	{
 		return str_replace('  ', ' ', $this->voornaam . ' ' . $this->tussenvoegsel . ' ' . $this->achternaam);
 	}
 
@@ -18,14 +20,19 @@ class Participant extends Model {
 	public function setPostcodeAttribute($value)
 	{
 		$value = strtoupper($value);
-		if (preg_match('/\d{4}[A-Z]{2}/', $value))
-		{
-			$this->attributes['postcode'] = substr($value,0,4) . ' ' . substr($value,4,2);
-		}
-		else
-		{
+		if (preg_match('/\d{4}[A-Z]{2}/', $value)) {
+			$this->attributes['postcode'] = substr($value, 0, 4) . ' ' . substr($value, 4, 2);
+		} else {
 			$this->attributes['postcode'] = $value;
 		}
+	}
+
+	public function getParentEmail()
+	{
+		return [
+			"email" => $this->email_ouder,
+			"name"  => 'dhr./mw. ' . $this->tussenvoegsel . ' ' . $this->achternaam,
+		];
 	}
 
 	// A participant belongs to many events

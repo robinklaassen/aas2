@@ -8,8 +8,9 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Event;
 use App\User;
+use Illuminate\Support\Facades\Config;
 
-class RegistrationConfirmation extends Mailable
+class MemberRegistrationConfirmation extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -38,11 +39,9 @@ class RegistrationConfirmation extends Mailable
      */
     public function build()
     {
-        return $this->from('kamp@anderwijs.nl', 'Kampcommissie Anderwijs')
+        $from = Config::get("mail.addresses.kamp");
+        return $this->from($from->email, $from->name)
             ->subject("ANDERWIJS - Bevestiging van inschrijving")
-            ->view('emails.newMemberConfirm')
-            ->with([
-                "username" => $this->member->user()->username
-            ]);
+            ->view('emails.members.registrationConfirmation');
     }
 }
