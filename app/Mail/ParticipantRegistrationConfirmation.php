@@ -1,28 +1,24 @@
 <?php
 
-namespace App\Mail\internal;
+namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class NewParticipantNotification extends Mailable
+class ParticipantRegistrationConfirmation extends Mailable
 {
     use Queueable, SerializesModels;
-
-    public $participant;
-    public $event;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(Participant $participant, Event $event)
+    public function __construct()
     {
-        $this->participant = $participant;
-        $this->event = $event;
+        //
     }
 
     /**
@@ -32,6 +28,6 @@ class NewParticipantNotification extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.newParticipantNotification')->subject('AAS 2.0 - Nieuwe deelnemer');;
+        return $this->view('view.name');
     }
 }
