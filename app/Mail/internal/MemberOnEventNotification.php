@@ -7,22 +7,18 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
-class NewParticipantNotification extends Mailable
+class MemberOnEventNotification extends Mailable
 {
     use Queueable, SerializesModels;
-
-    public $participant;
-    public $event;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct(Participant $participant, Event $event)
+    public function __construct()
     {
-        $this->participant = $participant;
-        $this->event = $event;
+        //
     }
 
     /**
@@ -32,9 +28,9 @@ class NewParticipantNotification extends Mailable
      */
     public function build()
     {
-        return $this->view('emails.newParticipantNotification')
+        return $this->view('emails.internal.memberOnEventNotification')
             ->from([Config::get("mail.addresses.aas")])
-            ->to([Config::get("mail.addresses.kantoor")])
-            ->subject('AAS 2.0 - Nieuwe deelnemer');;
+            ->to([Config::get("mail.addresses.kamp")])
+            ->subject('AAS 2.0 - Lid op kamp');
     }
 }

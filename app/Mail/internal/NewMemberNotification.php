@@ -36,6 +36,7 @@ class NewMemberNotification extends Mailable
     {
         return $this->from("aas@anderwijs.nl", "ANDERWIJS - AAS")
             ->subject("AAS 2.0 - Nieuwe vrijwilliger")
+            ->to([Config::get("email.addresses.kamp")])
             ->view('emails.newMemberNotification');
     }
 }

@@ -9,13 +9,13 @@ use App\Participant;
 use App\Event;
 use App\Course;
 use Mail;
-use App\Mail\ParticipantRegistrationConfirmation;
+use App\Mail\participants\ParticipantRegistrationConfirmation;
 use Illuminate\Support\Facades\Config;
 use App\Mail\internal\NewParticipantNotification;
 use App\Helpers\Payment\EventPayment;
 use App\Facades\Mollie;
 use App\Mail\internal\NewMemberNotification;
-use App\Mail\MemberRegistrationConfirmation;
+use App\Mail\members\MemberRegistrationConfirmation;
 
 class RegistrationController extends Controller
 {
@@ -266,14 +266,10 @@ class RegistrationController extends Controller
 		$iDeal = $request->iDeal;
 
 		// Send update to office committee
-		Mail::to([
-			Config::get("mail.addresses.kantoor")
-		])->send(
-			new NewParticipantNotification(
-				$participant,
-				$camp
-			)
-		);
+		Mail::sendMailable(new NewParticipantNotification(
+			$participant,
+			$camp
+		));
 
 		// Send confirmation email to newly registered participant's parent
 		Mail::to([
