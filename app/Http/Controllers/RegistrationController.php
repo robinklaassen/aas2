@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Config;
 use App\Mail\internal\NewParticipantNotification;
 use App\Helpers\Payment\EventPayment;
 use App\Facades\Mollie;
+use App\Mail\internal\NewMemberNotification;
+use App\Mail\MemberRegistrationConfirmation;
 
 class RegistrationController extends Controller
 {
@@ -127,18 +129,22 @@ class RegistrationController extends Controller
 		$camp = Event::findOrFail($request->selected_camp);
 
 		// Send confirmation email to newly registered member
-		Mail::send('emails.newMemberConfirm', compact('member', 'camp', 'givenCourses', 'username', 'password'), function ($message) use ($member) {
-			$message->from('kamp@anderwijs.nl', 'Kampcommissie Anderwijs');
-
-			$message->to($member->email, $member->voornaam . ' ' . $member->tussenvoegsel . ' ' . $member->achternaam);
-
-			$message->subject('ANDERWIJS - Bevestiging van inschrijving');
-		});
+		Mail::to([$member])->send(
+			new MemberRegistrationConfirmation(
+				$member,
+				$camp,
+				$givenCourses,
+				$password
+			)
+		);
 
 		// Send update to camp committee
-		Mail::send('emails.newMemberNotification', ['member' => $member, 'camp' => $camp], function ($message) {
-			$message->to('kamp@anderwijs.nl', 'Kampcommissie Anderwijs')->subject('AAS 2.0 - Nieuwe vrijwilliger');
-		});
+		Mail::to([Config::get("mail.addresses.kamp")])->send([
+			new NewMemberNotification(
+				$member,
+				$camp
+			)
+		]);
 
 		// Return closing view
 		return view('registration.memberStored');

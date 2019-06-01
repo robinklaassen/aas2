@@ -3,7 +3,7 @@
 </p>
 
 <p>
-	Zojuist heeft een nieuwe deelnemer, {{ $participant->voornaam }} {{ $participant->tussenvoegsel }} {{ $participant->achternaam }}, zich ingeschreven voor {{ $camp->naam }} ({{ $camp->code }}). {{ ($participant->geslacht == 'M') ? 'Zijn' : 'Haar' }} gegevens vind je <a href="{{ url('/participants', $participant->id) }}">hier</a>.
+	Zojuist heeft een nieuwe deelnemer, {{ $participant->voornaam }} {{ $participant->tussenvoegsel }} {{ $participant->achternaam }}, zich ingeschreven voor {{ $event->naam }} ({{ $event->code }}). {{ ($participant->geslacht == 'M') ? 'Zijn' : 'Haar' }} gegevens vind je <a href="{{ url('/participants', $participant->id) }}">hier</a>.
 </p>
 
 <p>
