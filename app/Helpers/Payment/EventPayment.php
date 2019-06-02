@@ -35,7 +35,7 @@ class EventPayment implements PaymentInterface
 
     public function getDescription(): string
     {
-        return $this->event->code . " - " . str_replace("  ", " ", $this->participant->voornaam . " " . $this->participant->tussenvoegsel . " " . $this->participant->achternaam);
+        return $this->event->code . " - " . $this->participant->volnaam;
     }
 
     public function getCurrency(): string

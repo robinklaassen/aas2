@@ -44,17 +44,6 @@ class IDealResponse extends TestCase
     public $event;
     public $user;
 
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
-    public function testExample()
-    {
-        $response = $this->get('/');
-
-        $response->assertStatus(200);
-    }
 
     protected function setUp(): void
     {
@@ -120,6 +109,7 @@ class IDealResponse extends TestCase
 
     public function testIDealWebhook()
     {
+        Mail::fake();
         DB::statement(
             "
             insert into event_participant

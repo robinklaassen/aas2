@@ -28,9 +28,7 @@ class PaymentTest extends TestCase
     }
 
     /**
-     * A basic unit test example.
-     *
-     * @return void
+     * Tests if the metadata call
      */
     public function testEventPaymentMetadata()
     {
@@ -46,15 +44,25 @@ class PaymentTest extends TestCase
         $this->assertEquals("new", $meta["type"]);
     }
 
+    /**
+     * Tests if the keys call 
+     */
     public function testEventPaymentKeys()
     {
         $this->assertEquals([$this->participant->id, $this->event->id], $this->payment->getKeys());
     }
+
+    /**
+     * Tests the currency
+     */
     public function testEventPaymentCurrenct()
     {
         $this->assertEquals("EUR", $this->payment->getCurrency());
     }
 
+    /**
+     * Tests the description
+     */
     public function testEventPaymentDescription()
     {
 
@@ -63,10 +71,17 @@ class PaymentTest extends TestCase
         $this->assertContains($this->participant->achternaam, $this->payment->getDescription());
     }
 
+    /**
+     * Tests the totalAmount call
+     */
     public function testEventPaymentPrice()
     {
         $this->assertEquals($this->event->prijs, $this->payment->getTotalAmount());
     }
+
+    /**
+     * Tests the totalAmount call with an income based discount
+     */
     public function testEventPaymentPriceWithDiscount()
     {
         $partWithDiscount = Participant::findOrFail(2);

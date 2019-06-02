@@ -10,10 +10,6 @@
 | and give it the controller to call when that URI is requested.
 */
 
-// test
-Route::get("/mollie/test", function () {
-    dd(Mollie::api()->payments->page());
-});
 
 # Root page refers to login
 Route::get('/', 'Auth\LoginController@showLoginForm');

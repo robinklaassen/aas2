@@ -8,7 +8,6 @@ use App\Helpers\Payment\PaymentInterface;
 class MolliePaymentProvider implements PaymentProvider
 {
 
-    const CURRENCY = "EUR";
     protected $mollie;
 
     public function __construct()

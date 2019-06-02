@@ -118,6 +118,9 @@ class RegistationTest extends TestCase
         parent::tearDown();
     }
 
+    /**
+     * Tests the participants registration with ideal provided by mollie
+     */
     public function testParticipantRegistrationWithIDeal()
     {
         Mail::fake();
@@ -152,6 +155,10 @@ class RegistationTest extends TestCase
         $response->assertRedirect("https://mollie-backend");
     }
 
+
+    /**
+     * Tests the participants registration without ideal
+     */
     public function testParticipantRegistrationWithoutIDeal()
     {
         Mail::fake();
