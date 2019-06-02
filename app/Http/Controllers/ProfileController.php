@@ -7,12 +7,13 @@ use App\Facades\Mollie;
 
 use Illuminate\Http\Request;
 use Input;
-use Mail;
 
 use App\Member;
 use App\Participant;
 use App\Event;
 use App\Course;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\internal\MemberOnEventNotification;
 
 class ProfileController extends Controller
 {
@@ -370,12 +371,13 @@ class ProfileController extends Controller
 			} else {
 
 				// Send update to camp committee
-				\Mail::send('emails.memberOnCampNotification', ['member' => $member, 'camp' => $camp], function ($message) {
+				Mail::sendMailable(new MemberOnEventNotification())
+				Mail::send('emails.memberOnCampNotification', ['member' => $member, 'camp' => $camp], function ($message) {
 					$message->to('kamp@anderwijs.nl', 'Kampcommissie Anderwijs')->subject('AAS 2.0 - Lid op kamp');
 				});
 
 				// Send confirmation to member
-				\Mail::send('emails.memberOnCampConfirmation', ['member' => $member, 'camp' => $camp], function ($message) use ($member) {
+				Mail::send('emails.memberOnCampConfirmation', ['member' => $member, 'camp' => $camp], function ($message) use ($member) {
 					$message->to($member->email_anderwijs, $member->voornaam . ' ' . $member->tussenvoegsel . ' ' . $member->achternaam)->subject('AAS 2.0 - Aangemeld voor kamp');
 				});
 

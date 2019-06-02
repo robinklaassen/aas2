@@ -28,12 +28,6 @@ class Member extends Model
 		}
 	}
 
-	/** used for mailables */
-	public function getNameAttribute()
-	{
-		return $this->getVolnaamAttribute();
-	}
-
 	// A member belongs to many events
 	public function events()
 	{

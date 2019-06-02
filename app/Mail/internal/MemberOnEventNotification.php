@@ -11,14 +11,18 @@ class MemberOnEventNotification extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $event;
+    public $member;
+
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct(Member $member, Event $event)
     {
-        //
+        $this->member = $member;
+        $this->event = $event;
     }
 
     /**
