@@ -16,6 +16,7 @@ class Member extends Model
 		return str_replace('  ', ' ', $this->voornaam . ' ' . $this->tussenvoegsel . ' ' . $this->achternaam);
 	}
 
+
 	// Postcode mutator
 	public function setPostcodeAttribute($value)
 	{
@@ -27,6 +28,7 @@ class Member extends Model
 		}
 	}
 
+	/** used for mailables */
 	public function getNameAttribute()
 	{
 		return $this->getVolnaamAttribute();

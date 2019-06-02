@@ -129,7 +129,7 @@ class RegistrationController extends Controller
 		$camp = Event::findOrFail($request->selected_camp);
 
 		// Send confirmation email to newly registered member
-		Mail::to([$member])->send(
+		Mail::sendMailable(
 			new MemberRegistrationConfirmation(
 				$member,
 				$camp,
@@ -139,12 +139,12 @@ class RegistrationController extends Controller
 		);
 
 		// Send update to camp committee
-		Mail::to([Config::get("mail.addresses.kamp")])->send([
+		Mail::sendMailable(
 			new NewMemberNotification(
 				$member,
 				$camp
 			)
-		]);
+		);
 
 		// Return closing view
 		return view('registration.memberStored');
@@ -272,9 +272,7 @@ class RegistrationController extends Controller
 		));
 
 		// Send confirmation email to newly registered participant's parent
-		Mail::to([
-			$participant->getParentEmail()
-		])->send(
+		Mail::sendMailable(
 			new ParticipantRegistrationConfirmation(
 				$participant,
 				$camp,

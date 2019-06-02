@@ -44,6 +44,7 @@ class ParticipantRegistrationConfirmation extends Mailable
 
         $from = Config::get("mail.addresses.kantoor");
         return $this->view('emails.participants.registrationConfirmation')
+            ->to($this->participant->getParentEmail())
             ->from($from->email, $from->name)
             ->subject('ANDERWIJS - Bevestiging van inschrijving');
     }
