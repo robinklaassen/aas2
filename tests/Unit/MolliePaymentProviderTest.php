@@ -55,6 +55,9 @@ class MolliePaymentProviderTest extends TestCase
         $this->payment = (new TestPaymentPayment());
     }
 
+    /**
+     * Processes a fake payment and checks if the correct data is transfered to the mollie api
+     */
     public function testPaymentProcessing()
     {
         $mock = Mollie::fakePayments();

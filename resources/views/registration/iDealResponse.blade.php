@@ -50,7 +50,7 @@ iDeal betaling mislukt
 @endif
 
 <p>
-	Heeft u een nieuwe deelnemer ingeschreven? Dan is er ook automatisch een account aangemaakt. Hiermee kunt u inloggen op ons <a href="http://aas2.anderwijs.nl">administratiesysteem</a> om de gegevens van uw kind te beheren. De details staan in de bevestigingsmail.
+	Heeft u een nieuwe deelnemer ingeschreven? Dan is er ook automatisch een account aangemaakt. Hiermee kunt u inloggen op ons <a href=" {{ url("/") }} ">administratiesysteem</a> om de gegevens van uw kind te beheren. De details staan in de bevestigingsmail.
 </p>
 
 <p>
@@ -58,7 +58,7 @@ iDeal betaling mislukt
 </p>
 @else
 <p>
-	<a href="http://aas2.anderwijs.nl/profile">Terug naar uw profiel</a>
+	<a href="{{ url("profile") }}">Terug naar uw profiel</a>
 </p>
 @endif
 
