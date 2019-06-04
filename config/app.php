@@ -151,7 +151,8 @@ return [
 		'App\Providers\ConfigServiceProvider',
 		'App\Providers\EventServiceProvider',
 		'App\Providers\RouteServiceProvider',
-		'App\Providers\ViewComposerServiceProvider'
+		'App\Providers\ViewComposerServiceProvider',
+		App\Providers\MollieServiceProvider::class
 
 	],
 
@@ -205,6 +206,7 @@ return [
 		'PDF' 		=> 'Barryvdh\DomPDF\Facade',
 		'Excel' 	=> 'Maatwebsite\Excel\Facades\Excel',
 		'Lava' 		=> 'Khill\Lavacharts\Laravel\LavachartsFacade',
+		'Mollie'	=> App\Facades\Mollie::class
 	],
 
 ];
