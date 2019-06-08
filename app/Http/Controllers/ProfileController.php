@@ -15,6 +15,7 @@ use App\Course;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\internal\MemberOnEventNotification;
 use App\Mail\internal\CoverageChangedNotification;
+use App\Mail\internal\NewDeclaration;
 
 class ProfileController extends Controller
 {
@@ -542,7 +543,7 @@ class ProfileController extends Controller
 
 				$file->move($destination, $newFilename);
 
-				$file_names[] = $newFilename;
+				$file_names[] = $destination . $newFilename;
 			}
 		}
 
@@ -587,19 +588,15 @@ class ProfileController extends Controller
 			//return $pdf->stream();
 
 			// Send email with data and files to treasurer and uploader
-			\Mail::send('emails.declaration', compact('member', 'inputData', 'totalAmount'), function ($message) use ($member, $destination, $file_names, $formFilePath) {
-				$message->to('penningmeester@anderwijs.nl', 'Penningmeester Anderwijs')
-					->cc($member->email_anderwijs, $member->voornaam . ' ' . $member->tussenvoegsel . ' ' . $member->achternaam)
-					//->bcc('aasman@anderwijs.nl', 'De geweldige AASman')
-					->from($member->email_anderwijs, $member->voornaam . ' ' . $member->tussenvoegsel . ' ' . $member->achternaam)
-					->subject('AAS 2.0 - Nieuwe declaratie');
-
-				$message->attach($formFilePath);
-
-				foreach ($file_names as $filename) {
-					$message->attach($destination . $filename);
-				}
-			});
+			Mail::sendMailable(
+				new NewDeclaration(
+					$member,
+					$formFilePath,
+					$inputData,
+					$totalAmount,
+					$file_names
+				)
+			);
 
 			return redirect('profile')->with([
 				'flash_message' => 'De declaratie is verstuurd!'

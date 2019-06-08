@@ -251,4 +251,12 @@ class Member extends Model
 		$fellows = \App\Member::whereIn('id', $fellow_ids)->orderBy('voornaam')->get();
 		return $fellows;
 	}
+
+	public function getAnderwijsEmail()
+	{
+		return [
+			"email" => $this->email_anderwijs,
+			"name" => $this->volnaam
+		]
+	}
 }

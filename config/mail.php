@@ -133,6 +133,10 @@ return [
 		"kamp" => [
 			"email" => "kamp@anderwijs.nl",
 			"name" => "Kampcommissie Anderwijs"
+		],
+		"penningmeester" => [
+			"email" => 'penningmeester@anderwijs.nl',
+			"name" => 'Penningmeester Anderwijs'
 		]
 	]
 

@@ -52,6 +52,6 @@ class CoverageChangedNotification extends Mailable
         return $this->view('email.internal.coverageChangedNotification')
             ->subject('AAS 2.0 - Vakdekking gewijzigd')
             ->from([Config::get('mail.addresses.aas')])
-            ->to([Config::get('mail.addresses.kamp$')]);
+            ->to([Config::get('mail.addresses.kamp')]);
     }
 }
