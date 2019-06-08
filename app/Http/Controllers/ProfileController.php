@@ -14,6 +14,7 @@ use App\Event;
 use App\Course;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\internal\MemberOnEventNotification;
+use App\Mail\internal\CoverageChangedNotification;
 
 class ProfileController extends Controller
 {
@@ -226,10 +227,16 @@ class ProfileController extends Controller
 
 				// If coverage status changes, send email to camp committe
 				if ($statusBefore != $statusAfter) {
-
-					\Mail::send('emails.coverageChangeNotification', compact('member', 'camp', 'course', 'courseLevelFrom', 'courseLevelTo', 'statusAfter'), function ($message) {
-						$message->to('kamp@anderwijs.nl', 'Kampcommissie Anderwijs')->subject('AAS 2.0 - Vakdekking gewijzigd');
-					});
+					Mail::sendMailable(
+						new CoverageChangedNotification(
+							$member,
+							$camp,
+							$course,
+							$courseLevelFrom,
+							$courseLevelTo,
+							$statusAfter
+						)
+					);
 				}
 			} else {
 				// If not, just update the course
@@ -270,10 +277,16 @@ class ProfileController extends Controller
 
 			// If coverage status changes, send email to camp committe
 			if ($statusBefore != $statusAfter) {
-
-				\Mail::send('emails.coverageChangeNotification', compact('member', 'camp', 'course', 'courseLevelFrom', 'courseLevelTo', 'statusAfter'), function ($message) {
-					$message->to('kamp@anderwijs.nl', 'Kampcommissie Anderwijs')->subject('AAS 2.0 - Vakdekking gewijzigd');
-				});
+				Mail::sendMailable(
+					new CoverageChangedNotification(
+						$member,
+						$camp,
+						$course,
+						$courseLevelFrom,
+						$courseLevelTo,
+						$statusAfter
+					)
+				);
 			}
 		} else {
 			// If not, just update the course
@@ -312,10 +325,16 @@ class ProfileController extends Controller
 
 			// If coverage status changes, send email to camp committe
 			if ($statusBefore != $statusAfter) {
-
-				\Mail::send('emails.coverageChangeNotification', compact('member', 'camp', 'course', 'courseLevelFrom', 'courseLevelTo', 'statusAfter'), function ($message) {
-					$message->to('kamp@anderwijs.nl', 'Kampcommissie Anderwijs')->subject('AAS 2.0 - Vakdekking gewijzigd');
-				});
+				Mail::sendMailable(
+					new CoverageChangedNotification(
+						$member,
+						$camp,
+						$course,
+						$courseLevelFrom,
+						$courseLevelTo,
+						$statusAfter
+					)
+				);
 			}
 		} else {
 			// If not, just update the course
@@ -371,10 +390,7 @@ class ProfileController extends Controller
 			} else {
 
 				// Send update to camp committee
-				Mail::sendMailable(new MemberOnEventNotification())
-				Mail::send('emails.memberOnCampNotification', ['member' => $member, 'camp' => $camp], function ($message) {
-					$message->to('kamp@anderwijs.nl', 'Kampcommissie Anderwijs')->subject('AAS 2.0 - Lid op kamp');
-				});
+				Mail::sendMailable(new MemberOnEventNotification($member, $camp));
 
 				// Send confirmation to member
 				Mail::send('emails.memberOnCampConfirmation', ['member' => $member, 'camp' => $camp], function ($message) use ($member) {
