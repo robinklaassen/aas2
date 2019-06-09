@@ -16,6 +16,8 @@ use Illuminate\Support\Facades\Mail;
 use App\Mail\internal\MemberOnEventNotification;
 use App\Mail\internal\CoverageChangedNotification;
 use App\Mail\internal\NewDeclaration;
+use App\Mail\participants\OnEventConfirmation;
+use App\Mail\internal\ParticipantOnEventNotification;
 
 class ProfileController extends Controller
 {
@@ -429,21 +431,24 @@ class ProfileController extends Controller
 					->existing(true);
 				$toPay = $payment->getTotalAmount();
 
-				// Send update to office committee
-				\Mail::send('emails.participantOnCampNotification', ['participant' => $participant, 'camp' => $camp], function ($message) {
-					$message->to('kantoor@anderwijs.nl', 'Kantoorcommissie Anderwijs')->subject('AAS 2.0 - Deelnemer op kamp');
-				});
-
-
 				$iDeal = $request->iDeal;
 				$type = "existing";
 
-				// Send confirmation email to parent
-				Mail::send('emails.participantOnCampConfirm', compact('participant', 'camp', 'givenCourses', 'incomeTable', 'toPay', 'iDeal', 'type'), function ($message) use ($participant) {
-					$message->from('kantoor@anderwijs.nl', 'Kantoorcommissie Anderwijs');
+				// Send update to office committee
+				Mail::sendMailable(new ParticipantOnEventNotification(
+					$participant,
+					$camp
+				));
 
-					$message->to($participant->email_ouder, 'dhr./mw. ' . $participant->tussenvoegsel . ' ' . $participant->achternaam)->subject('ANDERWIJS - Bevestiging van aanmelding');
-				});
+				// Send confirmation email to parent
+				Mail::sendMailable(new OnEventConfirmation(
+					$participant,
+					$camp,
+					$givenCourses,
+					$toPay,
+					$iDeal,
+					$type
+				));
 
 				// If they want to pay with iDeal, set up the payment now
 				if ($iDeal == '1' && $camp->prijs != 0) {
