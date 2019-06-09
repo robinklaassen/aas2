@@ -44,15 +44,12 @@ class PasswordController extends Controller
 			]);
 		} else {
 			// Reset password
-			$username = $user->username;
 			$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 			$password = substr(str_shuffle($chars), 0, 10);
 			$user->password = bcrypt($password);
 			$user->save();
 
 			// Send email
-			$email_address = ($type == 'member') ? $profile->email : $profile->email_ouder;
-
 			Mail::sendMailable(
 				ResetPassword($user, $password)
 			);
