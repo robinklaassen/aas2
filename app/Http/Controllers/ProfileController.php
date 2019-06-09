@@ -18,6 +18,7 @@ use App\Mail\internal\CoverageChangedNotification;
 use App\Mail\internal\NewDeclaration;
 use App\Mail\participants\OnEventConfirmation;
 use App\Mail\internal\ParticipantOnEventNotification;
+use App\Mail\internal\ParticipantEditedEventCourseInformationNotification;
 
 class ProfileController extends Controller
 {
@@ -506,9 +507,12 @@ class ProfileController extends Controller
 		$camp = \App\Event::findOrFail($event_id);
 
 		// Send update to office committee
-		\Mail::send('emails.participantEditedCampNotification', ['participant' => $participant, 'camp' => $camp], function ($message) {
-			$message->to('kantoor@anderwijs.nl', 'Kantoorcommissie')->subject('AAS 2.0 - Vakken voor kamp bewerkt');
-		});
+		Mail::sendMailable(
+			new ParticipantEditedEventCourseInformationNotification(
+				$participant,
+				$camp
+			)
+		);
 
 		return redirect('profile')->with([
 			'flash_message' => 'De vakken voor dit kamp zijn bewerkt!'
