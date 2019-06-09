@@ -44,8 +44,13 @@ class Participant extends Model
 	{
 		return [
 			"email" => $this->email_ouder,
-			"name"  => 'dhr./mw. ' . $this->tussenvoegsel . ' ' . $this->achternaam,
+			"name"  => $this->parentName,
 		];
+	}
+
+	public function getParentNameAttribute()
+	{
+		return 'dhr./mw. ' . $this->tussenvoegsel . ' ' . $this->achternaam;
 	}
 
 	// A participant belongs to many events
@@ -60,11 +65,13 @@ class Participant extends Model
 		return $this->morphOne('App\User', 'profile');
 	}
 
-	public function incomeDescription() {
+	public function incomeDescription()
+	{
 		return $this::INCOME_DESCRIPTION_TABLE[$this->inkomen];
 	}
 
-	public function incomeBasedDiscount(): float {
+	public function incomeBasedDiscount(): float
+	{
 		return $this::INCOME_DISCOUNT_TABLE[$this->inkomen];
 	}
 }
