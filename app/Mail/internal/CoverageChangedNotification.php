@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Member;
 use App\Event;
 use App\Course;
+use Illuminate\Support\Facades\Config;
 
 class CoverageChangedNotification extends Mailable
 {

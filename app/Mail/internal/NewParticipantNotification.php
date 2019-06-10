@@ -6,6 +6,9 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
+use App\Participant;
+use App\Event;
+use Illuminate\Support\Facades\Config;
 
 class NewParticipantNotification extends Mailable
 {
@@ -22,7 +25,7 @@ class NewParticipantNotification extends Mailable
 
     public function build()
     {
-        return $this->view('emails.newParticipantNotification')
+        return $this->view('emails.internal.newParticipantNotification')
             ->from([Config::get("mail.addresses.aas")])
             ->to([Config::get("mail.addresses.kantoor")])
             ->subject('AAS 2.0 - Nieuwe deelnemer');;

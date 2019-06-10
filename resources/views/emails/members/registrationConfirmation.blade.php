@@ -46,7 +46,7 @@
 <p>
 	Er is automatisch een account voor je aangemaakt. Hiermee kun je inloggen op ons <a href="http://aas2.anderwijs.nl">administratiesysteem</a> om je gegevens te beheren en in de toekomst makkelijk vaker op kamp te gaan. Je wordt geadviseerd om direct in te loggen en een nieuw, persoonlijk wachtwoord te kiezen.
 	<br/><br/>
-	Gebruikersnaam: {{$member->user()->username}}<br/>
+	Gebruikersnaam: {{$member->user->username}}<br/>
 	Wachtwoord: {{$password}}
 </p>
 

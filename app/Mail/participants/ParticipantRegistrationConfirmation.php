@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Mail;
+namespace App\Mail\participants;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use App\Participant;
 use App\Event;
+use Illuminate\Support\Facades\Config;
 
 class ParticipantRegistrationConfirmation extends Mailable
 {
@@ -31,11 +32,9 @@ class ParticipantRegistrationConfirmation extends Mailable
 
     public function build()
     {
-
-        $from = Config::get("mail.addresses.kantoor");
         return $this->view('emails.participants.registrationConfirmation')
-            ->to($this->participant->getParentEmail())
-            ->from($from->email, $from->name)
+            ->to([$this->participant->getParentEmail()])
+            ->from([Config::get("mail.addresses.kantoor")])
             ->subject('ANDERWIJS - Bevestiging van inschrijving');
     }
 }

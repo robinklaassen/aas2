@@ -63,7 +63,7 @@
 <p>
 	Er is automatisch een account aangemaakt. Hiermee kunt u inloggen op ons <a href="https://aas2.anderwijs.nl">administratiesysteem</a> om de gegevens van uw kind te beheren en in de toekomst makkelijk vaker uw kind op kamp te sturen. Ook kunt u de opgegeven vakken voor een kamp en de toelichting daarop wijzigen - Anderwijs wordt hiervan automatisch op de hoogte gesteld. U wordt geadviseerd om direct in te loggen en een nieuw, persoonlijk wachtwoord te kiezen.
 	<br/><br/>
-	Gebruikersnaam: {{$participant->user()->username}}<br/>
+	Gebruikersnaam: {{$participant->user->username}}<br/>
 	Wachtwoord: {{$password}}
 </p>
 

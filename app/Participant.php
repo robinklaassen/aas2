@@ -65,12 +65,12 @@ class Participant extends Model
 		return $this->morphOne('App\User', 'profile');
 	}
 
-	public function incomeDescription()
+	public function getIncomeDescriptionAttribute()
 	{
 		return $this::INCOME_DESCRIPTION_TABLE[$this->inkomen];
 	}
 
-	public function incomeBasedDiscount(): float
+	public function getIncomeBasedDiscountAttribute(): float
 	{
 		return $this::INCOME_DISCOUNT_TABLE[$this->inkomen];
 	}

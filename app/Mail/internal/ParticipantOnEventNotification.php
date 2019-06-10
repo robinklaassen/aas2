@@ -8,6 +8,7 @@ use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Participant;
 use App\Event;
+use Illuminate\Support\Facades\Config;
 
 class ParticipantOnEventNotification extends Mailable
 {

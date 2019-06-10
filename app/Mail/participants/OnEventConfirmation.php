@@ -7,6 +7,8 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use App\Event;
+use Illuminate\Support\Facades\Config;
+use App\Participant;
 
 class OnEventConfirmation extends Mailable
 {

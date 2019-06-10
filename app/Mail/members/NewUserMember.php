@@ -5,6 +5,7 @@ namespace App\Mail\members;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Config;
 
 class NewUserMember extends Mailable
 {
