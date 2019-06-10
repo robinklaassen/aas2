@@ -16,22 +16,12 @@ class NewMemberNotification extends Mailable
     public $member;
     public $event;
 
-    /**
-     * Create a new message instance.
-     *
-     * @return void
-     */
     public function __construct(Member $member, Event $event)
     {
         $this->member = $member;
         $this->event = $event;
     }
 
-    /**
-     * Build the message.
-     *
-     * @return $this
-     */
     public function build()
     {
         return $this->from("aas@anderwijs.nl", "ANDERWIJS - AAS")

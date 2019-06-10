@@ -32,7 +32,7 @@ class iDealController extends Controller
 			$participant->events()->updateExistingPivot($camp_id, ['datum_betaling' => date('Y-m-d')]);
 
 			// Send (yet another) confirmation email to parents
-			Mail::sendMailable(
+			Mail::send(
 				new IDealConfirmation(
 					$participant,
 					$camp,

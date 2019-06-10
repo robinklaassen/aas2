@@ -19,11 +19,6 @@ class ParticipantRegistrationConfirmation extends Mailable
     public $toPay;
     public $iDeal;
 
-    /**
-     * Create a new message instance.
-     *
-     * @return void
-     */
     public function __construct(Participant $participant, Event $event, $givenCourses, $password, $toPay, $iDeal)
     {
         $this->participant = $participant;
@@ -34,11 +29,6 @@ class ParticipantRegistrationConfirmation extends Mailable
         $this->iDeal = $iDeal;
     }
 
-    /**
-     * Build the message.
-     *
-     * @return $this
-     */
     public function build()
     {
 

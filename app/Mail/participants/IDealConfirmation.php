@@ -13,11 +13,6 @@ class IDealConfirmation extends Mailable
 {
     use Queueable, SerializesModels;
 
-    /**
-     * Create a new message instance.
-     *
-     * @return void
-     */
     public function __construct(Participant $participant, Event $event, $type)
     {
         $this->participant = $participant;
@@ -25,11 +20,6 @@ class IDealConfirmation extends Mailable
         $this->type = $type;
     }
 
-    /**
-     * Build the message.
-     *
-     * @return $this
-     */
     public function build()
     {
         return $this->view('emails.participants.iDealConfirmation')

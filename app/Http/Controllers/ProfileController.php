@@ -8,15 +8,12 @@ use App\Facades\Mollie;
 use Illuminate\Http\Request;
 use Input;
 
-use App\Member;
 use App\Participant;
 use App\Event;
-use App\Course;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\internal\MemberOnEventNotification;
 use App\Mail\internal\CoverageChangedNotification;
 use App\Mail\internal\NewDeclaration;
-use App\Mail\participants\OnEventConfirmation;
 use App\Mail\internal\ParticipantOnEventNotification;
 use App\Mail\internal\ParticipantEditedEventCourseInformationNotification;
 
@@ -231,7 +228,7 @@ class ProfileController extends Controller
 
 				// If coverage status changes, send email to camp committe
 				if ($statusBefore != $statusAfter) {
-					Mail::sendMailable(
+					Mail::send(
 						new CoverageChangedNotification(
 							$member,
 							$camp,
@@ -281,7 +278,7 @@ class ProfileController extends Controller
 
 			// If coverage status changes, send email to camp committe
 			if ($statusBefore != $statusAfter) {
-				Mail::sendMailable(
+				Mail::send(
 					new CoverageChangedNotification(
 						$member,
 						$camp,
@@ -329,7 +326,7 @@ class ProfileController extends Controller
 
 			// If coverage status changes, send email to camp committe
 			if ($statusBefore != $statusAfter) {
-				Mail::sendMailable(
+				Mail::send(
 					new CoverageChangedNotification(
 						$member,
 						$camp,
@@ -394,12 +391,14 @@ class ProfileController extends Controller
 			} else {
 
 				// Send update to camp committee
-				Mail::sendMailable(new MemberOnEventNotification($member, $camp));
+				Mail::send(new MemberOnEventNotification($member, $camp));
 
 				// Send confirmation to member
-				Mail::send('emails.memberOnCampConfirmation', ['member' => $member, 'camp' => $camp], function ($message) use ($member) {
-					$message->to($member->email_anderwijs, $member->voornaam . ' ' . $member->tussenvoegsel . ' ' . $member->achternaam)->subject('AAS 2.0 - Aangemeld voor kamp');
-				});
+				Mail::send(new \App\Mail\members\OnEventConfirmation($member, $camp));
+
+				// Mail::send('emails.memberOnCampConfirmation', ['member' => $member, 'camp' => $camp], function ($message) use ($member) {
+				// 	$message->to($member->email_anderwijs, $member->voornaam . ' ' . $member->tussenvoegsel . ' ' . $member->achternaam)->subject('AAS 2.0 - Aangemeld voor kamp');
+				// });
 
 				return redirect('profile')->with([
 					'flash_message' => 'Je gaat op kamp!'
@@ -436,13 +435,13 @@ class ProfileController extends Controller
 				$type = "existing";
 
 				// Send update to office committee
-				Mail::sendMailable(new ParticipantOnEventNotification(
+				Mail::send(new ParticipantOnEventNotification(
 					$participant,
 					$camp
 				));
 
 				// Send confirmation email to parent
-				Mail::sendMailable(new OnEventConfirmation(
+				Mail::send(new \App\Mail\participants\OnEventConfirmation(
 					$participant,
 					$camp,
 					$givenCourses,
@@ -507,7 +506,7 @@ class ProfileController extends Controller
 		$camp = \App\Event::findOrFail($event_id);
 
 		// Send update to office committee
-		Mail::sendMailable(
+		Mail::send(
 			new ParticipantEditedEventCourseInformationNotification(
 				$participant,
 				$camp
@@ -597,7 +596,7 @@ class ProfileController extends Controller
 			//return $pdf->stream();
 
 			// Send email with data and files to treasurer and uploader
-			Mail::sendMailable(
+			Mail::send(
 				new NewDeclaration(
 					$member,
 					$formFilePath,

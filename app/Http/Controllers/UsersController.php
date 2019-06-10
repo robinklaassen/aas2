@@ -106,7 +106,7 @@ class UsersController extends Controller
 			$member->user()->save($user);
 
 			// Send email
-			Mail::sendMailable(new NewUserMember($member, $username, $password));
+			Mail::send(new NewUserMember($member, $username, $password));
 
 			return redirect('users')->with([
 				'flash_message' => 'De gebruiker is aangemaakt!'
@@ -149,7 +149,7 @@ class UsersController extends Controller
 			$participant->user()->save($user);
 
 			// Send email
-			Mail::sendMailable(
+			Mail::send(
 				new NewUserParticipant($participant, $username, $password)
 			);
 

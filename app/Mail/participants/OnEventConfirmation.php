@@ -19,11 +19,6 @@ class OnEventConfirmation extends Mailable
     public $iDeal;
     public $type;
 
-    /**
-     * Create a new message instance.
-     *
-     * @return void
-     */
     public function __construct(Participant $participant, Event $event, $givenCourses, $toPay, $iDeal, $type)
     {
         $this->participant = $participant;
@@ -34,11 +29,6 @@ class OnEventConfirmation extends Mailable
         $this->type = $type;
     }
 
-    /**
-     * Build the message.
-     *
-     * @return $this
-     */
     public function build()
     {
         return $this->view('emails.participants.onEventConfirmation')

@@ -50,8 +50,8 @@ class PasswordController extends Controller
 			$user->save();
 
 			// Send email
-			Mail::sendMailable(
-				ResetPassword($user, $password)
+			Mail::send(
+				new ResetPassword($user, $password)
 			);
 
 			// Return to login page with success message

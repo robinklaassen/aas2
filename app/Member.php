@@ -257,6 +257,6 @@ class Member extends Model
 		return [
 			"email" => $this->email_anderwijs,
 			"name" => $this->volnaam
-		]
+		];
 	}
 }

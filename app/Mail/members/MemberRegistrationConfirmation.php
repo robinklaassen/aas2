@@ -19,11 +19,6 @@ class MemberRegistrationConfirmation extends Mailable
     public $givenCourses;
     public $password;
 
-    /**
-     * Create a new message instance.
-     *
-     * @return void
-     */
     public function __construct(Member $member, Event $event, $givenCourses, $password)
     {
         $this->member = $member;
@@ -32,11 +27,6 @@ class MemberRegistrationConfirmation extends Mailable
         $this->password = $password;
     }
 
-    /**
-     * Build the message.
-     *
-     * @return $this
-     */
     public function build()
     {
         $from = Config::get("mail.addresses.kamp");

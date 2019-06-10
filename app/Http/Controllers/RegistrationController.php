@@ -129,7 +129,7 @@ class RegistrationController extends Controller
 		$camp = Event::findOrFail($request->selected_camp);
 
 		// Send confirmation email to newly registered member
-		Mail::sendMailable(
+		Mail::send(
 			new MemberRegistrationConfirmation(
 				$member,
 				$camp,
@@ -139,7 +139,7 @@ class RegistrationController extends Controller
 		);
 
 		// Send update to camp committee
-		Mail::sendMailable(
+		Mail::send(
 			new NewMemberNotification(
 				$member,
 				$camp
@@ -266,13 +266,13 @@ class RegistrationController extends Controller
 		$iDeal = $request->iDeal;
 
 		// Send update to office committee
-		Mail::sendMailable(new NewParticipantNotification(
+		Mail::send(new NewParticipantNotification(
 			$participant,
 			$camp
 		));
 
 		// Send confirmation email to newly registered participant's parent
-		Mail::sendMailable(
+		Mail::send(
 			new ParticipantRegistrationConfirmation(
 				$participant,
 				$camp,

@@ -16,22 +16,12 @@ class ParticipantOnEventNotification extends Mailable
     public $participant;
     public $event;
 
-    /**
-     * Create a new message instance.
-     *
-     * @return void
-     */
     public function __construct(Participant $participant, Event $event)
     {
         $this->participant = $participant;
         $this->event = $event;
     }
 
-    /**
-     * Build the message.
-     *
-     * @return $this
-     */
     public function build()
     {
         return $this->view('emails.internal.participantOnEventNotification')

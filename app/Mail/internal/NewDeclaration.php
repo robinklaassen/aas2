@@ -17,11 +17,6 @@ class NewDeclaration extends Mailable
     public $totalAmount;
     public $fileNames;
 
-    /**
-     * Create a new message instance.
-     *
-     * @return void
-     */
     public function __construct(
         Member $member,
         $formFilePath,
@@ -36,11 +31,6 @@ class NewDeclaration extends Mailable
         $this->filePaths = $filePaths;
     }
 
-    /**
-     * Build the message.
-     *
-     * @return $this
-     */
     public function build()
     {
         $this->attach($this->formFilePath);

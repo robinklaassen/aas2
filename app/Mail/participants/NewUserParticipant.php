@@ -16,11 +16,6 @@ class NewUserParticipant extends Mailable
     public $username;
     public $password;
 
-    /**
-     * Create a new message instance.
-     *
-     * @return void
-     */
     public function __construct(Participant $participant, $username, $password)
     {
         $this->participant = $participant;
@@ -28,11 +23,6 @@ class NewUserParticipant extends Mailable
         $this->password = $password;
     }
 
-    /**
-     * Build the message.
-     *
-     * @return $this
-     */
     public function build()
     {
         return $this->view('emails.participants.newUserParticipant')

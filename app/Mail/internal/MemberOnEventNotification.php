@@ -13,22 +13,12 @@ class MemberOnEventNotification extends Mailable
     public $event;
     public $member;
 
-    /**
-     * Create a new message instance.
-     *
-     * @return void
-     */
     public function __construct(Member $member, Event $event)
     {
         $this->member = $member;
         $this->event = $event;
     }
 
-    /**
-     * Build the message.
-     *
-     * @return $this
-     */
     public function build()
     {
         return $this->view('emails.internal.memberOnEventNotification')
