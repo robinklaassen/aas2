@@ -3,14 +3,9 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class RegistrationTest extends TestCase
+class MemberRegistrationTest extends TestCase
 {
-
-    //use RefreshDatabase; TODO this would be nice to use but throws an error about the Mockery class
-
     /**
      * Test that the member registration form opens correctly.
      *

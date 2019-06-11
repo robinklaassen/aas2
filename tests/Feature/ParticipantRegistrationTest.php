@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\DB;
 
 
 
-class RegistationTest extends TestCase
+class ParticipantRegistrationTest extends TestCase
 {
     private static function clearDB()
     {
@@ -82,7 +82,7 @@ class RegistationTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        RegistationTest::clearDB();
+        ParticipantRegistrationTest::clearDB();
         $this->event = Event::findOrFail($this->data["selected_camp"]);
         $this->participantData = [
             "voornaam" => $this->data["voornaam"],
@@ -114,7 +114,7 @@ class RegistationTest extends TestCase
 
     protected function tearDown(): void
     {
-        RegistationTest::clearDB();
+        ParticipantRegistrationTest::clearDB();
         parent::tearDown();
     }
 
