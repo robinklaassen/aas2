@@ -10,6 +10,7 @@
 | and give it the controller to call when that URI is requested.
 */
 
+
 # Root page refers to login
 Route::get('/', 'Auth\LoginController@showLoginForm');
 
@@ -53,8 +54,10 @@ Route::get('profile/add-course', 'ProfileController@addCourse');
 Route::put('profile/add-course', 'ProfileController@addCourseSave');
 Route::get('profile/edit-course/{course}', 'ProfileController@editCourse');
 Route::put('profile/edit-course/{course}', 'ProfileController@editCourseSave');
-Route::get('profile/remove-course/{course}',
-    'ProfileController@removeCourseConfirm');
+Route::get(
+    'profile/remove-course/{course}',
+    'ProfileController@removeCourseConfirm'
+);
 Route::get('profile/on-camp', 'ProfileController@onCamp');
 Route::put('profile/on-camp', 'ProfileController@onCampSave');
 Route::get('profile/edit-camp/{event}', 'ProfileController@editCamp');
@@ -63,14 +66,22 @@ Route::delete('profile/remove-course/{course}', 'ProfileController@removeCourse'
 Route::get('profile/reviews/{event}', 'ProfileController@reviews');
 
 # Participant things
-Route::get('participants/{participant}/on-event',
-    'ParticipantsController@onEvent');
-Route::put('participants/{participant}/on-event',
-    'ParticipantsController@onEventSave');
-Route::get('participants/{participant}/edit-event/{event}',
-    'ParticipantsController@editEvent');
-Route::put('participants/{participant}/edit-event/{event}',
-    'ParticipantsController@editEventSave');
+Route::get(
+    'participants/{participant}/on-event',
+    'ParticipantsController@onEvent'
+);
+Route::put(
+    'participants/{participant}/on-event',
+    'ParticipantsController@onEventSave'
+);
+Route::get(
+    'participants/{participant}/edit-event/{event}',
+    'ParticipantsController@editEvent'
+);
+Route::put(
+    'participants/{participant}/edit-event/{event}',
+    'ParticipantsController@editEventSave'
+);
 Route::get('participants/{participant}/delete', 'ParticipantsController@delete');
 Route::get('participants/export', 'ParticipantsController@export');
 Route::get('participants/map', 'ParticipantsController@map');
@@ -82,14 +93,22 @@ Route::get('members/{member}/on-event', 'MembersController@onEvent');
 Route::put('members/{member}/on-event', 'MembersController@onEventSave');
 Route::get('members/{member}/add-course', 'MembersController@addCourse');
 Route::put('members/{member}/add-course', 'MembersController@addCourseSave');
-Route::get('members/{member}/edit-course/{course}',
-    'MembersController@editCourse');
-Route::put('members/{member}/edit-course/{course}',
-    'MembersController@editCourseSave');
-Route::get('members/{member}/remove-course/{course}',
-    'MembersController@removeCourseConfirm');
-Route::delete('members/{member}/remove-course/{course}',
-    'MembersController@removeCourse');
+Route::get(
+    'members/{member}/edit-course/{course}',
+    'MembersController@editCourse'
+);
+Route::put(
+    'members/{member}/edit-course/{course}',
+    'MembersController@editCourseSave'
+);
+Route::get(
+    'members/{member}/remove-course/{course}',
+    'MembersController@removeCourseConfirm'
+);
+Route::delete(
+    'members/{member}/remove-course/{course}',
+    'MembersController@removeCourse'
+);
 Route::get('members/{member}/delete', 'MembersController@delete');
 Route::get('members/export', 'MembersController@export');
 Route::get('members/map', 'MembersController@map');
@@ -97,21 +116,35 @@ Route::resource('members', 'MembersController');
 
 # Event things
 Route::get('events/{event}/delete', 'EventsController@delete');
-Route::get('events/{event}/remove-member/{member}',
-    'EventsController@removeMemberConfirm');
-Route::delete('events/{event}/remove-member/{member}',
-    'EventsController@removeMember');
+Route::get(
+    'events/{event}/remove-member/{member}',
+    'EventsController@removeMemberConfirm'
+);
+Route::delete(
+    'events/{event}/remove-member/{member}',
+    'EventsController@removeMember'
+);
 Route::get('events/{event}/edit-member/{member}', 'EventsController@editMember');
-Route::put('events/{event}/edit-member/{member}',
-    'EventsController@editMemberSave');
-Route::get('events/{event}/edit-participant/{participant}',
-    'EventsController@editParticipant');
-Route::put('events/{event}/edit-participant/{participant}',
-    'EventsController@editParticipantSave');
-Route::get('events/{event}/remove-participant/{participant}',
-    'EventsController@removeParticipantConfirm');
-Route::delete('events/{event}/remove-participant/{participant}',
-    'EventsController@removeParticipant');
+Route::put(
+    'events/{event}/edit-member/{member}',
+    'EventsController@editMemberSave'
+);
+Route::get(
+    'events/{event}/edit-participant/{participant}',
+    'EventsController@editParticipant'
+);
+Route::put(
+    'events/{event}/edit-participant/{participant}',
+    'EventsController@editParticipantSave'
+);
+Route::get(
+    'events/{event}/remove-participant/{participant}',
+    'EventsController@removeParticipantConfirm'
+);
+Route::delete(
+    'events/{event}/remove-participant/{participant}',
+    'EventsController@removeParticipant'
+);
 Route::get('events/{event}/export', 'EventsController@export');
 Route::get('events/{event}/check/{type}', 'EventsController@check');
 Route::get('events/{event}/budget', 'EventsController@budget');
@@ -149,19 +182,27 @@ Route::put('users/{user}/password', 'UsersController@passwordSave');
 Route::get('users/{user}/delete', 'UsersController@delete');
 Route::get('users/create-for-member', 'UsersController@createForMember');
 Route::post('users/create-for-member', 'UsersController@storeForMember');
-Route::get('users/create-for-participant',
-    'UsersController@createForParticipant');
-Route::post('users/create-for-participant',
-    'UsersController@storeForParticipant');
+Route::get(
+    'users/create-for-participant',
+    'UsersController@createForParticipant'
+);
+Route::post(
+    'users/create-for-participant',
+    'UsersController@storeForParticipant'
+);
 Route::resource('users', 'UsersController');
 
 # Declaration things
-Route::get('declarations/process/{member}',
-    'DeclarationsController@confirmProcess');
+Route::get(
+    'declarations/process/{member}',
+    'DeclarationsController@confirmProcess'
+);
 Route::post('declarations/process/{member}', 'DeclarationsController@process');
 Route::get('declarations/admin', 'DeclarationsController@admin');
-Route::get('declarations/files/{file}/delete',
-    'DeclarationsController@fileDelete');
+Route::get(
+    'declarations/files/{file}/delete',
+    'DeclarationsController@fileDelete'
+);
 Route::delete('declarations/files/{file}', 'DeclarationsController@fileDestroy');
 Route::get('declarations/files', 'DeclarationsController@showFiles');
 Route::get('declarations/{declaration}/delete', 'DeclarationsController@delete');

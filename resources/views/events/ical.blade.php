@@ -14,7 +14,7 @@ END:VEVENT
 @endforeach
 @foreach ($members as $member)
 BEGIN:VEVENT
-SUMMARY:Verjaardag {{$member->naam}}
+SUMMARY:Verjaardag {{$member->volnaam}}
 UID:m{{$member->id}}
 STATUS:CONFIRMED
 DTSTART;VALUE=DATE:{{$member->geboortedatum->format("Ymd")}}

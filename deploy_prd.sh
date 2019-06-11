@@ -2,7 +2,7 @@
 
 ssh anderwijs-nl@ssh.pcextreme.nl << EOF
 
-cd domains/anderwijs.nl/htdocs/aas2
+cd ~/domains/anderwijs.nl/htdocs/aas2
 php72 artisan down
 git pull origin master
 php72 composer.phar self-update

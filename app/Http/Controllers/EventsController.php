@@ -509,22 +509,17 @@ class EventsController extends Controller {
 		$events = Event::orderBy('datum_start', 'asc')->where('openbaar', 1)->get();
 		$members = Member::whereIn('soort', ['normaal', 'aspirant'])->get();
 
-		foreach ($members as $key => $member) {
-			$fullname = $member->voornaam . ' ';
-			if ($member->tussenvoegsel != '') {
-				$fullname .= $member->tussenvoegsel . ' ';
-			}
-			$fullname .= $member->achternaam;
-			//$fullname = html_entity_decode($fullname, ENT_QUOTES | ENT_HTML401, 'UTF-8');
-			$fullname = iconv('UTF-8','ASCII//TRANSLIT',$fullname);
-			$members[$key]->naam = $fullname;
+		$response = response()->view('events.ical', compact('events', 'members'));
+
+		if (env('APP_ENV') == 'production') {
+			$response
+				->header('Content-Type','text/calendar; charset=utf-8')
+				->header('Content-Disposition', 'inline; filename=anderwijs.ics');
+		} else {
+			$response->header('Content-Type','text/plain; charset=utf-8');
 		}
 
-		return response()
-			->view('events.ical', compact('events', 'members'))
-			//->header('Content-Type','text/plain; charset=utf-8');
-			->header('Content-Type','text/calendar; charset=utf-8')
-			->header('Content-Disposition', 'inline; filename=anderwijs.ics');
+		return $response;
 	}
 
 	# Join members to event (form)
