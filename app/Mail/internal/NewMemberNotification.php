@@ -5,8 +5,7 @@ namespace App\Mail\internal;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use App\User;
+use App\Member;
 use App\Event;
 use Illuminate\Support\Facades\Config;
 
@@ -27,7 +26,7 @@ class NewMemberNotification extends Mailable
     {
         return $this->from("aas@anderwijs.nl", "ANDERWIJS - AAS")
             ->subject("AAS 2.0 - Nieuwe vrijwilliger")
-            ->to([Config::get("email.addresses.kamp")])
-            ->view('emails.newMemberNotification');
+            ->to([Config::get("mail.addresses.kamp")])
+            ->view('emails.internal.newMemberNotification');
     }
 }

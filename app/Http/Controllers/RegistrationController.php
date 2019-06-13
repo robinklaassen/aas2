@@ -3,14 +3,12 @@
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use Input;
 use App\Member;
 use App\Participant;
 use App\Event;
 use App\Course;
 use Mail;
 use App\Mail\participants\ParticipantRegistrationConfirmation;
-use Illuminate\Support\Facades\Config;
 use App\Mail\internal\NewParticipantNotification;
 use App\Helpers\Payment\EventPayment;
 use App\Facades\Mollie;
