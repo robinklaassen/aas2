@@ -536,8 +536,9 @@ class ProfileController extends Controller
 		// Create destination folder if not exists
 		$destination = public_path() . '/img/declarations/' . $member->id . '/';
 		if (!file_exists($destination)) {
-			mkdir($destination);
+			mkdir($destination, 0777, true);
 		}
+
 
 		// Check and move files
 		$file_numbers = [];

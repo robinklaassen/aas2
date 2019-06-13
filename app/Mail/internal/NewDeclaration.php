@@ -2,6 +2,8 @@
 
 namespace App\Mail\internal;
 
+
+use App\Member;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -39,7 +41,7 @@ class NewDeclaration extends Mailable
         foreach ($this->filePaths as $filePath) {
             $this->attach($filePath);
         }
-        return $this->view('view.name')
+        return $this->view('emails.internal.newDeclaration')
             ->subject("AAS 2.0 - Nieuwe declaratie")
             ->cc([$this->member->getAnderwijsEmail()])
             ->to([Config::get('mail.addresses.penningmeester')])
