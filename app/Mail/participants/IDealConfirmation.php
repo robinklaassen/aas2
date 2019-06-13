@@ -14,6 +14,10 @@ class IDealConfirmation extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $participant;
+    public $event;
+    public $type;
+
     public function __construct(Participant $participant, Event $event, $type)
     {
         $this->participant = $participant;
@@ -25,7 +29,7 @@ class IDealConfirmation extends Mailable
     {
         return $this->view('emails.participants.iDealConfirmation')
             ->from(Config::get("mail.addresses.kantoor"))
-            ->to([$this->participants->getParentEmail()])
+            ->to([$this->participant->getParentEmail()])
             ->subject('ANDERWIJS - Betaling via iDeal ontvangen');
     }
 }

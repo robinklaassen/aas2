@@ -133,6 +133,7 @@ class IDealResponse extends TestCase
 
         $response = $this->post(action('iDealController@webhook'), ["id" => $someId]);
         $response->assertStatus(200);
+
         Mail::assertSent(IDealConfirmation::class);
 
         $this->assertDatabaseHas('event_participant', [
