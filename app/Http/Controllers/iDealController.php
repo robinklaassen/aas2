@@ -18,7 +18,6 @@ class iDealController extends Controller
 	public function webhook(Request $request)
 	{
 
-
 		// Retrieve payment info
 		$payment  = Mollie::api()->payments->get($request->id);
 		$participant_id = $payment->metadata->participant_id;
@@ -32,6 +31,7 @@ class iDealController extends Controller
 			$participant->events()->updateExistingPivot($camp_id, ['datum_betaling' => date('Y-m-d')]);
 
 			// Send (yet another) confirmation email to parents
+
 			Mail::send(
 				new IDealConfirmation(
 					$participant,
