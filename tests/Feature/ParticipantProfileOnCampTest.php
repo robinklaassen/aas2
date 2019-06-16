@@ -13,7 +13,7 @@ use App\Event;
 use App\Helpers\Payment\EventPayment;
 
 
-class ProfileNewCampTest extends TestCase
+class ParticipantProfileOnCampTest extends TestCase
 {
     use WithoutMiddleware;
 

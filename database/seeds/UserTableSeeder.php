@@ -38,6 +38,13 @@ class UserTableSeeder extends Seeder {
 		$user->is_admin = 0;
 		$participant->user()->save($user);
 		
+		$member = Member::find(3);
+		$user = new User;
+		$user->username = 'dkrijgsman';
+		$user->password = bcrypt('poep');
+		$user->is_admin = 0;
+		$member->user()->save($user);
+
 	}
 
 }
