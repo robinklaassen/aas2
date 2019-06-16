@@ -6,6 +6,45 @@ use Tests\TestCase;
 
 class MemberRegistrationTest extends TestCase
 {
+    private $fakeMemberData = [
+        'voornaam' => 'Berend',
+        'tussenvoegsel' => 'van',
+        'achternaam' => 'Zuid',
+        'geboortedatum' => '1980-10-10',
+        'geslacht' => 'M',
+        'adres' => 'Boegmeen 27',
+        'postcode' => '1234 AB',
+        'plaats' => 'Lalastad',
+        'telefoon' => '0123456789',
+        'email' => 'berend@vanzuid.nl',
+        'selected_camp' => '1',
+        'eindexamen' => 'VWO',
+        'studie' => 'Nietsnuttigheid',
+        'afgestudeerd' => 1,
+        'vak1' => 1,
+        'klas1' => 1,
+        'hoebij' => ['je moeder', 'je vader'],
+        'vog' => 1,
+        'privacy' => 1
+    ];
+    
+    private function clearDB(): void
+    {
+        \App\Member::where('email', $this->fakeMemberData['email'])->delete();
+    }
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->clearDB();
+    }
+
+    protected function tearDown(): void
+    {
+        $this->clearDB();
+        parent::tearDown();
+    }
+    
     /**
      * Test that the member registration form opens correctly.
      *
@@ -22,45 +61,25 @@ class MemberRegistrationTest extends TestCase
      */
     public function testMemberRegistrationHandler()
     {
-        $fakeEmail = 'berend@vanzuid.nl';
-
-        // Delete any members with this email
-        \App\Member::where('email', $fakeEmail)->delete();
-
         // POST and check status code
         $response = $this
             ->followingRedirects()
-            ->post('/register-member', [
-                'voornaam' => 'Berend',
-                'tussenvoegsel' => 'van',
-                'achternaam' => 'Zuid',
-                'geboortedatum' => '1980-10-10',
-                'geslacht' => 'M',
-                'adres' => 'Boegmeen 27',
-                'postcode' => '1234 AB',
-                'plaats' => 'Lalastad',
-                'telefoon' => '0123456789',
-                'email' => $fakeEmail,
-                'selected_camp' => '1',
-                'eindexamen' => 'VWO',
-                'studie' => 'Nietsnuttigheid',
-                'afgestudeerd' => 1,
-                'vak1' => 1,
-                'klas1' => 1,
-                'hoebij' => ['je moeder', 'je vader'],
-                'vog' => 1,
-                'privacy' => 1
-            ]);
+            ->post('/register-member', $this->fakeMemberData);
 
         $response->assertStatus(200);
 
         // Check existence of member and user in DB
         $this->assertDatabaseHas('members', [
-            'email' => $fakeEmail
+            'email' => $this->fakeMemberData['email']
         ]);
 
         $this->assertDatabaseHas('users', [
             'username' => 'bzuid'
+        ]);
+
+        $this->assertDatabaseHas('event_member', [
+            'member_id' => \App\Member::where('email', $this->fakeMemberData['email'])->first()->id,
+            'event_id' => 1
         ]);
     }
 }
