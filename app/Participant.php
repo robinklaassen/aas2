@@ -1,4 +1,6 @@
-<?php namespace App;
+<?php
+
+namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -63,6 +65,11 @@ class Participant extends Model
 	public function user()
 	{
 		return $this->morphOne('App\User', 'profile');
+	}
+
+	public function comments()
+	{
+		return $this->morphMany('App\Comment', 'entity');
 	}
 
 	public function getIncomeDescriptionAttribute()

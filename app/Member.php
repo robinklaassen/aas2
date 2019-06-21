@@ -1,4 +1,6 @@
-<?php namespace App;
+<?php
+
+namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -15,7 +17,6 @@ class Member extends Model
 	{
 		return str_replace('  ', ' ', $this->voornaam . ' ' . $this->tussenvoegsel . ' ' . $this->achternaam);
 	}
-
 
 	// Postcode mutator
 	public function setPostcodeAttribute($value)
@@ -44,6 +45,12 @@ class Member extends Model
 	public function user()
 	{
 		return $this->morphOne('App\User', 'profile');
+	}
+
+	// A Member can have comments
+	public function comments()
+	{
+		return $this->morphMany('App\Comment', 'entity');
 	}
 
 	// A member has many actions
