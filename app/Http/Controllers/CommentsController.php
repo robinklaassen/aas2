@@ -38,7 +38,7 @@ class CommentsController extends Controller
 
     public function delete(Comment $comment, Request $request)
     {
-        return view('members.delete', compact('member'));
+        return view('comments.delete', compact('comment'));
     }
 
     public function destroy(Comment $comment, Request $request)
