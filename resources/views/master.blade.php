@@ -10,64 +10,65 @@
 
 	<!-- Load Bootstrap theme -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.4/cosmo/bootstrap.min.css">
-	
+
 	<!-- Load Bootstrap extension for DataTables -->
 	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.10/css/dataTables.bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.0.0/css/responsive.bootstrap.min.css">
-	
+	{{ Html::style('css/custom.css') }}
+
 	<!-- Proper text alignment in multiline tooltips -->
 	<style type="text/css">
 		.tooltip-inner {
-			text-align:left;
+			text-align: left;
 		}
 	</style>
-	
+
 	@yield('header')
-	
+
 </head>
 
 <body style="padding-top:20px;">
-	
+
 	<div class="container">
 		<!-- Navigation bar for all authenticated users -->
 		@unless (Auth::guest())
-			@include('partials.nav')
+		@include('partials.nav')
 		@endunless
-		
+
 		<!-- Flash message -->
 		@include('partials.flash')
-		
+
 		<!-- Main content -->
 		@yield('content')
-	
+
 		<!-- Footer -->
 		<p class="text-right" style="margin-top:5px;">
 			<small style="border-top:1px solid #ddd; padding-top:10px;">AAS 2.0 is het Anderwijs Administratiesysteem. <button type="button" class="btn btn-link btn-sm" data-toggle="modal" data-target="#infoModal">Meer informatie?</button></small>
-			<br/>
+			<br />
 			<small>Meld problemen bij de <a href="mailto:webmaster@anderwijs.nl">webmaster</a>.</small>
 		</p>
 	</div>
-	
+
 	<!-- Info modal -->
 	<div class="modal fade" id="infoModal" tabindex="-1" role="dialog">
-	  <div class="modal-dialog" role="document">
-		<div class="modal-content">
-		  <div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			<h4 class="modal-title">Over AAS 2.0</h4>
-		  </div>
-		  <div class="modal-body">
-			<p>AAS 2.0 is ontwikkeld door <a href="mailto:robin@anderwijs.nl">Robin Klaassen</a> in april-mei 2015. Het systeem draait op het PHP framework <a href="http://laravel.com/">Laravel</a> en de voorkant is gebaseerd op <a href="http://getbootstrap.com/">Bootstrap 3</a>, met de <a href="https://bootswatch.com/cosmo/">Cosmo</a> template. Interactieve tabellen worden mogelijk gemaakt door <a href="https://datatables.net">DataTables</a>, kaarten en grafieken door Google's <a href="https://developers.google.com/maps/">Maps</a> en <a href="https://developers.google.com/chart/">Charts</a>.</p>
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title">Over AAS 2.0</h4>
+				</div>
+				<div class="modal-body">
+					<p>AAS 2.0 is ontwikkeld door <a href="mailto:robin@anderwijs.nl">Robin Klaassen</a> in april-mei 2015. Het systeem draait op het PHP framework <a href="http://laravel.com/">Laravel</a> en de voorkant is gebaseerd op <a href="http://getbootstrap.com/">Bootstrap 3</a>, met de <a href="https://bootswatch.com/cosmo/">Cosmo</a> template. Interactieve tabellen worden mogelijk gemaakt door <a href="https://datatables.net">DataTables</a>, kaarten en grafieken door Google's <a href="https://developers.google.com/maps/">Maps</a> en <a href="https://developers.google.com/chart/">Charts</a>.</p>
 
-			<p>AAS staat voor Anderwijs Administratie Systeem en is voor het eerst digitaal ontwikkeld door Dave Liefbroer in 2008.</p>
+					<p>AAS staat voor Anderwijs Administratie Systeem en is voor het eerst digitaal ontwikkeld door Dave Liefbroer in 2008.</p>
 
-			<p>Bug reports, feature requests en/of vragen graag per mail naar <a href="mailto:webmaster@anderwijs.nl">webmaster@anderwijs.nl</a>. Wees hierbij zo specifiek mogelijk.</p>
-		  </div>
-		  <div class="modal-footer">
-			<button type="button" class="btn btn-primary" data-dismiss="modal">Bedankt!</button>
-		  </div>
-		</div><!-- /.modal-content -->
-	  </div><!-- /.modal-dialog -->
+					<p>Bug reports, feature requests en/of vragen graag per mail naar <a href="mailto:webmaster@anderwijs.nl">webmaster@anderwijs.nl</a>. Wees hierbij zo specifiek mogelijk.</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" data-dismiss="modal">Bedankt!</button>
+				</div>
+			</div><!-- /.modal-content -->
+		</div><!-- /.modal-dialog -->
 	</div><!-- /.modal -->
 
 	<!-- Privacy modal -->
@@ -88,7 +89,7 @@
 					</p>
 				</div>
 				<div class="modal-footer">
-					<button type ="button" class="btn btn-primary" data-dismiss="modal">Akkoord</button>
+					<button type="button" class="btn btn-primary" data-dismiss="modal">Akkoord</button>
 				</div>
 			</div>
 		</div>
@@ -98,63 +99,64 @@
 	<!-- Load jQuery and Boostrap scripts -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-	
+
 	<!-- Load DataTables scripts -->
 	<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js"></script>
 	<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.10/js/dataTables.bootstrap.min.js"></script>
 	<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/responsive/2.0.0/js/dataTables.responsive.min.js"></script>
 	<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/responsive/2.0.0/js/responsive.bootstrap.min.js"></script>
-	
+
 	<!-- Load Modernizr and webshims scripts -->
 	<script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
 	<script type="text/javascript" charset="utf8" src="//cdnjs.cloudflare.com/ajax/libs/webshim/1.15.7/minified/polyfiller.js"></script>
-	
+
 	<script type="text/javascript">
-	// Set date functionality to HTML 5 in unsupported browsers
-	if(!Modernizr.inputtypes.date) {
-		webshim.polyfill('forms-ext');
-	}
-	
-	// On DOM ready...
-	($(document).ready(function(){
-		// Removes unimportant alerts after 3 seconds
-		$('div.alert').not('.alert-important').delay(3000).slideUp(300);
-		
-		// Set Bootstrap tooltips
-		$('[data-toggle="tooltip"]').tooltip();
-		
-		// Set DataTables default language things
-		$.extend( $.fn.dataTable.defaults, {
-			"responsive": true,
-			"language": {
-				"emptyTable": "Geen beschikbare data",
-				"lengthMenu": "Laat  _MENU_  rijen zien",
-				"zeroRecords": "Geen rijen gevonden!",
-				"info": "Rij _START_ t/m _END_ van _TOTAL_",
-				"infoEmpty": "Geen beschikbare rijen",
-				"infoFiltered": "(gefilterd uit _MAX_ rijen totaal)",
-				"search": "Zoeken:",
-				"paginate": {
-					"first": "Eerste",
-					"last": "Laatste",
-					"next": "Volgende",
-					"previous": "Vorige"
+		// Set date functionality to HTML 5 in unsupported browsers
+		if (!Modernizr.inputtypes.date) {
+			webshim.polyfill('forms-ext');
+		}
+
+		// On DOM ready...
+		($(document).ready(function() {
+			// Removes unimportant alerts after 3 seconds
+			$('div.alert').not('.alert-important').delay(3000).slideUp(300);
+
+			// Set Bootstrap tooltips
+			$('[data-toggle="tooltip"]').tooltip();
+
+			// Set DataTables default language things
+			$.extend($.fn.dataTable.defaults, {
+				"responsive": true,
+				"language": {
+					"emptyTable": "Geen beschikbare data",
+					"lengthMenu": "Laat  _MENU_  rijen zien",
+					"zeroRecords": "Geen rijen gevonden!",
+					"info": "Rij _START_ t/m _END_ van _TOTAL_",
+					"infoEmpty": "Geen beschikbare rijen",
+					"infoFiltered": "(gefilterd uit _MAX_ rijen totaal)",
+					"search": "Zoeken:",
+					"paginate": {
+						"first": "Eerste",
+						"last": "Laatste",
+						"next": "Volgende",
+						"previous": "Vorige"
+					}
 				}
-			}
-		} );
-		
-		// Fix DataTables in Boostrap tabs
-		$("a[data-toggle=\"tab\"]").on("shown.bs.tab", function (e) {
-		  console.log( 'show tab' );
-			$($.fn.dataTable.tables(true)).DataTable()
-			  .columns.adjust()
-			  .responsive.recalc();
-		});
-	}));
+			});
+
+			// Fix DataTables in Boostrap tabs
+			$("a[data-toggle=\"tab\"]").on("shown.bs.tab", function(e) {
+				console.log('show tab');
+				$($.fn.dataTable.tables(true)).DataTable()
+					.columns.adjust()
+					.responsive.recalc();
+			});
+		}));
 	</script>
-	
+
 	<!-- Footer content (page-specific scripts etc.) -->
 	@yield('footer')
-	
+
 </body>
+
 </html>

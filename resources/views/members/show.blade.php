@@ -1,11 +1,11 @@
 @extends('master')
 
 @section('title')
-	@if ($viewType == 'admin')
-		{{ $member->volnaam }}
-	@elseif ($viewType == 'profile')
-		Mijn profiel
-	@endif
+@if ($viewType == 'admin')
+{{ $member->volnaam }}
+@elseif ($viewType == 'profile')
+Mijn profiel
+@endif
 @endsection
 
 @section('content')
@@ -19,23 +19,23 @@
 	<div class="col-sm-6">
 		<p class="text-right">
 			@if ($viewType == 'profile')
-				<a class="btn btn-primary" type="button" href="{{ url('/profile/edit') }}" style="margin-top:21px;">Bewerken</a>
-				<a class="btn btn-info" type="button" href="{{ url('/profile/on-camp') }}" style="margin-top:21px;">Op kamp</a>
-				<a class="btn btn-success" type="button" href="{{ url('/profile/declare') }}" style="margin-top:21px;">Declaratie</a>
-				<a class="btn btn-warning" type="button" href="{{ url('/profile/password') }}" style="margin-top:21px;">Nieuw wachtwoord</a>
+			<a class="btn btn-primary" type="button" href="{{ url('/profile/edit') }}" style="margin-top:21px;">Bewerken</a>
+			<a class="btn btn-info" type="button" href="{{ url('/profile/on-camp') }}" style="margin-top:21px;">Op kamp</a>
+			<a class="btn btn-success" type="button" href="{{ url('/profile/declare') }}" style="margin-top:21px;">Declaratie</a>
+			<a class="btn btn-warning" type="button" href="{{ url('/profile/password') }}" style="margin-top:21px;">Nieuw wachtwoord</a>
 			@elseif ($viewType == 'admin')
-				<a class="btn btn-primary" type="button" href="{{ url('/members', [$member->id, 'edit']) }}" style="margin-top:21px;">Bewerken</a>
-				<a class="btn btn-info" type="button" href="{{ url('/members', [$member->id, 'on-event']) }}" style="margin-top:21px;">Op evenement</a>
-				<!--
+			<a class="btn btn-primary" type="button" href="{{ url('/members', [$member->id, 'edit']) }}" style="margin-top:21px;">Bewerken</a>
+			<a class="btn btn-info" type="button" href="{{ url('/members', [$member->id, 'on-event']) }}" style="margin-top:21px;">Op evenement</a>
+			<!--
 				<a class="btn btn-info" type="button" href="{{ url('/members', [$member->id, 'add-course']) }}" style="margin-top:21px;">Vak toevoegen</a>
 				-->
-				<a class="btn btn-danger" type="button" href="{{ url('/members', [$member->id, 'delete']) }}" style="margin-top:21px;">Verwijderen</a>
+			<a class="btn btn-danger" type="button" href="{{ url('/members', [$member->id, 'delete']) }}" style="margin-top:21px;">Verwijderen</a>
 			@endif
 		</p>
 	</div>
 </div>
 
-<hr/>
+<hr />
 
 <!-- Geen KMG waarschuwing -->
 @if ($viewType == 'admin' && $member->kmg == 0)
@@ -49,22 +49,22 @@
 
 	<!-- Linker kolom -->
 	<div class="col-md-6">
-		
+
 		<!-- Profielfoto -->
 		<div style="text-align:center; margin-bottom:10px;">
 			@if ($viewType == 'profile')
 			<a data-toggle="modal" data-target="#uploadPic" style="cursor:pointer;">
-			@endif
-				@if (file_exists(public_path().'/img/profile/full/'.$member->id.'.jpg'))
-					<img src="/img/profile/full/{{$member->id}}.jpg" height="300" @if ($viewType == 'profile') data-toggle="tooltip" title="Klik om te wijzigen" @endif />
-				@else
-					<img src="/img/profile/no-profile-{{ ($member->geslacht == 'M') ? 'm' : 'f' }}.gif" height="300" @if ($viewType == 'profile') data-toggle="tooltip" title="Klik om te wijzigen" @endif />
 				@endif
-			@if ($viewType == 'profile')
+				@if (file_exists(public_path().'/img/profile/full/'.$member->id.'.jpg'))
+				<img src="/img/profile/full/{{$member->id}}.jpg" height="300" @if ($viewType=='profile' ) data-toggle="tooltip" title="Klik om te wijzigen" @endif />
+				@else
+				<img src="/img/profile/no-profile-{{ ($member->geslacht == 'M') ? 'm' : 'f' }}.gif" height="300" @if ($viewType=='profile' ) data-toggle="tooltip" title="Klik om te wijzigen" @endif />
+				@endif
+				@if ($viewType == 'profile')
 			</a>
 			@endif
 		</div>
-		
+
 		<!-- Profieltabel -->
 		<table class="table table-hover">
 			<caption>Profiel</caption>
@@ -129,10 +129,10 @@
 				<td style="white-space:pre-wrap;">{{ $member->opmerkingen }}</td>
 			</tr>
 		</table>
-		
-		
+
+
 	</div>
-	
+
 	<!-- Rechter kolom -->
 	<div class="col-md-6">
 		<!-- Puntensysteem vak -->
@@ -142,8 +142,8 @@
 			</div>
 			<div class="col-md-9">
 				<div class="progress" style="height: 2em;">
-				  <div class="progress-bar" role="progressbar" style="width: {{ round(($member->points - $ranks[$member->rank]) / ($ranks[$member->rank + 1] - $ranks[$member->rank]) * 100) }}%;">
-				  </div>
+					<div class="progress-bar" role="progressbar" style="width: {{ round(($member->points - $ranks[$member->rank]) / ($ranks[$member->rank + 1] - $ranks[$member->rank]) * 100) }}%;">
+					</div>
 				</div>
 			</div>
 		</div>
@@ -157,18 +157,18 @@
 		</div>
 		<div class="row">
 			<div class="col-md-7">
-				<br/>
+				<br />
 				Meest recente actie: {{$member->mostrecentaction['name']}} ({{$member->mostrecentaction['points']}} pt)
 			</div>
 			<div class="col-md-5 text-right">
-				<br/>
+				<br />
 				<a data-toggle="modal" data-target="#actions" style="cursor:pointer;">Lijst met acties</a>
 			</div>
 		</div>
-		
-		<hr/>
-		
-		
+
+		<hr />
+
+
 		<!-- Administratietabel -->
 		<table class="table table-hover">
 			<caption>Administratie</caption>
@@ -235,9 +235,9 @@
 			</tr>
 			@endif
 		</table>
-		
+
 		<p><a data-toggle="modal" data-target="#fellows" style="cursor:pointer;">Met wie ben ik allemaal op kamp geweest?</a></p>
-		
+
 		<!-- Vakken van dit lid -->
 		<table class="table table-hover">
 			<caption>
@@ -246,54 +246,54 @@
 					<div style="float:right;">
 						@if ($viewType == 'admin')
 						<a href="{{ url('/members', [$member->id, 'add-course']) }}">
-						@elseif ($viewType == 'profile')
-						<a href="{{ url('/profile', ['add-course']) }}">
-						@endif
-							<span class="glyphicon glyphicon-plus" aria-hidden="true" data-toggle="tooltip" title="Vak toevoegen"></span>
-						</a>
+							@elseif ($viewType == 'profile')
+							<a href="{{ url('/profile', ['add-course']) }}">
+								@endif
+								<span class="glyphicon glyphicon-plus" aria-hidden="true" data-toggle="tooltip" title="Vak toevoegen"></span>
+							</a>
 					</div>
 				</div>
 			</caption>
 			@forelse ($member->courses()->orderBy('naam')->get() as $course)
-				<tr>
-					<td> @if ($viewType == 'admin') <a href="{{ url('/courses', $course->id) }}"> @endif {{ $course->naam }} @if ($viewType == 'admin') </a> @endif </td>
-					<td>{{ $course->pivot->klas }}</td>
-					<td>
-						@if ($viewType == 'admin')
-						<a href="{{ url('/members', [$member->id, 'edit-course', $course->id]) }}">
+			<tr>
+				<td> @if ($viewType == 'admin') <a href="{{ url('/courses', $course->id) }}"> @endif {{ $course->naam }} @if ($viewType == 'admin') </a> @endif </td>
+				<td>{{ $course->pivot->klas }}</td>
+				<td>
+					@if ($viewType == 'admin')
+					<a href="{{ url('/members', [$member->id, 'edit-course', $course->id]) }}">
 						@elseif ($viewType == 'profile')
 						<a href="{{ url('/profile', ['edit-course', $course->id]) }}">
-						@endif
+							@endif
 							<span class="glyphicon glyphicon-edit" aria-hidden="true" data-toggle="tooltip" title="Vak bewerken"></span>
 						</a>
-					</td>
-					<td>
-						@if ($viewType == 'admin')
-						<a href="{{ url('/members', [$member->id, 'remove-course', $course->id]) }}">
+				</td>
+				<td>
+					@if ($viewType == 'admin')
+					<a href="{{ url('/members', [$member->id, 'remove-course', $course->id]) }}">
 						@elseif ($viewType == 'profile')
 						<a href="{{ url('/profile', ['remove-course', $course->id]) }}">
-						@endif
+							@endif
 							<span class="glyphicon glyphicon-remove" aria-hidden="true" data-toggle="tooltip" title="Vak verwijderen"></span>
 						</a>
-					</td>
-				</tr>
+				</td>
+			</tr>
 			@empty
-				<tr><td>Geen vakken gevonden</td></tr>
+			<tr>
+				<td>Geen vakken gevonden</td>
+			</tr>
 			@endforelse
 		</table>
-		
+
 	</div>
-	
+
 </div>
 
-<hr/>
 <div class="row">
-	<h4>Comments</h4>
+	<h1 class="caption">Opmerkingen</h1>
 	@each('partials.comments', $member->comments, 'comment')
 </div>
 
-
-<hr/>
+<hr />
 
 <div class="row">
 	<!-- Linker kolom -->
@@ -302,32 +302,34 @@
 		<table class="table table-hover">
 			<caption>Kampen ({{ $member->events()->where('type','kamp')->count() }})</caption>
 			@forelse ($member->events()->where('type','kamp')->orderBy('datum_start', 'desc')->get() as $event)
-				<tr>
-					<td>
-						<a href="{{ url('/events', $event->id) }}">{{ $event->naam }}</a>
-					</td>
-					<td>
-						@if ($event->pivot->wissel)
-							<span class="glyphicon glyphicon-hourglass" aria-hidden="true" data-toggle="tooltip" title="Wisselleiding"></span>
-						@endif
-					</td>
-					<td>
-						@if (($viewType == 'profile') && ($event->reviews->count() > 0))
-							<a href="{{ url('/profile/reviews', $event->id) }}">
-								<span class="glyphicon glyphicon-dashboard" aria-hidden="true" data-toggle="tooltip" title="Enquetes bekijken"></span>
-							</a>
-						@endif
-					</td>
-					<td>
-						@if ($viewType == 'admin')
-							{{ $event->code }}
-						@elseif ($viewType == 'profile')
-							{{ $event->datum_start->format('d-m-Y') }}
-						@endif
-					</td>
-				</tr>
+			<tr>
+				<td>
+					<a href="{{ url('/events', $event->id) }}">{{ $event->naam }}</a>
+				</td>
+				<td>
+					@if ($event->pivot->wissel)
+					<span class="glyphicon glyphicon-hourglass" aria-hidden="true" data-toggle="tooltip" title="Wisselleiding"></span>
+					@endif
+				</td>
+				<td>
+					@if (($viewType == 'profile') && ($event->reviews->count() > 0))
+					<a href="{{ url('/profile/reviews', $event->id) }}">
+						<span class="glyphicon glyphicon-dashboard" aria-hidden="true" data-toggle="tooltip" title="Enquetes bekijken"></span>
+					</a>
+					@endif
+				</td>
+				<td>
+					@if ($viewType == 'admin')
+					{{ $event->code }}
+					@elseif ($viewType == 'profile')
+					{{ $event->datum_start->format('d-m-Y') }}
+					@endif
+				</td>
+			</tr>
 			@empty
-				<tr><td>Geen kampen gevonden</td></tr>
+			<tr>
+				<td>Geen kampen gevonden</td>
+			</tr>
 			@endforelse
 		</table>
 	</div>
@@ -337,20 +339,22 @@
 		<table class="table table-hover">
 			<caption>Trainingen ({{ $member->events()->where('type','training')->count() }})</caption>
 			@forelse ($member->events()->where('type','training')->orderBy('datum_start', 'desc')->get() as $event)
-				<tr>
-					<td>
-						<a href="{{ url('/events', $event->id) }}">{{ $event->naam }}</a>
-					</td>
-					<td>
-						@if ($viewType == 'admin')
-							{{ $event->code }}
-						@elseif ($viewType == 'profile')
-							{{ $event->datum_start->format('d-m-Y') }}
-						@endif
-					</td>
-				</tr>
+			<tr>
+				<td>
+					<a href="{{ url('/events', $event->id) }}">{{ $event->naam }}</a>
+				</td>
+				<td>
+					@if ($viewType == 'admin')
+					{{ $event->code }}
+					@elseif ($viewType == 'profile')
+					{{ $event->datum_start->format('d-m-Y') }}
+					@endif
+				</td>
+			</tr>
 			@empty
-				<tr><td>Geen trainingen gevonden</td></tr>
+			<tr>
+				<td>Geen trainingen gevonden</td>
+			</tr>
 			@endforelse
 		</table>
 	</div>
@@ -360,20 +364,22 @@
 		<table class="table table-hover">
 			<caption>Overige evenementen ({{ $member->events()->where('type','overig')->count() }})</caption>
 			@forelse ($member->events()->where('type','overig')->orderBy('datum_start', 'desc')->get() as $event)
-				<tr>
-					<td>
-						<a href="{{ url('/events', $event->id) }}">{{ $event->naam }}</a>
-					</td>
-					<td>
-						@if ($viewType == 'admin')
-							{{ $event->code }}
-						@elseif ($viewType == 'profile')
-							{{ $event->datum_start->format('d-m-Y') }}
-						@endif
-					</td>
-				</tr>
+			<tr>
+				<td>
+					<a href="{{ url('/events', $event->id) }}">{{ $event->naam }}</a>
+				</td>
+				<td>
+					@if ($viewType == 'admin')
+					{{ $event->code }}
+					@elseif ($viewType == 'profile')
+					{{ $event->datum_start->format('d-m-Y') }}
+					@endif
+				</td>
+			</tr>
 			@empty
-				<tr><td>Geen overige evenementen gevonden</td></tr>
+			<tr>
+				<td>Geen overige evenementen gevonden</td>
+			</tr>
 			@endforelse
 		</table>
 	</div>
@@ -381,71 +387,71 @@
 
 <!-- Modal: punten -->
 <div class="modal fade" id="actions" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Lijst met acties</h4>
-      </div>
-      <div class="modal-body">
-		<table class="table">
-			<thead>
-				<tr>
-					<th>Datum</th>
-					<th>Actie</th>
-					<th>Punten</th>
-				</tr>
-			</thead>
-			<tbody>
-				@foreach ($member->listofactions as $item)
-					<tr>
-						<td>{{$item['date']->format('d-m-Y')}}</td>
-						<td>{{$item['name']}}</td>
-						<td>{{$item['points']}}</td>
-					</tr>
-				@endforeach
-				@if ($member->hasstraightflush)
-				<tr>
-					<td></td>
-					<td>Straight flush</td>
-					<td>3</td>
-				</tr>
-				@endif
-				<tr>
-					<td></td>
-					<td><strong>Totaal:</strong></td>
-					<td><strong>{{$member->points}}</strong></td>
-				</tr>
-			</tbody>
-		</table>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Ja, bedankt</button>
-      </div>
-    </div>
-  </div>
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel">Lijst met acties</h4>
+			</div>
+			<div class="modal-body">
+				<table class="table">
+					<thead>
+						<tr>
+							<th>Datum</th>
+							<th>Actie</th>
+							<th>Punten</th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach ($member->listofactions as $item)
+						<tr>
+							<td>{{$item['date']->format('d-m-Y')}}</td>
+							<td>{{$item['name']}}</td>
+							<td>{{$item['points']}}</td>
+						</tr>
+						@endforeach
+						@if ($member->hasstraightflush)
+						<tr>
+							<td></td>
+							<td>Straight flush</td>
+							<td>3</td>
+						</tr>
+						@endif
+						<tr>
+							<td></td>
+							<td><strong>Totaal:</strong></td>
+							<td><strong>{{$member->points}}</strong></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" data-dismiss="modal">Ja, bedankt</button>
+			</div>
+		</div>
+	</div>
 </div>
 
 <!-- Modal: met wie op kamp geweest -->
 <div class="modal fade" id="fellows" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">Ik ben op kamp geweest met:</h4>
-      </div>
-      <div class="modal-body">
-        @forelse ($member->fellows as $x)
-			{{ $x->volnaam }}<br/>
-		@empty
-			Nog helemaal niemand! :(
-		@endforelse
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">Top!</button>
-      </div>
-    </div>
-  </div>
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<h4 class="modal-title" id="myModalLabel">Ik ben op kamp geweest met:</h4>
+			</div>
+			<div class="modal-body">
+				@forelse ($member->fellows as $x)
+				{{ $x->volnaam }}<br />
+				@empty
+				Nog helemaal niemand! :(
+				@endforelse
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-primary" data-dismiss="modal">Top!</button>
+			</div>
+		</div>
+	</div>
 </div>
 
 <!-- Modal: foto uploaden -->
