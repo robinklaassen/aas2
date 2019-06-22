@@ -7,9 +7,10 @@ use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Notifications\Notifiable;
 
-class User extends Model implements AuthenticatableContract, CanResetPasswordContract {
+class User extends Model implements AuthenticatableContract, CanResetPasswordContract
+{
 
-	use Authenticatable, CanResetPassword, Notifiable ;
+	use Authenticatable, CanResetPassword, Notifiable;
 
 	/**
 	 * The database table used by the model.
@@ -41,4 +42,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		return $this->morphTo();
 	}
 
+	public function getVolnaamAttribute()
+	{
+		return $this->profile->volnaam;
+	}
 }

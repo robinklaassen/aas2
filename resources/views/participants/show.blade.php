@@ -155,7 +155,8 @@
 			</tr>
 			@endif
 		</table>
-		
+
+
 		<!-- Kampen -->
 		<table class="table table-hover">
 			<caption>Kampen</caption>
@@ -191,6 +192,12 @@
 		@if ($viewType == 'profile')
 			<p>De opgegeven informatie per vak kunt u bekijken door op 'vakken bewerken' te klikken.</p>
 		@endif
+	</div>
+				
+	<hr/>
+	<div class="row">
+		<h4>Comments</h4>
+		@each('partials.comments', $member->comments(), 'comments')
 	</div>
 	
 </div>

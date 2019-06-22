@@ -287,6 +287,13 @@
 </div>
 
 <hr/>
+<div class="row">
+	<h4>Comments</h4>
+	@each('partials.comments', $member->comments, 'comment')
+</div>
+
+
+<hr/>
 
 <div class="row">
 	<!-- Linker kolom -->
