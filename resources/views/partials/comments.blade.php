@@ -8,10 +8,10 @@
             Door {{$comment->user->volnaam}} op {{$comment->created_at}}
 
             @if($comment->user_id == \Auth::user()->id )
-            <a href="{{action('CommentsController@edit', [$comment->id, 'origin' => Request::path()])}}"><i class="glyphicon glyphicon-pencil"></i></a>
+            <a href="{{action('CommentsController@edit', [$comment->id, 'origin' => Request::path()])}}"><i class="glyphicon glyphicon-edit"></i></a>
             @endif
             @if(\Auth::user()->is_admin || $comment->user_id == \Auth::user()->id )
-            <a href="{{action('CommentsController@delete', [$comment->id, 'origin' => Request::path()])}}"><i class="glyphicon glyphicon-trash"></i></a>
+            <a href="{{action('CommentsController@delete', [$comment->id, 'origin' => Request::path()])}}"><i class="glyphicon glyphicon-remove"></i></a>
             @endif
         </span>
     </div>
