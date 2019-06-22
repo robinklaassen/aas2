@@ -231,3 +231,9 @@ Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 // Note: these are the routes for the skeleton Laravel registration forms. We use register-member and register-participant
 //Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
 //Route::post('register', 'Auth\RegisterController@register');
+Route::get("comments/{comment}/delete", "CommentsController@delete");
+Route::get("comments/{comment}/edit", "CommentsController@edit");
+Route::get("comments/{comment}/new", "CommentsController@create");
+Route::delete("comments/{comment}", "CommentsController@destroy");
+Route::put("comments/{comment}", "CommentsController@update");
+Route::post("comments", "CommentsController@store");
