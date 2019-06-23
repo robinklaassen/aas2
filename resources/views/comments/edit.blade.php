@@ -7,7 +7,7 @@ Opmerking bewerken
 @section('content')
 
 <h1>Opmerking bewerken</h1>
-<h4>voor ...</h4>
+<h4>voor {{$comment->getEntityDescription()}}</h4>
 
 <hr />
 
