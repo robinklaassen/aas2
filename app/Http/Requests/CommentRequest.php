@@ -3,6 +3,8 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Comment;
+use Illuminate\Support\Facades\Auth;
 
 class CommentRequest extends FormRequest
 {
@@ -13,7 +15,15 @@ class CommentRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        $isValid = Auth::check();
+        $commentId =  $this->route('comment');
+
+        if ($commentId) {
+            $comment = Comment::findOrFail($commentId);
+            $isValid = $isValid && $comment->user_id == Auth::user()->id;
+        }
+
+        return $isValid;
     }
 
     /**

@@ -7,13 +7,13 @@ Opmerking bewerken
 @section('content')
 
 <h1>Opmerking bewerken</h1>
-<h4>voor {{$comment->getEntityDescription()}}</h4>
+<h4>Comment bij {{$comment->entityDescription}}</h4>
 
 <hr />
 
 @include ('errors.list')
 
-{!! Form::open(['url' => 'comments/'.$comment->id, 'method' => 'PATCH']) !!}
+{!! Form::model($comment, ['url' => 'comments/'.$comment->id, 'method' => 'PATCH']) !!}
 
 @include ('comments.form')
 

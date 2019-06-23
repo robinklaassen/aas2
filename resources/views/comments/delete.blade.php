@@ -14,7 +14,7 @@ Opmerking verwijderen
 
 {!! Form::open(['url' => 'events/'.$comment->id, 'method' => 'DELETE']) !!}
 
-<p>Weet je zeker dat je comment bij ... wilt verwijderen?</p>
+<p>Weet je zeker dat je comment bij {{$comment->entityDescription}} wilt verwijderen?</p>
 
 <div class="row">
     <div class="col-sm-6 form-group">

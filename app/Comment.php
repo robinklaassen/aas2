@@ -10,7 +10,7 @@ class Comment extends Model
     public $timestamps = true;
     protected $table = 'comments';
 
-    protected $fillable = ["text"];
+    protected $fillable = ["text", "is_secret"];
 
     protected static function boot()
     {
@@ -28,12 +28,17 @@ class Comment extends Model
         return $this->belongsTo('App\User');
     }
 
-    public function getEntityDescription()
+    public function getEntityDescriptionAttribute()
     {
         switch ($this->entity_type) {
             case 'App\Member':
             case 'App\Participant':
                 return $this->entity->volnaam;
+            case 'App\Location':
+                return $this->entity->naam;
+            case 'App\Event':
+                return '(' . $this->entity->code . ')' . $this->entity->naam;
+
             default:
                 return "Onbekende entity";
         }
