@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Comment;
+use App\Http\Requests\CommentRequest;
+use Illuminate\Http\Request;
 
 class CommentsController extends Controller
 {
@@ -14,18 +15,19 @@ class CommentsController extends Controller
         $this->middleware('admin');
     }
 
-    public function edit(Comment $comment, Requests\Request $request)
+    public function edit(Comment $comment, Request $request)
     {
-        return "test";
+        $origin = $request->query("origin", "/");
+        return view("comments.edit", compact('comment', 'origin'));
     }
 
-    public function update(Comment $comment, Requests\CommentRequest $request)
+    public function update(Comment $comment, CommentRequest $request)
     {
         $comment->update($request->all());
         return redirect($request->query("origin", "/"));
     }
 
-    public function create(Requests\Request $request)
+    public function create(Request $request)
     {
         return "test";
     }
