@@ -20,11 +20,22 @@ class Comment extends Model
 
     public function entity()
     {
-        $this->morphTo();
+        return $this->morphTo();
     }
 
     public function user()
     {
         return $this->belongsTo('App\User');
+    }
+
+    public function getEntityDescription()
+    {
+        switch ($this->entity_type) {
+            case 'App\Member':
+            case 'App\Participant':
+                return $this->entity->volnaam;
+            default:
+                return "Onbekende entity";
+        }
     }
 }
