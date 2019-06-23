@@ -227,13 +227,9 @@ Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('login', 'Auth\LoginController@login');
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
-// Registration Routes...
-// Note: these are the routes for the skeleton Laravel registration forms. We use register-member and register-participant
-//Route::get('register', 'Auth\RegisterController@showRegistrationForm')->name('register');
-//Route::post('register', 'Auth\RegisterController@register');
-Route::get("comments/{comment}/delete", "CommentsController@delete");
-Route::get("comments/{comment}/edit", "CommentsController@edit");
-Route::get("comments/{comment}/new", "CommentsController@create");
-Route::delete("comments/{comment}", "CommentsController@destroy");
-Route::put("comments/{comment}", "CommentsController@update");
-Route::post("comments", "CommentsController@store");
+Route::get("comments/{comment}/delete", "CommentsController@delete"); //->middleware('can:delete,comment');
+Route::delete("comments/{comment}", "CommentsController@destroy"); //->middleware('can:delete,comment');
+Route::get("comments/{comment}/edit", "CommentsController@edit"); //->middleware('can:update,comment');
+Route::patch("comments/{comment}", "CommentsController@update"); //->middleware('can:update,comment');
+Route::get("comments/{comment}/new", "CommentsController@create"); //->middleware('can:create,App\Comment');
+Route::post("comments", "CommentsController@store");//->middleware('can:create,App\Comment');
