@@ -13,7 +13,7 @@ Opmerking bewerken
 
 @include ('errors.list')
 
-{!! Form::open(['url' => 'comments/'.$comment->id ], 'method' => 'PATCH']) !!}
+{!! Form::open(['url' => 'comments/'.$comment->id, 'method' => 'PATCH']) !!}
 
 @include ('comments.form')
 
