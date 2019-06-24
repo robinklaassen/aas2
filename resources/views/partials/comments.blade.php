@@ -1,3 +1,11 @@
+<h1 class="caption">
+    Opmerkingen
+    <a href="{{ url('comments/new') }}?origin={{Request::path()}}&type={{urlencode($type)}}&key={{$key}}">
+        <i class="glyphicon glyphicon-plus" aria-hidden="true" data-toggle="tooltip" title="" data-original-title="Opmerking toevoegen"></i>
+    </a>
+</h1>
+
+@foreach($comments as $comment)
 <div class="row comment-item" style="margin-bottom: 7px;">
     <div class="col-md-12">{{$comment->text}}</div>
     <div class="col-md-12">
@@ -17,3 +25,4 @@
         </span>
     </div>
 </div>
+@endforeach
