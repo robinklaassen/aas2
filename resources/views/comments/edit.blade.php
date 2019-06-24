@@ -12,8 +12,10 @@ Opmerking bewerken
 <hr />
 
 @include ('errors.list')
-
-{!! Form::model($comment, ['url' => 'comments/'.$comment->id, 'method' => 'PATCH']) !!}
+@php
+$qs = 'origin=' . urlencode($origin);
+@endphp
+{!! Form::model($comment, ['url' => 'comments/' . $comment->id . '?' . $qs, 'method' => 'PATCH']) !!}
 
 @include ('comments.form')
 

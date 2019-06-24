@@ -16,10 +16,9 @@ class CommentRequest extends FormRequest
     public function authorize()
     {
         $isValid = Auth::check();
-        $commentId =  $this->route('comment');
+        $comment =  $this->route('comment');
 
-        if ($commentId) {
-            $comment = Comment::findOrFail($commentId);
+        if ($comment) {
             $isValid = $isValid && $comment->user_id == Auth::user()->id;
         }
 

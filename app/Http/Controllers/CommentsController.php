@@ -29,12 +29,28 @@ class CommentsController extends Controller
 
     public function create(Request $request)
     {
-        return "test";
+        $type = $request->query("type");
+        $key = $request->query("key");
+
+        if (!$type || !$key) {
+            abort(400, 'Invalid input, expected entity type and entity key.');
+        }
+
+        $origin = $request->query("origin", "/");
+        return view("comments.create", compact('comment', 'origin', 'type', 'key'));
     }
 
-    public function store(Requests\CommentRequest $request)
+    public function store(CommentRequest $request)
     {
-        Comment::create($request->all());
+
+        $model = $request->get("entity_type");
+        $entity = $model::findOrFail($request->get("entity_id"));
+
+        $comment = new Comment($request->all());
+        $comment->user_id = \Auth::user()->id;
+
+        $entity->comments()->save($comment);
+
         return redirect($request->query("origin", "/"));
     }
 

@@ -289,7 +289,12 @@ Mijn profiel
 </div>
 
 <div class="row">
-	<h1 class="caption">Opmerkingen</h1>
+	<h1 class="caption">
+		Opmerkingen
+		<a href="{{ url('comments/new') }}?origin={{Request::path()}}&type={{urlencode('App\Member')}}&key={{$member->id}}">
+			<i class="glyphicon glyphicon-plus" aria-hidden="true" data-toggle="tooltip" title="" data-original-title="Opmerking toevoegen"></i>
+		</a>
+	</h1>
 	@each('partials.comments', $member->comments, 'comment')
 </div>
 

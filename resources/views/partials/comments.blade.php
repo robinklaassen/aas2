@@ -5,12 +5,12 @@
             @if($comment->is_secret)
             <i class="glyphicon glyphicon-eye-close"></i>
             @endif
-            Door {{$comment->user->volnaam}} op {{$comment->created_at}}
+            Door {{$comment->user->volnaam}} op {{$comment->updated_at}}
 
             @can('update', $comment)
             <a href="{{action('CommentsController@edit', [$comment->id, 'origin' => Request::path()])}}"><i class="glyphicon glyphicon-edit"></i></a>
             @endcan
-            
+
             @can('delete', $comment)
             <a href="{{action('CommentsController@delete', [$comment->id, 'origin' => Request::path()])}}"><i class="glyphicon glyphicon-remove"></i></a>
             @endcan

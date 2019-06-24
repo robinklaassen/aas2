@@ -13,8 +13,13 @@ Nieuwe opmerking
 <hr />
 
 @include ('errors.list')
+@php
+$qs = 'origin=' . urlencode($origin);
+@endphp
+{!! Form::open(['url' => 'comments?'. $qs , 'method' => 'POST']) !!}
 
-{!! Form::open(['url' => 'comments', 'method' => 'POST']) !!}
+{!! Form::hidden('entity_type', $type) !!}
+{!! Form::hidden('entity_id', $key) !!}
 
 @include ('comments.form')
 
