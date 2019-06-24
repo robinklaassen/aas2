@@ -20,5 +20,7 @@ class CommentScope implements Scope
         if (!(\Auth::check() && \Auth::user()->is_admin)) {
             $builder->where('is_secret', '=', false);
         }
+
+        $builder->orderBy('updated_at', 'desc');
     }
 }

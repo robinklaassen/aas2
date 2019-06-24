@@ -231,5 +231,5 @@ Route::get("comments/{comment}/delete", "CommentsController@delete")->middleware
 Route::delete("comments/{comment}", "CommentsController@destroy")->middleware('can:delete,comment');
 Route::get("comments/{comment}/edit", "CommentsController@edit")->middleware('can:update,comment');
 Route::patch("comments/{comment}", "CommentsController@update")->middleware('can:update,comment');
-Route::get("comments/{comment}/new", "CommentsController@create")->middleware('can:create,App\Comment');
+Route::get("comments/new", "CommentsController@create")->middleware('can:create,App\Comment');
 Route::post("comments", "CommentsController@store")->middleware('can:create,App\Comment');
