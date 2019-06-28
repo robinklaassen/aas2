@@ -8,7 +8,7 @@ Nieuwe opmerking
 
 
 <h1>Nieuw opmerking</h1>
-<h4>voor ...</h4>
+<h4>voor {{\App\Comment::getEntityDescriptionByKey($type, $key)}}</h4>
 
 <hr />
 
