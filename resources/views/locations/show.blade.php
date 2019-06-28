@@ -1,7 +1,7 @@
 @extends('master')
 
 @section('title')
-	{{ $location->naam }}
+{{ $location->naam }}
 @endsection
 
 
@@ -21,7 +21,7 @@
 	</div>
 </div>
 
-<hr/>
+<hr />
 
 <div id="map-canvas" style="width:100%; height:300px; margin-bottom:10px;"></div>
 
@@ -69,52 +69,62 @@
 			</tr>
 		</table>
 	</div>
-	
+
 	<div class="col-md-6">
 		<table class="table table-hover">
 			<caption>Kampen ({{$location->events()->where('type','kamp')->count()}})</caption>
 			@forelse ($location->events()->where('type','kamp')->orderBy('datum_start','desc')->get() as $event)
-				<tr>
-					<td><a href="{{ url('/events', $event->id) }}">{{ $event->naam }}</a></td>
-					<td>
-						@if ($event->reviews->count() > 0)
-							<a href="{{ url('/locations', [$location->id, 'reviews', $event->id]) }}">
-								<span class="glyphicon glyphicon-dashboard" aria-hidden="true" data-toggle="tooltip" title="Enquetes bekijken"></span>
-							</a>
-						@endif
-					</td>
-					<td>{{ $event->code }}</td>
-				</tr>
+			<tr>
+				<td><a href="{{ url('/events', $event->id) }}">{{ $event->naam }}</a></td>
+				<td>
+					@if ($event->reviews->count() > 0)
+					<a href="{{ url('/locations', [$location->id, 'reviews', $event->id]) }}">
+						<span class="glyphicon glyphicon-dashboard" aria-hidden="true" data-toggle="tooltip" title="Enquetes bekijken"></span>
+					</a>
+					@endif
+				</td>
+				<td>{{ $event->code }}</td>
+			</tr>
 			@empty
-				<tr><td>Geen kampen gevonden</td></tr>
+			<tr>
+				<td>Geen kampen gevonden</td>
+			</tr>
 			@endforelse
 		</table>
-	
+
 		<table class="table table-hover">
 			<caption>Trainingen ({{$location->events()->where('type','training')->count()}})</caption>
 			@forelse ($location->events()->where('type','training')->orderBy('datum_start','desc')->get() as $event)
-				<tr>
-					<td><a href="{{ url('/events', $event->id) }}">{{ $event->naam }}</a></td>
-					<td>{{ $event->code }}</td>
-				</tr>
+			<tr>
+				<td><a href="{{ url('/events', $event->id) }}">{{ $event->naam }}</a></td>
+				<td>{{ $event->code }}</td>
+			</tr>
 			@empty
-				<tr><td>Geen trainingen gevonden</td></tr>
+			<tr>
+				<td>Geen trainingen gevonden</td>
+			</tr>
 			@endforelse
 		</table>
-	
+
 		<table class="table table-hover">
 			<caption>Overige evenementen ({{$location->events()->where('type','overig')->count()}})</caption>
 			@forelse ($location->events()->where('type','overig')->orderBy('datum_start','desc')->get() as $event)
-				<tr>
-					<td><a href="{{ url('/events', $event->id) }}">{{ $event->naam }}</a></td>
-					<td>{{ $event->code }}</td>
-				</tr>
+			<tr>
+				<td><a href="{{ url('/events', $event->id) }}">{{ $event->naam }}</a></td>
+				<td>{{ $event->code }}</td>
+			</tr>
 			@empty
-				<tr><td>Geen overige evenementen gevonden</td></tr>
+			<tr>
+				<td>Geen overige evenementen gevonden</td>
+			</tr>
 			@endforelse
 		</table>
 	</div>
-	
+
+	<div class="col-md-12">
+		@include('partials.comments', [ 'comments' => $location->comments, 'type' => 'App\Location', 'key' => $location->id ])
+	</div>
+
 </div>
 @endsection
 
@@ -124,29 +134,34 @@
 
 <!-- Initialize map -->
 <script type="text/javascript">
-function initialize() {
-	// First initialize map
-	var geocoder = new google.maps.Geocoder();
-	var mapOptions = {
-		center: { lat: 52.31, lng: 5.55},
-		zoom: 8
-	};
-	var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-	
-	// Then code address and find
-	var address = '<?php echo $locString; ?>';
-	geocoder.geocode( { 'address': address}, function(results, status) {
-      if (status == google.maps.GeocoderStatus.OK) {
-        map.setCenter(results[0].geometry.location);
-        var marker = new google.maps.Marker({
-            map: map,
-            position: results[0].geometry.location
-        });
-      } else {
-        alert("Geocode was not successful for the following reason: " + status);
-      }
-    });
-}
-google.maps.event.addDomListener(window, 'load', initialize);
+	function initialize() {
+		// First initialize map
+		var geocoder = new google.maps.Geocoder();
+		var mapOptions = {
+			center: {
+				lat: 52.31,
+				lng: 5.55
+			},
+			zoom: 8
+		};
+		var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+
+		// Then code address and find
+		var address = '<?php echo $locString; ?>';
+		geocoder.geocode({
+			'address': address
+		}, function(results, status) {
+			if (status == google.maps.GeocoderStatus.OK) {
+				map.setCenter(results[0].geometry.location);
+				var marker = new google.maps.Marker({
+					map: map,
+					position: results[0].geometry.location
+				});
+			} else {
+				alert("Geocode was not successful for the following reason: " + status);
+			}
+		});
+	}
+	google.maps.event.addDomListener(window, 'load', initialize);
 </script>
 @endsection

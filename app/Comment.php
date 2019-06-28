@@ -7,6 +7,27 @@ use App\Scopes\CommentScope;
 
 class Comment extends Model
 {
+    public static function getEntityDescription($entityType, $entity)
+    {
+        switch ($entityType) {
+            case 'App\Member':
+            case 'App\Participant':
+                return $entity->volnaam;
+            case 'App\Location':
+                return $entity->naam;
+            case 'App\Event':
+                return '(' . $entity->code . ')' . $entity->naam;
+            default:
+                return "Onbekende entity";
+        }
+    }
+
+    public static function getEntityDescriptionByKey($entityType, $key)
+    {
+        $entity = $entityType::findOrFail($key);
+        return Comment::getEntityDescription($entityType, $entity);
+    }
+
     public $timestamps = true;
     protected $table = 'comments';
 
@@ -30,17 +51,6 @@ class Comment extends Model
 
     public function getEntityDescriptionAttribute()
     {
-        switch ($this->entity_type) {
-            case 'App\Member':
-            case 'App\Participant':
-                return $this->entity->volnaam;
-            case 'App\Location':
-                return $this->entity->naam;
-            case 'App\Event':
-                return '(' . $this->entity->code . ')' . $this->entity->naam;
-
-            default:
-                return "Onbekende entity";
-        }
+        return Comment::getEntityDescription($this->entity_type, $this->entity);
     }
 }
