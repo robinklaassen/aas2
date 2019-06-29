@@ -19,19 +19,19 @@ class RegistationTest extends TestCase
 {
     private static function clearDB()
     {
-        DB::statement("
-        delete from users
-         where profile_type = 'App\Participant'
-           and profile_id in (select p.id from participants p where p.achternaam = 'Test' )
-        ");
-        DB::statement("
-        delete from event_participant
-         where participant_id in (select p.id from participants p where p.achternaam = 'Test' )
-        ");
-        DB::statement("
-        delete from participants
-         where achternaam = 'Test'
-        ");
+        // DB::statement("
+        // delete from users
+        //  where profile_type = 'App\Participant'
+        //    and profile_id in (select p.id from participants p where p.achternaam = 'Test' )
+        // ");
+        // DB::statement("
+        // delete from event_participant
+        //  where participant_id in (select p.id from participants p where p.achternaam = 'Test' )
+        // ");
+        // DB::statement("
+        // delete from participants
+        //  where achternaam = 'Test'
+        // ");
     }
     use DatabaseTransactions;
     use WithoutMiddleware;
@@ -82,7 +82,7 @@ class RegistationTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        RegistationTest::clearDB();
+        // RegistationTest::clearDB();
         $this->event = Event::findOrFail($this->data["selected_camp"]);
         $this->participantData = [
             "voornaam" => $this->data["voornaam"],
@@ -112,11 +112,11 @@ class RegistationTest extends TestCase
         ];
     }
 
-    protected function tearDown(): void
-    {
-        RegistationTest::clearDB();
-        parent::tearDown();
-    }
+    // protected function tearDown(): void
+    // {
+    //     RegistationTest::clearDB();
+    //     parent::tearDown();
+    // }
 
     /**
      * Tests the participants registration with ideal provided by mollie
