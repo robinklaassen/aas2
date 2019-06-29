@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use App\Member;
 use App\User;
+use Illuminate\Support\Str;
 
 class CommentTest extends TestCase
 {
