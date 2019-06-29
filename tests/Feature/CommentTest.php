@@ -67,44 +67,42 @@ class CommentTest extends TestCase
     }
 
 
-    // public function testDoesntSeeSecretComment()
-    // {
-    //     $user = User::findOrFail(2);
-    //     $this->actingAs($user)
-    //         ->get("/members/2")
-    //         ->assertDontSee("This is a testing comment");
+    public function testDoesntSeeSecretComment()
+    {
+        $user = User::findOrFail(2);
+        $comment = new Comment();
 
-    //     $comment = new Comment();
+        $random = Str::random(40);
+        $text = "Testing " . $random;
 
-    //     $comment->user_id = 1;
-    //     $comment->text = "This is a testing comment";
-    //     $comment->is_secret = true;
+        $comment->user_id = 1;
+        $comment->text = $text;
+        $comment->is_secret = true;
 
-    //     $this->member->comments()->save($comment);
+        $user->profile->comments()->save($comment);
 
-    //     $this->actingAs($user)
-    //         ->get("/members/2")
-    //         ->assertSee("This is a testing comment");
-    // }
+        $this->actingAs($user)
+            ->get("/profile")
+            ->assertDontSee($text);
+    }
 
 
-    // public function testAdminSeesSecretComment()
-    // {
-    //     $user = User::findOrFail(1);
-    //     $this->actingAs($user)
-    //         ->get("/members/2")
-    //         ->assertDontSee("This is a testing comment");
+    public function testAdminSeesSecretComment()
+    {
+        $user = User::findOrFail(2);
 
-    //     $comment = new Comment();
+        $comment = new Comment();
+        $random = Str::random(40);
+        $text = "Testing " . $random;
 
-    //     $comment->user_id = 1;
-    //     $comment->text = "This is a testing comment";
-    //     $comment->is_secret = true;
+        $comment->user_id = 1;
+        $comment->text  = $text;
+        $comment->is_secret = true;
 
-    //     $this->member->comments()->save($comment);
+        $user->profile->comments()->save($comment);
 
-    //     $this->actingAs($user)
-    //         ->get("/members/2")
-    //         ->assertSee("This is a testing comment");
-    // }
+        $this->actingAs(User::findOrFail(1))
+            ->get("/members/2")
+            ->assertSee($text);
+    }
 }
