@@ -261,17 +261,17 @@ class RegistrationController extends Controller
 			$message->to('kantoor@anderwijs.nl', 'Kantoorcommissie Anderwijs')->subject('AAS 2.0 - Nieuwe deelnemer');
 		});
 
-		$iDeal = $request->iDeal;
+		$ideal = $request->ideal;
 
 		// Send confirmation email to newly registered participant
-		Mail::send('emails.newParticipantConfirm', compact('participant', 'camp', 'givenCourses', 'username', 'password', 'incomeTable', 'toPay', 'iDeal'), function ($message) use ($participant) {
+		Mail::send('emails.newParticipantConfirm', compact('participant', 'camp', 'givenCourses', 'username', 'password', 'incomeTable', 'toPay', 'ideal'), function ($message) use ($participant) {
 			$message->from('kantoor@anderwijs.nl', 'Kantoorcommissie Anderwijs');
 
 			$message->to($participant->email_ouder, 'dhr./mw. ' . $participant->tussenvoegsel . ' ' . $participant->achternaam)->subject('ANDERWIJS - Bevestiging van inschrijving');
 		});
 
 		// If they want to pay with iDeal, set up the payment now
-		if ($iDeal == '1' && $camp->prijs != 0) {
+		if ($ideal == '1' && $camp->prijs != 0) {
 			return Mollie::process($payment);
 		} else {
 			// Return closing view
