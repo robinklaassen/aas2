@@ -204,7 +204,7 @@ class RegistrationController extends Controller
 		$request->merge(array('hoebij' => $hb_string));
 
 		// Store participant in database
-		$participant = Participant::create($request->except('selected_camp', 'vak0', 'vak1', 'vak2', 'vak3', 'vak4', 'vak5', 'vakinfo0', 'vakinfo1', 'vakinfo2', 'vakinfo3', 'vakinfo4', 'vakinfo5', 'iDeal', 'hoebij_anders', 'voorwaarden', 'privacy'));
+		$participant = Participant::create($request->except('selected_camp', 'vak0', 'vak1', 'vak2', 'vak3', 'vak4', 'vak5', 'vakinfo0', 'vakinfo1', 'vakinfo2', 'vakinfo3', 'vakinfo4', 'vakinfo5', 'ideal', 'hoebij_anders', 'voorwaarden', 'privacy'));
 
 		// Attach to camp
 		$participant->events()->attach($request->selected_camp);
