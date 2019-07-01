@@ -416,18 +416,18 @@ class ProfileController extends Controller
 				});
 
 
-				$iDeal = $request->iDeal;
+				$ideal = $request->ideal;
 				$type = "existing";
 
 				// Send confirmation email to parent
-				Mail::send('emails.participantOnCampConfirm', compact('participant', 'camp', 'givenCourses', 'incomeTable', 'toPay', 'iDeal', 'type'), function ($message) use ($participant) {
+				Mail::send('emails.participantOnCampConfirm', compact('participant', 'camp', 'givenCourses', 'incomeTable', 'toPay', 'ideal', 'type'), function ($message) use ($participant) {
 					$message->from('kantoor@anderwijs.nl', 'Kantoorcommissie Anderwijs');
 
 					$message->to($participant->email_ouder, 'dhr./mw. ' . $participant->tussenvoegsel . ' ' . $participant->achternaam)->subject('ANDERWIJS - Bevestiging van aanmelding');
 				});
 
 				// If they want to pay with iDeal, set up the payment now
-				if ($iDeal == '1' && $camp->prijs != 0) {
+				if ($ideal == '1' && $camp->prijs != 0) {
 					return Mollie::process($payment);
 				} else {
 					// Return to profile

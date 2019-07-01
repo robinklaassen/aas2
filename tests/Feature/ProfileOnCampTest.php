@@ -95,7 +95,7 @@ class ProfileNewCampTest extends TestCase
                 ->andReturns(redirect("https://mollie-backend"));
         }));
 
-        $this->data["iDeal"] = 1;
+        $this->data["ideal"] = 1;
         $response = $this->actingAs($this->user)->put(action("ProfileController@onCampSave"), $this->data);
 
         $response->assertStatus(302);
