@@ -12,7 +12,6 @@ class CommentsController extends Controller
     {
         // You need to be logged in and have admin rights to access
         $this->middleware('auth');
-        $this->middleware('admin');
     }
 
     public function edit(Comment $comment, Request $request)
@@ -23,7 +22,11 @@ class CommentsController extends Controller
 
     public function update(Comment $comment, CommentRequest $request)
     {
+        if ($request->get("is_secret") && !\Auth::user()->is_admin) {
+            abort(403, 'Cannot create secret comments as non-admin');
+        }
         $comment->update($request->all());
+
         return redirect($request->query("origin", "/"));
     }
 
@@ -42,12 +45,16 @@ class CommentsController extends Controller
 
     public function store(CommentRequest $request)
     {
+        if ($request->get("is_secret") && !\Auth::user()->is_admin) {
+            abort(403, 'Cannot create secret comments as non-admin');
+        }
 
         $model = $request->get("entity_type");
         $entity = $model::findOrFail($request->get("entity_id"));
 
         $comment = new Comment($request->all());
         $comment->user_id = \Auth::user()->id;
+
 
         $entity->comments()->save($comment);
 
