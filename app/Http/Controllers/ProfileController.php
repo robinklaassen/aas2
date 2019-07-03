@@ -431,7 +431,7 @@ class ProfileController extends Controller
 					->existing(true);
 				$toPay = $payment->getTotalAmount();
 
-				$ideal = $request->ideal;
+				$iDeal = $request->iDeal;
 				$type = "existing";
 
 				// Send update to office committee
@@ -446,12 +446,12 @@ class ProfileController extends Controller
 					$camp,
 					$givenCourses,
 					$toPay,
-					$ideal,
+					$iDeal,
 					$type
 				));
 
 				// If they want to pay with iDeal, set up the payment now
-				if ($ideal == '1' && $camp->prijs != 0) {
+				if ($iDeal == '1' && $camp->prijs != 0) {
 					return Mollie::process($payment);
 				} else {
 					// Return to profile

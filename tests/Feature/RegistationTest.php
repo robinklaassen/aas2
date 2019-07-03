@@ -68,7 +68,7 @@ class RegistationTest extends TestCase
         "vakinfo4" => "",
         "vak5" => 0,
         "vakinfo5" => "",
-        "ideal" => 1,
+        "iDeal" => 1,
         "hoebij" => ["Nieuwsbrief school"],
         "hoebij_anders" => "",
         "opmerkingen" => "",
@@ -119,7 +119,7 @@ class RegistationTest extends TestCase
     }
 
     /**
-     * Tests the participants registration with ideal provided by mollie
+     * Tests the participants registration with iDeal provided by mollie
      */
     public function testParticipantRegistrationWithIDeal()
     {
@@ -144,7 +144,7 @@ class RegistationTest extends TestCase
                 ->andReturns(redirect("https://mollie-backend"));
         }));
 
-        $this->data["ideal"] = '1';
+        $this->data["iDeal"] = '1';
         $response = $this->post('/register-participant', $this->data);
 
         // check db
@@ -157,7 +157,7 @@ class RegistationTest extends TestCase
 
 
     /**
-     * Tests the participants registration without ideal
+     * Tests the participants registration without iDeal
      */
     public function testParticipantRegistrationWithoutIDeal()
     {
@@ -167,7 +167,7 @@ class RegistationTest extends TestCase
             $mock->shouldNotReceive('process');
         }));
 
-        $this->data["ideal"] = 0;
+        $this->data["iDeal"] = 0;
 
         $response = $this->post('/register-participant', $this->data);
 

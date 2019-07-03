@@ -73,13 +73,13 @@
 		<div class="col-sm-6 form-group" style="margin-bottom:30px;">
 			<div class="radio">
 				 <label>
-					{!! Form::radio('ideal', 1, true) !!}
+					{!! Form::radio('iDeal', 1, true) !!}
 					<b>Direct betalen met iDeal</b>
 				 </label>
 			</div>
 			<div class="radio">
 				 <label>
-						{!! Form::radio('ideal', 0) !!}
+						{!! Form::radio('iDeal', 0) !!}
 					Per bankoverschrijving (instructies in de bevestigingsmail)
 				 </label>
 			</div>
