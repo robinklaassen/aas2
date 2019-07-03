@@ -119,7 +119,7 @@ class ParticipantRegistrationTest extends TestCase
     }
 
     /**
-     * Tests the participants registration with ideal provided by mollie
+     * Tests the participants registration with iDeal provided by mollie
      */
     public function testParticipantRegistrationWithIDeal()
     {
@@ -157,7 +157,7 @@ class ParticipantRegistrationTest extends TestCase
 
 
     /**
-     * Tests the participants registration without ideal
+     * Tests the participants registration without iDeal
      */
     public function testParticipantRegistrationWithoutIDeal()
     {

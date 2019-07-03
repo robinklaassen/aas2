@@ -7,12 +7,15 @@ use App\Facades\Mollie;
 
 use Illuminate\Http\Request;
 use Input;
-use Mail;
 
-use App\Member;
 use App\Participant;
 use App\Event;
-use App\Course;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\internal\MemberOnEventNotification;
+use App\Mail\internal\CoverageChangedNotification;
+use App\Mail\internal\NewDeclaration;
+use App\Mail\internal\ParticipantOnEventNotification;
+use App\Mail\internal\ParticipantEditedEventCourseInformationNotification;
 
 class ProfileController extends Controller
 {
@@ -225,10 +228,16 @@ class ProfileController extends Controller
 
 				// If coverage status changes, send email to camp committe
 				if ($statusBefore != $statusAfter) {
-
-					\Mail::send('emails.coverageChangeNotification', compact('member', 'camp', 'course', 'courseLevelFrom', 'courseLevelTo', 'statusAfter'), function ($message) {
-						$message->to('kamp@anderwijs.nl', 'Kampcommissie Anderwijs')->subject('AAS 2.0 - Vakdekking gewijzigd');
-					});
+					Mail::send(
+						new CoverageChangedNotification(
+							$member,
+							$camp,
+							$course,
+							$courseLevelFrom,
+							$courseLevelTo,
+							$statusAfter
+						)
+					);
 				}
 			} else {
 				// If not, just update the course
@@ -269,10 +278,16 @@ class ProfileController extends Controller
 
 			// If coverage status changes, send email to camp committe
 			if ($statusBefore != $statusAfter) {
-
-				\Mail::send('emails.coverageChangeNotification', compact('member', 'camp', 'course', 'courseLevelFrom', 'courseLevelTo', 'statusAfter'), function ($message) {
-					$message->to('kamp@anderwijs.nl', 'Kampcommissie Anderwijs')->subject('AAS 2.0 - Vakdekking gewijzigd');
-				});
+				Mail::send(
+					new CoverageChangedNotification(
+						$member,
+						$camp,
+						$course,
+						$courseLevelFrom,
+						$courseLevelTo,
+						$statusAfter
+					)
+				);
 			}
 		} else {
 			// If not, just update the course
@@ -311,10 +326,16 @@ class ProfileController extends Controller
 
 			// If coverage status changes, send email to camp committe
 			if ($statusBefore != $statusAfter) {
-
-				\Mail::send('emails.coverageChangeNotification', compact('member', 'camp', 'course', 'courseLevelFrom', 'courseLevelTo', 'statusAfter'), function ($message) {
-					$message->to('kamp@anderwijs.nl', 'Kampcommissie Anderwijs')->subject('AAS 2.0 - Vakdekking gewijzigd');
-				});
+				Mail::send(
+					new CoverageChangedNotification(
+						$member,
+						$camp,
+						$course,
+						$courseLevelFrom,
+						$courseLevelTo,
+						$statusAfter
+					)
+				);
 			}
 		} else {
 			// If not, just update the course
@@ -370,14 +391,14 @@ class ProfileController extends Controller
 			} else {
 
 				// Send update to camp committee
-				\Mail::send('emails.memberOnCampNotification', ['member' => $member, 'camp' => $camp], function ($message) {
-					$message->to('kamp@anderwijs.nl', 'Kampcommissie Anderwijs')->subject('AAS 2.0 - Lid op kamp');
-				});
+				Mail::send(new MemberOnEventNotification($member, $camp));
 
 				// Send confirmation to member
-				\Mail::send('emails.memberOnCampConfirmation', ['member' => $member, 'camp' => $camp], function ($message) use ($member) {
-					$message->to($member->email_anderwijs, $member->voornaam . ' ' . $member->tussenvoegsel . ' ' . $member->achternaam)->subject('AAS 2.0 - Aangemeld voor kamp');
-				});
+				Mail::send(new \App\Mail\members\OnEventConfirmation($member, $camp));
+
+				// Mail::send('emails.memberOnCampConfirmation', ['member' => $member, 'camp' => $camp], function ($message) use ($member) {
+				// 	$message->to($member->email_anderwijs, $member->voornaam . ' ' . $member->tussenvoegsel . ' ' . $member->achternaam)->subject('AAS 2.0 - Aangemeld voor kamp');
+				// });
 
 				return redirect('profile')->with([
 					'flash_message' => 'Je gaat op kamp!'
@@ -410,21 +431,24 @@ class ProfileController extends Controller
 					->existing(true);
 				$toPay = $payment->getTotalAmount();
 
-				// Send update to office committee
-				\Mail::send('emails.participantOnCampNotification', ['participant' => $participant, 'camp' => $camp], function ($message) {
-					$message->to('kantoor@anderwijs.nl', 'Kantoorcommissie Anderwijs')->subject('AAS 2.0 - Deelnemer op kamp');
-				});
-
-
 				$iDeal = $request->iDeal;
 				$type = "existing";
 
-				// Send confirmation email to parent
-				Mail::send('emails.participantOnCampConfirm', compact('participant', 'camp', 'givenCourses', 'incomeTable', 'toPay', 'iDeal', 'type'), function ($message) use ($participant) {
-					$message->from('kantoor@anderwijs.nl', 'Kantoorcommissie Anderwijs');
+				// Send update to office committee
+				Mail::send(new ParticipantOnEventNotification(
+					$participant,
+					$camp
+				));
 
-					$message->to($participant->email_ouder, 'dhr./mw. ' . $participant->tussenvoegsel . ' ' . $participant->achternaam)->subject('ANDERWIJS - Bevestiging van aanmelding');
-				});
+				// Send confirmation email to parent
+				Mail::send(new \App\Mail\participants\OnEventConfirmation(
+					$participant,
+					$camp,
+					$givenCourses,
+					$toPay,
+					$iDeal,
+					$type
+				));
 
 				// If they want to pay with iDeal, set up the payment now
 				if ($iDeal == '1' && $camp->prijs != 0) {
@@ -482,9 +506,12 @@ class ProfileController extends Controller
 		$camp = \App\Event::findOrFail($event_id);
 
 		// Send update to office committee
-		\Mail::send('emails.participantEditedCampNotification', ['participant' => $participant, 'camp' => $camp], function ($message) {
-			$message->to('kantoor@anderwijs.nl', 'Kantoorcommissie')->subject('AAS 2.0 - Vakken voor kamp bewerkt');
-		});
+		Mail::send(
+			new ParticipantEditedEventCourseInformationNotification(
+				$participant,
+				$camp
+			)
+		);
 
 		return redirect('profile')->with([
 			'flash_message' => 'De vakken voor dit kamp zijn bewerkt!'
@@ -509,8 +536,9 @@ class ProfileController extends Controller
 		// Create destination folder if not exists
 		$destination = public_path() . '/img/declarations/' . $member->id . '/';
 		if (!file_exists($destination)) {
-			mkdir($destination);
+			mkdir($destination, 0777, true);
 		}
+
 
 		// Check and move files
 		$file_numbers = [];
@@ -524,7 +552,7 @@ class ProfileController extends Controller
 
 				$file->move($destination, $newFilename);
 
-				$file_names[] = $newFilename;
+				$file_names[] = $destination . $newFilename;
 			}
 		}
 
@@ -569,19 +597,15 @@ class ProfileController extends Controller
 			//return $pdf->stream();
 
 			// Send email with data and files to treasurer and uploader
-			\Mail::send('emails.declaration', compact('member', 'inputData', 'totalAmount'), function ($message) use ($member, $destination, $file_names, $formFilePath) {
-				$message->to('penningmeester@anderwijs.nl', 'Penningmeester Anderwijs')
-					->cc($member->email_anderwijs, $member->voornaam . ' ' . $member->tussenvoegsel . ' ' . $member->achternaam)
-					//->bcc('aasman@anderwijs.nl', 'De geweldige AASman')
-					->from($member->email_anderwijs, $member->voornaam . ' ' . $member->tussenvoegsel . ' ' . $member->achternaam)
-					->subject('AAS 2.0 - Nieuwe declaratie');
-
-				$message->attach($formFilePath);
-
-				foreach ($file_names as $filename) {
-					$message->attach($destination . $filename);
-				}
-			});
+			Mail::send(
+				new NewDeclaration(
+					$member,
+					$formFilePath,
+					$inputData,
+					$totalAmount,
+					$file_names
+				)
+			);
 
 			return redirect('profile')->with([
 				'flash_message' => 'De declaratie is verstuurd!'

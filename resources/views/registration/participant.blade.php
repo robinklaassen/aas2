@@ -32,8 +32,6 @@ a:hover {
 @section('content')
 <!-- Dit is het formulier voor het inschrijven van een nieuwe deelnemer -->
 
-
-
 <h1><img src="https://www.anderwijs.nl/wp-content/uploads/2016/03/Test-6-2.png" alt="Logo Anderwijs" style="height:2.5em;margin-right:30px;vertical-align:bottom;"> <span style="white-space:nowrap;">Nieuwe deelnemer inschrijven</span></h1>
 
 <hr/>
@@ -234,13 +232,13 @@ a:hover {
 	<div class="col-sm-6 form-group">
 		<div class="radio">
 			 <label>
-				<input type="radio" name="iDeal" id="iDeal1" value="1" checked>
+				{!! Form::radio('iDeal', 1, true) !!}
 				<b>Direct betalen met iDeal</b>
 			 </label>
 		</div>
 		<div class="radio">
 			 <label>
-				<input type="radio" name="iDeal" id="iDeal0" value="0">
+				{!! Form::radio('iDeal', 2) !!}
 				Per bankoverschrijving (instructies in de bevestigingsmail)
 			 </label>
 		</div>
@@ -259,17 +257,17 @@ a:hover {
 		@foreach ($hoebij_options as $i => $option)
 			<div class="checkbox">
 				<label>
-					<input type="checkbox" name="hoebij[]" id="hoebij_{{$i+1}}" value="{{$option}}"> {{$option}}
+					{!! Form::checkbox('hoebij[]', $option) !!} {{ $option }}
 				</label>
 			</div>
 		@endforeach
 
 		<div class="checkbox form-inline">
 			<label>
-				<input type="checkbox" name="hoebij[]" id="hoebij_0" value="0"> Anders, namelijk: 
+				{!! Form::checkbox('hoebij[]', '0') !!} Anders, namelijk: 
 			</label>
-
-			<input class="form-control input-sm" type="text" name="hoebij_anders" id="hoebij_anders">
+			
+			{!! Form::text('hoebij_anders', null, ['class' => ['form-control', 'input-sm']]) !!}
 		</div>
 
 	</div>
@@ -284,24 +282,18 @@ a:hover {
 	<div class="col-sm-12">
 		<div class="checkbox">
 			<label>
-			<input type="checkbox" name="voorwaarden" id="check_voorwaarden" value="1" {{ (old('voorwaarden')) ? 'checked' : '' }}> Ik ga akkoord met de <a href="http://www.anderwijs.nl/algemene-voorwaarden/" target="_blank">algemene voorwaarden</a> voor deelname aan dit Anderwijskamp.
+				{!! Form::checkbox('voorwaarden', 1) !!} Ik ga akkoord met de <a href="http://www.anderwijs.nl/algemene-voorwaarden/" target="_blank">algemene voorwaarden</a> voor deelname aan dit Anderwijskamp.
 			</label>
 		</div>
 		<div class="checkbox">
 				<label>
-					<input type="checkbox" name="privacy" id="check_privacy" value="1" {{ (old('privacy')) ? 'checked' : '' }}> Ik geef Anderwijs toestemming om deze gegevens te verwerken zoals beschreven in het <a href="http://www.anderwijs.nl/anderwijs/privacy/" target="_blank">privacystatement</a>.
+					{!! Form::checkbox('privacy', 1) !!} Ik geef Anderwijs toestemming om deze gegevens te verwerken zoals beschreven in het <a href="http://www.anderwijs.nl/anderwijs/privacy/" target="_blank">privacystatement</a>.
 				</label>
 			</div>
 	</div>
 </div>
 
-<!--
-<div class="well">
-	<strong>Let op!</strong> Bij inschrijving gaat u automatisch akkoord met onze <a href="http://www.anderwijs.nl/algemene-voorwaarden/" target="_blank">algemene voorwaarden</a> (link wordt geopend in een nieuw venster). 
-</div>
--->
-
-<br>
+<br/>
 
 <div class="form-group">
 	<button class="btn btn-primary form-control" type="submit">Inschrijven</button>

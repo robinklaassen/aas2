@@ -30,7 +30,7 @@ class EventPayment implements PaymentInterface
 
     public function getTotalAmount(): float
     {
-        return round(($this->participant->incomeBasedDiscount() * $this->event->prijs) / 5) * 5;
+        return round(($this->participant->incomeBasedDiscount * $this->event->prijs) / 5) * 5;
     }
 
     public function getDescription(): string

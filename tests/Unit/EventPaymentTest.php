@@ -86,6 +86,6 @@ class PaymentTest extends TestCase
     {
         $partWithDiscount = Participant::findOrFail(2);
         $this->payment->participant($partWithDiscount);
-        $this->assertEquals($this->event->prijs * $partWithDiscount->incomeBasedDiscount(), $this->payment->getTotalAmount());
+        $this->assertEquals($this->event->prijs * $partWithDiscount->incomeBasedDiscount, $this->payment->getTotalAmount());
     }
 }

@@ -48,7 +48,7 @@ class ParticipantProfileOnCampTest extends TestCase
     }
 
     /**
-     * Tests to send a participant on camp from the profile page without ideal
+     * Tests to send a participant on camp from the profile page without iDeal
      *
      * @return void
      */
@@ -69,7 +69,7 @@ class ParticipantProfileOnCampTest extends TestCase
     }
 
     /**
-     * Tests to send a participant on camp from the profile page with ideal
+     * Tests to send a participant on camp from the profile page with iDeal
      *
      * @return void
      */

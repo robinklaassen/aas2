@@ -2,7 +2,8 @@
 
 use Illuminate\Database\Eloquent\Model;
 
-class Participant extends Model {
+class Participant extends Model
+{
 
 	const INCOME_DESCRIPTION_TABLE = [
 		0 => 'Meer dan € 3400 (geen korting)',
@@ -23,7 +24,8 @@ class Participant extends Model {
 	protected $dates = ['geboortedatum', 'inkomensverklaring'];
 
 	// Full name
-	public function getVolnaamAttribute() {
+	public function getVolnaamAttribute()
+	{
 		return str_replace('  ', ' ', $this->voornaam . ' ' . $this->tussenvoegsel . ' ' . $this->achternaam);
 	}
 
@@ -31,14 +33,24 @@ class Participant extends Model {
 	public function setPostcodeAttribute($value)
 	{
 		$value = strtoupper($value);
-		if (preg_match('/\d{4}[A-Z]{2}/', $value))
-		{
-			$this->attributes['postcode'] = substr($value,0,4) . ' ' . substr($value,4,2);
-		}
-		else
-		{
+		if (preg_match('/\d{4}[A-Z]{2}/', $value)) {
+			$this->attributes['postcode'] = substr($value, 0, 4) . ' ' . substr($value, 4, 2);
+		} else {
 			$this->attributes['postcode'] = $value;
 		}
+	}
+
+	public function getParentEmail()
+	{
+		return [
+			"email" => $this->email_ouder,
+			"name"  => $this->parentName,
+		];
+	}
+
+	public function getParentNameAttribute()
+	{
+		return 'dhr./mw. ' . $this->tussenvoegsel . ' ' . $this->achternaam;
 	}
 
 	// A participant belongs to many events
@@ -53,11 +65,13 @@ class Participant extends Model {
 		return $this->morphOne('App\User', 'profile');
 	}
 
-	public function incomeDescription() {
+	public function getIncomeDescriptionAttribute()
+	{
 		return $this::INCOME_DESCRIPTION_TABLE[$this->inkomen];
 	}
 
-	public function incomeBasedDiscount(): float {
+	public function getIncomeBasedDiscountAttribute(): float
+	{
 		return $this::INCOME_DISCOUNT_TABLE[$this->inkomen];
 	}
 }
