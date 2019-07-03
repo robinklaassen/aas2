@@ -48,7 +48,7 @@ class ProfileNewCampTest extends TestCase
     }
 
     /**
-     * Tests to send a participant on camp from the profile page without ideal
+     * Tests to send a participant on camp from the profile page without iDeal
      *
      * @return void
      */
@@ -69,7 +69,7 @@ class ProfileNewCampTest extends TestCase
     }
 
     /**
-     * Tests to send a participant on camp from the profile page with ideal
+     * Tests to send a participant on camp from the profile page with iDeal
      *
      * @return void
      */
@@ -95,7 +95,7 @@ class ProfileNewCampTest extends TestCase
                 ->andReturns(redirect("https://mollie-backend"));
         }));
 
-        $this->data["ideal"] = 1;
+        $this->data["iDeal"] = 1;
         $response = $this->actingAs($this->user)->put(action("ProfileController@onCampSave"), $this->data);
 
         $response->assertStatus(302);

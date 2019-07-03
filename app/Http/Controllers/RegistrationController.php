@@ -3,14 +3,17 @@
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use Input;
 use App\Member;
 use App\Participant;
 use App\Event;
 use App\Course;
 use Mail;
+use App\Mail\participants\ParticipantRegistrationConfirmation;
+use App\Mail\internal\NewParticipantNotification;
 use App\Helpers\Payment\EventPayment;
 use App\Facades\Mollie;
+use App\Mail\internal\NewMemberNotification;
+use App\Mail\members\MemberRegistrationConfirmation;
 
 class RegistrationController extends Controller
 {
@@ -124,18 +127,22 @@ class RegistrationController extends Controller
 		$camp = Event::findOrFail($request->selected_camp);
 
 		// Send confirmation email to newly registered member
-		Mail::send('emails.newMemberConfirm', compact('member', 'camp', 'givenCourses', 'username', 'password'), function ($message) use ($member) {
-			$message->from('kamp@anderwijs.nl', 'Kampcommissie Anderwijs');
-
-			$message->to($member->email, $member->voornaam . ' ' . $member->tussenvoegsel . ' ' . $member->achternaam);
-
-			$message->subject('ANDERWIJS - Bevestiging van inschrijving');
-		});
+		Mail::send(
+			new MemberRegistrationConfirmation(
+				$member,
+				$camp,
+				$givenCourses,
+				$password
+			)
+		);
 
 		// Send update to camp committee
-		Mail::send('emails.newMemberNotification', ['member' => $member, 'camp' => $camp], function ($message) {
-			$message->to('kamp@anderwijs.nl', 'Kampcommissie Anderwijs')->subject('AAS 2.0 - Nieuwe vrijwilliger');
-		});
+		Mail::send(
+			new NewMemberNotification(
+				$member,
+				$camp
+			)
+		);
 
 		// Return closing view
 		return view('registration.memberStored');
@@ -204,7 +211,7 @@ class RegistrationController extends Controller
 		$request->merge(array('hoebij' => $hb_string));
 
 		// Store participant in database
-		$participant = Participant::create($request->except('selected_camp', 'vak0', 'vak1', 'vak2', 'vak3', 'vak4', 'vak5', 'vakinfo0', 'vakinfo1', 'vakinfo2', 'vakinfo3', 'vakinfo4', 'vakinfo5', 'ideal', 'hoebij_anders', 'voorwaarden', 'privacy'));
+		$participant = Participant::create($request->except('selected_camp', 'vak0', 'vak1', 'vak2', 'vak3', 'vak4', 'vak5', 'vakinfo0', 'vakinfo1', 'vakinfo2', 'vakinfo3', 'vakinfo4', 'vakinfo5', 'iDeal', 'hoebij_anders', 'voorwaarden', 'privacy'));
 
 		// Attach to camp
 		$participant->events()->attach($request->selected_camp);
@@ -254,24 +261,28 @@ class RegistrationController extends Controller
 			->participant($participant)
 			->existing(false);
 		$toPay = $payment->getTotalAmount();
-
+		$iDeal = $request->iDeal;
 
 		// Send update to office committee
-		Mail::send('emails.newParticipantNotification', ['participant' => $participant, 'camp' => $camp], function ($message) {
-			$message->to('kantoor@anderwijs.nl', 'Kantoorcommissie Anderwijs')->subject('AAS 2.0 - Nieuwe deelnemer');
-		});
+		Mail::send(new NewParticipantNotification(
+			$participant,
+			$camp
+		));
 
-		$ideal = $request->ideal;
-
-		// Send confirmation email to newly registered participant
-		Mail::send('emails.newParticipantConfirm', compact('participant', 'camp', 'givenCourses', 'username', 'password', 'incomeTable', 'toPay', 'ideal'), function ($message) use ($participant) {
-			$message->from('kantoor@anderwijs.nl', 'Kantoorcommissie Anderwijs');
-
-			$message->to($participant->email_ouder, 'dhr./mw. ' . $participant->tussenvoegsel . ' ' . $participant->achternaam)->subject('ANDERWIJS - Bevestiging van inschrijving');
-		});
+		// Send confirmation email to newly registered participant's parent
+		Mail::send(
+			new ParticipantRegistrationConfirmation(
+				$participant,
+				$camp,
+				$givenCourses,
+				$password,
+				$toPay,
+				$iDeal
+			)
+		);
 
 		// If they want to pay with iDeal, set up the payment now
-		if ($ideal == '1' && $camp->prijs != 0) {
+		if ($iDeal == '1' && $camp->prijs != 0) {
 			return Mollie::process($payment);
 		} else {
 			// Return closing view

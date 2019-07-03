@@ -232,13 +232,13 @@ a:hover {
 	<div class="col-sm-6 form-group">
 		<div class="radio">
 			 <label>
-				{!! Form::radio('ideal', 1, true) !!}
+				{!! Form::radio('iDeal', 1, true) !!}
 				<b>Direct betalen met iDeal</b>
 			 </label>
 		</div>
 		<div class="radio">
 			 <label>
-				{!! Form::radio('ideal', 2) !!}
+				{!! Form::radio('iDeal', 2) !!}
 				Per bankoverschrijving (instructies in de bevestigingsmail)
 			 </label>
 		</div>

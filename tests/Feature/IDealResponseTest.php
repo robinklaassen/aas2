@@ -9,6 +9,7 @@ use App\Facades\Mollie;
 use Tests\TestCase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use App\Mail\participants\IDealConfirmation;
 
 class FakePaymentMetadata
 {
@@ -110,6 +111,8 @@ class IDealResponse extends TestCase
     public function testIDealWebhook()
     {
         Mail::fake();
+        Mail::assertNothingSent();
+
         DB::statement(
             "
             insert into event_participant
@@ -130,6 +133,8 @@ class IDealResponse extends TestCase
 
         $response = $this->post(action('iDealController@webhook'), ["id" => $someId]);
         $response->assertStatus(200);
+
+        Mail::assertSent(IDealConfirmation::class);
 
         $this->assertDatabaseHas('event_participant', [
             "event_id" => $this->event->id,

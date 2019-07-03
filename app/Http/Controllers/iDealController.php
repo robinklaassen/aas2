@@ -8,6 +8,7 @@ use Mail;
 use App\Facades\Mollie;
 
 use Illuminate\Http\Request;
+use App\Mail\participants\IDealConfirmation;
 
 # The iDealController is for the Mollie API iDeal webhook and response routes
 class iDealController extends Controller
@@ -16,7 +17,6 @@ class iDealController extends Controller
 	# iDeal webhook
 	public function webhook(Request $request)
 	{
-
 
 		// Retrieve payment info
 		$payment  = Mollie::api()->payments->get($request->id);
@@ -31,11 +31,14 @@ class iDealController extends Controller
 			$participant->events()->updateExistingPivot($camp_id, ['datum_betaling' => date('Y-m-d')]);
 
 			// Send (yet another) confirmation email to parents
-			Mail::send('emails.iDealConfirm', compact('participant', 'camp', 'type'), function ($message) use ($participant) {
-				$message->from('kantoor@anderwijs.nl', 'Kantoorcommissie Anderwijs');
 
-				$message->to($participant->email_ouder, 'dhr./mw. ' . $participant->tussenvoegsel . ' ' . $participant->achternaam)->subject('ANDERWIJS - Betaling via iDeal ontvangen');
-			});
+			Mail::send(
+				new IDealConfirmation(
+					$participant,
+					$camp,
+					$type
+				)
+			);
 		}
 	}
 
