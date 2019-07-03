@@ -35,9 +35,8 @@ class PagesController extends Controller {
 			$m = date('m'); $d = date('d');
 			$today = [];
 			foreach ($bdates as $id => $date) {
-				if (substr($date, 5) == $m.'-'.$d) { $today[] = $id; }
+				if ($date->isBirthday()) { $today[] = $id; }
 			}
-			//$today = ['147', '168']; // testing purposes
 
 			foreach ($today as $k => $id) {
 				$member = \App\Member::find($id);
@@ -65,7 +64,6 @@ class PagesController extends Controller {
 				$klikbaar = false;
 
 				$events = \Auth::user()->profile->events->pluck('id');
-				//dd($events);
 
 				if (\Auth::user()->is_admin) {
 					$klikbaar = true;
@@ -96,13 +94,13 @@ class PagesController extends Controller {
 				$thermo[] = compact('naam', 'id', 'klikbaar', 'streef_L', 'streef_D', 'num_L_goed', 'perc_L_goed', 'num_L_bijna', 'perc_L_bijna', 'num_D_goed', 'perc_D_goed', 'num_D_bijna', 'perc_D_bijna');
 			}
 
-			return view('pages.home-member', compact('congrats', 'today', 'thermo'));
+			return view('pages.home-member', compact('today', 'thermo'));
 		} else {
 			// Participant homepage
 
 			// Birthday check!
 			$bday = \Auth::user()->profile->geboortedatum;
-			$congrats = ($bday->day == date('d') && $bday->month == date('m')) ? 1 : 0;
+			$congrats = ($bday->isBirthday()) ? 1 : 0;
 
 			return view('pages.home-participant', compact('congrats'));
 		}

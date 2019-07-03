@@ -68,7 +68,7 @@ class RegistationTest extends TestCase
         "vakinfo4" => "",
         "vak5" => 0,
         "vakinfo5" => "",
-        "iDeal" => 1,
+        "ideal" => 1,
         "hoebij" => ["Nieuwsbrief school"],
         "hoebij_anders" => "",
         "opmerkingen" => "",
@@ -144,7 +144,7 @@ class RegistationTest extends TestCase
                 ->andReturns(redirect("https://mollie-backend"));
         }));
 
-        $this->data["iDeal"] = '1';
+        $this->data["ideal"] = '1';
         $response = $this->post('/register-participant', $this->data);
 
         // check db
@@ -167,7 +167,7 @@ class RegistationTest extends TestCase
             $mock->shouldNotReceive('process');
         }));
 
-        $this->data["iDeal"] = 0;
+        $this->data["ideal"] = 0;
 
         $response = $this->post('/register-participant', $this->data);
 

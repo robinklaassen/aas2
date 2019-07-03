@@ -38,3 +38,7 @@ deploy:
 cache:
   directories:
   - vendor
+
+notifications:
+  email:
+    - aas@anderwijs.nl

@@ -3,7 +3,7 @@
 </p>
 
 <p>
-	Wij bevestigen hierbij dat de betaling via iDeal door ons is ontvangen en daarmee uw {{ ($participant->geslacht == 'M') ? 'zoon' : 'dochter' }} {{$participant->voornaam}} {{$participant->tussenvoegsel}} {{$participant->achternaam}} definitief staat ingeschreven voor het {{$event->naam}} {{$event->datum_start->format('Y')}} ({{$event->datum_start->format('d-m-Y')}} t/m {{$event->datum_eind->format('d-m-Y')}}) te {{$event->location->plaats}}.
+	Wij bevestigen hierbij dat de betaling via iDeal door ons is ontvangen en daarmee uw {{ ($participant->geslacht == 'M') ? 'zoon' : 'dochter' }} {{ $participant->volnaam }} definitief staat ingeschreven voor het {{$event->naam}} {{$event->datum_start->format('Y')}} ({{$event->datum_start->format('d-m-Y')}} t/m {{$event->datum_eind->format('d-m-Y')}}) te {{$event->location->plaats}}.
 </p>
 
 <p>

@@ -211,7 +211,7 @@ class RegistrationController extends Controller
 		$request->merge(array('hoebij' => $hb_string));
 
 		// Store participant in database
-		$participant = Participant::create($request->except('selected_camp', 'vak0', 'vak1', 'vak2', 'vak3', 'vak4', 'vak5', 'vakinfo0', 'vakinfo1', 'vakinfo2', 'vakinfo3', 'vakinfo4', 'vakinfo5', 'iDeal', 'hoebij_anders', 'voorwaarden', 'privacy'));
+		$participant = Participant::create($request->except('selected_camp', 'vak0', 'vak1', 'vak2', 'vak3', 'vak4', 'vak5', 'vakinfo0', 'vakinfo1', 'vakinfo2', 'vakinfo3', 'vakinfo4', 'vakinfo5', 'ideal', 'hoebij_anders', 'voorwaarden', 'privacy'));
 
 		// Attach to camp
 		$participant->events()->attach($request->selected_camp);
@@ -261,7 +261,7 @@ class RegistrationController extends Controller
 			->participant($participant)
 			->existing(false);
 		$toPay = $payment->getTotalAmount();
-		$iDeal = $request->iDeal;
+		$ideal = $request->ideal;
 
 		// Send update to office committee
 		Mail::send(new NewParticipantNotification(
@@ -277,12 +277,12 @@ class RegistrationController extends Controller
 				$givenCourses,
 				$password,
 				$toPay,
-				$iDeal
+				$ideal
 			)
 		);
 
 		// If they want to pay with iDeal, set up the payment now
-		if ($iDeal == '1' && $camp->prijs != 0) {
+		if ($ideal == '1' && $camp->prijs != 0) {
 			return Mollie::process($payment);
 		} else {
 			// Return closing view
