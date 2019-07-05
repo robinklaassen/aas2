@@ -62,7 +62,10 @@ return [
 			'engine'    => 'InnoDB',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',
-			'strict'    => false,
+			'strict'    => true,
+			'modes'  => [
+				'NO_AUTO_VALUE_ON_ZERO'
+			]
 		],
 
 		'pgsql' => [
