@@ -104,10 +104,6 @@ Mijn profiel
 				<td>Hoe bij Anderwijs</td>
 				<td>{{ $participant->hoebij }}</td>
 			</tr>
-			<tr>
-				<td>Opmerkingen</td>
-				<td style="white-space:pre-wrap;">{{ $participant->opmerkingen }}</td>
-			</tr>
 		</table>
 
 
@@ -148,10 +144,6 @@ Mijn profiel
 					@endif
 				</td>
 				@endunless
-			</tr>
-			<tr>
-				<td>Opmerkingen</td>
-				<td style="white-space:pre-wrap;">{{ $participant->opmerkingen_admin }}</td>
 			</tr>
 			@endif
 		</table>

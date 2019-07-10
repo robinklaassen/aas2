@@ -4,7 +4,8 @@ use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 use App\Member;
 
-class MemberTableSeeder extends Seeder {
+class MemberTableSeeder extends Seeder
+{
 
 	/**
 	 * Run the database seeds.
@@ -14,7 +15,7 @@ class MemberTableSeeder extends Seeder {
 	public function run()
 	{
 		DB::table('members')->delete();
-		
+
 		Member::create([
 			'voornaam' => 'Ranonkeltje',
 			'tussenvoegsel' => 'van',
@@ -38,11 +39,9 @@ class MemberTableSeeder extends Seeder {
 			'ranonkeltje' => '1',
 			'vog' => '1',
 			'ervaren_trainer' => '1',
-			'incasso' => '1',
-			'opmerkingen' => 'Ik ben het allergaafste spookje ooit! En ook nog eens heel bescheiden.',
-			'opmerkingen_admin' => 'Wauw wat is zij tof inderdaad.'
+			'incasso' => '1'
 		]);
-		
+
 		Member::create([
 			'voornaam' => 'Jön',
 			'achternaam' => 'Snow',
@@ -62,11 +61,9 @@ class MemberTableSeeder extends Seeder {
 			'kmg' => '1',
 			'ranonkeltje' => '0',
 			'vog' => '1',
-			'ervaren_trainer' => '1',
-			'opmerkingen' => 'Winter is coming.',
-			'opmerkingen_admin' => 'Hij weet echt niks.'
+			'ervaren_trainer' => '1'
 		]);
-		
+
 		Member::create([
 			'voornaam' => 'Dingo',
 			'achternaam' => 'Krijgsman',
@@ -86,10 +83,7 @@ class MemberTableSeeder extends Seeder {
 			'kmg' => '0',
 			'ranonkeltje' => '1',
 			'vog' => '0',
-			'ervaren_trainer' => '0',
-			'opmerkingen' => 'YEEHAW!',
-			'opmerkingen_admin' => 'Licht autistisch en een beetje gestoord.'
+			'ervaren_trainer' => '0'
 		]);
 	}
-
 }

@@ -124,10 +124,6 @@ Mijn profiel
 				<td>Ranonkeltje</td>
 				<td>{{ $member->ranonkeltje }}</td>
 			</tr>
-			<tr>
-				<td>Opmerkingen</td>
-				<td style="white-space:pre-wrap;">{{ $member->opmerkingen }}</td>
-			</tr>
 		</table>
 
 
@@ -222,18 +218,6 @@ Mijn profiel
 				<td>Laatste update</td>
 				<td>{{ $member->updated_at->format('d-m-Y') }}</td>
 			</tr>
-			@if ($viewType == 'admin')
-			<tr>
-				<td>Opmerkingen</td>
-				<td style="white-space:pre-wrap;">{{ $member->opmerkingen_admin }}</td>
-			</tr>
-			@endif
-			@if (\Auth::user()->is_admin==2 && $viewType == 'admin')
-			<tr>
-				<td><b>Supergeheime</b> opmerkingen</td>
-				<td style="white-space:pre-wrap;">{{ $member->opmerkingen_geheim }}</td>
-			</tr>
-			@endif
 		</table>
 
 		<p><a data-toggle="modal" data-target="#fellows" style="cursor:pointer;">Met wie ben ik allemaal op kamp geweest?</a></p>
