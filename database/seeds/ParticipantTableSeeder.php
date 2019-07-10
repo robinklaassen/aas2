@@ -4,7 +4,8 @@ use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 use App\Participant;
 
-class ParticipantTableSeeder extends Seeder {
+class ParticipantTableSeeder extends Seeder
+{
 
 	/**
 	 * Run the database seeds.
@@ -14,7 +15,7 @@ class ParticipantTableSeeder extends Seeder {
 	public function run()
 	{
 		DB::table('participants')->delete();
-		
+
 		Participant::create([
 			'voornaam' => 'Jaap',
 			'tussenvoegsel' => 'de',
@@ -33,11 +34,9 @@ class ParticipantTableSeeder extends Seeder {
 			'school' => 'Planckgas Lyceum',
 			'niveau' => 'VWO',
 			'klas' => 4,
-			'hoebij' => 'Google',
-			'opmerkingen' => 'Ik eet het liefst heel veel vlees!',
-			'opmerkingen_admin' => 'Dit is een opmerking die wat zegt!'
+			'hoebij' => 'Google'
 		]);
-		
+
 		Participant::create([
 			'voornaam' => 'Annabelle',
 			'tussenvoegsel' => '',
@@ -57,11 +56,7 @@ class ParticipantTableSeeder extends Seeder {
 			'school' => 'Vreemans College',
 			'niveau' => 'HAVO',
 			'klas' => 1,
-			'hoebij' => 'Zusje',
-			'opmerkingen' => 'Enorm veel zin in kamp.',
-			'opmerkingen_admin' => 'Af en toe wat vervelend stuiterig, maar verder een topmeid.'
+			'hoebij' => 'Zusje'
 		]);
-
 	}
-
 }

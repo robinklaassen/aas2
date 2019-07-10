@@ -63,10 +63,7 @@
 				<td>Prijsinformatie</td>
 				<td style="white-space:pre-wrap;">{!! $location->prijsinfo !!}</td>
 			</tr>
-			<tr>
-				<td>Opmerkingen</td>
-				<td style="white-space:pre-wrap;">{!! $location->opmerkingen !!}</td>
-			</tr>
+
 		</table>
 	</div>
 

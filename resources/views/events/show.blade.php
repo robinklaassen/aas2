@@ -101,10 +101,7 @@
 				<td style="white-space:pre-wrap;">{{ $event->beschrijving }}</td>
 			</tr>
 			@endif
-			<tr>
-				<td>Opmerkingen</td>
-				<td style="white-space:pre-wrap;">{{ $event->opmerkingen }}</td>
-			</tr>
+
 			@endif
 		</table>
 	</div>

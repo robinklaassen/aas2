@@ -4,7 +4,8 @@ use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 use App\Event;
 
-class EventTableSeeder extends Seeder {
+class EventTableSeeder extends Seeder
+{
 
 	/**
 	 * Run the database seeds.
@@ -28,8 +29,7 @@ class EventTableSeeder extends Seeder {
 			'prijs' => 400,
 			'streeftal' => 8,
 			'vol' => '1',
-			'beschrijving' => 'Ga mee op kamp!',
-			'opmerkingen' => 'Beste kamp ooit!'
+			'beschrijving' => 'Ga mee op kamp!'
 		]);
 
 		Event::create([
@@ -41,8 +41,7 @@ class EventTableSeeder extends Seeder {
 			'datum_eind' => '2015-08-08',
 			'location_id' => 2,
 			'prijs' => 350,
-			'openbaar' => '0',
-			'opmerkingen' => 'Dit gaat natuurlijk nooit goed.'
+			'openbaar' => '0'
 		]);
 
 
@@ -52,8 +51,7 @@ class EventTableSeeder extends Seeder {
 			'type' => 'training',
 			'datum_start' => '2015-04-24',
 			'datum_eind' => '2015-04-26',
-			'location_id' => 2,
-			'opmerkingen' => 'Wat een vette training!'
+			'location_id' => 2
 		]);
 
 		Event::create([
@@ -62,8 +60,7 @@ class EventTableSeeder extends Seeder {
 			'type' => 'overig',
 			'datum_start' => '2015-06-12',
 			'datum_eind' => '2015-06-14',
-			'location_id' => 1,
-			'opmerkingen' => 'Dit is geen kamp en ook geen training.'
+			'location_id' => 1
 		]);
 
 
@@ -77,10 +74,7 @@ class EventTableSeeder extends Seeder {
 			'location_id' => 2,
 			'prijs' => 1000,
 			'streeftal' => 10,
-			'openbaar' => '1',
-			'opmerkingen' => 'Dit gaat natuurlijk nooit goed.'
+			'openbaar' => '1'
 		]);
-
 	}
-
 }

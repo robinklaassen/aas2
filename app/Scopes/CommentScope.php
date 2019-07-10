@@ -17,9 +17,17 @@ class CommentScope implements Scope
      */
     public function apply(Builder $builder, Model $model)
     {
-        if (!(\Auth::check() && \Auth::user()->is_admin)) {
-            $builder->where('is_secret', '=', false);
+        if (!\Auth::check()) {
+            $builder->whereRaw("1=0");
+        } else {
+            if (\Auth::user()->is_admin != 2) {
+                $builder->where('is_secret', '=', false);
+            }
+            if (!\Auth::user()->is_admin) {
+                $builder->where('user_id', '=', \Auth::user()->id);
+            }
         }
+
 
         $builder->orderBy('updated_at', 'desc');
     }
