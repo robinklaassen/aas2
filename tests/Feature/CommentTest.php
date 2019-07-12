@@ -23,7 +23,7 @@ class CommentTest extends TestCase
         $this->member = Member::findOrFail(2);
     }
 
-    public function testSeeNormalComment()
+    public function testSeeOwnNormalComment()
     {
         $user = User::findOrFail(2);
         // This doesnt work for some reason
@@ -35,7 +35,7 @@ class CommentTest extends TestCase
         $text = "Testing " . $random;
 
         $comment = new Comment();
-        $comment->user_id = 1;
+        $comment->user_id = 2;
         $comment->text = $text;
         $comment->is_secret = false;
 
@@ -55,6 +55,37 @@ class CommentTest extends TestCase
         );
     }
 
+    public function testDontSeeOtherNormalComment()
+    {
+        $user = User::findOrFail(2);
+        // This doesnt work for some reason
+        // $this->actingAs($user)
+        //     ->get("/profile")
+        //     ->assertDontSee("This is a testing comment");
+
+        $random = Str::random(40);
+        $text = "Testing " . $random;
+
+        $comment = new Comment();
+        $comment->user_id = 1;
+        $comment->text = $text;
+        $comment->is_secret = false;
+
+        $user->profile->comments()->save($comment);
+
+        $this->actingAs($user)
+            ->get("/profile")
+            ->assertDontSee($comment->text);
+
+        $this->assertDatabaseMissing(
+            'comments',
+            [
+                "text" => $text,
+                "entity_type" => "App\\Member",
+                "entity_id" => "1"
+            ]
+        );
+    }
 
     public function testDoesntSeeSecretComment()
     {
@@ -184,10 +215,11 @@ class CommentTest extends TestCase
             "user_id" => 1
         ])->first();
 
+        // comment shouldn't be found due to the CommentScope
         $this->actingAs(User::findOrFail(2))
             ->delete(
                 "/comments/{$comment->id}?origin=profile"
-            )->assertStatus(403);
+            )->assertStatus(404);
 
         $this->assertDatabaseHas("comments", ["id" => $comment->id]);
     }
