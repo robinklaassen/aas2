@@ -126,11 +126,15 @@ class RegistrationController extends Controller
 		$user->password = bcrypt($password);
 		$member->user()->save($user);
 
-		$comment = new \App\Comment;
-		$comment->user_id = $user->id;
-		$comment->text = $request->only("opmerkingen");
-		$comment->is_secret = false;
-		$member->comments()->save($comment);
+		$opmerkingText = $request->get('opmerkingen');
+
+		if ($opmerkingText) {
+			$comment = new \App\Comment;
+			$comment->user_id = $user->id;
+			$comment->text = $opmerkingText;
+			$comment->is_secret = false;
+			$member->comments()->save($comment);
+		}
 
 		$camp = Event::findOrFail($request->selected_camp);
 

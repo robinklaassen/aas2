@@ -12,27 +12,10 @@ use App\Helpers\Payment\MolliePaymentProvider;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
-
-
+use Illuminate\Support\Str;
 
 class RegistationTest extends TestCase
 {
-    private static function clearDB()
-    {
-        // DB::statement("
-        // delete from users
-        //  where profile_type = 'App\Participant'
-        //    and profile_id in (select p.id from participants p where p.achternaam = 'Test' )
-        // ");
-        // DB::statement("
-        // delete from event_participant
-        //  where participant_id in (select p.id from participants p where p.achternaam = 'Test' )
-        // ");
-        // DB::statement("
-        // delete from participants
-        //  where achternaam = 'Test'
-        // ");
-    }
     use DatabaseTransactions;
     use WithoutMiddleware;
 
@@ -71,7 +54,7 @@ class RegistationTest extends TestCase
         "iDeal" => 1,
         "hoebij" => ["Nieuwsbrief school"],
         "hoebij_anders" => "",
-        "opmerkingen" => "",
+        "opmerkingen" => "Testerrrr",
         "voorwaarden" => 1,
         "privacy" => 1
     ];
@@ -110,6 +93,10 @@ class RegistationTest extends TestCase
             "username" => $username,
             "is_admin" => 0
         ];
+
+        $random = Str::random(40);
+        $text = "Testing " . $random;
+        $this->data["opmerkingen"] = $text;
     }
 
     // protected function tearDown(): void
@@ -150,6 +137,10 @@ class RegistationTest extends TestCase
         // check db
         $this->assertDatabaseHas('users', $this->userData);
         $this->assertDatabaseHas('participants', $this->participantData);
+        $this->assertDatabaseHas('comments', [
+            "text" => $this->data["opmerkingen"],
+            "entity_type" => "App\\Participant"
+        ]);
         // redirect
         $response->assertStatus(302);
         $response->assertRedirect("https://mollie-backend");
@@ -174,6 +165,10 @@ class RegistationTest extends TestCase
         // check db
         $this->assertDatabaseHas('users', $this->userData);
         $this->assertDatabaseHas('participants', $this->participantData);
+        $this->assertDatabaseHas('comments', [
+            "text" => $this->data["opmerkingen"],
+            "entity_type" => "App\\Participant"
+        ]);
 
         // Check output
         $response->assertStatus(200);
