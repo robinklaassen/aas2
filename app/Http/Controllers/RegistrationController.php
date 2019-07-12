@@ -252,12 +252,15 @@ class RegistrationController extends Controller
 		$user->password = bcrypt($password);
 		$participant->user()->save($user);
 
-		$comment = new \App\Comment;
-		$comment->user_id = $user->id;
-		$comment->text = $request->only("opmerkingen");
-		$comment->is_secret = false;
-		$participant->comments()->save($comment);
+		$opmerkingText = $request->get('opmerkingen');
 
+		if ($opmerkingText) {
+			$comment = new \App\Comment;
+			$comment->user_id = $user->id;
+			$comment->text = $opmerkingText;
+			$comment->is_secret = false;
+			$participant->comments()->save($comment);
+		}
 		// Income table
 		$incomeTable = Participant::INCOME_DESCRIPTION_TABLE;
 
