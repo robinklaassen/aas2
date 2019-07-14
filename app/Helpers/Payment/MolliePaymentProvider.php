@@ -13,7 +13,7 @@ class MolliePaymentProvider implements PaymentProvider
     public function __construct()
     {
         $this->mollie = new \Mollie\Api\MollieApiClient();
-        $this->mollie->setApiKey(env('MOLLIE_API_KEY'));
+        $this->mollie->setApiKey(config('mollie.api_key'));
     }
 
     public function api()
