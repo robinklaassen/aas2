@@ -66,7 +66,7 @@ class EventsController extends Controller {
 	{
 		// Redirect the viewer if the user profile is not attached to this event
 		$profile = \Auth::user()->profile;
-		if ($profile->events->contains('id', $event->id) && !(\Auth::user()->is_admin))
+		if (!($profile->events->contains('id', $event->id)) && !(\Auth::user()->is_admin))
 		{
 			return redirect('profile');
 		}
