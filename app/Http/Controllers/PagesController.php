@@ -234,11 +234,11 @@ class PagesController extends Controller {
 	# Analytical graphs
 	public function graphs()
 	{
-		// Include the current year?
-		$withCurrentYear = false;
-		$minDate = "2009-09-01";
-		$maxDate = "2018-08-31";
+		// Determine end date for graph range; from 1st of August we include the current Anderwijs year
+		$maxYear = Carbon::now()->addMonths(5)->year - 1;
 
+		$minDate = "2009-09-01";
+		$maxDate = $maxYear . "-08-31";
 
 		$camps = \App\Event::where('type','kamp')
 							->where('datum_start', '<=', $maxDate)
