@@ -1,9 +1,13 @@
-<?php namespace App\Http\Controllers;
+<?php
+
+namespace App\Http\Controllers;
 
 use Input;
 use App\Member;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use Maatwebsite\Excel\Facades\Excel;
+use App\Exports\MembersExport;
 
 class MembersController extends Controller
 {
@@ -173,14 +177,7 @@ class MembersController extends Controller
 	# Export all members to Excel
 	public function export()
 	{
-		// Specificy columns in order to exclude 'opmerkingen_geheim'
-		$members = Member::get(['id', 'voornaam', 'tussenvoegsel', 'achternaam', 'geslacht', 'geboortedatum', 'adres', 'postcode', 'plaats', 'telefoon', 'email', 'email_anderwijs', 'iban', 'soort', 'eindexamen', 'studie', 'afgestudeerd', 'hoebij', 'kmg', 'ranonkeltje', 'vog', 'ervaren_trainer', 'incasso', 'datum_af', 'opmerkingen', 'opmerkingen_admin', 'created_at', 'updated_at']);
-
-		\Excel::create(date('Y-m-d') . ' AAS Leden', function ($excel) use ($members) {
-			$excel->sheet('leden', function ($sheet) use ($members) {
-				$sheet->fromModel($members);
-			});
-		})->export('xlsx');
+		return Excel::download(new MembersExport, date('Y-m-d') . ' AAS leden.xlsx');
 	}
 
 	# Show all members on a Google Map

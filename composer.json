@@ -14,7 +14,6 @@
     "maatwebsite/excel": "~3.1.0",
     "mollie/mollie-api-php": "1.2.x",
     "intervention/image": "^2.3",
-    "shin1x1/laravel-force-https-url-scheme": "^1.0",
     "khill/lavacharts": "3.0.*",
     "caouecs/laravel-lang": "~3.0",
     "fideloper/proxy": "^4.1"

@@ -85,7 +85,6 @@ Route::put(
 Route::get('participants/{participant}/delete', 'ParticipantsController@delete');
 Route::get('participants/export', 'ParticipantsController@export');
 Route::get('participants/map', 'ParticipantsController@map');
-// Route::get('participants/{participant}', 'ParticipantsController@show');
 Route::resource('participants', 'ParticipantsController');
 
 # Member things
@@ -214,7 +213,6 @@ Route::get('declarations/upload', 'DeclarationsController@upload');
 Route::post('declarations/create', 'DeclarationsController@create');
 Route::post('declarations', 'DeclarationsController@store');
 Route::get('declarations', 'DeclarationsController@index');
-//Route::resource('declarations', 'DeclarationsController');
 
 # Review things
 Route::get('enquete/{event}', 'ReviewsController@review');
