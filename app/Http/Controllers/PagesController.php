@@ -310,9 +310,9 @@ class PagesController extends Controller {
 				$year = substr($k,0,2) . '-' . substr($k,2,2);
 				$data['membGrowth'][] = [$year, $num_members[$k], count(array_unique($member_ids[$k])), $num_members_new[$k]];
 				$data['partGrowth'][] = [$year, $num_participants[$k], count(array_unique($participant_ids[$k])), $num_participants_new[$k]];
-				$data['percNew'][] = [$year, ($num_members_new[$k] / $num_members[$k]) * 100, ($num_participants_new[$k] / $num_participants[$k]) * 100];
-				$data['membPartRatio'][] = [$year, round($num_members[$k] / $num_participants[$k], 3)];
-				$data['aveNumCamps'][] = [$year, round(count($member_ids[$k]) / count(array_unique($member_ids[$k])), 3), round(count($participant_ids[$k]) / count(array_unique($participant_ids[$k])), 3)];
+				$data['percNew'][] = [$year, round(($num_members_new[$k] / $num_members[$k]) * 100, 1), round(($num_participants_new[$k] / $num_participants[$k]) * 100, 1)];
+				$data['membPartRatio'][] = [$year, round($num_members[$k] / $num_participants[$k], 2)];
+				$data['aveNumCamps'][] = [$year, round(count($member_ids[$k]) / count(array_unique($member_ids[$k])), 2), round(count($participant_ids[$k]) / count(array_unique($participant_ids[$k])), 2)];
 				if ($num_members_female[$k] > 0 && $num_participants_female[$k] > 0) { $data['maleFemaleRatio'][] = [$year, round($num_members_male[$k] / $num_members_female[$k], 3), round($num_participants_male[$k] / $num_participants_female[$k], 3)]; }
 			}
 		}
@@ -357,7 +357,7 @@ class PagesController extends Controller {
 			if ($v != []) {
 				$year = substr($k,0,2) . '-' . substr($k,2,2);
 				$data['trainerGrowth'][] = [$year, $num_trainers[$k], count(array_unique($member_ids[$k])), $num_trainers_new[$k]];
-				$data['aveNumTrainings'][] = [$year, round(count($v) / count(array_unique($v)), 3)];
+				$data['aveNumTrainings'][] = [$year, round(count($v) / count(array_unique($v)), 2)];
 			}
 		}
 
