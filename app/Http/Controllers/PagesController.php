@@ -313,7 +313,7 @@ class PagesController extends Controller {
 				$data['percNew'][] = [$year, round(($num_members_new[$k] / $num_members[$k]) * 100, 1), round(($num_participants_new[$k] / $num_participants[$k]) * 100, 1)];
 				$data['membPartRatio'][] = [$year, round($num_members[$k] / $num_participants[$k], 2)];
 				$data['aveNumCamps'][] = [$year, round(count($member_ids[$k]) / count(array_unique($member_ids[$k])), 2), round(count($participant_ids[$k]) / count(array_unique($participant_ids[$k])), 2)];
-				if ($num_members_female[$k] > 0 && $num_participants_female[$k] > 0) { $data['maleFemaleRatio'][] = [$year, round($num_members_male[$k] / $num_members_female[$k], 3), round($num_participants_male[$k] / $num_participants_female[$k], 3)]; }
+				if ($num_members_female[$k] > 0 && $num_participants_female[$k] > 0) { $data['maleFemaleRatio'][] = [$year, round($num_members_male[$k] / $num_members_female[$k], 2), round($num_participants_male[$k] / $num_participants_female[$k], 2)]; }
 			}
 		}
 
