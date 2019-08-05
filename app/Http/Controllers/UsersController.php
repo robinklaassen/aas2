@@ -1,4 +1,6 @@
-<?php namespace App\Http\Controllers;
+<?php
+
+namespace App\Http\Controllers;
 
 use App\User;
 use Mail;
@@ -7,7 +9,8 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 
-class UsersController extends Controller {
+class UsersController extends Controller
+{
 
 	public function __construct()
 	{
@@ -38,8 +41,7 @@ class UsersController extends Controller {
 		$type = 'member';
 		$members = \App\Member::orderBy('voornaam')->whereNotIn('soort', ['oud'])->get();
 		$profile_options = [];
-		foreach ($members as $member)
-		{
+		foreach ($members as $member) {
 			if (!$member->user()->count()) {
 				$profile_options[$member->id] = $member->voornaam . ' ' . $member->tussenvoegsel . ' ' . $member->achternaam;
 			}
@@ -53,8 +55,7 @@ class UsersController extends Controller {
 		$type = 'participant';
 		$participants = \App\Participant::orderBy('voornaam')->get();
 		$profile_options = [];
-		foreach ($participants as $participant)
-		{
+		foreach ($participants as $participant) {
 			if (!$participant->user()->count()) {
 				$profile_options[$participant->id] = $participant->voornaam . ' ' . $participant->tussenvoegsel . ' ' . $participant->achternaam;
 			}
@@ -84,19 +85,18 @@ class UsersController extends Controller {
 			]);
 		} else {
 			// Create username
-			$thename = strtolower(substr($member->voornaam,0,1) . str_replace(' ', '', $member->achternaam));
+			$thename = strtolower(substr($member->voornaam, 0, 1) . str_replace(' ', '', $member->achternaam));
 			$username = $thename;
 			$nameList = \DB::table('users')->pluck('username');
 			$i = 0;
-			while ($nameList->contains($username))
-			{
+			while ($nameList->contains($username)) {
 				$i++;
 				$username = $thename . $i;
 			}
 
 			// Create password
 			$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-			$password = substr( str_shuffle( $chars ), 0, 10 );
+			$password = substr(str_shuffle($chars), 0, 10);
 
 			// Attach account
 			$user = new \App\User;
@@ -106,8 +106,7 @@ class UsersController extends Controller {
 			$member->user()->save($user);
 
 			// Send email
-			Mail::send('emails.newUserMember', compact('member', 'username', 'password'), function($message) use ($member)
-			{
+			Mail::send('emails.newUserMember', compact('member', 'username', 'password'), function ($message) use ($member) {
 				$message->from('kamp@anderwijs.nl', 'Kampcommissie Anderwijs');
 
 				$message->to($member->email, $member->voornaam . ' ' . $member->tussenvoegsel . ' ' . $member->achternaam);
@@ -136,19 +135,18 @@ class UsersController extends Controller {
 			]);
 		} else {
 			// Create username
-			$thename = strtolower(substr($participant->voornaam,0,1) . str_replace(' ', '', $participant->achternaam));
+			$thename = strtolower(substr($participant->voornaam, 0, 1) . str_replace(' ', '', $participant->achternaam));
 			$username = $thename;
 			$nameList = \DB::table('users')->pluck('username');
 			$i = 0;
-			while ($nameList->contains($username))
-			{
+			while ($nameList->contains($username)) {
 				$i++;
 				$username = $thename . $i;
 			}
 
 			// Create password
 			$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-			$password = substr( str_shuffle( $chars ), 0, 10 );
+			$password = substr(str_shuffle($chars), 0, 10);
 
 			// Attach account
 			$user = new \App\User;
@@ -157,8 +155,7 @@ class UsersController extends Controller {
 			$participant->user()->save($user);
 
 			// Send email
-			Mail::send('emails.newUserParticipant', compact('participant', 'username', 'password'), function($message) use ($participant)
-			{
+			Mail::send('emails.newUserParticipant', compact('participant', 'username', 'password'), function ($message) use ($participant) {
 				$message->from('kantoor@anderwijs.nl', 'Kantoorcommissie Anderwijs');
 
 				$message->to($participant->email_ouder, 'dhr./mw. ' . $participant->tussenvoegsel . ' ' . $participant->achternaam)->subject('ANDERWIJS - Gebruikersaccount aangemaakt');
@@ -186,8 +183,7 @@ class UsersController extends Controller {
 	# Grant or revoke admin access
 	public function admin(User $user)
 	{
-		if (\Auth::user()->is_admin < 2)
-		{
+		if (\Auth::user()->is_admin < 2) {
 			return redirect('users');
 		}
 
@@ -197,16 +193,13 @@ class UsersController extends Controller {
 	public function adminSave(User $user)
 	{
 		// Check if this user is member! (participants can never be admins)
-		if ($user->profile_type == 'App\Member')
-		{
+		if ($user->profile_type == 'App\Member') {
 			$user->is_admin = \Input::get('is_admin');
 			$user->save();
 			return redirect('users')->with([
 				'flash_message' => 'Admin-rechten gewijzigd!'
 			]);
-		}
-		else
-		{
+		} else {
 			return redirect('users');
 		}
 	}
@@ -251,4 +244,10 @@ class UsersController extends Controller {
 		]);
 	}
 
+	public function privacy(User $user)
+	{
+		return view("pages.privacy-statement", [
+			"privacy_md" => "## test\ntester"
+		])
+	}
 }
