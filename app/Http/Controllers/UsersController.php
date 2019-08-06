@@ -8,6 +8,8 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
+use App\Mail\members\NewUserMember;
+use App\Mail\participants\NewUserParticipant;
 
 class UsersController extends Controller
 {
@@ -106,13 +108,7 @@ class UsersController extends Controller
 			$member->user()->save($user);
 
 			// Send email
-			Mail::send('emails.newUserMember', compact('member', 'username', 'password'), function ($message) use ($member) {
-				$message->from('kamp@anderwijs.nl', 'Kampcommissie Anderwijs');
-
-				$message->to($member->email, $member->voornaam . ' ' . $member->tussenvoegsel . ' ' . $member->achternaam);
-
-				$message->subject('ANDERWIJS - Gebruikersaccount aangemaakt');
-			});
+			Mail::send(new NewUserMember($member, $username, $password));
 
 			return redirect('users')->with([
 				'flash_message' => 'De gebruiker is aangemaakt!'
@@ -155,11 +151,9 @@ class UsersController extends Controller
 			$participant->user()->save($user);
 
 			// Send email
-			Mail::send('emails.newUserParticipant', compact('participant', 'username', 'password'), function ($message) use ($participant) {
-				$message->from('kantoor@anderwijs.nl', 'Kantoorcommissie Anderwijs');
-
-				$message->to($participant->email_ouder, 'dhr./mw. ' . $participant->tussenvoegsel . ' ' . $participant->achternaam)->subject('ANDERWIJS - Gebruikersaccount aangemaakt');
-			});
+			Mail::send(
+				new NewUserParticipant($participant, $username, $password)
+			);
 
 			return redirect('users')->with([
 				'flash_message' => 'De gebruiker is aangemaakt!'
@@ -248,6 +242,6 @@ class UsersController extends Controller
 	{
 		return view("pages.privacy-statement", [
 			"privacy_md" => "## test\ntester"
-		])
+		]);
 	}
 }

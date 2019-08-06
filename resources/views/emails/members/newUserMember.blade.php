@@ -1,5 +1,5 @@
 <p>
-	Beste {{$member->voornaam}} {{$member->tussenvoegsel}} {{$member->achternaam}},
+	Beste {{$member->volnaam}},
 </p>
 
 <p>

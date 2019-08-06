@@ -3,15 +3,20 @@
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use Input;
 use App\Member;
 use App\Participant;
 use App\Event;
 use App\Course;
-use Illuminate\Http\Request;
 use Mail;
+use App\Mail\participants\ParticipantRegistrationConfirmation;
+use App\Mail\internal\NewParticipantNotification;
+use App\Helpers\Payment\EventPayment;
+use App\Facades\Mollie;
+use App\Mail\internal\NewMemberNotification;
+use App\Mail\members\MemberRegistrationConfirmation;
 
-class RegistrationController extends Controller {
+class RegistrationController extends Controller
+{
 
 	public function __construct()
 	{
@@ -24,14 +29,13 @@ class RegistrationController extends Controller {
 	{
 		// List of future camps that are not full
 		$camps = Event::where('type', 'kamp')
-						->where('datum_voordag','>',date('Y-m-d'))
-						->where('openbaar', 1)
-						->orderBy('datum_start', 'asc')
-						->get();
+			->where('datum_voordag', '>', date('Y-m-d'))
+			->where('openbaar', 1)
+			->orderBy('datum_start', 'asc')
+			->get();
 		$camp_options = array();
-		foreach ($camps as $camp)
-		{
-			$camp_options[$camp->id] = $camp->naam . ' ' . substr($camp->datum_start,0,4) . ' te ' . $camp->location->plaats . ' (' . $camp->datum_voordag->format('d-m-Y') . ')';
+		foreach ($camps as $camp) {
+			$camp_options[$camp->id] = $camp->naam . ' ' . substr($camp->datum_start, 0, 4) . ' te ' . $camp->location->plaats . ' (' . $camp->datum_voordag->format('d-m-Y') . ')';
 			if ($camp->vol) {
 				$camp_options[$camp->id] .= ' - VOL';
 				$camp_full[$camp->id] = 1;
@@ -92,10 +96,8 @@ class RegistrationController extends Controller {
 		$courseInput = [$request->vak0, $request->vak1, $request->vak2, $request->vak3, $request->vak4, $request->vak5, $request->vak6, $request->vak7];
 		$levelInput = [$request->klas0, $request->klas1, $request->klas2, $request->klas3, $request->klas4, $request->klas5, $request->klas6, $request->klas7];
 
-		foreach (array_unique($courseInput) as $i => $course)
-		{
-			if ($course != '0')
-			{
+		foreach (array_unique($courseInput) as $i => $course) {
+			if ($course != '0') {
 				$member->courses()->sync([$course], false);
 				$member->courses()->updateExistingPivot($course, ['klas' => $levelInput[$i]]);
 				$givenCourses[] = ['naam' => Course::find($course)->naam, 'klas' => $levelInput[$i]];
@@ -103,19 +105,18 @@ class RegistrationController extends Controller {
 		}
 
 		// Create username
-		$thename = strtolower(substr($member->voornaam,0,1) . str_replace(' ', '', $member->achternaam));
+		$thename = strtolower(substr($member->voornaam, 0, 1) . str_replace(' ', '', $member->achternaam));
 		$username = $thename;
 		$nameList = \DB::table('users')->pluck('username');
 		$i = 0;
-		while ($nameList->contains($username))
-		{
+		while ($nameList->contains($username)) {
 			$i++;
 			$username = $thename . $i;
 		}
 
 		// Create password
 		$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-		$password = substr( str_shuffle( $chars ), 0, 10 );
+		$password = substr(str_shuffle($chars), 0, 10);
 
 		// Attach account
 		$user = new \App\User;
@@ -126,20 +127,22 @@ class RegistrationController extends Controller {
 		$camp = Event::findOrFail($request->selected_camp);
 
 		// Send confirmation email to newly registered member
-		Mail::send('emails.newMemberConfirm', compact('member', 'camp', 'givenCourses', 'username', 'password'), function($message) use ($member)
-		{
-			$message->from('kamp@anderwijs.nl', 'Kampcommissie Anderwijs');
-
-			$message->to($member->email, $member->voornaam . ' ' . $member->tussenvoegsel . ' ' . $member->achternaam);
-
-			$message->subject('ANDERWIJS - Bevestiging van inschrijving');
-		});
+		Mail::send(
+			new MemberRegistrationConfirmation(
+				$member,
+				$camp,
+				$givenCourses,
+				$password
+			)
+		);
 
 		// Send update to camp committee
-		Mail::send('emails.newMemberNotification', ['member' => $member, 'camp' => $camp], function($message)
-		{
-			$message->to('kamp@anderwijs.nl', 'Kampcommissie Anderwijs')->subject('AAS 2.0 - Nieuwe vrijwilliger');
-		});
+		Mail::send(
+			new NewMemberNotification(
+				$member,
+				$camp
+			)
+		);
 
 		// Return closing view
 		return view('registration.memberStored');
@@ -149,11 +152,10 @@ class RegistrationController extends Controller {
 	public function registerParticipant()
 	{
 		// List of future camps that are not full
-		$camps = Event::where('type', 'kamp')->where('datum_start','>',date('Y-m-d'))->where('openbaar', 1)->orderBy('datum_start', 'asc')->get();
+		$camps = Event::where('type', 'kamp')->where('datum_start', '>', date('Y-m-d'))->where('openbaar', 1)->orderBy('datum_start', 'asc')->get();
 		$camp_options = array();
-		foreach ($camps as $camp)
-		{
-			$camp_options[$camp->id] = $camp->naam . ' ' . substr($camp->datum_start,0,4) . ' te ' . $camp->location->plaats . ' (' . $camp->datum_start->format('d-m-Y') . ')';
+		foreach ($camps as $camp) {
+			$camp_options[$camp->id] = $camp->naam . ' ' . substr($camp->datum_start, 0, 4) . ' te ' . $camp->location->plaats . ' (' . $camp->datum_start->format('d-m-Y') . ')';
 			if ($camp->vol) {
 				$camp_options[$camp->id] .= ' - VOL';
 				$camp_full[$camp->id] = 1;
@@ -220,10 +222,8 @@ class RegistrationController extends Controller {
 		$courseInput = [$request->vak0, $request->vak1, $request->vak2, $request->vak3, $request->vak4, $request->vak5];
 		$courseInfo = [$request->vakinfo0, $request->vakinfo1,  $request->vakinfo2, $request->vakinfo3, $request->vakinfo4, $request->vakinfo5];
 
-		foreach (array_unique($courseInput) as $key => $course_id)
-		{
-			if ($course_id != 0)
-			{
+		foreach (array_unique($courseInput) as $key => $course_id) {
+			if ($course_id != 0) {
 				\DB::table('course_event_participant')->insert(
 					['course_id' => $course_id, 'event_id' => $request->selected_camp, 'participant_id' => $participant->id, 'info' => $courseInfo[$key]]
 				);
@@ -232,19 +232,18 @@ class RegistrationController extends Controller {
 		}
 
 		// Create username
-		$thename = strtolower(substr($participant->voornaam,0,1) . str_replace(' ', '', $participant->achternaam));
+		$thename = strtolower(substr($participant->voornaam, 0, 1) . str_replace(' ', '', $participant->achternaam));
 		$username = $thename;
 		$nameList = \DB::table('users')->pluck('username');
 		$i = 0;
-		while ($nameList->contains($username))
-		{
+		while ($nameList->contains($username)) {
 			$i++;
 			$username = $thename . $i;
 		}
 
 		// Create password
 		$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-		$password = substr( str_shuffle( $chars ), 0, 10 );
+		$password = substr(str_shuffle($chars), 0, 10);
 
 		// Attach account
 		$user = new \App\User;
@@ -253,80 +252,41 @@ class RegistrationController extends Controller {
 		$participant->user()->save($user);
 
 		// Income table
-		$incomeTable = [
-			0 => 'Meer dan € 3400 (geen korting)',
-			1 => 'Tussen € 2200 en € 3400 (korting: 15%)',
-			2 => 'Tussen € 1300 en € 2200 (korting: 30%)',
-			3 => 'Minder dan € 1300 (korting: 50%)'
-		];
+		$incomeTable = Participant::INCOME_DESCRIPTION_TABLE;
 
 		// Obtain camp and cost information
 		$camp = Event::findOrFail($request->selected_camp);
-		switch ($participant->inkomen)
-		{
-			case 0:
-				$toPay = $camp->prijs;
-				break;
-
-			case 1:
-				$toPay = round((0.85 * $camp->prijs)/5) * 5;
-				break;
-
-			case 2:
-				$toPay = round((0.7 * $camp->prijs)/5) * 5;
-				break;
-
-			case 3:
-				$toPay = round((0.5 * $camp->prijs)/5) * 5;
-				break;
-		}
-
-		// Send update to office committee
-		Mail::send('emails.newParticipantNotification', ['participant' => $participant, 'camp' => $camp], function($message)
-		{
-			$message->to('kantoor@anderwijs.nl', 'Kantoorcommissie Anderwijs')->subject('AAS 2.0 - Nieuwe deelnemer');
-		});
-
+		$payment = (new EventPayment())
+			->event($camp)
+			->participant($participant)
+			->existing(false);
+		$toPay = $payment->getTotalAmount();
 		$iDeal = $request->iDeal;
 
-		// Send confirmation email to newly registered participant
-		Mail::send('emails.newParticipantConfirm', compact('participant', 'camp', 'givenCourses', 'username', 'password', 'incomeTable', 'toPay', 'iDeal'), function($message) use ($participant)
-		{
-			$message->from('kantoor@anderwijs.nl', 'Kantoorcommissie Anderwijs');
+		// Send update to office committee
+		Mail::send(new NewParticipantNotification(
+			$participant,
+			$camp
+		));
 
-			$message->to($participant->email_ouder, 'dhr./mw. ' . $participant->tussenvoegsel . ' ' . $participant->achternaam)->subject('ANDERWIJS - Bevestiging van inschrijving');
-		});
+		// Send confirmation email to newly registered participant's parent
+		Mail::send(
+			new ParticipantRegistrationConfirmation(
+				$participant,
+				$camp,
+				$givenCourses,
+				$password,
+				$toPay,
+				$iDeal
+			)
+		);
 
 		// If they want to pay with iDeal, set up the payment now
-		if ($iDeal == '1' && $camp->prijs != 0)
-		{
-			// Initialize Mollie (with API key)
-			include "MollieSet.php";
-
-			// Create the payment
-			$payment = $mollie->payments->create(array(
-				"amount"      => $toPay,
-				"description" => $camp->code . " - " . str_replace("  ", " ", $participant->voornaam . " " . $participant->tussenvoegsel . " " . $participant->achternaam),
-				"metadata"	  => array(
-					//"order_id" => $order_id
-					"participant_id" => $participant->id,
-					"camp_id" => $camp->id,
-					"type" => "new"
-				),
-				"webhookUrl"  => url("iDeal-webhook"),
-				"redirectUrl" => url("/iDeal-response/{$participant->id}/{$camp->id}"),
-				"method" => \Mollie_API_Object_Method::IDEAL,
-			));
-
-			// Direct to Mollie payment site
-			return redirect($payment->getPaymentUrl());
-		}
-		else
-		{
+		if ($iDeal == '1' && $camp->prijs != 0) {
+			return Mollie::process($payment);
+		} else {
 			// Return closing view
 			return view('registration.participantStored', compact('participant', 'camp', 'toPay', 'incomeTable'));
 		}
-
 	}
-
 }

@@ -180,7 +180,6 @@ a:hover {
 @endfor
 
 <h3>Overige informatie</h3>
-
 <div class="row">
 	<div class="col-sm-12 form-group">
 		<b>Hoe ben je bij Anderwijs terechtgekomen?</b><br/>
@@ -188,17 +187,17 @@ a:hover {
 		@foreach ($hoebij_options as $i => $option)
 			<div class="checkbox">
 				<label>
-					<input type="checkbox" name="hoebij[]" id="hoebij_{{$i+1}}" value="{{$option}}"> {{$option}}
+					{!! Form::checkbox('hoebij[]', $option) !!} {{ $option }}
 				</label>
 			</div>
 		@endforeach
 
 		<div class="checkbox form-inline">
 			<label>
-				<input type="checkbox" name="hoebij[]" id="hoebij_0" value="0"> Anders, namelijk: 
+				{!! Form::checkbox('hoebij[]', '0') !!} Anders, namelijk: 
 			</label>
-
-			<input class="form-control input-sm" type="text" name="hoebij_anders" id="hoebij_anders">
+			
+			{!! Form::text('hoebij_anders', null, ['class' => ['form-control', 'input-sm']]) !!}
 		</div>
 
 	</div>
@@ -213,12 +212,12 @@ a:hover {
 	<div class="col-sm-12">
 		<div class="checkbox">
 			<label>
-				<input type="checkbox" name="vog" id="check_vog" value="1" {{ (old( 'vog')) ? 'checked' : '' }}> Ik ga akkoord dat ik een <strong>Verklaring Omtrent het Gedrag (VOG)</strong> moet aanvragen en inleveren om mee te mogen op kamp. Anderwijs vergoedt eventuele kosten die hieraan verbonden zijn (over de aanvraagprocedure volgt apart bericht).
+				{!! Form::checkbox('vog', 1) !!} Ik ga akkoord dat ik een <strong>Verklaring Omtrent het Gedrag (VOG)</strong> moet aanvragen en inleveren om mee te mogen op kamp. Anderwijs vergoedt eventuele kosten die hieraan verbonden zijn (over de aanvraagprocedure volgt apart bericht).
 			</label>
 		</div>
 		<div class="checkbox">
 			<label>
-				<input type="checkbox" name="privacy" id="check_privacy" value="1" {{ (old( 'privacy')) ? 'checked' : '' }}> Ik geef Anderwijs toestemming om deze gegevens te verwerken zoals beschreven in het
+				{!! Form::checkbox('privacy', 1) !!} Ik geef Anderwijs toestemming om deze gegevens te verwerken zoals beschreven in het
 				<a href="http://www.anderwijs.nl/anderwijs/privacy/"
 				    target="_blank">privacystatement</a>.
 			</label>

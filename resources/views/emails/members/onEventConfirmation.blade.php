@@ -7,11 +7,11 @@
 </p>
 
 <p>
-	Naam kamp: {{ $camp->naam }}<br/>
-	Locatie: {{ $camp->location->plaats }}<br/>
-	Voordag: {{ $camp->datum_voordag->format('d-m-Y') }}<br/>
-	Startdatum: {{ $camp->datum_start->format('d-m-Y') }}<br/>
-	Einddatum: {{ $camp->datum_eind->format('d-m-Y') }}
+	Naam kamp: {{ $event->naam }}<br/>
+	Locatie: {{ $event->location->plaats }}<br/>
+	Voordag: {{ $event->datum_voordag->format('d-m-Y') }}<br/>
+	Startdatum: {{ $event->datum_start->format('d-m-Y') }}<br/>
+	Einddatum: {{ $event->datum_eind->format('d-m-Y') }}
 </p>
 
 <p>

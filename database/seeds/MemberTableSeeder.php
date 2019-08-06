@@ -44,7 +44,7 @@ class MemberTableSeeder extends Seeder {
 		]);
 		
 		Member::create([
-			'voornaam' => 'Jon',
+			'voornaam' => 'Jön',
 			'achternaam' => 'Snow',
 			'geslacht' => 'M',
 			'geboortedatum' => '2010-03-05',

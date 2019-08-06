@@ -10,6 +10,7 @@
 | and give it the controller to call when that URI is requested.
 */
 
+
 # Root page refers to login
 Route::get('/', 'Auth\LoginController@showLoginForm');
 

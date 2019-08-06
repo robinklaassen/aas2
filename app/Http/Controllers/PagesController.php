@@ -35,9 +35,8 @@ class PagesController extends Controller {
 			$m = date('m'); $d = date('d');
 			$today = [];
 			foreach ($bdates as $id => $date) {
-				if (substr($date, 5) == $m.'-'.$d) { $today[] = $id; }
+				if ($date->isBirthday()) { $today[] = $id; }
 			}
-			//$today = ['147', '168']; // testing purposes
 
 			foreach ($today as $k => $id) {
 				$member = \App\Member::find($id);
@@ -65,7 +64,6 @@ class PagesController extends Controller {
 				$klikbaar = false;
 
 				$events = \Auth::user()->profile->events->pluck('id');
-				//dd($events);
 
 				if (\Auth::user()->is_admin) {
 					$klikbaar = true;
@@ -96,13 +94,13 @@ class PagesController extends Controller {
 				$thermo[] = compact('naam', 'id', 'klikbaar', 'streef_L', 'streef_D', 'num_L_goed', 'perc_L_goed', 'num_L_bijna', 'perc_L_bijna', 'num_D_goed', 'perc_D_goed', 'num_D_bijna', 'perc_D_bijna');
 			}
 
-			return view('pages.home-member', compact('congrats', 'today', 'thermo'));
+			return view('pages.home-member', compact('today', 'thermo'));
 		} else {
 			// Participant homepage
 
 			// Birthday check!
 			$bday = \Auth::user()->profile->geboortedatum;
-			$congrats = ($bday->day == date('d') && $bday->month == date('m')) ? 1 : 0;
+			$congrats = ($bday->isBirthday()) ? 1 : 0;
 
 			return view('pages.home-participant', compact('congrats'));
 		}
@@ -236,11 +234,11 @@ class PagesController extends Controller {
 	# Analytical graphs
 	public function graphs()
 	{
-		// Include the current year?
-		$withCurrentYear = false;
-		$minDate = "2009-09-01";
-		$maxDate = "2018-08-31";
+		// Determine end date for graph range; from 1st of August we include the current Anderwijs year
+		$maxYear = Carbon::now()->addMonths(5)->year - 1;
 
+		$minDate = "2009-09-01";
+		$maxDate = $maxYear . "-08-31";
 
 		$camps = \App\Event::where('type','kamp')
 							->where('datum_start', '<=', $maxDate)
@@ -312,10 +310,10 @@ class PagesController extends Controller {
 				$year = substr($k,0,2) . '-' . substr($k,2,2);
 				$data['membGrowth'][] = [$year, $num_members[$k], count(array_unique($member_ids[$k])), $num_members_new[$k]];
 				$data['partGrowth'][] = [$year, $num_participants[$k], count(array_unique($participant_ids[$k])), $num_participants_new[$k]];
-				$data['percNew'][] = [$year, ($num_members_new[$k] / $num_members[$k]) * 100, ($num_participants_new[$k] / $num_participants[$k]) * 100];
-				$data['membPartRatio'][] = [$year, round($num_members[$k] / $num_participants[$k], 3)];
-				$data['aveNumCamps'][] = [$year, round(count($member_ids[$k]) / count(array_unique($member_ids[$k])), 3), round(count($participant_ids[$k]) / count(array_unique($participant_ids[$k])), 3)];
-				if ($num_members_female[$k] > 0 && $num_participants_female[$k] > 0) { $data['maleFemaleRatio'][] = [$year, round($num_members_male[$k] / $num_members_female[$k], 3), round($num_participants_male[$k] / $num_participants_female[$k], 3)]; }
+				$data['percNew'][] = [$year, round(($num_members_new[$k] / $num_members[$k]) * 100, 1), round(($num_participants_new[$k] / $num_participants[$k]) * 100, 1)];
+				$data['membPartRatio'][] = [$year, round($num_members[$k] / $num_participants[$k], 2)];
+				$data['aveNumCamps'][] = [$year, round(count($member_ids[$k]) / count(array_unique($member_ids[$k])), 2), round(count($participant_ids[$k]) / count(array_unique($participant_ids[$k])), 2)];
+				if ($num_members_female[$k] > 0 && $num_participants_female[$k] > 0) { $data['maleFemaleRatio'][] = [$year, round($num_members_male[$k] / $num_members_female[$k], 2), round($num_participants_male[$k] / $num_participants_female[$k], 2)]; }
 			}
 		}
 
@@ -359,7 +357,7 @@ class PagesController extends Controller {
 			if ($v != []) {
 				$year = substr($k,0,2) . '-' . substr($k,2,2);
 				$data['trainerGrowth'][] = [$year, $num_trainers[$k], count(array_unique($member_ids[$k])), $num_trainers_new[$k]];
-				$data['aveNumTrainings'][] = [$year, round(count($v) / count(array_unique($v)), 3)];
+				$data['aveNumTrainings'][] = [$year, round(count($v) / count(array_unique($v)), 2)];
 			}
 		}
 
