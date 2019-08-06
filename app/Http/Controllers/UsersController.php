@@ -238,10 +238,13 @@ class UsersController extends Controller
 		]);
 	}
 
-	public function privacy(User $user)
+	public function showPrivacy(User $user)
 	{
 		return view("pages.privacy-statement", [
-			"privacy_md" => "## test\ntester"
+			"privacy_md" => file_get_contents(resource_path("\\markdown\\privacy-statement.md"))
 		]);
 	}
+
+	public function storePrivacy(User $user, Request $request)
+	{ }
 }

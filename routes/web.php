@@ -227,7 +227,8 @@ Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('login', 'Auth\LoginController@login');
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 
-Route::get("privacy-statement", "Users@privacy");
+Route::get("privacy", "UsersController@showPrivacy");
+Route::post("privacy", "UsersController@storePrivacy");
 
 // Registration Routes...
 // Note: these are the routes for the skeleton Laravel registration forms. We use register-member and register-participant

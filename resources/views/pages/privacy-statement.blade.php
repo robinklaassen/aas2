@@ -5,5 +5,21 @@ Privacy statement
 @endsection
 
 @section('content')
-@markdown({! privacy_md !})
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        {{ Form::model(Auth::user(), ['METHOD' => 'POST', 'url' => 'privacy']) }}
+        <label>
+
+            {{ Form::checkbox('privacyAccepted', 1) }}
+            Ik geef Anderwijs toestemming om mijn gegevens te verwerken zoals beschreven in het onderstaande privacystatement
+
+        </label>
+        {{ Form::submit('Opslaan', [ "class" => "button" ]) }}
+        {{ Form::close() }}
+    </div>
+    <div class="panel-body">
+        @markdown($privacy_md)
+    </div>
+</div>
 @endsection
