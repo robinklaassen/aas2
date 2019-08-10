@@ -239,27 +239,4 @@ class UsersController extends Controller
 			'flash_message' => 'De gebruiker is verwijderd!'
 		]);
 	}
-
-	public function showPrivacy(Request $request)
-	{
-		$user = Auth::user();
-		$origin = $request->query("origin", "/");
-		$privacy_md = file_get_contents(resource_path("\\markdown\\privacy-statement.md"));
-		return view("pages.privacy-statement", compact("user", "origin", "privacy_md"));
-	}
-
-	public function storePrivacy(Request $request)
-	{
-		$privacyAccepted = $request->input("privacyAccepted") === "1";
-		if (!$privacyAccepted) {
-			return redirect("privacy")->with([
-				"flash_error" => "De privacy voorwaarde dient geaccepteerd te worden om verder te kunnen."
-			]);
-		}
-
-		$user = Auth::user();
-		$user->privacy = Carbon::now();
-		$user->save();
-		return redirect($request->query("origin", "/"));
-	}
 }

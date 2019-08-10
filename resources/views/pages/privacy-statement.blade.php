@@ -5,10 +5,12 @@ Privacy statement
 @endsection
 
 @php
-$qs = 'origin=' . urlencode($origin);
+$qs = isset($origin) ? 'origin=' . urlencode($origin) : '';
+$privacy_md = file_get_contents(resource_path("\\markdown\\privacy-statement.md"));
 @endphp
 @section('content')
 <div class="panel panel-default">
+    @if(isset($showForm) && $showForm)
     <div class="panel-heading" style="height:62px">
         {{ Form::model($user, ['METHOD' => 'POST', 'url' => 'privacy?' . $qs,]) }}
         <label>
@@ -18,6 +20,7 @@ $qs = 'origin=' . urlencode($origin);
         {{ Form::submit('Opslaan', [ "class" => "btn btn-primary pull-right" ]) }}
         {{ Form::close() }}
     </div>
+    @endif
     <div class="panel-body">
         @markdown($privacy_md)
     </div>
