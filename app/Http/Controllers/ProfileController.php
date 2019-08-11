@@ -1,4 +1,6 @@
-<?php namespace App\Http\Controllers;
+<?php
+
+namespace App\Http\Controllers;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -21,10 +23,7 @@ class ProfileController extends Controller
 {
 
 	public function __construct()
-	{
-		// You need to be logged in to access your profile
-		$this->middleware('auth');
-	}
+	{ }
 
 	/**
 	 * Display the specified resource.

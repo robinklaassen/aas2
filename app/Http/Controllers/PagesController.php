@@ -16,17 +16,7 @@ class PagesController extends Controller
 {
 
 	public function __construct()
-	{
-		// You need to be logged in to access
-		$this->middleware('auth', ['except' => ['iDealWebhook', 'cal', 'campInfo', 'campsReport', 'referrer', 'showPrivacyStatement']]);
-		$this->middleware('admin', ['only' => ['lists', 'graphs']]);
-
-		// Guest access
-		$this->middleware('guest', ['only' => ['referrer', 'showPrivacyStatement']]);
-
-		// Cross-Origin Resource Sharing for API
-		$this->middleware('cors', ['only' => 'cal']);
-	}
+	{ }
 
 	# Homepage
 	public function home()

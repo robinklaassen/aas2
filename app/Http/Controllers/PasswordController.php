@@ -1,4 +1,6 @@
-<?php namespace App\Http\Controllers;
+<?php
+
+namespace App\Http\Controllers;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -12,10 +14,7 @@ class PasswordController extends Controller
 {
 
 	public function __construct()
-	{
-		// You need to be not logged in to access
-		$this->middleware('guest');
-	}
+	{ }
 
 	# Forgot password form
 	public function forgot()

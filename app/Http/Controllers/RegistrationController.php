@@ -1,4 +1,6 @@
-<?php namespace App\Http\Controllers;
+<?php
+
+namespace App\Http\Controllers;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -19,10 +21,7 @@ class RegistrationController extends Controller
 {
 
 	public function __construct()
-	{
-		// You can only access these forms if you are not logged in
-		$this->middleware('guest');
-	}
+	{ }
 
 	# Member registration form
 	public function registerMember()
