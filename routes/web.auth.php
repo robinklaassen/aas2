@@ -34,7 +34,7 @@ Route::get('enquete/{event}', 'ReviewsController@review');
 Route::post('enquete/{event}', 'ReviewsController@reviewPost');
 
 
-Route::get("accept-privacy", "PagesController@showAcceptPrivacyStatement");
-Route::post("accept-privacy", "PagesController@storePrivacyStatement");
+Route::get("accept-privacy", "PagesController@showAcceptPrivacyStatement")->name("show-accept-privacy");
+Route::post("accept-privacy", "PagesController@storePrivacyStatement")->name("store-accept-privacy");
 
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');

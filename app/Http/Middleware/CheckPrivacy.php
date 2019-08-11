@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Support\Facades\Auth;
 
 class CheckPrivacy
 {
@@ -15,9 +16,12 @@ class CheckPrivacy
      */
     public function handle($request, Closure $next)
     {
+        $isPrivacyRoute = strpos($request->route()->getName(), "privacy") !== false;
 
-        if (Auth::user() && Auth::user()->privacy === null) {
-            return route('/accept-privacy');
+        if (!$isPrivacyRoute && Auth::user() && Auth::user()->privacy === null) {
+            return redirect()->route('show-accept-privacy', [
+                "origin" => $request->path()
+            ]);
         }
         return $next($request);
     }

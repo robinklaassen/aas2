@@ -12,7 +12,7 @@ $privacy_md = file_get_contents(resource_path("\\markdown\\privacy-statement.md"
 <div class="panel panel-default">
     @if(isset($showForm) && $showForm)
     <div class="panel-heading" style="height:62px">
-        {{ Form::model($user, ['METHOD' => 'POST', 'url' => 'privacy?' . $qs,]) }}
+        {{ Form::model($user, ['METHOD' => 'POST', 'url' => 'accept-privacy?' . $qs,]) }}
         <label>
             {{ Form::checkbox('privacyAccepted', 1) }}
             Ik geef Anderwijs toestemming om mijn gegevens te verwerken zoals beschreven in het onderstaande privacystatement
