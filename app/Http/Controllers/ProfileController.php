@@ -358,6 +358,7 @@ class ProfileController extends Controller
 			->where('datum_start', '>', date('Y-m-d'))
 			->orderBy('datum_start', 'asc')
 			->get();
+		$camp_options = []; $camp_full = [];
 		foreach ($camps as $camp) {
 			$camp_options[$camp->id] = $camp->naam . ' ' . substr($camp->datum_start, 0, 4) . ' te ' . $camp->location->plaats . ' (' . $camp->datum_start->format('d-m-Y') . ')';
 			if ($camp->vol) {
