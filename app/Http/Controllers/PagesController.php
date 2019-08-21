@@ -723,16 +723,15 @@ class PagesController extends Controller
 	public function showAcceptPrivacyStatement(Request $request)
 	{
 		$user = Auth::user();
-		$origin = $request->query("origin", "/");
 		$showForm = true;
-		return view("pages.privacy-statement", compact("user", "origin", "showForm"));
+		return view("pages.privacy-statement", compact("user", "showForm"));
 	}
 
 	public function storePrivacyStatement(Request $request)
 	{
 		$privacyAccepted = $request->input("privacyAccepted") === "1";
 		if (!$privacyAccepted) {
-			return redirect("privacy")->with([
+			return redirect("accept-privacy")->with([
 				"flash_error" => "De privacy voorwaarde dient geaccepteerd te worden om verder te kunnen."
 			]);
 		}
@@ -740,6 +739,6 @@ class PagesController extends Controller
 		$user = Auth::user();
 		$user->privacy = Carbon::now();
 		$user->save();
-		return redirect($request->query("origin", "/"));
+		return redirect("home");
 	}
 }
