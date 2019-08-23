@@ -61,7 +61,7 @@
 <div class="row">
 	<div class="col-md-4 form-group">
 		{!! Form::label('datum_voordag', 'Start voordag(en):') !!}
-		@if (isset($event))
+		@if (isset($event) && $event->datum_voordag !== null)
 			{!! Form::input('date', 'datum_voordag', $event->datum_voordag->format('Y-m-d'), ['class' => 'form-control', 'placeholder' => 'Format: jjjj-mm-dd']) !!}
 		@else
 			{!! Form::input('date', 'datum_voordag', null, ['class' => 'form-control', 'placeholder' => 'Format: jjjj-mm-dd']) !!}
