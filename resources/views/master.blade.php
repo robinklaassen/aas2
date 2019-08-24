@@ -70,31 +70,6 @@
 	  </div><!-- /.modal-dialog -->
 	</div><!-- /.modal -->
 
-	<!-- Privacy modal -->
-	@unless (Auth::guest())
-	<div class="modal" id="privacyModal" tabindex="-1" role="dialog">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title">Privacystatement</h4>
-				</div>
-				<div class="modal-body">
-					<p>
-						Per 25 mei 2018 is de Algemene Verordening Gegevensbescherming (AVG) van kracht. Ook wij vinden het belangrijk om daar aandacht aan te besteden. In ons nieuwe <a href="http://www.anderwijs.nl/anderwijs/privacy" target="_blank">privacystatement</a> leggen we uit wat we doen met de gegevens die bij ons bekend zijn.
-					</p>
-					<p>
-						Als je doorgaat met het gebruik van dit administratiesysteem, geef je ons toestemming om je gegevens te blijven gebruiken voor wat we doen. Na het klikken op de knop krijg je dit bericht niet meer te zien. Heb je bezwaar tegen het gebruik van je gegevens en wil je dat we jouw data verwijderen, laat dit dan weten middels een email naar <a href="mailto:bestuur@anderwijs.nl">bestuur@anderwijs.nl</a>. We zullen dit dan zo spoedig mogelijk uitvoeren. Ook voor andere vragen omtrent privacy en gegevensgebruik kun je bij het bestuur terecht.
-					</p>
-				</div>
-				<div class="modal-footer">
-					<button type ="button" class="btn btn-primary" data-dismiss="modal">Akkoord</button>
-				</div>
-			</div>
-		</div>
-	</div>
-	@endunless
-
 	<!-- Load jQuery and Boostrap scripts -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
