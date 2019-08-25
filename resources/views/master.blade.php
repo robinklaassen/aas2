@@ -41,10 +41,11 @@
 		@yield('content')
 	
 		<!-- Footer -->
-		<p class="text-right" style="margin-top:5px;">
-			<small style="border-top:1px solid #ddd; padding-top:10px;">AAS 2.0 is het Anderwijs Administratiesysteem. <button type="button" class="btn btn-link btn-sm" data-toggle="modal" data-target="#infoModal">Meer informatie?</button></small>
-			<br/>
-			<small>Meld problemen bij de <a href="mailto:webmaster@anderwijs.nl">webmaster</a>.</small>
+		<p class="text-right" style="margin-top: 5px; padding: 10px 0px; border-top: 1px solid #ddd;">
+			<span class="btn btn-sm" disabled="true">AAS 2.0 is het Anderwijs Administratiesysteem.</span>
+			<button type="button" class="btn btn-link btn-sm" data-toggle="modal" data-target="#infoModal">Meer informatie</button>
+			<button type="button" class="btn btn-link btn-sm"><a href="{{ url('privacy') }}">Privacystatement</a></button>
+			<button type="button" class="btn btn-link btn-sm"><a href="mailto:webmaster@anderwijs.nl">Mail de webmaster</a></button>
 		</p>
 	</div>
 	
