@@ -5,7 +5,7 @@ Privacy statement
 @endsection
 
 @php
-$privacy_md = file_get_contents(resource_path("\\markdown\\privacy-statement.md"));
+$privacy_md = file_get_contents(resource_path("markdown/privacy-statement.md"));
 @endphp
 @section('content')
 <div class="panel panel-default">
