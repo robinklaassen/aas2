@@ -46,14 +46,14 @@ Als leiding word je lid van vereniging Anderwijs. We bewaren je gegevens in iede
 
 ### Opslag van gegevens
 
-Alle gegevens worden digitaal bewaard in een beveiligde omgeving. Wij zorgen ervoor dat de beveiliging bijgehouden wordt. Gegevens zijn alleen te raadplegen met een persoonlijk account met wachtwoord. Ons administratiesysteem is ondergebracht bij een hostingpartij, die ook zorgvuldig omgaat met de opslag van onze gegevens. Zij zullen alleen persoonsgegevens verwerken als dat volgens ons nodig is. Meer details over de privacyvoorwaarden van deze hostingpartij vind je hier (Artikel 17).
+Alle gegevens worden digitaal bewaard in een beveiligde omgeving. Wij zorgen ervoor dat de beveiliging bijgehouden wordt. Gegevens zijn alleen te raadplegen met een persoonlijk account met wachtwoord. Ons administratiesysteem is ondergebracht bij een hostingpartij, die ook zorgvuldig omgaat met de opslag van onze gegevens. Zij zullen alleen persoonsgegevens verwerken als dat volgens ons nodig is. Meer details over de privacyvoorwaarden van deze hostingpartij vind je [hier](https://www.pcextreme.nl/policies/privacy-policy).
 
 ### Mailcontact
 
 Bij de inschrijving voor een kamp worden (automatische) serviceberichten gestuurd. Denk hierbij aan een bevestiging van een inschrijving voor een kamp of een betalingsbevestiging. Het is niet mogelijk om je voor deze serviceberichten uit te schrijven. Vereniging Anderwijs beschouwt deze berichten als noodzakelijk voor een goede informatievoorziening. Voor alle overige berichten kan worden afgemeld via een optie in het inschrijfformulier, via het persoonlijke profiel in ons administratiesysteem of door beantwoording van een dergelijk bericht.
 
 Wijzigingen privacystatement
-Vereniging Anderwijs behoudt zich het recht voor om wijzigingen aan te brengen in dit privacybeleid. Het is aan te raden om dit privacybeleid voor het gebruik van ons administratiesysteem te raadplegen, zodat je altijd op de hoogte bent. Je kunt dit privacybeleid zelf opslaan of raadplegen via [ons administratiesysteem](http://aas2.anderwijs.nl/privacy).
+Vereniging Anderwijs behoudt zich het recht voor om wijzigingen aan te brengen in dit privacybeleid. Het is aan te raden om dit privacybeleid voor het gebruik van ons administratiesysteem te raadplegen, zodat je altijd op de hoogte bent. Je kunt dit privacybeleid zelf opslaan of raadplegen via [ons administratiesysteem](https://aas2.anderwijs.nl/privacy).
 
 ### Vragen of klachten
 
