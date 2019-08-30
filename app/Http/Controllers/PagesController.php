@@ -542,7 +542,6 @@ class PagesController extends Controller
 				'id' => $k,
 				'naam' => $naam,
 				'code' => $event->code,
-				'voordag' => ($event->datum_voordag->year > 0) ? '<tr><td>Voordag:</td><td>' . $event->datum_voordag->format('d-m-Y') . '</td></tr>' : null,
 				'voordag_tekst' => ($event->type == 'kamp') ? 'Voordag:<br/>' : null,
 				'datum_voordag' => ($event->type == 'kamp') ? $event->datum_voordag->format('d-m-Y') . '<br/>' : null,
 				'tijd_voordag' => ($event->type == 'kamp') ?

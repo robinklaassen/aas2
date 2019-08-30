@@ -81,5 +81,15 @@ class EventTableSeeder extends Seeder
 			'openbaar' => '1',
 			'opmerkingen' => 'Dit ligt wel heel ver in de toekomst!'
 		]);
+
+		Event::create([
+			'naam' => 'Training Nieuwjaarskamp',
+			'code' => 'TN8990',
+			'type' => 'training',
+			'datum_start' => '2089-12-17',
+			'datum_eind' => '2089-12-18',
+			'location_id' => 1,
+			'opmerkingen' => 'Kan iemand anders deze training doen? Ik heb jeuk.'
+		]);
 	}
 }
