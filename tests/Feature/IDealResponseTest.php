@@ -39,7 +39,7 @@ class FakeEventPayment
 
 
 
-class IDealResponse extends TestCase
+class IDealResponseTest extends TestCase
 {
 
     public $event;
