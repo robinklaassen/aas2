@@ -57,5 +57,4 @@ class MemberProfileOnCampTest extends TestCase
         $response->assertRedirect(action('ProfileController@show'));
         $response->assertSessionHas("flash_message", 'Je gaat op kamp!');
     }
-
 }
