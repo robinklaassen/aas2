@@ -41,61 +41,18 @@
 		@yield('content')
 	
 		<!-- Footer -->
-		<p class="text-right" style="margin-top:5px;">
-			<small style="border-top:1px solid #ddd; padding-top:10px;">AAS 2.0 is het Anderwijs Administratiesysteem. <button type="button" class="btn btn-link btn-sm" data-toggle="modal" data-target="#infoModal">Meer informatie?</button></small>
-			<br/>
-			<small>Meld problemen bij de <a href="mailto:webmaster@anderwijs.nl">webmaster</a>.</small>
-		</p>
+		<div style="display: inline-flex; float: right; flex-wrap: wrap; border-top: 1px solid #ddd; padding-top: 10px;">
+			<span class="btn btn-sm" disabled="true">AAS 2.0 is het Anderwijs Administratiesysteem.</span>
+			<button type="button" class="btn btn-link btn-sm" data-toggle="modal" data-target="#infoModal">Meer informatie</button>
+			<button type="button" class="btn btn-link btn-sm"><a href="{{ url('privacy') }}">Privacystatement</a></button>
+			<button type="button" class="btn btn-link btn-sm"><a href="mailto:webmaster@anderwijs.nl">Mail de webmaster</a></button>
+		</div>
 	</div>
 	
 	<!-- Info modal -->
-	<div class="modal fade" id="infoModal" tabindex="-1" role="dialog">
-	  <div class="modal-dialog" role="document">
-		<div class="modal-content">
-		  <div class="modal-header">
-			<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-			<h4 class="modal-title">Over AAS 2.0</h4>
-		  </div>
-		  <div class="modal-body">
-			<p>AAS 2.0 is ontwikkeld door <a href="mailto:robin@anderwijs.nl">Robin Klaassen</a> in april-mei 2015. Het systeem draait op het PHP framework <a href="http://laravel.com/">Laravel</a> en de voorkant is gebaseerd op <a href="http://getbootstrap.com/">Bootstrap 3</a>, met de <a href="https://bootswatch.com/cosmo/">Cosmo</a> template. Interactieve tabellen worden mogelijk gemaakt door <a href="https://datatables.net">DataTables</a>, kaarten en grafieken door Google's <a href="https://developers.google.com/maps/">Maps</a> en <a href="https://developers.google.com/chart/">Charts</a>.</p>
+	@include('partials.info')
 
-			<p>AAS staat voor Anderwijs Administratie Systeem en is voor het eerst digitaal ontwikkeld door Dave Liefbroer in 2008.</p>
-
-			<p>Bug reports, feature requests en/of vragen graag per mail naar <a href="mailto:webmaster@anderwijs.nl">webmaster@anderwijs.nl</a>. Wees hierbij zo specifiek mogelijk.</p>
-		  </div>
-		  <div class="modal-footer">
-			<button type="button" class="btn btn-primary" data-dismiss="modal">Bedankt!</button>
-		  </div>
-		</div><!-- /.modal-content -->
-	  </div><!-- /.modal-dialog -->
-	</div><!-- /.modal -->
-
-	<!-- Privacy modal -->
-	@unless (Auth::guest())
-	<div class="modal" id="privacyModal" tabindex="-1" role="dialog">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					<h4 class="modal-title">Privacystatement</h4>
-				</div>
-				<div class="modal-body">
-					<p>
-						Per 25 mei 2018 is de Algemene Verordening Gegevensbescherming (AVG) van kracht. Ook wij vinden het belangrijk om daar aandacht aan te besteden. In ons nieuwe <a href="http://www.anderwijs.nl/anderwijs/privacy" target="_blank">privacystatement</a> leggen we uit wat we doen met de gegevens die bij ons bekend zijn.
-					</p>
-					<p>
-						Als je doorgaat met het gebruik van dit administratiesysteem, geef je ons toestemming om je gegevens te blijven gebruiken voor wat we doen. Na het klikken op de knop krijg je dit bericht niet meer te zien. Heb je bezwaar tegen het gebruik van je gegevens en wil je dat we jouw data verwijderen, laat dit dan weten middels een email naar <a href="mailto:bestuur@anderwijs.nl">bestuur@anderwijs.nl</a>. We zullen dit dan zo spoedig mogelijk uitvoeren. Ook voor andere vragen omtrent privacy en gegevensgebruik kun je bij het bestuur terecht.
-					</p>
-				</div>
-				<div class="modal-footer">
-					<button type ="button" class="btn btn-primary" data-dismiss="modal">Akkoord</button>
-				</div>
-			</div>
-		</div>
-	</div>
-	@endunless
-
-	<!-- Load jQuery and Boostrap scripts -->
+	<!-- Load jQuery and Bootstrap scripts -->
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 	
@@ -143,7 +100,7 @@
 			}
 		} );
 		
-		// Fix DataTables in Boostrap tabs
+		// Fix DataTables in Bootstrap tabs
 		$("a[data-toggle=\"tab\"]").on("shown.bs.tab", function (e) {
 		  console.log( 'show tab' );
 			$($.fn.dataTable.tables(true)).DataTable()

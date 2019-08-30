@@ -141,6 +141,7 @@ return [
 		'Maatwebsite\Excel\ExcelServiceProvider',
 		'Khill\Lavacharts\Laravel\LavachartsServiceProvider',
 		'Illuminate\Notifications\NotificationServiceProvider',
+		'GrahamCampbell\Markdown\MarkdownServiceProvider',
 
 
 		/*
@@ -151,8 +152,7 @@ return [
 		'App\Providers\ConfigServiceProvider',
 		'App\Providers\EventServiceProvider',
 		'App\Providers\RouteServiceProvider',
-		'App\Providers\ViewComposerServiceProvider',
-		App\Providers\MollieServiceProvider::class
+		'App\Providers\ViewComposerServiceProvider'
 
 	],
 
@@ -206,7 +206,6 @@ return [
 		'PDF' 		=> 'Barryvdh\DomPDF\Facade',
 		'Excel' 	=> 'Maatwebsite\Excel\Facades\Excel',
 		'Lava' 		=> 'Khill\Lavacharts\Laravel\LavachartsFacade',
-		'Mollie'	=> App\Facades\Mollie::class
 	],
 
 ];

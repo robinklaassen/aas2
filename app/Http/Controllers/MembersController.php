@@ -1,4 +1,6 @@
-<?php namespace App\Http\Controllers;
+<?php
+
+namespace App\Http\Controllers;
 
 use Input;
 use App\Member;
@@ -11,11 +13,7 @@ class MembersController extends Controller
 {
 
 	public function __construct()
-	{
-		// You need to be logged in and have admin rights to access
-		$this->middleware('auth');
-		$this->middleware('admin', ['except' => ['index']]);
-	}
+	{ }
 
 	# Index page
 	public function index()
