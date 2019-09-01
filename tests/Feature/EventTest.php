@@ -25,8 +25,7 @@ class EventTest extends TestCase
             ->actingAs($this->user)
             ->get('/events')
             ->assertStatus(200)
-            ->assertSee('Nieuwjaarskamp')
-            ->assertSee('Training Meikamp');
+            ->assertSee('Nieuwjaarskamp', 'Training Meikamp', '/events/1');
     }
 
     /**
@@ -40,6 +39,6 @@ class EventTest extends TestCase
             ->actingAs($this->user)
             ->get('/events/1')
             ->assertStatus(200)
-            ->assertSeeInOrder(['Bewerken', 'Venlo', 'Ranonkeltje', 'Vakdekking', 'Annabelle']);
+            ->assertSee('Bewerken', 'Venlo', 'Ranonkeltje', 'Vakdekking', 'Annabelle');
     }
 }

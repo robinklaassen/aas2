@@ -25,8 +25,7 @@ class MemberTest extends TestCase
             ->actingAs($this->user)
             ->get('/members')
             ->assertStatus(200)
-            ->assertSee('Dingo')
-            ->assertSee('Ranonkeltje');
+            ->assertSee('Dingo', 'Ranonkeltje', '/members/1');
     }
 
     /**
@@ -40,6 +39,6 @@ class MemberTest extends TestCase
             ->actingAs($this->user)
             ->get('/members/3')
             ->assertStatus(200)
-            ->assertSeeInOrder(['Bewerken', 'Flipstoeje', 'Lijst met acties', 'Natuurkunde']);
+            ->assertSee('Bewerken', 'Flipstoeje', 'Lijst met acties', 'Natuurkunde');
     }
 }

@@ -25,8 +25,7 @@ class ParticipantTest extends TestCase
             ->actingAs($this->user)
             ->get('/participants')
             ->assertStatus(200)
-            ->assertSee('Annabelle')
-            ->assertSee('Jaap');
+            ->assertSee('Annabelle', 'Jaap', '/participants/1');
     }
 
     /**
@@ -40,6 +39,6 @@ class ParticipantTest extends TestCase
             ->actingAs($this->user)
             ->get('/participants/1')
             ->assertStatus(200)
-            ->assertSeeInOrder(['Bewerken', 'Elst', 'Meikamp']);
+            ->assertSee('Bewerken', 'Elst', 'Meikamp');
     }
 }
