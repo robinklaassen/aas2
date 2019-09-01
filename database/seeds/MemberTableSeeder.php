@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 use App\Member;
 
 class MemberTableSeeder extends Seeder

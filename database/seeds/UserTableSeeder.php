@@ -31,6 +31,7 @@ class UserTableSeeder extends Seeder
 		$user->username = 'jon';
 		$user->password = bcrypt('snow');
 		$user->is_admin = 0;
+		$user->privacy = '2018-06-01';
 		$member->user()->save($user);
 
 		$participant = Participant::find(2);
