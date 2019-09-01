@@ -9,7 +9,7 @@ Hieronder globale informatie over het opzetten van een lokale ontwikkelomgeving.
 ## Draai de code lokaal
 
 - Installeer WAMP
-- Optioneel: installeer Composer globaal (maar je kunt ook `$ php composer.phar <command>` gebruiken binnen deze repo)
+- Installeer Composer; dit kan globaal of lokaal met een `composer.phar` bestand in deze repo (zie https://getcomposer.org/download/)
 - Clone dit project
 - `$ composer install` haalt de dependencies binnen van de source code en maakt een lokale `.env` file aan
 - Maak in WAMP een Virtual Host aan die verwijst naar de `public` map van dit project
