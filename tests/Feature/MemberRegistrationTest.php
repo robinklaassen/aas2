@@ -9,7 +9,7 @@ class MemberRegistrationTest extends TestCase
 {
     use DatabaseTransactions;
 
-    private $fakeMemberData = [
+    private $postData = [
         'voornaam' => 'Berend',
         'tussenvoegsel' => 'van',
         'achternaam' => 'Zuid',
@@ -20,7 +20,7 @@ class MemberRegistrationTest extends TestCase
         'plaats' => 'Lalastad',
         'telefoon' => '0123456789',
         'email' => 'berend@vanzuid.nl',
-        'selected_camp' => '1',
+        'selected_camp' => 1,
         'eindexamen' => 'VWO',
         'studie' => 'Nietsnuttigheid',
         'afgestudeerd' => 1,
@@ -30,6 +30,26 @@ class MemberRegistrationTest extends TestCase
         'vog' => 1,
         'privacy' => 1
     ];
+    private $memberData;
+    private $userData;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        // Create member data to test for in DB
+        $this->memberData = $this->postData;
+        $keysToRemove = ['selected_camp', 'vak1', 'klas1', 'vog', 'privacy'];
+        foreach ($keysToRemove as $key) {
+            unset($this->memberData[$key]);
+        }
+        $this->memberData['hoebij'] = implode(", ", $this->postData['hoebij']);
+
+        $this->userData = [
+            'username' => 'bzuid',
+            'is_admin' => 0
+        ];
+    }
 
     /**
      * Test that the member registration form opens correctly.
@@ -38,8 +58,9 @@ class MemberRegistrationTest extends TestCase
      */
     public function testMemberRegistrationForm()
     {
-        $response = $this->get('/register-member');
-        $response->assertStatus(200);
+        $response = $this
+            ->get('/register-member')
+            ->assertStatus(200);
     }
 
     /**
@@ -50,22 +71,15 @@ class MemberRegistrationTest extends TestCase
         // POST and check status code
         $response = $this
             ->followingRedirects()
-            ->post('/register-member', $this->fakeMemberData);
-
-        $response->assertStatus(200);
+            ->post('/register-member', $this->postData)
+            ->assertStatus(200);
 
         // Check existence of member and user in DB
-        $this->assertDatabaseHas('members', [
-            'email' => $this->fakeMemberData['email']
-        ]);
-
-        $this->assertDatabaseHas('users', [
-            'username' => 'bzuid'
-        ]);
-
+        $this->assertDatabaseHas('members', $this->memberData);
+        $this->assertDatabaseHas('users', $this->userData);
         $this->assertDatabaseHas('event_member', [
-            'member_id' => \App\Member::where('email', $this->fakeMemberData['email'])->first()->id,
-            'event_id' => 1
+            'member_id' => \App\Member::latest()->first()->id,
+            'event_id' => $this->postData['selected_camp']
         ]);
     }
 }
