@@ -9,9 +9,7 @@ class MemberRegistrationTest extends TestCase
 {
     use DatabaseTransactions;
 
-    /**
-     * @var array // This fixes a type hint problem in intelephense
-     */
+    /** @var (string|int|array) array */
     private $postData = [
         'voornaam' => 'Berend',
         'tussenvoegsel' => 'van',
