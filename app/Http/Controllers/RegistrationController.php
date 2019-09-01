@@ -96,7 +96,7 @@ class RegistrationController extends Controller
 		$levelInput = [$request->klas0, $request->klas1, $request->klas2, $request->klas3, $request->klas4, $request->klas5, $request->klas6, $request->klas7];
 
 		foreach (array_unique($courseInput) as $i => $course) {
-			if ($course != '0') {
+			if ($course !== null && $course != '0') {
 				$member->courses()->sync([$course], false);
 				$member->courses()->updateExistingPivot($course, ['klas' => $levelInput[$i]]);
 				$givenCourses[] = ['naam' => Course::find($course)->naam, 'klas' => $levelInput[$i]];

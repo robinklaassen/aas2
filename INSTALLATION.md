@@ -8,20 +8,20 @@
   - Install WAMP, you can leave everything as default.
   - You might need some extra things, if you start WAMP and have an error about a missing Msvcr110.dll [this windows update package thingy](https://www.microsoft.com/en-us/download/details.aspx?id=30679) (if you are not sure which to download, you propably need the x64 one)
 
-- Startup WAMP and ensure it is on php `7.1.x`
+- Startup WAMP and ensure it is on php `7.2.x`
 
   - Open WAMP
-  - Change the PHP CLI version to `7.1.x`
+  - Change the PHP CLI version to `7.2.x`
     - In the system tray, right click on the WAMP logo
     - Go to `Tools`
     - Go to `Change PHP CLI version`
-    - Select `7.1.x`
+    - Select `7.2.x`
 
 * Install Composer
 
   - Download composer. [direct download](https://getcomposer.org/Composer-Setup.exe)
   - Install composer. You can leave most as default see below.
-    - There is a page to select the proper PHP version. Select 7.1.x in the dropdown.
+    - There is a page to select the proper PHP version. Select 7.2.x in the dropdown.
 
 * Install a Git environment. Either one of the below should do fine (NOT BOTH)
   - Github for windows (should be dummy proof, but never used it)

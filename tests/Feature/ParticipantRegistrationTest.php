@@ -11,28 +11,10 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use App\Helpers\Payment\MolliePaymentProvider;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\DB;
 
 
-
-class RegistationTest extends TestCase
+class ParticipantRegistrationTest extends TestCase
 {
-    private static function clearDB()
-    {
-        DB::statement("
-        delete from users
-         where profile_type = 'App\Participant'
-           and profile_id in (select p.id from participants p where p.achternaam = 'Test' )
-        ");
-        DB::statement("
-        delete from event_participant
-         where participant_id in (select p.id from participants p where p.achternaam = 'Test' )
-        ");
-        DB::statement("
-        delete from participants
-         where achternaam = 'Test'
-        ");
-    }
     use DatabaseTransactions;
     use WithoutMiddleware;
 
@@ -82,7 +64,6 @@ class RegistationTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        RegistationTest::clearDB();
         $this->event = Event::findOrFail($this->data["selected_camp"]);
         $this->participantData = [
             "voornaam" => $this->data["voornaam"],
@@ -110,12 +91,6 @@ class RegistationTest extends TestCase
             "username" => $username,
             "is_admin" => 0
         ];
-    }
-
-    protected function tearDown(): void
-    {
-        RegistationTest::clearDB();
-        parent::tearDown();
     }
 
     /**
