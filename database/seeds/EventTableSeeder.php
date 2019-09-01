@@ -65,16 +65,25 @@ class EventTableSeeder extends Seeder
 
 
 		Event::create([
-			'naam' => 'Het nieuwjaarskamp 2019',
-			'code' => 'Z2019-1',
+			'naam' => 'Nieuwjaarskamp',
+			'code' => 'N8990',
 			'type' => 'kamp',
-			'datum_voordag' => '2019-12-29',
-			'datum_start' => '2019-12-30',
-			'datum_eind' => '2020-01-01',
+			'datum_voordag' => '2090-01-01',
+			'datum_start' => '2090-01-02',
+			'datum_eind' => '2090-01-05',
 			'location_id' => 2,
 			'prijs' => 1000,
 			'streeftal' => 10,
 			'openbaar' => '1'
+		]);
+
+		Event::create([
+			'naam' => 'Training Nieuwjaarskamp',
+			'code' => 'TN8990',
+			'type' => 'training',
+			'datum_start' => '2089-12-17',
+			'datum_eind' => '2089-12-18',
+			'location_id' => 1
 		]);
 	}
 }

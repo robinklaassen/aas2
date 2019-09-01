@@ -1,4 +1,6 @@
-<?php namespace App;
+<?php
+
+namespace App;
 
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
@@ -45,5 +47,15 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	public function getVolnaamAttribute()
 	{
 		return $this->profile->volnaam;
+	}
+
+	public function getPrivacyAcceptedAttribute()
+	{
+		return $this->privacy !== null;
+	}
+
+	public function setPrivacyAcceptedAttribute(bool $v)
+	{
+		$this->attributes['privacy'] = $v ? Carbon::now() : null;
 	}
 }

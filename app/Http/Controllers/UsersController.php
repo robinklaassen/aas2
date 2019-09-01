@@ -1,4 +1,6 @@
-<?php namespace App\Http\Controllers;
+<?php
+
+namespace App\Http\Controllers;
 
 use App\User;
 use Mail;
@@ -8,16 +10,14 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Mail\members\NewUserMember;
 use App\Mail\participants\NewUserParticipant;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class UsersController extends Controller
 {
 
 	public function __construct()
-	{
-		// You need to be logged in and have admin rights to access
-		$this->middleware('auth');
-		$this->middleware('admin');
-	}
+	{ }
 
 	/**
 	 * Display a listing of the resource.

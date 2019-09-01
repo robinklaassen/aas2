@@ -11,10 +11,8 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use App\Helpers\Payment\MolliePaymentProvider;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
-class RegistationTest extends TestCase
+class ParticipantRegistrationTest extends TestCase
 {
     use DatabaseTransactions;
     use WithoutMiddleware;
@@ -65,7 +63,6 @@ class RegistationTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        // RegistationTest::clearDB();
         $this->event = Event::findOrFail($this->data["selected_camp"]);
         $this->participantData = [
             "voornaam" => $this->data["voornaam"],
@@ -93,17 +90,7 @@ class RegistationTest extends TestCase
             "username" => $username,
             "is_admin" => 0
         ];
-
-        $random = Str::random(40);
-        $text = "Testing " . $random;
-        $this->data["opmerkingen"] = $text;
     }
-
-    // protected function tearDown(): void
-    // {
-    //     RegistationTest::clearDB();
-    //     parent::tearDown();
-    // }
 
     /**
      * Tests the participants registration with iDeal provided by mollie

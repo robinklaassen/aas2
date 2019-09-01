@@ -1,4 +1,6 @@
-<?php namespace App\Http\Controllers;
+<?php
+
+namespace App\Http\Controllers;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -21,10 +23,7 @@ class ProfileController extends Controller
 {
 
 	public function __construct()
-	{
-		// You need to be logged in to access your profile
-		$this->middleware('auth');
-	}
+	{ }
 
 	/**
 	 * Display the specified resource.
@@ -358,6 +357,7 @@ class ProfileController extends Controller
 			->where('datum_start', '>', date('Y-m-d'))
 			->orderBy('datum_start', 'asc')
 			->get();
+		$camp_options = []; $camp_full = [];
 		foreach ($camps as $camp) {
 			$camp_options[$camp->id] = $camp->naam . ' ' . substr($camp->datum_start, 0, 4) . ' te ' . $camp->location->plaats . ' (' . $camp->datum_start->format('d-m-Y') . ')';
 			if ($camp->vol) {

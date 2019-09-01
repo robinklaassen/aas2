@@ -1,4 +1,6 @@
-<?php namespace App\Http;
+<?php
+
+namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -28,20 +30,23 @@ class Kernel extends HttpKernel
 		'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
 		'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
 		'admin' => \App\Http\Middleware\RedirectIfNotAnAdmin::class,
-		'member' => A\pp\Http\Middleware\RedirectIfNotAMember::class,
+		'member' => \App\Http\Middleware\RedirectIfNotAMember::class,
 		'cors' => \App\Http\Middleware\CORS::class,
 		'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
 		'can' => \Illuminate\Auth\Middleware\Authorize::class,
+		'privacy' => \App\Http\Middleware\CheckPrivacy::class
 	];
 
 	protected $middlewareGroups = [
 		'web' => [
+
 			\App\Http\Middleware\EncryptCookies::class,
 			\Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
 			\Illuminate\Session\Middleware\StartSession::class,
 			\Illuminate\View\Middleware\ShareErrorsFromSession::class,
-			// \App\Http\Middleware\VerifyCsrfToken::class,
 			\Illuminate\Routing\Middleware\SubstituteBindings::class,
+			\App\Http\Middleware\CheckPrivacy::class,
+			// \App\Http\Middleware\VerifyCsrfToken::class,
 		],
 
 		'api' => [
