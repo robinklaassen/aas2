@@ -10,6 +10,7 @@ use Tests\TestCase;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\participants\IDealConfirmation;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class FakePaymentMetadata
 {
@@ -42,6 +43,8 @@ class FakeEventPayment
 class IDealResponseTest extends TestCase
 {
 
+    use DatabaseTransactions;
+
     public $event;
     public $user;
 
@@ -50,20 +53,7 @@ class IDealResponseTest extends TestCase
     {
         parent::setUp();
         $this->event = Event::findOrFail(5);
-
-        DB::statement("
-            delete from event_participant where event_id = 5
-        ");
-        // annabel, we zijn niets zonder jou, annabel!
         $this->user = User::findOrFail(3);
-    }
-
-    protected function tearDown(): void
-    {
-        DB::statement("
-            delete from event_participant where event_id = 5
-        ");
-        parent::tearDown();
     }
 
 

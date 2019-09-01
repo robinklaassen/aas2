@@ -19,8 +19,7 @@ class CourseCoverageCheckerTest extends TestCase
             ->actingAs($user)
             ->get('/events/1/check/all')
             ->assertStatus(200)
-            ->assertSee('Engels')
-            ->assertSee('glyphicon-ok')
+            ->assertSee('Engels', 'glyphicon-ok')
             ->assertDontSee('glyphicon-alert');
 
         $response = $this

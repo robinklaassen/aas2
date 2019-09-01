@@ -2,10 +2,13 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 class MemberRegistrationTest extends TestCase
 {
+    use DatabaseTransactions;
+
     private $fakeMemberData = [
         'voornaam' => 'Berend',
         'tussenvoegsel' => 'van',
@@ -27,24 +30,7 @@ class MemberRegistrationTest extends TestCase
         'vog' => 1,
         'privacy' => 1
     ];
-    
-    private function clearDB(): void
-    {
-        \App\Member::where('email', $this->fakeMemberData['email'])->delete();
-    }
 
-    protected function setUp(): void
-    {
-        parent::setUp();
-        $this->clearDB();
-    }
-
-    protected function tearDown(): void
-    {
-        $this->clearDB();
-        parent::tearDown();
-    }
-    
     /**
      * Test that the member registration form opens correctly.
      *

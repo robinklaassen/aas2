@@ -48,7 +48,7 @@ return [
 
 		'sqlite' => [
 			'driver'   => 'sqlite',
-			'database' => storage_path().'/database.sqlite',
+			'database' => storage_path() . '/database.sqlite',
 			'prefix'   => '',
 		],
 
@@ -62,6 +62,7 @@ return [
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',
 			'strict'    => false,
+			'engine'	=> 'InnoDB',
 		],
 
 		'pgsql' => [

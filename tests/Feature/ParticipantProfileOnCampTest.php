@@ -11,12 +11,12 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use App\Event;
 use App\Helpers\Payment\EventPayment;
-
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class ParticipantProfileOnCampTest extends TestCase
 {
     use WithoutMiddleware;
-
+    use DatabaseTransactions;
 
     protected $data = [
         "selected_camp" => 5,
@@ -31,20 +31,7 @@ class ParticipantProfileOnCampTest extends TestCase
     {
         parent::setUp();
         $this->event = Event::findOrFail($this->data["selected_camp"]);
-
-        DB::statement("
-            delete from event_participant where event_id = 5
-        ");
-        // annabel, we zijn niets zonder jou, annabel!
-        $this->user = User::findOrFail(3);
-    }
-
-    protected function tearDown(): void
-    {
-        DB::statement("
-            delete from event_participant where event_id = 5
-        ");
-        parent::tearDown();
+        $this->user = User::findOrFail(3); // Annabelle, we zijn niets zonder jou, Annabelle!
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Mail;
@@ -9,6 +10,7 @@ use Illuminate\Support\Facades\Mail;
 class MemberProfileOnCampTest extends TestCase
 {
     use WithoutMiddleware;
+    use DatabaseTransactions;
 
     private $member_id = 3;
     private $event_id = 2;
@@ -16,25 +18,12 @@ class MemberProfileOnCampTest extends TestCase
     private $member;
     private $event;
 
-    private function clearDB(): void
-    {
-        $this->member->events()->detach();
-    }
-
     protected function setUp(): void
     {
         parent::setUp();
 
         $this->member = \App\Member::findOrFail($this->member_id);
         $this->event = \App\Event::findOrFail($this->event_id);
-
-        $this->clearDB();
-    }
-
-    protected function tearDown(): void
-    {
-        $this->clearDB();
-        parent::tearDown();
     }
 
     /**
