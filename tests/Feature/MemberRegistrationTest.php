@@ -9,6 +9,9 @@ class MemberRegistrationTest extends TestCase
 {
     use DatabaseTransactions;
 
+    /**
+     * @var array // This fixes a type hint problem in intelephense
+     */
     private $postData = [
         'voornaam' => 'Berend',
         'tussenvoegsel' => 'van',
