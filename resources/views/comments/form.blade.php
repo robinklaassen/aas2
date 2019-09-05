@@ -1,4 +1,3 @@
-
 <div class="form-group">
     {!! Form::label('text', 'Opmerking:') !!}
     {!! Form::textarea('text', null, ['class' => 'form-control']) !!}
@@ -6,14 +5,14 @@
 
 @if(\Auth::user()->is_admin)
 <div class="checkbox">
-    <label>
+    <label title="Alleen zichtbaar voor admins">
         {!! Form::hidden('is_secret', 0) !!}
         {!! Form::checkbox('is_secret', 1, null) !!}
-        Verborgen
+        Geheim <i class="glyphicon glyphicon-question-sign"></i>
     </label>
 </div>
 @endif
 
 <div class="form-group">
-	{!! Form::submit('Opslaan', ['class' => 'btn btn-primary form-control']) !!}
+    {!! Form::submit('Opslaan', ['class' => 'btn btn-primary form-control']) !!}
 </div>
