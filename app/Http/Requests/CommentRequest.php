@@ -23,7 +23,7 @@ class CommentRequest extends FormRequest
         $comment =  $this->route('comment');
 
         // You can only edit your own comments
-        if ($comment->user_id != Auth::user()->id) {
+        if ($comment && $comment->user_id != Auth::user()->id) {
             return false;
         }
 
