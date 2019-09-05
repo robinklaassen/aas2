@@ -15,14 +15,21 @@ class CommentRequest extends FormRequest
      */
     public function authorize()
     {
-        $isValid = Auth::check();
-        $comment =  $this->route('comment');
-
-        if ($comment) {
-            $isValid = $isValid && $comment->user_id == Auth::user()->id;
+        // Only registered users are allowed to comment
+        if (!Auth::check()) {
+            return false;
         }
 
-        return $isValid;
+        $comment =  $this->route('comment');
+
+        // You can only edit your own comments
+        if ($comment->user_id != Auth::user()->id) {
+            return false;
+        }
+
+
+        // Secret comments can only be set by admins
+        return (!$this->get('is_secret') || Auth::user()->is_admin);
     }
 
     /**

@@ -22,9 +22,6 @@ class CommentsController extends Controller
 
     public function update(Comment $comment, CommentRequest $request)
     {
-        if ($request->get("is_secret") && !\Auth::user()->is_admin) {
-            abort(403, 'Cannot create secret comments as non-admin');
-        }
         $comment->update($request->all());
 
         return redirect($request->query("origin", "/"));
@@ -45,9 +42,6 @@ class CommentsController extends Controller
 
     public function store(CommentRequest $request)
     {
-        if ($request->get("is_secret") && !\Auth::user()->is_admin) {
-            abort(403, 'Cannot create secret comments as non-admin');
-        }
 
         $model = $request->get("entity_type");
         $entity = $model::findOrFail($request->get("entity_id"));
