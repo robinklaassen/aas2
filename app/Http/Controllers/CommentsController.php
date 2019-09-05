@@ -64,7 +64,7 @@ class CommentsController extends Controller
     {
         $comment->delete();
         return redirect($request->query("origin", "/"))->with([
-            'flash_message' => 'De opermking is verwijderd!'
+            'flash_message' => 'De opmerking is verwijderd!'
         ]);
     }
 }
