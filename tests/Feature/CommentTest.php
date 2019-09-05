@@ -26,10 +26,6 @@ class CommentTest extends TestCase
     public function testSeeOwnNormalComment()
     {
         $user = User::findOrFail(2);
-        // This doesnt work for some reason
-        // $this->actingAs($user)
-        //     ->get("/profile")
-        //     ->assertDontSee("This is a testing comment");
 
         $random = Str::random(40);
         $text = "Testing " . $random;
@@ -58,10 +54,6 @@ class CommentTest extends TestCase
     public function testDontSeeOtherNormalComment()
     {
         $user = User::findOrFail(2);
-        // This doesnt work for some reason
-        // $this->actingAs($user)
-        //     ->get("/profile")
-        //     ->assertDontSee("This is a testing comment");
 
         $random = Str::random(40);
         $text = "Testing " . $random;
