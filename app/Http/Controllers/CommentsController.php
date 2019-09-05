@@ -40,7 +40,7 @@ class CommentsController extends Controller
         }
 
         $origin = $request->query("origin", "/");
-        return view("comments.create", compact('comment', 'origin', 'type', 'key'));
+        return view("comments.create", compact('origin', 'type', 'key'));
     }
 
     public function store(CommentRequest $request)
