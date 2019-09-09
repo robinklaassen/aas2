@@ -146,6 +146,6 @@ class Comments extends Migration
         ");
 
         Schema::dropIfExists('comments');
-        DB::statement("DELETE FROM users WHERE id = 1");
+        DB::statement("DELETE FROM users WHERE id = 0");
     }
 }
