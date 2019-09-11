@@ -40,6 +40,10 @@
 					</td>
 				</tr>
 				@endforeach
+				<tr>
+					<th>Gemiddeld aantal dagen tussen registratie en kamp (deelnemers)</th>
+					<td>{{ $stats['average_days_reg'] }}
+				</tr>
 			</tbody>
 		</table>
 	</div>
