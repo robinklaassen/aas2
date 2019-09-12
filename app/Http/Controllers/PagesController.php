@@ -151,6 +151,7 @@ class PagesController extends Controller
 		// Average number of days of participant registration before camp start date
 		$regs = DB::table('event_participant')
 			->select('event_participant.created_at as reg_date', 'events.datum_start as camp_date')
+			->where('reg_date', '>', '2005-01-01')  // Old registrations with unknown date have 01-01-2000, filter them out
 			->join('events', 'event_participant.event_id', '=', 'events.id', 'left')
 			->get();
 		$days_arr = [];
