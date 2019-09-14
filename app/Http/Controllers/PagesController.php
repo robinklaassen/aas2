@@ -152,7 +152,8 @@ class PagesController extends Controller
 		$ranonkeltjeDigitaal = \App\Member::whereIn('ranonkeltje', ['digitaal', 'beide'])->orderBy('voornaam', 'asc')->get();
 
 		// Ervaren trainers
-		$trainerList = \App\Member::where('ervaren_trainer', 1)->orderBy('voornaam', 'asc')->get();
+		$trainerList = \App\Member::where('ervaren_trainer', 1)->where('soort', '<>', 'oud')->orderBy('voornaam', 'asc')->get();
+		$oldTrainerList = \App\Member::where('ervaren_trainer', 1)->where('soort', 'oud')->orderBy('voornaam', 'asc')->get();
 
 		// Niet betaalde deelnemers
 		$unpaidList = \DB::table('event_participant')
@@ -222,7 +223,23 @@ class PagesController extends Controller
 		$startDate = Carbon::now()->subYears(19);
 		$participantMailingList = \App\Participant::where('mag_gemaild', 1)->where('geboortedatum', '>', $startDate->toDateString())->get();
 
-		return view('pages.lists', compact('stats', 'types', 'ranonkeltjePapier', 'ranonkeltjeDigitaal', 'trainerList', 'unpaidList', 'kmgList', 'aspirantList', 'birthdayList', 'courses', 'monthName', 'membersWithoutEvents', 'participantsWithoutCamps', 'participantMailingList'));
+		return view('pages.lists', compact(
+			'stats',
+			'types',
+			'ranonkeltjePapier',
+			'ranonkeltjeDigitaal',
+			'trainerList',
+			'oldTrainerList',
+			'unpaidList',
+			'kmgList',
+			'aspirantList',
+			'birthdayList',
+			'courses',
+			'monthName',
+			'membersWithoutEvents',
+			'participantsWithoutCamps',
+			'participantMailingList'
+		));
 	}
 
 	# Analytical graphs
