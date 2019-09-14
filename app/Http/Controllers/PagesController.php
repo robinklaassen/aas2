@@ -10,6 +10,7 @@ use App\Event;
 use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 # The PagesController is for static pages that do not fall under any other type of controller, like members or events.
 class PagesController extends Controller
@@ -146,6 +147,20 @@ class PagesController extends Controller
 				'members' => $members
 			];
 		}
+
+		// Average number of days of participant registration before camp start date
+		$regs = DB::table('event_participant')
+			->select('event_participant.created_at as reg_date', 'events.datum_start as camp_date')
+			->where('reg_date', '>', '2005-01-01')  // Old registrations with unknown date have 01-01-2000, filter them out
+			->join('events', 'event_participant.event_id', '=', 'events.id', 'left')
+			->get();
+		$days_arr = [];
+		foreach ($regs as $r) {
+			$reg_date = Carbon::parse($r->reg_date);
+			$camp_date = Carbon::parse($r->camp_date);
+			$days_arr[] = $reg_date->diffInDays($camp_date, false);
+		}
+		$stats['average_days_reg'] = round(array_sum($days_arr) / count($days_arr));
 
 		// Ranonkeltje
 		$ranonkeltjePapier = \App\Member::whereIn('ranonkeltje', ['papier', 'beide'])->orderBy('voornaam', 'asc')->get();
@@ -748,7 +763,7 @@ class PagesController extends Controller
 		$privacyAccepted = $request->input("privacyAccepted") === "1";
 		if (!$privacyAccepted) {
 			return redirect("accept-privacy")->with([
-				"flash_error" => "De privacy voorwaarde dient geaccepteerd te worden om verder te kunnen."
+				"flash_error" => "De privacyvoorwaarden dienen geaccepteerd te worden om verder te kunnen."
 			]);
 		}
 
