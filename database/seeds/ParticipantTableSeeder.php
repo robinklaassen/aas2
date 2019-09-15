@@ -34,7 +34,8 @@ class ParticipantTableSeeder extends Seeder
 			'school' => 'Planckgas Lyceum',
 			'niveau' => 'VWO',
 			'klas' => 4,
-			'hoebij' => 'Google'
+			'hoebij' => 'Google',
+			'opmerkingen' => 'Ik eet het liefst heel veel vlees!',
 		]);
 
 		Participant::create([
@@ -56,7 +57,8 @@ class ParticipantTableSeeder extends Seeder
 			'school' => 'Vreemans College',
 			'niveau' => 'HAVO',
 			'klas' => 1,
-			'hoebij' => 'Zusje'
+			'hoebij' => 'Zusje',
+			'opmerkingen' => 'Enorm veel zin in kamp.',
 		]);
 	}
 }

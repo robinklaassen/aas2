@@ -40,7 +40,8 @@ class MemberTableSeeder extends Seeder
 			'ranonkeltje' => '1',
 			'vog' => '1',
 			'ervaren_trainer' => '1',
-			'incasso' => '1'
+			'incasso' => '1',
+			'opmerkingen' => 'Ik ben het allergaafste spookje ooit! En ook nog eens heel bescheiden.',
 		]);
 
 		Member::create([
@@ -62,7 +63,8 @@ class MemberTableSeeder extends Seeder
 			'kmg' => '1',
 			'ranonkeltje' => '0',
 			'vog' => '1',
-			'ervaren_trainer' => '1'
+			'ervaren_trainer' => '1',
+			'opmerkingen' => 'Winter is coming.',
 		]);
 
 		Member::create([
@@ -84,7 +86,8 @@ class MemberTableSeeder extends Seeder
 			'kmg' => '0',
 			'ranonkeltje' => '1',
 			'vog' => '0',
-			'ervaren_trainer' => '0'
+			'ervaren_trainer' => '0',
+			'opmerkingen' => 'YEEHAW!',
 		]);
 	}
 }

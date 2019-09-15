@@ -83,7 +83,8 @@ class ParticipantRegistrationTest extends TestCase
             "school" => $this->data["school"],
             "niveau" => $this->data["niveau"],
             "klas" => $this->data["klas"],
-            "inkomensverklaring" => null
+            "inkomensverklaring" => null,
+            "opmerkingen" => $this->data["opmerkingen"],
         ];
         $username = strtolower(substr($this->data["voornaam"], 0, 1) . $this->data["achternaam"]);
         $this->userData = [
@@ -124,10 +125,7 @@ class ParticipantRegistrationTest extends TestCase
         // check db
         $this->assertDatabaseHas('users', $this->userData);
         $this->assertDatabaseHas('participants', $this->participantData);
-        $this->assertDatabaseHas('comments', [
-            "text" => $this->data["opmerkingen"],
-            "entity_type" => "App\\Participant"
-        ]);
+
         // redirect
         $response->assertStatus(302);
         $response->assertRedirect("https://mollie-backend");
@@ -152,10 +150,6 @@ class ParticipantRegistrationTest extends TestCase
         // check db
         $this->assertDatabaseHas('users', $this->userData);
         $this->assertDatabaseHas('participants', $this->participantData);
-        $this->assertDatabaseHas('comments', [
-            "text" => $this->data["opmerkingen"],
-            "entity_type" => "App\\Participant"
-        ]);
 
         // Check output
         $response->assertStatus(200);

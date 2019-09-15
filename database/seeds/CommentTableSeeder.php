@@ -36,7 +36,7 @@ class CommentTableSeeder extends Seeder
         $member = Member::find(2);
         $comment = new Comment;
         $comment->user_id = 1;
-        $comment->text = "Volgens mij heeft hij geen muur of kennis";
+        $comment->text = "Goed bezig jon";
         $comment->is_secret = false;
         $member->comments()->save($comment);
 

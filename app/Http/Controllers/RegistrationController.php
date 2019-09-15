@@ -84,7 +84,7 @@ class RegistrationController extends Controller
 		$request->merge(array('hoebij' => $hb_string));
 
 		// Store member in database
-		$member = Member::create($request->except('selected_camp', 'vak0', 'vak1', 'vak2', 'vak3', 'vak4', 'vak5', 'vak6', 'vak7', 'klas0', 'klas1', 'klas2', 'klas3', 'klas4', 'klas5', 'klas6', 'klas7', 'hoebij_anders', 'vog', 'privacy', 'opmerkingen'));
+		$member = Member::create($request->except('selected_camp', 'vak0', 'vak1', 'vak2', 'vak3', 'vak4', 'vak5', 'vak6', 'vak7', 'klas0', 'klas1', 'klas2', 'klas3', 'klas4', 'klas5', 'klas6', 'klas7', 'hoebij_anders', 'vog', 'privacy'));
 
 		// Attach to camp
 		$member->events()->attach($request->selected_camp);
@@ -122,16 +122,6 @@ class RegistrationController extends Controller
 		$user->username = $username;
 		$user->password = bcrypt($password);
 		$member->user()->save($user);
-
-		$opmerkingText = $request->get('opmerkingen');
-
-		if ($opmerkingText) {
-			$comment = new \App\Comment;
-			$comment->user_id = $user->id;
-			$comment->text = $opmerkingText;
-			$comment->is_secret = false;
-			$member->comments()->save($comment);
-		}
 
 		$camp = Event::findOrFail($request->selected_camp);
 
@@ -220,7 +210,7 @@ class RegistrationController extends Controller
 		$request->merge(array('hoebij' => $hb_string));
 
 		// Store participant in database
-		$participant = Participant::create($request->except('selected_camp', 'vak0', 'vak1', 'vak2', 'vak3', 'vak4', 'vak5', 'vakinfo0', 'vakinfo1', 'vakinfo2', 'vakinfo3', 'vakinfo4', 'vakinfo5', 'iDeal', 'hoebij_anders', 'voorwaarden', 'privacy', 'opmerkingen'));
+		$participant = Participant::create($request->except('selected_camp', 'vak0', 'vak1', 'vak2', 'vak3', 'vak4', 'vak5', 'vakinfo0', 'vakinfo1', 'vakinfo2', 'vakinfo3', 'vakinfo4', 'vakinfo5', 'iDeal', 'hoebij_anders', 'voorwaarden', 'privacy'));
 
 		// Attach to camp
 		$participant->events()->attach($request->selected_camp);
@@ -260,15 +250,6 @@ class RegistrationController extends Controller
 		$user->password = bcrypt($password);
 		$participant->user()->save($user);
 
-		$opmerkingText = $request->get('opmerkingen');
-
-		if ($opmerkingText) {
-			$comment = new \App\Comment;
-			$comment->user_id = $user->id;
-			$comment->text = $opmerkingText;
-			$comment->is_secret = false;
-			$participant->comments()->save($comment);
-		}
 		// Income table
 		$incomeTable = Participant::INCOME_DESCRIPTION_TABLE;
 
