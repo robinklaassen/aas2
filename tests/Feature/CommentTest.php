@@ -179,11 +179,11 @@ class CommentTest extends TestCase
             "user_id" => 1
         ])->first();
 
-        // comment shouldn't be found due to the CommentScope
-        $this->actingAs(User::findOrFail(2))
+        $resp = $this->actingAs(User::findOrFail(4))
             ->delete(
                 "/comments/{$comment->id}?origin=profile"
-            )->assertStatus(404);
+            )->assertStatus(403);
+
 
         $this->assertDatabaseHas("comments", ["id" => $comment->id]);
     }

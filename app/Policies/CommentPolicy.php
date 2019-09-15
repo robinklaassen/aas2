@@ -18,7 +18,7 @@ class CommentPolicy
      */
     public function viewAny(User $user)
     {
-        return true;
+        return $user->is_admin;
     }
 
     /**
@@ -30,7 +30,7 @@ class CommentPolicy
      */
     public function view(User $user, Comment $comment)
     {
-        return $user->is_admin || !$comment->is_secret;
+        return $user->is_admin == 1 && (!$comment->is_secret || $user->is_admin == 2);
     }
 
     /**
@@ -65,7 +65,7 @@ class CommentPolicy
      */
     public function delete(User $user, Comment $comment)
     {
-        return $comment->user_id == $user->id || $user->is_admin == 2;
+        return $user->is_admin && $comment->user_id == $user->id || $user->is_admin == 2;
     }
 
     /**
