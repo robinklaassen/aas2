@@ -190,7 +190,7 @@ Mijn profiel
 		<p>De opgegeven informatie per vak kunt u bekijken door op 'vakken bewerken' te klikken.</p>
 		@endif
 
-		@if ($viewType == 'admin')
+		@if (\Auth::user()->is_admin)
 			<div>
 				@include('partials.comments', [ 'comments' => $participant->comments, 'type' => 'App\Participant', 'key' => $participant->id ])
 			</div>

@@ -276,7 +276,7 @@ Mijn profiel
 
 </div>
 
-@if ($viewType == 'admin')
+@if (\Auth::user()->is_admin)
 	<div>
 		@include('partials.comments', [ 'comments' => $member->comments, 'type' => 'App\Member', 'key' => $member->id ])
 	</div>
