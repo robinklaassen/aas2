@@ -25,7 +25,7 @@ class CommentTest extends TestCase
 
     public function testDontSeeOtherNormalComment()
     {
-        $user = User::findOrFail(2);
+        $user = User::findOrFail(4);
 
         $random = Str::random(40);
         $text = "Testing " . $random;
