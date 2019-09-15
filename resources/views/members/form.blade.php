@@ -106,6 +106,10 @@
 	</div>
 </div>
 
+<div class="form-group">
+	{!! Form::label('opmerkingen', 'Opmerkingen:') !!}
+	{!! Form::textarea('opmerkingen', null, ['class' => 'form-control']) !!}
+</div>
 
 @if ($viewType == 'admin')
 

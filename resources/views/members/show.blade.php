@@ -124,6 +124,10 @@ Mijn profiel
 				<td>Ranonkeltje</td>
 				<td>{{ $member->ranonkeltje }}</td>
 			</tr>
+			<tr>
+					<td>Opmerkingen</td>
+					<td style="white-space:pre-wrap;">{{ $member->opmerkingen }}</td>
+				</tr>
 		</table>
 
 
@@ -272,9 +276,11 @@ Mijn profiel
 
 </div>
 
-<div class="row">
-	@include('partials.comments', [ 'comments' => $member->comments, 'type' => 'App\Member', 'key' => $member->id ])
-</div>
+@if ($viewType == 'admin')
+	<div>
+		@include('partials.comments', [ 'comments' => $member->comments, 'type' => 'App\Member', 'key' => $member->id ])
+	</div>
+@endif
 
 <hr />
 

@@ -23,34 +23,6 @@ class CommentTest extends TestCase
         $this->member = Member::findOrFail(2);
     }
 
-    public function testSeeOwnNormalComment()
-    {
-        $user = User::findOrFail(2);
-
-        $random = Str::random(40);
-        $text = "Testing " . $random;
-
-        $comment = new Comment();
-        $comment->user_id = 2;
-        $comment->text = $text;
-        $comment->is_secret = false;
-
-        $user->profile->comments()->save($comment);
-
-        $this->actingAs($user)
-            ->get("/profile")
-            ->assertSee($comment->text);
-
-        $this->assertDatabaseHas(
-            'comments',
-            [
-                "text" => $text,
-                "entity_type" => "App\\Member",
-                "entity_id" => "2"
-            ]
-        );
-    }
-
     public function testDontSeeOtherNormalComment()
     {
         $user = User::findOrFail(2);
@@ -118,7 +90,7 @@ class CommentTest extends TestCase
             ->assertSee($text);
     }
 
-    public function testCreateSecretCommentAsUserNotAllowed()
+    public function testCreateSecretCommentAsNonSuperAdminNotAllowed()
     {
 
         $random = Str::random(40);

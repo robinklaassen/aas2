@@ -29,7 +29,7 @@ class CommentRequest extends FormRequest
 
 
         // Secret comments can only be set by admins
-        return (!$this->get('is_secret') || Auth::user()->is_admin);
+        return (!$this->get('is_secret') || Auth::user()->is_admin == 2);
     }
 
     /**

@@ -35,10 +35,6 @@ class Comments extends Migration
         DB::statement("
             INSERT INTO comments (text, entity_type, entity_id, is_secret, user_id)
                 SELECT * FROM (
-                   SELECT opmerkingen, 'App\\\\Member', id, false, 0
-                     FROM members
-                    WHERE opmerkingen is not null
-                  UNION
                     SELECT opmerkingen_admin, 'App\\\\Member', id, true, 0
                       FROM members
                      WHERE opmerkingen_admin is not null
@@ -50,7 +46,6 @@ class Comments extends Migration
         ");
 
         Schema::table("members", function ($table) {
-            $table->dropColumn('opmerkingen');
             $table->dropColumn('opmerkingen_admin');
             $table->dropColumn('opmerkingen_geheim');
         });
@@ -58,10 +53,6 @@ class Comments extends Migration
         DB::statement("
             INSERT INTO comments (text, entity_type, entity_id, is_secret, user_id)
                 SELECT * FROM (
-                    SELECT opmerkingen, 'App\\\\Participant', id, false, 0
-                      FROM participants
-                     WHERE opmerkingen is not null
-                  UNION
                     SELECT opmerkingen_admin, 'App\\\\Participant', id, true, 0
                       FROM participants
                      WHERE opmerkingen_admin is not null
@@ -69,7 +60,6 @@ class Comments extends Migration
         ");
 
         Schema::table("participants", function ($table) {
-            $table->dropColumn('opmerkingen');
             $table->dropColumn('opmerkingen_admin');
         });
 

@@ -104,6 +104,10 @@ Mijn profiel
 				<td>Hoe bij Anderwijs</td>
 				<td>{{ $participant->hoebij }}</td>
 			</tr>
+			<tr>
+					<td>Opmerkingen</td>
+					<td style="white-space:pre-wrap;">{{ $participant->opmerkingen }}</td>
+				</tr>
 		</table>
 
 
@@ -186,9 +190,11 @@ Mijn profiel
 		<p>De opgegeven informatie per vak kunt u bekijken door op 'vakken bewerken' te klikken.</p>
 		@endif
 
-		<div>
-			@include('partials.comments', [ 'comments' => $participant->comments, 'type' => 'App\Participant', 'key' => $participant->id ])
-		</div>
+		@if ($viewType == 'admin')
+			<div>
+				@include('partials.comments', [ 'comments' => $participant->comments, 'type' => 'App\Participant', 'key' => $participant->id ])
+			</div>
+		@endif
 	</div>
 
 

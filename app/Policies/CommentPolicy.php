@@ -65,7 +65,7 @@ class CommentPolicy
      */
     public function delete(User $user, Comment $comment)
     {
-        return $comment->user_id == $user->id || $user->is_admin;
+        return $comment->user_id == $user->id || $user->is_admin == 2;
     }
 
     /**
@@ -89,6 +89,6 @@ class CommentPolicy
      */
     public function forceDelete(User $user, Comment $comment)
     {
-        return $user->is_admin;
+        return $user->is_admin == 2;
     }
 }
