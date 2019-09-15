@@ -10,6 +10,7 @@ use App\Event;
 use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 # The PagesController is for static pages that do not fall under any other type of controller, like members or events.
 class PagesController extends Controller
@@ -147,12 +148,27 @@ class PagesController extends Controller
 			];
 		}
 
+		// Average number of days of participant registration before camp start date
+		$regs = DB::table('event_participant')
+			->select('event_participant.created_at as reg_date', 'events.datum_start as camp_date')
+			->where('event_participant.created_at', '>', '2005-01-01')  // Old registrations with unknown date have 01-01-2000, filter them out
+			->join('events', 'event_participant.event_id', '=', 'events.id', 'left')
+			->get();
+		$days_arr = [];
+		foreach ($regs as $r) {
+			$reg_date = Carbon::parse($r->reg_date);
+			$camp_date = Carbon::parse($r->camp_date);
+			$days_arr[] = $reg_date->diffInDays($camp_date, false);
+		}
+		$stats['average_days_reg'] = round(array_sum($days_arr) / count($days_arr));
+
 		// Ranonkeltje
 		$ranonkeltjePapier = \App\Member::whereIn('ranonkeltje', ['papier', 'beide'])->orderBy('voornaam', 'asc')->get();
 		$ranonkeltjeDigitaal = \App\Member::whereIn('ranonkeltje', ['digitaal', 'beide'])->orderBy('voornaam', 'asc')->get();
 
 		// Ervaren trainers
-		$trainerList = \App\Member::where('ervaren_trainer', 1)->orderBy('voornaam', 'asc')->get();
+		$trainerList = \App\Member::where('ervaren_trainer', 1)->where('soort', '<>', 'oud')->orderBy('voornaam', 'asc')->get();
+		$oldTrainerList = \App\Member::where('ervaren_trainer', 1)->where('soort', 'oud')->orderBy('voornaam', 'asc')->get();
 
 		// Niet betaalde deelnemers
 		$unpaidList = \DB::table('event_participant')
@@ -222,7 +238,23 @@ class PagesController extends Controller
 		$startDate = Carbon::now()->subYears(19);
 		$participantMailingList = \App\Participant::where('mag_gemaild', 1)->where('geboortedatum', '>', $startDate->toDateString())->get();
 
-		return view('pages.lists', compact('stats', 'types', 'ranonkeltjePapier', 'ranonkeltjeDigitaal', 'trainerList', 'unpaidList', 'kmgList', 'aspirantList', 'birthdayList', 'courses', 'monthName', 'membersWithoutEvents', 'participantsWithoutCamps', 'participantMailingList'));
+		return view('pages.lists', compact(
+			'stats',
+			'types',
+			'ranonkeltjePapier',
+			'ranonkeltjeDigitaal',
+			'trainerList',
+			'oldTrainerList',
+			'unpaidList',
+			'kmgList',
+			'aspirantList',
+			'birthdayList',
+			'courses',
+			'monthName',
+			'membersWithoutEvents',
+			'participantsWithoutCamps',
+			'participantMailingList'
+		));
 	}
 
 	# Analytical graphs
@@ -731,7 +763,7 @@ class PagesController extends Controller
 		$privacyAccepted = $request->input("privacyAccepted") === "1";
 		if (!$privacyAccepted) {
 			return redirect("accept-privacy")->with([
-				"flash_error" => "De privacy voorwaarde dient geaccepteerd te worden om verder te kunnen."
+				"flash_error" => "De privacyvoorwaarden dienen geaccepteerd te worden om verder te kunnen."
 			]);
 		}
 

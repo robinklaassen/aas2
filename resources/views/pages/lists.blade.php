@@ -40,6 +40,10 @@
 					</td>
 				</tr>
 				@endforeach
+				<tr>
+					<th>Gemiddeld aantal dagen tussen registratie en kamp (deelnemers)</th>
+					<td>{{ $stats['average_days_reg'] }}
+				</tr>
 			</tbody>
 		</table>
 	</div>
@@ -244,29 +248,56 @@
 	</div>
 	
 	<div role="tabpanel" class="tab-pane" id="trainers">
-		<h3>Ervaren trainers</h3>
+
+		<p>Geeft iemand aan niet meer te willen trainen? Haal dan het vinkje 'ervaren trainer' bij die persoon weg.</p>
+
+		<h3>Ervaren trainers (huidige leden)</h3>
 		<table class="table table-hover">
 			<thead>
 				<tr>
 					<th>Naam</th>
 					<th>Telefoon</th>
-					<th>Email persoonlijk</th>
 					<th>Email Anderwijs</th>
 					<th>Soort lid</th>
 				</tr>
 			</thead>
 			<tbody>
-				@foreach ($trainerList as $member)
+				@foreach ($trainerList as $m)
 					<tr>
-						<td><a href="{{ url('/members', $member->id) }}">{{ $member->voornaam }} {{ $member->tussenvoegsel }} {{ $member->achternaam }}</a></td>
-						<td>{{ $member->telefoon }}</td>
-						<td><a href="mailto:{{$member->email}}">{{ $member->email }}</a></td>
-						<td><a href="mailto:{{$member->email_anderwijs}}">{{ $member->email_anderwijs }}</a></td>
-						<td>{{ $member->soort }}</td>
+						<td><a href="{{ url('/members', $m->id) }}">{{ $m->volnaam }}</a></td>
+						<td>{{ $m->telefoon }}</td>
+						<td><a href="mailto:{{$m->email_anderwijs}}">{{ $m->email_anderwijs }}</a></td>
+						<td>{{ $m->soort }}</td>
 					</tr>
 				@endforeach
 			</tbody>
 		</table>
+
+		<h4>Mailinglijst</h4>
+		<p>{{ implode(', ', $trainerList->pluck('email_anderwijs')->toArray()) }}</p>
+
+		<h3>Ervaren trainers (oud-leden)</h3>
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th>Naam</th>
+					<th>Telefoon</th>
+					<th>Email</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach ($oldTrainerList as $m)
+					<tr>
+						<td><a href="{{ url('/members', $m->id) }}">{{ $m->volnaam }}</a></td>
+						<td>{{ $m->telefoon }}</td>
+						<td><a href="mailto:{{$m->email}}">{{ $m->email }}</a></td>
+					</tr>
+				@endforeach
+			</tbody>
+		</table>
+
+		<h4>Mailinglijst <small>(denk aan de BCC!)</small></h4>
+		<p>{{ implode(', ', $oldTrainerList->pluck('email')->toArray()) }}</p>
 	</div>
 	
 	<div role="tabpanel" class="tab-pane" id="verjaardag">

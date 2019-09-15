@@ -89,5 +89,29 @@ class MemberTableSeeder extends Seeder
 			'ervaren_trainer' => '0',
 			'opmerkingen' => 'YEEHAW!',
 		]);
+
+		Member::create([
+			'voornaam' => 'Bert',
+			'tussenvoegsel' => 'van der',
+			'achternaam' => 'Ven',
+			'geslacht' => 'M',
+			'geboortedatum' => '1950-03-16',
+			'adres' => 'Bejaardenstraat 17',
+			'postcode' => '8866 ZX',
+			'plaats' => 'Grandpatown',
+			'telefoon' => '0689726239',
+			'email' => 'b.vanderven@planetzz.nl',
+			'email_anderwijs' => '',
+			'soort' => 'oud',
+			'eindexamen' => 'HAVO',
+			'studie' => 'Geriatrie',
+			'afgestudeerd' => '1',
+			'hoebij' => 'De krant',
+			'kmg' => '1',
+			'ranonkeltje' => '0',
+			'vog' => '1',
+			'ervaren_trainer' => '1',
+			'opmerkingen' => 'Ik ben doof aan één kant en slechtziend aan de andere.'
+		]);
 	}
 }

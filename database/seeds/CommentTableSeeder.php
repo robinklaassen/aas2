@@ -52,5 +52,14 @@ class CommentTableSeeder extends Seeder
         $comment->user_id = 1;
         $comment->text = "Erg mooie bosrijke locatie, maar slecht bereikbaar met het OV.";
         $location->comments()->save($comment);
+
+        
+        $member = Member::find(4);
+        $comment = new Comment;
+        $comment->user_id = 1;
+        $comment->text = "Serieus, waar is deze vent vandaan gekomen?!";
+        $comment->is_secret = false;
+        $member->comments()->save($comment);
     }
+    
 }
