@@ -23,7 +23,7 @@ class CommentScope implements Scope
 
         // A just to be sure scope, never allow non admins to see any comments
         if (\Auth::check() && !\Auth::user()->is_admin) {
-            $builder->where('1', '=', '0');
+            $builder->whereRaw('1=0');
         }
 
 

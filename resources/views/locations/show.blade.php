@@ -118,9 +118,12 @@
 		</table>
 	</div>
 
-	<div class="col-md-12">
-		@include('partials.comments', [ 'comments' => $location->comments, 'type' => 'App\Location', 'key' => $location->id ])
-	</div>
+	
+	@if (\Auth::user()->is_admin)
+		<div class="col-md-12">
+			@include('partials.comments', [ 'comments' => $location->comments, 'type' => 'App\Location', 'key' => $location->id ])
+		</div>
+	@endif
 
 </div>
 @endsection

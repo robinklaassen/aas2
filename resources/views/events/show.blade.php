@@ -163,9 +163,12 @@
 			@endforeach
 		</table>
 
-		<div class="col-md-12">
-			@include('partials.comments', [ 'comments' => $event->comments, 'type' => 'App\Event', 'key' => $event->id ])
-		</div>
+		
+		@if (\Auth::user()->is_admin)
+			<div class="col-md-12">
+				@include('partials.comments', [ 'comments' => $event->comments, 'type' => 'App\Event', 'key' => $event->id ])
+			</div>
+		@endif
 	</div>
 	@endif
 </div>
