@@ -16,6 +16,7 @@ use App\Helpers\Payment\EventPayment;
 use App\Facades\Mollie;
 use App\Mail\internal\NewMemberNotification;
 use App\Mail\members\MemberRegistrationConfirmation;
+use Illuminate\Support\Carbon;
 
 class RegistrationController extends Controller
 {
@@ -121,6 +122,7 @@ class RegistrationController extends Controller
 		$user = new \App\User;
 		$user->username = $username;
 		$user->password = bcrypt($password);
+		$user->privacy = Carbon::now();
 		$member->user()->save($user);
 
 		$camp = Event::findOrFail($request->selected_camp);
@@ -248,6 +250,7 @@ class RegistrationController extends Controller
 		$user = new \App\User;
 		$user->username = $username;
 		$user->password = bcrypt($password);
+		$user->privacy = Carbon::now();
 		$participant->user()->save($user);
 
 		// Income table
