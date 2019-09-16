@@ -42,7 +42,7 @@
 		@yield('content')
 
 		<!-- Footer -->
-		<div style="display: inline-flex; float: right; flex-wrap: wrap; border-top: 1px solid #ddd; padding-top: 10px;">
+		<div style="display: inline-flex; float: right; flex-wrap: wrap; border-top: 1px solid #ddd; padding-top: 10px; margin-top: 10px;">
 			<span class="btn btn-sm" disabled="true">AAS 2.0 is het Anderwijs Administratiesysteem.</span>
 			<button type="button" class="btn btn-link btn-sm" data-toggle="modal" data-target="#infoModal">Meer informatie</button>
 			<button type="button" class="btn btn-link btn-sm"><a href="{{ url('privacy') }}">Privacystatement</a></button>
