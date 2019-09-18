@@ -1,12 +1,12 @@
 @extends('master')
 
 @section('title')
-Opmerking verwijderen
+Informatie verwijderen
 @endsection
 
 @section('content')
 
-<h1>Opmerking verwijderen</h1>
+<h1>Informatie verwijderen</h1>
 
 <hr />
 
@@ -14,7 +14,7 @@ Opmerking verwijderen
 
 {!! Form::open(['url' => 'events/'.$comment->id, 'method' => 'DELETE']) !!}
 
-<p>Weet je zeker dat je de opmerking bij {{$comment->entityDescription}} wilt verwijderen?</p>
+<p>Weet je zeker dat je de extra informatie bij {{$comment->entityDescription}} wilt verwijderen?</p>
 
 <div class="row">
     <div class="col-sm-6 form-group">

@@ -1,7 +1,7 @@
 <h1 class="caption">
-    Opmerkingen
+    Overige informatie
     <a href="{{ url('comments/new') }}?origin={{Request::path()}}&type={{urlencode($type)}}&key={{$key}}">
-        <i class="glyphicon glyphicon-plus" aria-hidden="true" data-toggle="tooltip" title="" data-original-title="Opmerking toevoegen"></i>
+        <i class="glyphicon glyphicon-plus" aria-hidden="true" data-toggle="tooltip" title="" data-original-title="Informatie toevoegen"></i>
     </a>
 </h1>
 
