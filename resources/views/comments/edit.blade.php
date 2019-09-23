@@ -1,12 +1,12 @@
 @extends('master')
 
 @section('title')
-Informatie bewerken
+Opmerking Bewerken
 @endsection
 
 @section('content')
 
-<h1>Informatie bewerken</h1>
+<h1>Opmerking bewerken</h1>
 <h4>Comment bij {{$comment->entityDescription}}</h4>
 
 <hr />

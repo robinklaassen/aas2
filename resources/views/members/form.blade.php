@@ -107,7 +107,7 @@
 </div>
 
 <div class="form-group">
-	{!! Form::label('opmerkingen', 'Opmerkingen:') !!}
+	{!! Form::label('opmerkingen', 'Overige informatie:') !!}
 	{!! Form::textarea('opmerkingen', null, ['class' => 'form-control']) !!}
 </div>
 

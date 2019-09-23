@@ -1,13 +1,13 @@
 @extends('master')
 
 @section('title')
-Nieuwe informatie
+Nieuwe opmerking
 @endsection
 
 @section('content')
 
 
-<h1>Nieuwe informatie</h1>
+<h1>Nieuwe opmerking</h1>
 <h4>voor {{\App\Comment::getEntityDescriptionByKey($type, $key)}}</h4>
 
 <hr />
