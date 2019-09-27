@@ -125,9 +125,9 @@ Mijn profiel
 				<td>{{ $member->ranonkeltje }}</td>
 			</tr>
 			<tr>
-					<td>Opmerkingen</td>
-					<td style="white-space:pre-wrap;">{{ $member->opmerkingen }}</td>
-				</tr>
+				<td>Overige informatie</td>
+				<td style="white-space:pre-wrap;">{{ $member->opmerkingen }}</td>
+			</tr>
 		</table>
 
 

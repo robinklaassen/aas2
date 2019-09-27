@@ -1,7 +1,7 @@
 @extends('master')
 
 @section('title')
-Opmerking Bewerken
+Opmerking bewerken
 @endsection
 
 @section('content')
