@@ -53,7 +53,7 @@ class Comments extends Migration
         DB::statement("
             INSERT INTO comments (text, entity_type, entity_id, is_secret, user_id)
                 SELECT * FROM (
-                    SELECT opmerkingen_admin, 'App\\\\Participant', id, true, 0
+                    SELECT opmerkingen_admin, 'App\\\\Participant', id, false, 0
                       FROM participants
                      WHERE opmerkingen_admin is not null
                 ) x
@@ -101,9 +101,9 @@ class Comments extends Migration
         DB::statement("
             UPDATE members m
               LEFT JOIN comments uc on uc.entity_id = m.id and uc.entity_type = 'App\\\\Member' AND uc.user_id = 0 and uc.is_secret = false
-              LEFT JOIN comments ac on ac.entity_id = m.id and ac.entity_type = 'App\\\\Member' AND ac.user_id = 0 and ac.is_secret = true and left(ac.text, 1) != '©'
+              LEFT JOIN comments ac on ac.entity_id = m.id and ac.entity_type = 'App\\\\Member' AND ac.user_id = 0 and ac.is_secret = false and left(ac.text, 1) != '©'
               LEFT JOIN comments sc on sc.entity_id = m.id and sc.entity_type = 'App\\\\Member' AND sc.user_id = 0 and sc.is_secret = true and left(sc.text, 1) = '©'
-               SET m.opmerkingen = uc.text, m.opmerkingen_admin = ac.text
+               SET m.opmerkingen = uc.text, m.opmerkingen_admin = ac.text, m.opmerkingen_geheim = sc.text
         ");
 
         Schema::table("participants", function ($table) {
