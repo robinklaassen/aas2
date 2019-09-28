@@ -35,7 +35,7 @@ class Comments extends Migration
         DB::statement("
             INSERT INTO comments (text, entity_type, entity_id, is_secret, user_id)
                 SELECT * FROM (
-                    SELECT opmerkingen_admin, 'App\\\\Member', id, true, 0
+                    SELECT opmerkingen_admin, 'App\\\\Member', id, false, 0
                       FROM members
                      WHERE opmerkingen_admin is not null
                  UNION
