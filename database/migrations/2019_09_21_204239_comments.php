@@ -16,7 +16,7 @@ class Comments extends Migration
         Schema::create('comments', function (Blueprint $table) {
 
             $table->increments('id');
-            $table->string('text');
+            $table->text('text');
             $table->boolean("is_secret");
             $table->string('entity_type');
             $table->integer('entity_id')->unsigned();
