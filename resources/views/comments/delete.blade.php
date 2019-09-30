@@ -12,7 +12,7 @@ Opmerking verwijderen
 
 @include ('errors.list')
 
-{!! Form::open(['url' => 'events/'.$comment->id, 'method' => 'DELETE']) !!}
+{!! Form::open(['url' => 'comments/'.$comment->id, 'method' => 'DELETE']) !!}
 
 <p>Weet je zeker dat je de opmerking bij {{$comment->entityDescription}} wilt verwijderen?</p>
 
