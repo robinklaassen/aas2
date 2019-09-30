@@ -274,7 +274,7 @@ a:hover {
 </div>
 
 <div class="form-group">
-	{!! Form::label('opmerkingen', 'Opmerkingen:') !!}
+	{!! Form::label('opmerkingen', 'Overige informatie:') !!}
 	{!! Form::textarea('opmerkingen', null, ['class' => 'form-control', 'placeholder' => 'Denk bijvoorbeeld aan speciale diëten, allergieën, medicijnen of andere dingen waar rekening mee gehouden moet worden op kamp.' ]) !!}
 </div>
 

@@ -59,10 +59,13 @@ return [
 			'username'  => env('DB_USERNAME', 'forge'),
 			'password'  => env('DB_PASSWORD', ''),
 			'charset'   => 'utf8',
+			'engine'    => 'InnoDB',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',
-			'strict'    => false,
-			'engine'	=> 'InnoDB',
+			'strict'    => true,
+			'modes'  => [
+				'NO_AUTO_VALUE_ON_ZERO'
+			]
 		],
 
 		'pgsql' => [

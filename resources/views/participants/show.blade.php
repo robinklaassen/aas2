@@ -105,7 +105,7 @@ Mijn profiel
 				<td>{{ $participant->hoebij }}</td>
 			</tr>
 			<tr>
-				<td>Opmerkingen</td>
+				<td>Overige informatie</td>
 				<td style="white-space:pre-wrap;">{{ $participant->opmerkingen }}</td>
 			</tr>
 		</table>
@@ -149,10 +149,6 @@ Mijn profiel
 				</td>
 				@endunless
 			</tr>
-			<tr>
-				<td>Opmerkingen</td>
-				<td style="white-space:pre-wrap;">{{ $participant->opmerkingen_admin }}</td>
-			</tr>
 			@endif
 		</table>
 
@@ -193,7 +189,15 @@ Mijn profiel
 		@if ($viewType == 'profile')
 		<p>De opgegeven informatie per vak kunt u bekijken door op 'vakken bewerken' te klikken.</p>
 		@endif
+
+		@if (\Auth::user()->is_admin)
+			<div>
+				@include('partials.comments', [ 'comments' => $participant->comments, 'type' => 'App\Participant', 'key' => $participant->id ])
+			</div>
+		@endif
 	</div>
+
+
 
 </div>
 

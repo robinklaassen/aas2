@@ -44,6 +44,15 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		return $this->morphTo();
 	}
 
+	public function getVolnaamAttribute()
+	{
+		if ($this->id != 0) {
+			return $this->profile->volnaam;
+		} else {
+			return "-system-";
+		}
+	}
+
 	public function getPrivacyAcceptedAttribute()
 	{
 		return $this->privacy !== null;

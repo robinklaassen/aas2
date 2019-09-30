@@ -32,8 +32,9 @@ class Kernel extends HttpKernel
 		'admin' => \App\Http\Middleware\RedirectIfNotAnAdmin::class,
 		'member' => \App\Http\Middleware\RedirectIfNotAMember::class,
 		'cors' => \App\Http\Middleware\CORS::class,
-		'privacy' => \App\Http\Middleware\CheckPrivacy::class,
-		'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class
+		'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
+		'can' => \Illuminate\Auth\Middleware\Authorize::class,
+		'privacy' => \App\Http\Middleware\CheckPrivacy::class
 	];
 
 	protected $middlewareGroups = [

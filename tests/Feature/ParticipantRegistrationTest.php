@@ -12,7 +12,6 @@ use App\Helpers\Payment\MolliePaymentProvider;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Mail;
 
-
 class ParticipantRegistrationTest extends TestCase
 {
     use DatabaseTransactions;
@@ -53,7 +52,7 @@ class ParticipantRegistrationTest extends TestCase
         "iDeal" => 1,
         "hoebij" => ["Nieuwsbrief school"],
         "hoebij_anders" => "",
-        "opmerkingen" => "",
+        "opmerkingen" => "Testerrrr",
         "voorwaarden" => 1,
         "privacy" => 1
     ];
@@ -84,7 +83,8 @@ class ParticipantRegistrationTest extends TestCase
             "school" => $this->data["school"],
             "niveau" => $this->data["niveau"],
             "klas" => $this->data["klas"],
-            "inkomensverklaring" => null
+            "inkomensverklaring" => null,
+            "opmerkingen" => $this->data["opmerkingen"],
         ];
         $username = strtolower(substr($this->data["voornaam"], 0, 1) . $this->data["achternaam"]);
         $this->userData = [
@@ -125,6 +125,7 @@ class ParticipantRegistrationTest extends TestCase
         // check db
         $this->assertDatabaseHas('users', $this->userData);
         $this->assertDatabaseHas('participants', $this->participantData);
+
         // redirect
         $response->assertStatus(302);
         $response->assertRedirect("https://mollie-backend");

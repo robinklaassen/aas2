@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 use App\Member;
 
 class MemberTableSeeder extends Seeder
@@ -41,7 +42,6 @@ class MemberTableSeeder extends Seeder
 			'ervaren_trainer' => '1',
 			'incasso' => '1',
 			'opmerkingen' => 'Ik ben het allergaafste spookje ooit! En ook nog eens heel bescheiden.',
-			'opmerkingen_admin' => 'Wauw wat is zij tof inderdaad.'
 		]);
 
 		Member::create([
@@ -65,7 +65,6 @@ class MemberTableSeeder extends Seeder
 			'vog' => '1',
 			'ervaren_trainer' => '1',
 			'opmerkingen' => 'Winter is coming.',
-			'opmerkingen_admin' => 'Hij weet echt niks.'
 		]);
 
 		Member::create([
@@ -89,7 +88,6 @@ class MemberTableSeeder extends Seeder
 			'vog' => '0',
 			'ervaren_trainer' => '0',
 			'opmerkingen' => 'YEEHAW!',
-			'opmerkingen_admin' => 'Licht autistisch en een beetje gestoord.'
 		]);
 
 		Member::create([
@@ -113,8 +111,7 @@ class MemberTableSeeder extends Seeder
 			'ranonkeltje' => '0',
 			'vog' => '1',
 			'ervaren_trainer' => '1',
-			'opmerkingen' => 'Ik ben doof aan één kant en slechtziend aan de andere.',
-			'opmerkingen_admin' => 'Serieus, waar is deze vent vandaan gekomen?'
+			'opmerkingen' => 'Ik ben doof aan één kant en slechtziend aan de andere.'
 		]);
 	}
 }
