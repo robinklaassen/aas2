@@ -30,8 +30,10 @@ class Comments extends Migration
                 ->onDelete('cascade');
         });
 
+        // Adds a SYS user to migrate existing 'opmerkingen' to new comments
         DB::statement("INSERT INTO users (id, username, password, profile_id, profile_type, is_admin) VALUES ('0', 'SYS', '', 0, 'App\\\\Member', true)");
 
+        // Migrate the member comments
         DB::statement("
             INSERT INTO comments (text, entity_type, entity_id, is_secret, user_id)
                 SELECT * FROM (
@@ -39,7 +41,7 @@ class Comments extends Migration
                       FROM members
                      WHERE opmerkingen_admin is not null
                  UNION
-                    SELECT concat('©', opmerkingen_geheim), 'App\\\\Member', id, true, 0
+                    SELECT opmerkingen_geheim, 'App\\\\Member', id, true, 0
                        FROM members
                       WHERE opmerkingen_geheim is not null
                 ) x
@@ -50,6 +52,7 @@ class Comments extends Migration
             $table->dropColumn('opmerkingen_geheim');
         });
 
+        // Migrate the participant comments
         DB::statement("
             INSERT INTO comments (text, entity_type, entity_id, is_secret, user_id)
                 SELECT * FROM (
@@ -63,6 +66,7 @@ class Comments extends Migration
             $table->dropColumn('opmerkingen_admin');
         });
 
+        // Migrate the event comments
         DB::statement("
             INSERT INTO comments (text, entity_type, entity_id, is_secret, user_id)
                  SELECT opmerkingen, 'App\\\\Event', id, false, 0
@@ -74,6 +78,7 @@ class Comments extends Migration
             $table->dropColumn('opmerkingen');
         });
 
+        // Migrate the location comments
         DB::statement("
             INSERT INTO comments (text, entity_type, entity_id, is_secret, user_id)
                  SELECT opmerkingen, 'App\\\\Location', id, false, 0
@@ -93,49 +98,51 @@ class Comments extends Migration
     public function down()
     {
 
+        // Return the member comments
         Schema::table("members", function ($table) {
-            $table->string('opmerkingen')->nullable();
             $table->string('opmerkingen_admin')->nullable();
             $table->string('opmerkingen_geheim')->nullable();
         });
         DB::statement("
             UPDATE members m
-              LEFT JOIN comments uc on uc.entity_id = m.id and uc.entity_type = 'App\\\\Member' AND uc.user_id = 0 and uc.is_secret = false
-              LEFT JOIN comments ac on ac.entity_id = m.id and ac.entity_type = 'App\\\\Member' AND ac.user_id = 0 and ac.is_secret = false and left(ac.text, 1) != '©'
-              LEFT JOIN comments sc on sc.entity_id = m.id and sc.entity_type = 'App\\\\Member' AND sc.user_id = 0 and sc.is_secret = true and left(sc.text, 1) = '©'
-               SET m.opmerkingen = uc.text, m.opmerkingen_admin = ac.text, m.opmerkingen_geheim = sc.text
+              LEFT JOIN comments ac on ac.entity_id = m.id and ac.entity_type = 'App\\\\Member' AND ac.user_id = 0 and ac.is_secret = false
+              LEFT JOIN comments sc on sc.entity_id = m.id and sc.entity_type = 'App\\\\Member' AND sc.user_id = 0 and sc.is_secret = true
+               SET m.opmerkingen_admin = ac.text, m.opmerkingen_geheim = sc.text
         ");
 
+        // Return the participant comments
         Schema::table("participants", function ($table) {
-            $table->string('opmerkingen')->nullable();
             $table->string('opmerkingen_admin')->nullable();
         });
         DB::statement("
             UPDATE participants p
-              LEFT JOIN comments uc on uc.entity_id = p.id and uc.entity_type = 'App\\\\Participant' AND uc.user_id = 0 and uc.is_secret = false
-              LEFT JOIN comments ac on ac.entity_id = p.id and ac.entity_type = 'App\\\\Participant' AND ac.user_id = 0 and uc.is_secret = true
-               SET p.opmerkingen = uc.text, p.opmerkingen_admin = ac.text
+              LEFT JOIN comments ac on ac.entity_id = p.id and ac.entity_type = 'App\\\\Participant' AND ac.user_id = 0
+               SET p.opmerkingen_admin = ac.text
         ");
 
+        // Return the event comments
         Schema::table("events", function ($table) {
             $table->string('opmerkingen')->nullable();
         });
         DB::statement("
             UPDATE events e
-              LEFT JOIN comments uc on uc.entity_id = e.id and uc.entity_type = 'App\\\\Event' AND uc.user_id = 0 and uc.is_secret = false
+              LEFT JOIN comments uc on uc.entity_id = e.id and uc.entity_type = 'App\\\\Event' AND uc.user_id = 0
                SET e.opmerkingen = uc.text
         ");
 
+        // Return the location comments
         Schema::table("locations", function ($table) {
             $table->string('opmerkingen')->nullable();
         });
         DB::statement("
             UPDATE locations l
-              LEFT JOIN comments uc on uc.entity_id = l.id and uc.entity_type = 'App\\\\Location' AND uc.user_id = 0 and uc.is_secret = false
+              LEFT JOIN comments uc on uc.entity_id = l.id and uc.entity_type = 'App\\\\Location' AND uc.user_id = 0
                SET l.opmerkingen = uc.text
         ");
 
         Schema::dropIfExists('comments');
+
+        // Remove the SYS user
         DB::statement("DELETE FROM users WHERE id = 0");
     }
 }
