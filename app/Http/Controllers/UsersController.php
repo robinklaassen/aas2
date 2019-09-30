@@ -26,7 +26,7 @@ class UsersController extends Controller
 	 */
 	public function index()
 	{
-		$memberUsers = User::where('profile_type', 'App\Member')->get();
+		$memberUsers = User::where('profile_type', 'App\Member')->where('id', '<>', 0)->get();
 		$participantUsers = User::where('profile_type', 'App\Participant')->get();
 		return view('users.index', compact('memberUsers', 'participantUsers'));
 	}
