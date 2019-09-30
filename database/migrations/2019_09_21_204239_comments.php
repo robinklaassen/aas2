@@ -30,8 +30,8 @@ class Comments extends Migration
                 ->onDelete('cascade');
         });
 
-        // Adds a SYS user to migrate existing 'opmerkingen' to new comments
-        DB::statement("INSERT INTO users (id, username, password, profile_id, profile_type, is_admin) VALUES ('0', 'SYS', '', 0, 'App\\\\Member', true)");
+        // PLEASE NOTE: the below migrations require a 'SYS' user with ID 0
+        // There was a DB statement here to insert one but due to problems on production it was moved to the UserTableSeeder
 
         // Migrate the member comments
         DB::statement("

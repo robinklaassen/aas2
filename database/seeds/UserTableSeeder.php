@@ -18,6 +18,8 @@ class UserTableSeeder extends Seeder
 	{
 		DB::table('users')->delete();
 
+		DB::statement("INSERT INTO users (id, username, password, profile_id, profile_type, is_admin) VALUES ('0', 'SYS', '', 0, 'App\\\\Member', true)");
+
 		$member = Member::find(1);
 		$user = new User;
 		$user->username = 'ranonkeltje';
