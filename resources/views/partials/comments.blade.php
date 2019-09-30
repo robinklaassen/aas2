@@ -13,7 +13,7 @@
             @if($comment->is_secret)
             <i class="glyphicon glyphicon-eye-close"></i>
             @endif
-            Door {{$comment->user->volnaam}} op {{$comment->updated_at}}
+            Door {{$comment->user->volnaam}} op {{$comment->updated_at ?? 'n.v.t.'}}
 
             @can('update', $comment)
             <a href="{{action('CommentsController@edit', [$comment->id, 'origin' => Request::path()])}}"><i class="glyphicon glyphicon-edit"></i></a>
