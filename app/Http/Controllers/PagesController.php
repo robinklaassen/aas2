@@ -8,6 +8,7 @@ use Mollie\Mollie_API_Client;
 use Carbon\Carbon;
 use App\Event;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Arr;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -205,7 +206,7 @@ class PagesController extends Controller
 			];
 		}
 
-		$birthdayList = array_values(array_sort($birthdayList, function ($member) {
+		$birthdayList = array_values(Arr::sort($birthdayList, function ($member) {
 			return (100 * $member['maand'] + $member['dag']);
 		}));
 
