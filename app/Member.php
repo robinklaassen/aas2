@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 
 class Member extends Model
 {
@@ -182,7 +183,7 @@ class Member extends Model
 		}
 
 		// Then sort and return
-		$data = array_sort($data, function ($item) {
+		$data = Arr::sort($data, function ($item) {
 			return $item['date'];
 		});
 

@@ -206,6 +206,8 @@ return [
 		'PDF' 		=> 'Barryvdh\DomPDF\Facade',
 		'Excel' 	=> 'Maatwebsite\Excel\Facades\Excel',
 		'Lava' 		=> 'Khill\Lavacharts\Laravel\LavachartsFacade',
+		'Arr'		=> 'Illuminate\Support\Arr',
+		'Str'		=> 'Illuminate\Support\Str',
 	],
 
 ];

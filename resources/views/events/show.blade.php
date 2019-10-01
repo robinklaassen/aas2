@@ -53,7 +53,7 @@
 			</tr>
 			<tr>
 				<td>Type</td>
-				<td>{{ studly_case($event->type) }}</td>
+				<td>{{ \Str::studly($event->type) }}</td>
 			</tr>
 			@endif
 			@if (($event->type == 'kamp') && (\Auth::user()->profile_type != 'App\Participant'))
