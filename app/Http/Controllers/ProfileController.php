@@ -6,10 +6,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Helpers\Payment\EventPayment;
 use App\Facades\Mollie;
-
 use Illuminate\Http\Request;
-use Input;
-
 use App\Participant;
 use App\Event;
 use Illuminate\Support\Facades\Mail;
@@ -204,7 +201,7 @@ class ProfileController extends Controller
 	public function addCourseSave()
 	{
 		$member = \Auth::user()->profile;
-		$course_id = Input::get('selected_course');
+		$course_id = \Request::input('selected_course');
 		$course = \App\Course::find($course_id);
 		$courseLevelFrom = 0;
 
@@ -221,7 +218,7 @@ class ProfileController extends Controller
 			if ($event_id = goesOnCamp($member)) {
 				$camp = \App\Event::findOrFail($event_id);
 				// If so, check if this change makes or breaks the course coverage
-				$courseLevelTo = Input::get('klas');
+				$courseLevelTo = \Request::input('klas');
 				$member->courses()->updateExistingPivot($course_id, ['klas' => $courseLevelTo]);
 				$statusAfter = checkCoverage($camp, $course_id);
 
@@ -240,7 +237,7 @@ class ProfileController extends Controller
 				}
 			} else {
 				// If not, just update the course
-				$member->courses()->updateExistingPivot($course_id, ['klas' => Input::get('klas')]);
+				$member->courses()->updateExistingPivot($course_id, ['klas' => \Request::input('klas')]);
 			}
 
 			$message = 'Vak toegevoegd!';
@@ -271,7 +268,7 @@ class ProfileController extends Controller
 			$camp = \App\Event::findOrFail($event_id);
 			// If so, check if this change makes or breaks the course coverage
 			$statusBefore = checkCoverage($camp, $course_id);
-			$courseLevelTo = Input::get('klas');
+			$courseLevelTo = \Request::input('klas');
 			$member->courses()->updateExistingPivot($course_id, ['klas' => $courseLevelTo]);
 			$statusAfter = checkCoverage($camp, $course_id);
 
@@ -290,7 +287,7 @@ class ProfileController extends Controller
 			}
 		} else {
 			// If not, just update the course
-			$member->courses()->updateExistingPivot($course_id, ['klas' => Input::get('klas')]);
+			$member->courses()->updateExistingPivot($course_id, ['klas' => \Request::input('klas')]);
 		}
 
 		return redirect('profile')->with([

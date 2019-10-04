@@ -4,14 +4,10 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Mail;
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
 use Illuminate\Http\Request;
 use App\Mail\members\NewUserMember;
 use App\Mail\participants\NewUserParticipant;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
 
 class UsersController extends Controller
 {
@@ -186,7 +182,7 @@ class UsersController extends Controller
 	{
 		// Check if this user is member! (participants can never be admins)
 		if ($user->profile_type == 'App\Member') {
-			$user->is_admin = \Input::get('is_admin');
+			$user->is_admin = \Request::input('is_admin');
 			$user->save();
 			return redirect('users')->with([
 				'flash_message' => 'Admin-rechten gewijzigd!'
@@ -209,7 +205,7 @@ class UsersController extends Controller
 			'password' => 'required|confirmed'
 		]);
 
-		$user->password = bcrypt(\Input::get('password'));
+		$user->password = bcrypt(\Request::input('password'));
 		$user->save();
 
 		return redirect('users')->with([
