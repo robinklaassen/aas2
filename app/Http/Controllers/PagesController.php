@@ -250,7 +250,6 @@ class PagesController extends Controller
 			'kmgList',
 			'aspirantList',
 			'birthdayList',
-			'courses',
 			'monthName',
 			'membersWithoutEvents',
 			'participantsWithoutCamps',

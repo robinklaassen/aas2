@@ -34,6 +34,7 @@ class RegistrationController extends Controller
 			->orderBy('datum_start', 'asc')
 			->get();
 		$camp_options = array();
+		$camp_full = array();
 		foreach ($camps as $camp) {
 			$camp_options[$camp->id] = $camp->naam . ' ' . substr($camp->datum_start, 0, 4) . ' te ' . $camp->location->plaats . ' (' . $camp->datum_voordag->format('d-m-Y') . ')';
 			if ($camp->vol) {
