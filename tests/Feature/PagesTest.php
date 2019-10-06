@@ -26,4 +26,17 @@ class PagesTest extends TestCase
             ->get('/lists')
             ->assertStatus(200);
     }
+
+    /**
+     * Test the graphs page
+     *
+     * @return void
+     */
+    public function testGraphsPage()
+    {
+        $response = $this
+            ->actingAs($this->user)
+            ->get('/graphs')
+            ->assertStatus(200);
+    }
 }
