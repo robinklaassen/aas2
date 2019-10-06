@@ -1,6 +1,5 @@
 <?php
 
-// 'cal', 'campInfo', 'campsReport', 'referrer'
 Route::get('home', 'PagesController@home');
 Route::get('info', 'PagesController@info');
 Route::get('run-script', 'PagesController@runScript');
@@ -29,10 +28,7 @@ Route::put('profile/edit-camp/{event}', 'ProfileController@editCampSave');
 Route::delete('profile/remove-course/{course}', 'ProfileController@removeCourse');
 Route::get('profile/reviews/{event}', 'ProfileController@reviews');
 
-# Review things
-Route::get('enquete/{event}', 'ReviewsController@review');
-Route::post('enquete/{event}', 'ReviewsController@reviewPost');
-
+# Comments
 Route::get("comments/{comment}/delete", "CommentsController@delete")->middleware('can:delete,comment');
 Route::delete("comments/{comment}", "CommentsController@destroy")->middleware('can:delete,comment');
 Route::get("comments/{comment}/edit", "CommentsController@edit")->middleware('can:update,comment');
@@ -40,6 +36,7 @@ Route::patch("comments/{comment}", "CommentsController@update")->middleware('can
 Route::get("comments/new", "CommentsController@create")->middleware('can:create,App\Comment');
 Route::post("comments", "CommentsController@store")->middleware('can:create,App\Comment');
 
+# Other
 Route::get("accept-privacy", "PagesController@showAcceptPrivacyStatement")->name("show-accept-privacy");
 Route::post("accept-privacy", "PagesController@storePrivacyStatement")->name("store-accept-privacy");
 

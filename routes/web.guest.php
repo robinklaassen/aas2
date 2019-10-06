@@ -2,6 +2,7 @@
 
 # Root page refers to login
 Route::get('/', 'Auth\LoginController@showLoginForm');
+
 # New registration things
 Route::get('register-member', 'RegistrationController@registerMember');
 Route::post('register-member', 'RegistrationController@storeMember');

@@ -9,3 +9,7 @@ Route::get("privacy", "PagesController@showPrivacyStatement");
 Route::get('cal/{type}', 'PagesController@cal')->middleware('cors');
 Route::get('camp-info/{camp}', 'PagesController@campInfo');
 Route::get('camps-report', 'PagesController@campsReport');
+
+# Review things
+Route::get('enquete/{event}', 'ReviewsController@review');
+Route::post('enquete/{event}', 'ReviewsController@reviewPost');
