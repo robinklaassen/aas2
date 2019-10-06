@@ -73,7 +73,9 @@ class EventsController extends Controller
 			return redirect('profile');
 		}
 
+		
 		// Obtain participant course information
+		$participantCourseString = array();
 		foreach ($event->participants->all() as $p) {
 			$result = \DB::table('course_event_participant')
 				->where('event_id', $event->id)

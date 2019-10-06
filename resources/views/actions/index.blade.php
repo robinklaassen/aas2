@@ -1,7 +1,7 @@
 @extends('master')
 
 @section('title')
-	Punten
+Punten
 @endsection
 
 @section('content')
@@ -14,15 +14,19 @@
 	</div>
 	<div class="col-sm-6">
 		<p class="text-right">
-			<a class="btn btn-primary" type="button" href="{{ url('actions/create') }}" style="margin-top:21px;">Nieuwe actie</a>
+			<a class="btn btn-primary" type="button" href="{{ url('actions/create') }}" style="margin-top:21px;">
+				Nieuwe actie
+			</a>
 		</p>
 	</div>
 </div>
 
-<hr/>
+<hr />
 
 <ul class="nav nav-tabs" role="tablist">
-	<li role="presentation" class="active"><a href="#actions" aria-controls="actions" role="tab" data-toggle="tab">Lijst van acties</a></li>
+	<li role="presentation" class="active">
+		<a href="#actions" aria-controls="actions" role="tab" data-toggle="tab">Lijst van acties</a>
+	</li>
 	<li role="presentation"><a href="#points" aria-controls="points" role="tab" data-toggle="tab">Huidige stand</a></li>
 </ul>
 
@@ -42,24 +46,36 @@
 							<th></th>
 						</tr>
 					</thead>
-					
+
 					<tbody>
 						@foreach ($actions as $action)
-							<tr>
-								<td>{{ $action->date->format('Y-m-d') }}</td>
-								<td><a href="{{ url('/members', $action->member->id) }}">{{ $action->member->voornaam }} {{ $action->member->tussenvoegsel }} {{ $action->member->achternaam }}</a></td>
-								<td>{{ $action->description }}</td>
-								<td>{{ $action->points }}</td>
-								<td><a href="{{ url('/actions', [$action->id, 'edit']) }}"><span class="glyphicon glyphicon-edit" data-toggle="tooltip" title="Bewerken"></span></a></td>
-								<td><a href="{{ url('/actions', [$action->id, 'delete']) }}"><span class="glyphicon glyphicon-remove" data-toggle="tooltip" title="Verwijderen"></span></a></td>
-							</tr>
+						<tr>
+							<td>{{ $action->date->format('Y-m-d') }}</td>
+							<td>
+								<a href="{{ url('/members', $action->member->id) }}">{{ $action->member->volnaam }}</a>
+							</td>
+							<td>{{ $action->description }}</td>
+							<td>{{ $action->points }}</td>
+							<td>
+								<a href="{{ url('/actions', [$action->id, 'edit']) }}">
+									<span class="glyphicon glyphicon-edit" data-toggle="tooltip"
+										title="Bewerken"></span>
+								</a>
+							</td>
+							<td>
+								<a href="{{ url('/actions', [$action->id, 'delete']) }}">
+									<span class="glyphicon glyphicon-remove" data-toggle="tooltip"
+										title="Verwijderen"></span>
+								</a>
+							</td>
+						</tr>
 						@endforeach
 					</tbody>
 				</table>
 			</div>
 		</div>
 	</div>
-	
+
 	<div role="tabpanel" class="tab-pane" id="points">
 		<div class="row">
 			<div class="col-sm-5">
@@ -72,14 +88,14 @@
 							<th>Level</th>
 						</tr>
 					</thead>
-					
+
 					<tbody>
 						@foreach ($members as $member)
-							<tr>
-								<td><a href="{{ url('/members', $member->id) }}">{{ $member->voornaam }} {{ $member->tussenvoegsel }} {{ $member->achternaam }}</a></td>
-								<td>{{ $member->points }}</td>
-								<td>{{ $member->rank }}</td>
-							</tr>
+						<tr>
+							<td><a href="{{ url('/members', $member->id) }}">{{ $member->volnaam }}</a></td>
+							<td>{{ $member->points }}</td>
+							<td>{{ $member->rank }}</td>
+						</tr>
 						@endforeach
 					</tbody>
 				</table>
@@ -92,7 +108,7 @@
 
 @section('footer')
 <script type="text/javascript">
-$( document ).ready(function() {
+	$( document ).ready(function() {
     $('#actionsTable').DataTable({
 		responsive: true,
 		order: [[ 0, "desc" ]],

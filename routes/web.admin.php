@@ -11,7 +11,7 @@ Route::resource('actions', 'ActionsController');
 Route::get('courses/{course}/delete', 'CoursesController@delete');
 Route::resource('courses', 'CoursesController');
 
-# Declartion things
+# Declaration things
 Route::get(
     'declarations/process/{member}',
     'DeclarationsController@confirmProcess'

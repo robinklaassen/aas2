@@ -1,9 +1,22 @@
-<?php namespace App;
+<?php
+
+namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
 class Event extends Model
 {
+
+	// Descriptions of the camp types (used in reviews)
+	const CAMP_DESCRIPTIONS = [
+		"herfst" 		=> "Herfstkamp (weekend in de herfstvakantie)",
+		"winter" 		=> "Winterkamp (halve week voor Kerst of na Oud en Nieuw)",
+		"voorjaar" 		=> "Voorjaarskamp (weekend in de voorjaarsvakantie)",
+		"paas" 			=> "Paaskamp (lang weekend met Pasen)",
+		"mei" 			=> "Meikamp (week in de meivakantie, vlak voor de eindexamens)",
+		"hemelvaart" 	=> "Hemelvaartskamp (lang weekend met Hemelvaart, vlak voor de laatste toetsweek van niet-eindexamenklassen)",
+		"zomer" 		=> "Zomerkamp (week in de zomervakantie)"
+	];
 
 	protected $guarded = ['id', 'created_at', 'updated_at'];
 

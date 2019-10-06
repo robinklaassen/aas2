@@ -7,7 +7,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Exports\ParticipantsExport;
 
-use Input;
+
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
