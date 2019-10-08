@@ -109,8 +109,7 @@ Route::get('events/{event}/join-members', 'EventsController@joinMembers');
 Route::put('events/{event}/join-members', 'EventsController@joinMembersSave');
 Route::get('events/{event}/move-participant/{participant}', 'EventsController@moveParticipant');
 Route::put('events/{event}/move-participant/{participant}', 'EventsController@moveParticipantSave');
-Route::resource('events', 'EventsController')->except(['show']);
-
+Route::resource('events', 'EventsController', ["except" => "show"]);
 
 # Member things
 Route::get('members/search', 'MembersController@search');

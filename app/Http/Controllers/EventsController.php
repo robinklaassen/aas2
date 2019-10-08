@@ -4,10 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Event;
 use App\Member;
-use App\Participant;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use Khill\Lavacharts\Lavacharts;
 use App\Exports\EventNightRegisterReport;
 use App\Exports\EventPaymentReport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -19,8 +17,8 @@ class EventsController extends Controller
 	public function __construct()
 	{
 		// You need to be logged in and have admin rights to access
-		$this->middleware('auth', ['except' => ['iCalendar']]);
-		$this->middleware('admin', ['except' => ['show', 'iCalendar', 'reviews']]);
+		// $this->middleware('auth', ['except' => ['iCalendar']]);
+		// $this->middleware('admin', ['except' => ['show', 'iCalendar', 'reviews']]);
 	}
 
 	/**
@@ -251,6 +249,7 @@ class EventsController extends Controller
 			return redirect('events');
 		}
 
+		$participantCourses = array();
 		// Get participants
 		$participants = $event->participants()->orderBy('voornaam')->get();
 		$num_participants_placed = $event->participants()->wherePivot('geplaatst', 1)->count();
@@ -275,6 +274,7 @@ class EventsController extends Controller
 		// And age distribution and if new or not
 		$stats['num_new'] = 0;
 		$stats['num_old'] = 0;
+		$ages = array();
 		foreach ($participants as $participant) {
 			$ages[] = $participant->geboortedatum->diffInYears($event->datum_start);
 
