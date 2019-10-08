@@ -249,6 +249,7 @@ class EventsController extends Controller
 			return redirect('events');
 		}
 
+		$participantCourses = array();
 		// Get participants
 		$participants = $event->participants()->orderBy('voornaam')->get();
 		$num_participants_placed = $event->participants()->wherePivot('geplaatst', 1)->count();
@@ -273,6 +274,7 @@ class EventsController extends Controller
 		// And age distribution and if new or not
 		$stats['num_new'] = 0;
 		$stats['num_old'] = 0;
+		$ages = array();
 		foreach ($participants as $participant) {
 			$ages[] = $participant->geboortedatum->diffInYears($event->datum_start);
 
