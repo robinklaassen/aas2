@@ -18,7 +18,7 @@ Route::get('declarations', 'DeclarationsController@index');
 
 # Event things
 Route::get('events/{event}/reviews', 'EventsController@reviews');
-Route::resource('events', 'EventsController', ["only" => "show"]);
+Route::resource('events', 'EventsController')->only(['show']);
 
 # Member index
 Route::resource('members', 'MembersController', ["only" => "index"]);
