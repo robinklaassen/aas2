@@ -89,7 +89,7 @@ Homestead.json
 .phpunit.result.cache
 composer.lock
 
-#Laravel Specific files
+# Laravel specific files
 /node_modules
 /public/hot
 /public/storage
@@ -103,6 +103,10 @@ storage/*.key
 /node_modules
 bootstrap/cache
 
-#AAS2 specifics
+# AAS2 specifics
 /public/img
 /public/uploads
+
+# Ignore the composer archive
+# It's required on server (can't install globally) but updating interferes with git pull
+composer.phar

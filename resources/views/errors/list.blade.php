@@ -3,7 +3,7 @@
 		<p>Ho, er ging iets fout!</p>
 		<ul>
 			@foreach ($errors->all() as $error)
-				<li>{{ $error }}
+				<li>{{ $error }}</li>
 			@endforeach
 		</ul>
 	</div>

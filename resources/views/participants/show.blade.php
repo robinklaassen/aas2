@@ -1,11 +1,11 @@
 @extends('master')
 
 @section('title')
-	@if ($viewType == 'admin')
-		{{ $participant->volnaam }}
-	@elseif ($viewType == 'profile')
-		Mijn profiel
-	@endif
+@if ($viewType == 'admin')
+{{ $participant->volnaam }}
+@elseif ($viewType == 'profile')
+Mijn profiel
+@endif
 @endsection
 
 @section('content')
@@ -19,19 +19,19 @@
 	<div class="col-sm-6">
 		<p class="text-right">
 			@if ($viewType == 'profile')
-				<a class="btn btn-primary" type="button" href="{{ url('/profile/edit') }}" style="margin-top:21px;">Bewerken</a>
-				<a class="btn btn-info" type="button" href="{{ url('/profile/on-camp') }}" style="margin-top:21px;">Op kamp</a>
-				<a class="btn btn-warning" type="button" href="{{ url('/profile/password') }}" style="margin-top:21px;">Nieuw wachtwoord</a>
+			<a class="btn btn-primary" type="button" href="{{ url('/profile/edit') }}" style="margin-top:21px;">Bewerken</a>
+			<a class="btn btn-info" type="button" href="{{ url('/profile/on-camp') }}" style="margin-top:21px;">Op kamp</a>
+			<a class="btn btn-warning" type="button" href="{{ url('/profile/password') }}" style="margin-top:21px;">Nieuw wachtwoord</a>
 			@elseif ($viewType == 'admin')
-				<a class="btn btn-primary" type="button" href="{{ url('/participants', [$participant->id, 'edit']) }}" style="margin-top:21px;">Bewerken</a>
-				<a class="btn btn-info" type="button" href="{{ url('/participants', [$participant->id, 'on-event']) }}" style="margin-top:21px;">Op kamp</a>
-				<a class="btn btn-danger" type="button" href="{{ url('/participants', [$participant->id, 'delete']) }}" style="margin-top:21px;">Verwijderen</a>
+			<a class="btn btn-primary" type="button" href="{{ url('/participants', [$participant->id, 'edit']) }}" style="margin-top:21px;">Bewerken</a>
+			<a class="btn btn-info" type="button" href="{{ url('/participants', [$participant->id, 'on-event']) }}" style="margin-top:21px;">Op kamp</a>
+			<a class="btn btn-danger" type="button" href="{{ url('/participants', [$participant->id, 'delete']) }}" style="margin-top:21px;">Verwijderen</a>
 			@endif
 		</p>
 	</div>
 </div>
 
-<hr/>
+<hr />
 
 <div class="row">
 
@@ -105,14 +105,14 @@
 				<td>{{ $participant->hoebij }}</td>
 			</tr>
 			<tr>
-				<td>Opmerkingen</td>
+				<td>Overige informatie</td>
 				<td style="white-space:pre-wrap;">{{ $participant->opmerkingen }}</td>
 			</tr>
 		</table>
-		
-		
+
+
 	</div>
-	
+
 	<!-- Rechter kolom -->
 	<div class="col-md-6">
 		<!-- Administratietabel -->
@@ -139,60 +139,66 @@
 			@if ($viewType == 'admin')
 			<tr>
 				@unless ($participant->inkomen == 0)
-					<td>Inkomensverklaring</td>
-					<td>
+				<td>Inkomensverklaring</td>
+				<td>
 					@if ($participant->inkomensverklaring != null)
-						{{ $participant->inkomensverklaring->format('d-m-Y') }}
+					{{ $participant->inkomensverklaring->format('d-m-Y') }}
 					@else
-						<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" data-toggle="tooltip" title="Inkomensverklaring nog niet binnen!"></span> 
+					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" data-toggle="tooltip" title="Inkomensverklaring nog niet binnen!"></span>
 					@endif
-					</td>
+				</td>
 				@endunless
-			</tr>
-			<tr>
-				<td>Opmerkingen</td>
-				<td style="white-space:pre-wrap;">{{ $participant->opmerkingen_admin }}</td>
 			</tr>
 			@endif
 		</table>
-		
+
 		<!-- Kampen -->
 		<table class="table table-hover">
 			<caption>Kampen</caption>
 			@forelse ($participant->events()->where('type','kamp')->orderBy('datum_start', 'desc')->get() as $event)
-				<tr>
-					<td><a href="{{ url('/events', $event->id) }}">{{ $event->naam }}</a></td>
-					<td>
-						@if ($viewType == 'admin')
-							{{ $event->code }}
-						@elseif ($viewType == 'profile')
-							{{ $event->datum_start->format('d-m-Y') }}
-						@endif
-					</td>
-					<td>
-					@if ($courseOnCamp != [])
-						@foreach ($courseOnCamp[$event->id] as $course) {{ $course['naam'] }} <br/> @endforeach
+			<tr>
+				<td><a href="{{ url('/events', $event->id) }}">{{ $event->naam }}</a></td>
+				<td>
+					@if ($viewType == 'admin')
+					{{ $event->code }}
+					@elseif ($viewType == 'profile')
+					{{ $event->datum_start->format('d-m-Y') }}
 					@endif
-					</td>
-					<td>
-						@if ($viewType == 'admin')
-							<a href="{{ url('/participants', [$participant->id, 'edit-event', $event->id]) }}">
+				</td>
+				<td>
+					@if ($courseOnCamp != [])
+					@foreach ($courseOnCamp[$event->id] as $course) {{ $course['naam'] }} <br /> @endforeach
+					@endif
+				</td>
+				<td>
+					@if ($viewType == 'admin')
+					<a href="{{ url('/participants', [$participant->id, 'edit-event', $event->id]) }}">
 						@elseif ($viewType == 'profile')
-							<a href="{{ url('/profile/edit-camp', $event->id) }}">
-						@endif
-						<span class="glyphicon glyphicon-edit" data-toggle="tooltip" title="Vakken bewerken" aria-hidden="true"></span></a>
-					</td>
-				</tr>
+						<a href="{{ url('/profile/edit-camp', $event->id) }}">
+							@endif
+							<span class="glyphicon glyphicon-edit" data-toggle="tooltip" title="Vakken bewerken" aria-hidden="true"></span></a>
+				</td>
+			</tr>
 			@empty
-				<tr><td>Geen kampen gevonden</td></tr>
+			<tr>
+				<td>Geen kampen gevonden</td>
+			</tr>
 			@endforelse
 		</table>
-		
+
 		@if ($viewType == 'profile')
-			<p>De opgegeven informatie per vak kunt u bekijken door op 'vakken bewerken' te klikken.</p>
+		<p>De opgegeven informatie per vak kunt u bekijken door op 'vakken bewerken' te klikken.</p>
+		@endif
+
+		@if (\Auth::user()->is_admin)
+			<div>
+				@include('partials.comments', [ 'comments' => $participant->comments, 'type' => 'App\Participant', 'key' => $participant->id ])
+			</div>
 		@endif
 	</div>
-	
+
+
+
 </div>
 
 @endsection

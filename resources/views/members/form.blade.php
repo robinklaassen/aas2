@@ -28,7 +28,7 @@
 	</div>
 
 	<div class="col-sm-7 form-group">
-		{!! Form::label('geslacht', 'Geslacht:') !!}<br/>
+		{!! Form::label('geslacht', 'Geslacht:') !!}<br />
 		<div style="margin-top:10px;">
 			{!! Form::radio('geslacht', 'M', 0) !!} Man
 			{!! Form::radio('geslacht', 'V', 0, ['style' => 'margin-left:20px;']) !!} Vrouw
@@ -72,7 +72,7 @@
 	</div>
 
 	<div class="col-sm-2 form-group">
-		{!! Form::label('rijbewijs', 'Rijbewijs?') !!}<br/>
+		{!! Form::label('rijbewijs', 'Rijbewijs?') !!}<br />
 		{!! Form::hidden('rijbewijs', 0) !!}
 		{!! Form::checkbox('rijbewijs', 1, null, ['style' => 'margin-top:14px;']) !!}
 	</div>
@@ -90,7 +90,7 @@
 	</div>
 
 	<div class="col-sm-2 form-group">
-		{!! Form::label('afgestudeerd', 'Afgestudeerd?') !!}<br/>
+		{!! Form::label('afgestudeerd', 'Afgestudeerd?') !!}<br />
 		{!! Form::hidden('afgestudeerd', 0) !!}
 		{!! Form::checkbox('afgestudeerd', 1, null, ['style' => 'margin-top:14px;']) !!}
 	</div>
@@ -107,7 +107,7 @@
 </div>
 
 <div class="form-group">
-	{!! Form::label('opmerkingen', 'Opmerkingen:') !!}
+	{!! Form::label('opmerkingen', 'Overige informatie:') !!}
 	{!! Form::textarea('opmerkingen', null, ['class' => 'form-control']) !!}
 </div>
 
@@ -122,13 +122,13 @@
 	</div>
 
 	<div class="col-sm-2 form-group">
-		{!! Form::label('kmg', 'KMG gehad?') !!}<br/>
+		{!! Form::label('kmg', 'KMG gehad?') !!}<br />
 		{!! Form::hidden('kmg', 0) !!}
 		{!! Form::checkbox('kmg', 1, null, ['style' => 'margin-top:14px;']) !!}
 	</div>
 
 	<div class="col-sm-2 form-group">
-		{!! Form::label('vog', 'VOG ingeleverd?') !!}<br/>
+		{!! Form::label('vog', 'VOG ingeleverd?') !!}<br />
 		{!! Form::hidden('vog', 0) !!}
 		{!! Form::checkbox('vog', 1, null, ['style' => 'margin-top:14px;']) !!}
 	</div>
@@ -141,13 +141,13 @@
 	</div>
 
 	<div class="col-sm-2 form-group">
-		{!! Form::label('ervaren_trainer', 'Ervaren trainer?') !!}<br/>
+		{!! Form::label('ervaren_trainer', 'Ervaren trainer?') !!}<br />
 		{!! Form::hidden('ervaren_trainer', 0) !!}
 		{!! Form::checkbox('ervaren_trainer', 1, null, ['style' => 'margin-top:14px;']) !!}
 	</div>
 
 	<div class="col-sm-2 form-group">
-		{!! Form::label('incasso', 'Automatische incasso?') !!}<br/>
+		{!! Form::label('incasso', 'Automatische incasso?') !!}<br />
 		{!! Form::hidden('incasso', 0) !!}
 		{!! Form::checkbox('incasso', 1, null, ['style' => 'margin-top:14px;']) !!}
 	</div>

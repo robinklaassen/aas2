@@ -53,7 +53,7 @@
 			</tr>
 			<tr>
 				<td>Type</td>
-				<td>{{ studly_case($event->type) }}</td>
+				<td>{{ \Str::studly($event->type) }}</td>
 			</tr>
 			@endif
 			@if (($event->type == 'kamp') && (\Auth::user()->profile_type != 'App\Participant'))
@@ -101,10 +101,6 @@
 				<td style="white-space:pre-wrap;">{{ $event->beschrijving }}</td>
 			</tr>
 			@endif
-			<tr>
-				<td>Opmerkingen</td>
-				<td style="white-space:pre-wrap;">{{ $event->opmerkingen }}</td>
-			</tr>
 			@endif
 		</table>
 	</div>
@@ -165,6 +161,11 @@
 			</tr>
 			@endforeach
 		</table>
+
+		
+		@if (\Auth::user()->is_admin)
+			@include('partials.comments', [ 'comments' => $event->comments, 'type' => 'App\Event', 'key' => $event->id ])
+		@endif
 	</div>
 	@endif
 </div>
@@ -289,7 +290,7 @@
 	@endforeach
 </table>
 @endcan
-@endif
+@endisf
 
 @endsection
 

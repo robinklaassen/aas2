@@ -7,7 +7,8 @@ use App\Participant;
 use App\User;
 use App\Role;
 
-class UserTableSeeder extends Seeder {
+class UserTableSeeder extends Seeder
+{
 
 	/**
 	 * Run the database seeds.
@@ -18,6 +19,8 @@ class UserTableSeeder extends Seeder {
 	{
 		DB::table('users')->delete();
 
+		DB::statement("INSERT INTO users (id, username, password, profile_id, profile_type, is_admin) VALUES ('0', 'SYS', '', 0, 'App\\\\Member', true)");
+
 		$member = Member::find(1);
 		$user = new User;
 		$user->username = 'ranonkeltje';
@@ -25,6 +28,7 @@ class UserTableSeeder extends Seeder {
 		$user->is_admin = 2;
 		$user->save();
 		$user->roles()->attach(Role::find(1));
+		$user->privacy = '2018-06-01';
 		$member->user()->save($user);
 
 		$member = Member::find(2);
@@ -35,6 +39,8 @@ class UserTableSeeder extends Seeder {
 		$user->save();
 		$user->roles()->attach(Role::find(2));
 		$user->roles()->attach(Role::find(3));
+		$user->is_admin = 1;
+		$user->privacy = '2018-06-01';
 		$member->user()->save($user);
 
 		$participant = Participant::find(2);
@@ -44,6 +50,12 @@ class UserTableSeeder extends Seeder {
 		$user->is_admin = 0;
 		$participant->user()->save($user);
 
+		$member = Member::find(3);
+		$user = new User;
+		$user->username = 'dkrijgsman';
+		$user->password = bcrypt('poep');
+		$user->is_admin = 0;
+		$user->privacy = '2018-06-01';
+		$member->user()->save($user);
 	}
-
 }

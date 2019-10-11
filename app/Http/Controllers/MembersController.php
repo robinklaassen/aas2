@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Input;
 use App\Member;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -13,11 +12,7 @@ class MembersController extends Controller
 {
 
 	public function __construct()
-	{
-		// You need to be logged in and have admin rights to access
-		$this->middleware('auth');
-		$this->middleware('admin', ['except' => ['index']]);
-	}
+	{ }
 
 	# Index page
 	public function index()
@@ -44,7 +39,7 @@ class MembersController extends Controller
 	{
 		$viewType = 'admin';
 
-		return view('members.show', compact('member', 'viewType', 'fellows'));
+		return view('members.show', compact('member', 'viewType'));
 	}
 
 	# Create new member
@@ -111,7 +106,7 @@ class MembersController extends Controller
 	public function onEventSave(Member $member)
 	{
 		// Should not be attached if the member has already been sent on this event! That's why we use sync instead of attach, without detaching (second parameter false)
-		$status = $member->events()->sync([Input::get('selected_event')], false);
+		$status = $member->events()->sync([\Request::input('selected_event')], false);
 		$message = ($status['attached'] == []) ? 'Het lid is reeds op dit evenement gestuurd!' : 'Het lid is op evenement gestuurd!';
 		return redirect('members/' . $member->id)->with([
 			'flash_message' => $message
@@ -128,11 +123,11 @@ class MembersController extends Controller
 	# Add course for this member (update database)
 	public function addCourseSave(Member $member)
 	{
-		$status = $member->courses()->sync([Input::get('selected_course')], false);
+		$status = $member->courses()->sync([\Request::input('selected_course')], false);
 		if ($status['attached'] == []) {
 			$message = 'Vak reeds toegevoegd!';
 		} else {
-			$member->courses()->updateExistingPivot(Input::get('selected_course'), ['klas' => Input::get('klas')]);
+			$member->courses()->updateExistingPivot(\Request::input('selected_course'), ['klas' => \Request::input('klas')]);
 			$message = 'Vak toegevoegd!';
 		}
 		return redirect('members/' . $member->id)->with([
@@ -151,7 +146,7 @@ class MembersController extends Controller
 	# Edit course for this member (update database)
 	public function editCourseSave(Member $member, $course_id)
 	{
-		$member->courses()->updateExistingPivot($course_id, ['klas' => Input::get('klas')]);
+		$member->courses()->updateExistingPivot($course_id, ['klas' => \Request::input('klas')]);
 		return redirect('members/' . $member->id)->with([
 			'flash_message' => 'Het vak is bewerkt!'
 		]);

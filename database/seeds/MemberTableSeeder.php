@@ -2,9 +2,11 @@
 
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 use App\Member;
 
-class MemberTableSeeder extends Seeder {
+class MemberTableSeeder extends Seeder
+{
 
 	/**
 	 * Run the database seeds.
@@ -14,7 +16,7 @@ class MemberTableSeeder extends Seeder {
 	public function run()
 	{
 		DB::table('members')->delete();
-		
+
 		Member::create([
 			'voornaam' => 'Ranonkeltje',
 			'tussenvoegsel' => 'van',
@@ -40,11 +42,10 @@ class MemberTableSeeder extends Seeder {
 			'ervaren_trainer' => '1',
 			'incasso' => '1',
 			'opmerkingen' => 'Ik ben het allergaafste spookje ooit! En ook nog eens heel bescheiden.',
-			'opmerkingen_admin' => 'Wauw wat is zij tof inderdaad.'
 		]);
-		
+
 		Member::create([
-			'voornaam' => 'Jon',
+			'voornaam' => 'Jön',
 			'achternaam' => 'Snow',
 			'geslacht' => 'M',
 			'geboortedatum' => '2010-03-05',
@@ -64,9 +65,8 @@ class MemberTableSeeder extends Seeder {
 			'vog' => '1',
 			'ervaren_trainer' => '1',
 			'opmerkingen' => 'Winter is coming.',
-			'opmerkingen_admin' => 'Hij weet echt niks.'
 		]);
-		
+
 		Member::create([
 			'voornaam' => 'Dingo',
 			'achternaam' => 'Krijgsman',
@@ -88,8 +88,30 @@ class MemberTableSeeder extends Seeder {
 			'vog' => '0',
 			'ervaren_trainer' => '0',
 			'opmerkingen' => 'YEEHAW!',
-			'opmerkingen_admin' => 'Licht autistisch en een beetje gestoord.'
+		]);
+
+		Member::create([
+			'voornaam' => 'Bert',
+			'tussenvoegsel' => 'van der',
+			'achternaam' => 'Ven',
+			'geslacht' => 'M',
+			'geboortedatum' => '1950-03-16',
+			'adres' => 'Bejaardenstraat 17',
+			'postcode' => '8866 ZX',
+			'plaats' => 'Grandpatown',
+			'telefoon' => '0689726239',
+			'email' => 'b.vanderven@planetzz.nl',
+			'email_anderwijs' => '',
+			'soort' => 'oud',
+			'eindexamen' => 'HAVO',
+			'studie' => 'Geriatrie',
+			'afgestudeerd' => '1',
+			'hoebij' => 'De krant',
+			'kmg' => '1',
+			'ranonkeltje' => '0',
+			'vog' => '1',
+			'ervaren_trainer' => '1',
+			'opmerkingen' => 'Ik ben doof aan één kant en slechtziend aan de andere.'
 		]);
 	}
-
 }

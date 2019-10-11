@@ -19,9 +19,14 @@
 
 <div class="tab-content">
 	<div role="tabpanel" class="tab-pane active" id="stats">
+
 		<p>
 			<br/>
-			Wil je een nieuwe grafiek in dit rijtje? Vraag het even lief aan Robin. En: hoe specifieker je verzoek, hoe beter.
+			NB: pas vanaf 1 augustus wordt het huidige Anderwijsjaar meegenomen in de onderstaande grafieken. Eerder geeft de grafiek dan geen goed beeld.
+		</p>
+
+		<p>
+			Wil je een nieuwe grafiek in dit rijtje? Vraag het even lief aan een AAS-baas. En: hoe specifieker je verzoek, hoe beter.
 		</p>
 
 		<div class="row">

@@ -1,8 +1,11 @@
-<?php namespace App\Http\Controllers;
+<?php
+
+namespace App\Http\Controllers;
 
 use App\Event;
 use App\Member;
 use App\Http\Requests;
+use App\Http\Controllers\Controller;
 use App\Exports\EventNightRegisterReport;
 use App\Exports\EventPaymentReport;
 use Maatwebsite\Excel\Facades\Excel;
@@ -14,8 +17,8 @@ class EventsController extends Controller
 	public function __construct()
 	{
 		// You need to be logged in and have admin rights to access
-		$this->middleware('auth', ['except' => ['iCalendar']]);
-		$this->middleware('admin', ['except' => ['show', 'iCalendar', 'reviews']]);
+		// $this->middleware('auth', ['except' => ['iCalendar']]);
+		// $this->middleware('admin', ['except' => ['show', 'iCalendar', 'reviews']]);
 	}
 
 	/**
@@ -67,11 +70,13 @@ class EventsController extends Controller
 		$this->authorize("view", $event);
 		// Redirect the viewer if the user profile is not attached to this event
 		$profile = \Auth::user()->profile;
-		if ($profile->events->contains('id', $event->id) && !(\Auth::user()->is_admin)) {
+		if (!($profile->events->contains('id', $event->id)) && !(\Auth::user()->is_admin)) {
 			return redirect('profile');
 		}
 
+		
 		// Obtain participant course information
+		$participantCourseString = array();
 		foreach ($event->participants->all() as $p) {
 			$result = \DB::table('course_event_participant')
 				->where('event_id', $event->id)
@@ -341,9 +346,9 @@ class EventsController extends Controller
 
 			// Filter out unplaced participants, if requested
 			if ($type == 'placed') {
-				$unplaced = $event->participants()->where('geplaatst', 0)->get();
-				$result = $result->filter(function ($value, $key) use ($unplaced) {
-					return !$unplaced->contains($value);
+				$unplaced = $event->participants()->where('geplaatst', 0)->get()->pluck('id');
+				$result = $result->filter(function ($participant) use ($unplaced) {
+					return !$unplaced->contains($participant->id);
 				});
 			}
 
@@ -507,22 +512,17 @@ class EventsController extends Controller
 		$events = Event::orderBy('datum_start', 'asc')->where('openbaar', 1)->get();
 		$members = Member::whereIn('soort', ['normaal', 'aspirant'])->get();
 
-		foreach ($members as $key => $member) {
-			$fullname = $member->voornaam . ' ';
-			if ($member->tussenvoegsel != '') {
-				$fullname .= $member->tussenvoegsel . ' ';
-			}
-			$fullname .= $member->achternaam;
-			//$fullname = html_entity_decode($fullname, ENT_QUOTES | ENT_HTML401, 'UTF-8');
-			$fullname = iconv('UTF-8', 'ASCII//TRANSLIT', $fullname);
-			$members[$key]->naam = $fullname;
+		$response = response()->view('events.ical', compact('events', 'members'));
+
+		if (env('APP_ENV') == 'production') {
+			$response
+				->header('Content-Type', 'text/calendar; charset=utf-8')
+				->header('Content-Disposition', 'inline; filename=anderwijs.ics');
+		} else {
+			$response->header('Content-Type', 'text/plain; charset=utf-8');
 		}
 
-		return response()
-			->view('events.ical', compact('events', 'members'))
-			//->header('Content-Type','text/plain; charset=utf-8');
-			->header('Content-Type', 'text/calendar; charset=utf-8')
-			->header('Content-Disposition', 'inline; filename=anderwijs.ics');
+		return $response;
 	}
 
 	# Join members to event (form)

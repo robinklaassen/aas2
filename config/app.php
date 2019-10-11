@@ -141,6 +141,7 @@ return [
 		'Maatwebsite\Excel\ExcelServiceProvider',
 		'Khill\Lavacharts\Laravel\LavachartsServiceProvider',
 		'Illuminate\Notifications\NotificationServiceProvider',
+		'GrahamCampbell\Markdown\MarkdownServiceProvider',
 
 
 		/*
@@ -182,7 +183,6 @@ return [
 		'Event'     => 'Illuminate\Support\Facades\Event',
 		'File'      => 'Illuminate\Support\Facades\File',
 		'Hash'      => 'Illuminate\Support\Facades\Hash',
-		'Input'     => 'Illuminate\Support\Facades\Input',
 		'Inspiring' => 'Illuminate\Foundation\Inspiring',
 		'Lang'      => 'Illuminate\Support\Facades\Lang',
 		'Log'       => 'Illuminate\Support\Facades\Log',
@@ -205,6 +205,8 @@ return [
 		'PDF' 		=> 'Barryvdh\DomPDF\Facade',
 		'Excel' 	=> 'Maatwebsite\Excel\Facades\Excel',
 		'Lava' 		=> 'Khill\Lavacharts\Laravel\LavachartsFacade',
+		'Arr'		=> 'Illuminate\Support\Arr',
+		'Str'		=> 'Illuminate\Support\Str',
 	],
 
 ];

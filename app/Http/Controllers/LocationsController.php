@@ -1,4 +1,6 @@
-<?php namespace App\Http\Controllers;
+<?php
+
+namespace App\Http\Controllers;
 
 use App\Location;
 use App\Event;
@@ -7,15 +9,12 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 
-class LocationsController extends Controller {
-	
+class LocationsController extends Controller
+{
+
 	public function __construct()
-	{
-		// You need to be logged in and have admin rights to access
-		$this->middleware('auth');
-		$this->middleware('admin');
-	}
-	
+	{ }
+
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -82,7 +81,7 @@ class LocationsController extends Controller {
 	public function update(Location $location, Requests\LocationRequest $request)
 	{
 		$location->update($request->all());
-		return redirect('locations/'.$location->id)->with([
+		return redirect('locations/' . $location->id)->with([
 			'flash_message' => 'De locatie is bewerkt!'
 		]);
 	}
@@ -93,12 +92,12 @@ class LocationsController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	 
+
 	public function delete(Location $location)
 	{
 		return view('locations.delete', compact('location'));
 	}
-	
+
 	public function destroy(Location $location)
 	{
 		$location->delete();
@@ -106,24 +105,23 @@ class LocationsController extends Controller {
 			'flash_message' => 'De locatie is verwijderd!'
 		]);
 	}
-	
+
 	# Enqueteresultaten
 	public function reviews(Location $location, Event $event)
 	{
 		// Repeatedly set options and create charts using a helper function based on LavaCharts
-		
+
 		$options = [
 			1 => 'Slecht',
 			2 => 'Onvoldoende',
 			3 => 'Voldoende',
 			4 => 'Goed'
 		];
-		
+
 		createReviewChart($event, 'kh-slaap', $options);
 		createReviewChart($event, 'kh-bijspijker', $options);
 		createReviewChart($event, 'kh-geheel', $options);
-		
+
 		return view('locations.reviews', compact('location', 'event'));
 	}
-
 }

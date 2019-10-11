@@ -27,8 +27,8 @@ class EventRequest extends Request {
 			'type' => 'required',
 			'datum_start' => 'required|regex:/\d{4}-\d{2}-\d{2}/',
 			'datum_eind' => 'required|regex:/\d{4}-\d{2}-\d{2}/',
-			'datum_voordag' => 'sometimes|regex:/\d{4}-\d{2}-\d{2}/',
-			'prijs' => 'sometimes|numeric',
+			'datum_voordag' => 'sometimes|nullable|regex:/\d{4}-\d{2}-\d{2}/',
+			'prijs' => 'sometimes|nullable|numeric',
 			'location_id' => 'required'
 		];
 	}

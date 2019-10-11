@@ -1,11 +1,13 @@
-<?php namespace App\Http\Controllers;
+<?php
+
+namespace App\Http\Controllers;
 
 use App\Participant;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Exports\ParticipantsExport;
 
-use Input;
+
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -13,11 +15,7 @@ class ParticipantsController extends Controller
 {
 
 	public function __construct()
-	{
-		// You need to be logged in and have admin rights to access
-		$this->middleware('auth');
-		$this->middleware('admin');
-	}
+	{ }
 
 	/**
 	 * Display a listing of the resource.

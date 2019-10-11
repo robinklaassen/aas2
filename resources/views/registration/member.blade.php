@@ -1,31 +1,31 @@
 @extends('master')
 
 @section('title')
-	Inschrijven vrijwilliger
+Inschrijven vrijwilliger
 @endsection
 
 @section('header')
 <style>
-a {
-	color: #51B848;
-}
+	a {
+		color: #51B848;
+	}
 
-a:hover {
-	color: #1D5027;
-}
+	a:hover {
+		color: #1D5027;
+	}
 
-[type=submit].btn {
-	background-color: #1D5027;
-	border: 0;
-}
+	[type=submit].btn {
+		background-color: #1D5027;
+		border: 0;
+	}
 
-[type=submit].btn:hover {
-	background-color: #51B848;
-}
+	[type=submit].btn:hover {
+		background-color: #51B848;
+	}
 
-[type=submit].btn:active {
-	background-color: #51B848;
-}
+	[type=submit].btn:active {
+		background-color: #51B848;
+	}
 </style>
 @endsection
 
@@ -34,7 +34,7 @@ a:hover {
 
 <h1><img src="https://www.anderwijs.nl/wp-content/uploads/2016/03/Test-6-2.png" alt="Logo Anderwijs" style="height:2.5em;margin-right:30px;vertical-align:bottom;"> <span style="white-space:nowrap;">Inschrijven als nieuwe vrijwilliger</span></h1>
 
-<hr/>
+<hr />
 
 
 {{-- <div class="alert alert-danger alert-important" role="alert">
@@ -57,12 +57,12 @@ a:hover {
 		{!! Form::label('voornaam', 'Voornaam:') !!}
 		{!! Form::text('voornaam', null, ['class' => 'form-control']) !!}
 	</div>
-	
+
 	<div class="col-sm-2 form-group">
 		{!! Form::label('tussenvoegsel', 'Tussenvoegsel:') !!}
 		{!! Form::text('tussenvoegsel', null, ['class' => 'form-control']) !!}
 	</div>
-	
+
 	<div class="col-sm-5 form-group">
 		{!! Form::label('achternaam', 'Achternaam:') !!}
 		{!! Form::text('achternaam', null, ['class' => 'form-control']) !!}
@@ -74,9 +74,9 @@ a:hover {
 		{!! Form::label('geboortedatum', 'Geboortedatum:') !!}
 		{!! Form::input('date', 'geboortedatum', null, ['class' => 'form-control']) !!}
 	</div>
-	
+
 	<div class="col-sm-7 form-group">
-		{!! Form::label('geslacht', 'Geslacht:') !!}<br/>
+		{!! Form::label('geslacht', 'Geslacht:') !!}<br />
 		<div style="margin-top:10px;">
 			{!! Form::radio('geslacht', 'M', 0) !!} Man
 			{!! Form::radio('geslacht', 'V', 0, ['style' => 'margin-left:20px;']) !!} Vrouw
@@ -89,24 +89,24 @@ a:hover {
 		{!! Form::label('adres', 'Adres:') !!}
 		{!! Form::text('adres', null, ['class' => 'form-control']) !!}
 	</div>
-	
+
 	<div class="col-sm-2 form-group">
 		{!! Form::label('postcode', 'Postcode:') !!}
 		{!! Form::text('postcode', null, ['class' => 'form-control']) !!}
 	</div>
-	
+
 	<div class="col-sm-5 form-group">
 		{!! Form::label('plaats', 'Woonplaats:') !!}
 		{!! Form::text('plaats', null, ['class' => 'form-control']) !!}
 	</div>
 </div>
-	
+
 <div class="row">
 	<div class="col-sm-5 form-group">
 		{!! Form::label('telefoon', 'Telefoonnummer:') !!}
 		{!! Form::text('telefoon', null, ['class' => 'form-control', 'maxlength' => 10, 'placeholder' => '10 cijfers']) !!}
 	</div>
-	
+
 	<div class="col-sm-7 form-group">
 		{!! Form::label('email', 'Emailadres:') !!}
 		{!! Form::email('email', null, ['class' => 'form-control']) !!}
@@ -127,7 +127,7 @@ a:hover {
 		{!! Form::label('selected_camp', 'Kamp:') !!}
 		<select class="form-control" id="selected_camp" name="selected_camp">
 			<?php foreach ($camp_options as $id => $name) { ?>
-				<option value="{{$id}}" {{ ($camp_full[$id]) ? 'disabled' : '' }} >{{$name}}</option>
+				<option value="{{$id}}" {{ ($camp_full[$id]) ? 'disabled' : '' }}>{{$name}}</option>
 			<?php } ?>
 		</select>
 	</div>
@@ -140,14 +140,14 @@ a:hover {
 		{!! Form::label('eindexamen', 'Niveau eindexamen:') !!}
 		{!! Form::select('eindexamen', ['VMBO' => 'VMBO', 'HAVO' => 'HAVO', 'VWO' => 'VWO'], null, ['class' => 'form-control']) !!}
 	</div>
-	
+
 	<div class="col-sm-5 form-group">
 		{!! Form::label('studie', 'Studie:') !!}
 		{!! Form::text('studie', null, ['class' => 'form-control']) !!}
 	</div>
-	
+
 	<div class="col-sm-2 form-group">
-		{!! Form::label('afgestudeerd', 'Afgestudeerd?') !!}<br/>
+		{!! Form::label('afgestudeerd', 'Afgestudeerd?') !!}<br />
 		<div style="margin-top:10px;">
 			{!! Form::radio('afgestudeerd', 1, 0) !!} Ja
 			{!! Form::radio('afgestudeerd', 0, 0, ['style' => 'margin-left:20px;']) !!} Nee
@@ -159,85 +159,82 @@ a:hover {
 	Geef hieronder aan welke vakken je zou kunnen geven op kamp. Minstens één en zoveel als je wilt. Voorzie ieder vak ook van een klas, dit slaat op het hoogste niveau waarop je het vak kunt geven, gerekend naar VWO (voor HAVO moet je dit dus compenseren).
 </div>
 
-@for ($i = 0; $i < 4; $i++)
-<div class="row">
+@for ($i = 0; $i < 4; $i++) <div class="row">
 	<div class="col-sm-3 form-group">
 		{!! Form::select('vak'.(2*$i), $course_options, null, ['class' => 'form-control']) !!}
 	</div>
-	
+
 	<div class="col-sm-2 form-group">
 		{!! Form::input('number', 'klas'.(2*$i), null, ['class' => 'form-control', 'min' => 1, 'max' => 6, 'step' => 1]) !!}
 	</div>
-	
+
 	<div class="col-sm-3 col-sm-offset-1 form-group">
 		{!! Form::select('vak'.((2*$i)+1), $course_options, null, ['class' => 'form-control']) !!}
 	</div>
-	
+
 	<div class="col-sm-2 form-group">
 		{!! Form::input('number', 'klas'.((2*$i)+1), null, ['class' => 'form-control', 'min' => 1, 'max' => 6, 'step' => 1]) !!}
 	</div>
-</div>
-@endfor
+	</div>
+	@endfor
 
-<h3>Overige informatie</h3>
-
-<div class="row">
-	<div class="col-sm-12 form-group">
-		<b>Hoe ben je bij Anderwijs terechtgekomen?</b><br/>
-		<small>Meerdere antwoorden mogelijk</small>
-		@foreach ($hoebij_options as $i => $option)
+	<h3>Overige informatie</h3>
+	<div class="row">
+		<div class="col-sm-12 form-group">
+			<b>Hoe ben je bij Anderwijs terechtgekomen?</b><br />
+			<small>Meerdere antwoorden mogelijk</small>
+			@foreach ($hoebij_options as $i => $option)
 			<div class="checkbox">
 				<label>
-					<input type="checkbox" name="hoebij[]" id="hoebij_{{$i+1}}" value="{{$option}}"> {{$option}}
+					{!! Form::checkbox('hoebij[]', $option) !!} {{ $option }}
 				</label>
 			</div>
-		@endforeach
+			@endforeach
 
-		<div class="checkbox form-inline">
-			<label>
-				<input type="checkbox" name="hoebij[]" id="hoebij_0" value="0"> Anders, namelijk: 
-			</label>
+			<div class="checkbox form-inline">
+				<label>
+					{!! Form::checkbox('hoebij[]', '0') !!} Anders, namelijk:
+				</label>
 
-			<input class="form-control input-sm" type="text" name="hoebij_anders" id="hoebij_anders">
-		</div>
+				{!! Form::text('hoebij_anders', null, ['class' => ['form-control', 'input-sm']]) !!}
+			</div>
 
-	</div>
-</div>
-
-<div class="form-group">
-	{!! Form::label('opmerkingen', 'Opmerkingen:') !!}
-	{!! Form::textarea('opmerkingen', null, ['class' => 'form-control', 'placeholder' => 'Denk bijvoorbeeld aan speciale diëten, allergieën, medicijnen of andere dingen waar rekening mee gehouden moet worden op kamp.' ]) !!}
-</div>
-
-<div class="row">
-	<div class="col-sm-12">
-		<div class="checkbox">
-			<label>
-				<input type="checkbox" name="vog" id="check_vog" value="1" {{ (old( 'vog')) ? 'checked' : '' }}> Ik ga akkoord dat ik een <strong>Verklaring Omtrent het Gedrag (VOG)</strong> moet aanvragen en inleveren om mee te mogen op kamp. Anderwijs vergoedt eventuele kosten die hieraan verbonden zijn (over de aanvraagprocedure volgt apart bericht).
-			</label>
-		</div>
-		<div class="checkbox">
-			<label>
-				<input type="checkbox" name="privacy" id="check_privacy" value="1" {{ (old( 'privacy')) ? 'checked' : '' }}> Ik geef Anderwijs toestemming om deze gegevens te verwerken zoals beschreven in het
-				<a href="http://www.anderwijs.nl/anderwijs/privacy/"
-				    target="_blank">privacystatement</a>.
-			</label>
 		</div>
 	</div>
-</div>
 
-<!--
+	<div class="form-group">
+		{!! Form::label('opmerkingen', 'Overige informatie:') !!}
+		{!! Form::textarea('opmerkingen', null, ['class' => 'form-control', 'placeholder' => 'Denk bijvoorbeeld aan speciale diëten, allergieën, medicijnen of andere dingen waar rekening mee gehouden moet worden op kamp.' ]) !!}
+	</div>
+
+	<div class="row">
+		<div class="col-sm-12">
+			<div class="checkbox">
+				<label>
+					{!! Form::checkbox('vog', 1) !!} Ik ga akkoord dat ik een <strong>Verklaring Omtrent het Gedrag (VOG)</strong> moet aanvragen en inleveren om mee te mogen op kamp. Anderwijs vergoedt eventuele kosten die hieraan verbonden zijn (over de aanvraagprocedure volgt apart bericht).
+				</label>
+			</div>
+			<div class="checkbox">
+				<label>
+					{!! Form::checkbox('privacy', 1) !!} Ik geef Anderwijs toestemming om deze gegevens te verwerken zoals beschreven in het
+					<a href="http://www.anderwijs.nl/anderwijs/privacy/" target="_blank">privacystatement</a>.
+				</label>
+			</div>
+		</div>
+	</div>
+
+	<!--
 <div class="well">
 	<strong>Let op! </strong>Door je in te schrijven ga je ermee akkoord dat je een <strong>Verklaring Omtrent het Gedrag (VOG)</strong> moet aanvragen en inleveren om mee te mogen op kamp. Anderwijs vergoedt de kosten die hieraan verbonden zijn. Over de aanvraagprocedure ontvang je een apart bericht.
 </div>
 -->
 
-<br>
+	<br>
 
-<div class="form-group">
-	{!! Form::submit('Inschrijven', ['class' => 'btn btn-primary form-control']) !!}
-</div>
+	<div class="form-group">
+		{!! Form::submit('Inschrijven', ['class' => 'btn btn-primary form-control']) !!}
+	</div>
 
-{!! Form::close() !!}
+	{!! Form::close() !!}
 
-@endsection
+	@endsection

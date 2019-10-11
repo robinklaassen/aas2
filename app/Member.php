@@ -1,6 +1,9 @@
-<?php namespace App;
+<?php
+
+namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 
 class Member extends Model
 {
@@ -43,6 +46,12 @@ class Member extends Model
 	public function user()
 	{
 		return $this->morphOne('App\User', 'profile');
+	}
+
+	// A Member can have comments
+	public function comments()
+	{
+		return $this->morphMany('App\Comment', 'entity');
 	}
 
 	// A member has many actions
@@ -174,7 +183,7 @@ class Member extends Model
 		}
 
 		// Then sort and return
-		$data = array_sort($data, function ($item) {
+		$data = Arr::sort($data, function ($item) {
 			return $item['date'];
 		});
 
@@ -255,5 +264,13 @@ class Member extends Model
 	{
 		$user = $this->user()->first();
 		return $user ? $user->hasRole($title) : false;
+	}
+	
+	public function getAnderwijsEmail()
+	{
+		return [
+			"email" => $this->email_anderwijs,
+			"name" => $this->volnaam
+		];
 	}
 }
