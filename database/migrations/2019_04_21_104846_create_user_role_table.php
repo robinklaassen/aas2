@@ -20,7 +20,7 @@ class CreateUserRoleTable extends Migration
             $table->timestamp('created_at')->useCurrent();
 
             $table->foreign('role_id')
-					->references('role_id')
+					->references('id')
 					->on('roles')
                     ->onDelete('cascade');
 
