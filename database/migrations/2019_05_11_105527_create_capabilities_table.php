@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\DB;
 
 class CreateCapabilitiesTable extends Migration
 {
@@ -86,12 +87,10 @@ class CreateCapabilitiesTable extends Migration
             ["locations::create", "Locaties - Aanmaken"],
             ["locations::delete", "Locaties - Verwijderen"],
             
-            
-            
         ];
         $all = array_map(function ($i) { return [ "name" => $i[0], "description" => $i[1] ]; }, $capa);
 
-        Schema::table("capabilities")->insert($all);
+        DB::table("capabilities")->insert($all);
     }
 
     /**

@@ -27,7 +27,6 @@ class UserTableSeeder extends Seeder
 		$user->password = bcrypt('ranonkeltje');
 		$user->is_admin = 2;
 		$user->save();
-		$user->roles()->attach(Role::find(1));
 		$user->privacy = '2018-06-01';
 		$member->user()->save($user);
 
@@ -37,8 +36,6 @@ class UserTableSeeder extends Seeder
 		$user->password = bcrypt('snow');
 		$user->is_admin = 0;
 		$user->save();
-		$user->roles()->attach(Role::find(2));
-		$user->roles()->attach(Role::find(3));
 		$user->is_admin = 1;
 		$user->privacy = '2018-06-01';
 		$member->user()->save($user);

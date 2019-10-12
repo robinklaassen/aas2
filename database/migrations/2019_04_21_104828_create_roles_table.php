@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\DB;
 
 class CreateRolesTable extends Migration
 {
@@ -18,6 +19,26 @@ class CreateRolesTable extends Migration
             $table->string('tag');
             $table->unique('tag');
         });
+
+
+        $roles = [
+            ["Aasbaas", "aasbaas"],
+            ["Bestuurslid", "board"],
+            ["Voorzitter", "president"],
+            ["Penningmeester", "treasurer"],
+            ["Kampcommissielid", "kampci"],
+            ["Kantoorcommissie", "kantoorci"],
+            ["Promocommissielid", "promoci"],
+            ["Trainerscommissielid", "trainerci"],
+            ["Trainer", "trainer"],
+            ["Normaallid", "member"],
+            ["Normaallid kijken andere", "member-see-others"],
+            ["Oudlid", "old-member"],
+            ["Deelnemer", "participant"]
+        ];
+        $all = array_map(function ($i) { return [ "title" => $i[0], "tag" => $i[1] ]; }, $roles);
+
+        DB::table("roles")->insert($all);
     }
 
     /**
