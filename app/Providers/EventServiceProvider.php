@@ -1,9 +1,14 @@
-<?php namespace App\Providers;
+<?php
 
+namespace App\Providers;
+
+use App\Listeners\SetLastLoginDate;
+use Illuminate\Auth\Events\Login;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
-class EventServiceProvider extends ServiceProvider {
+class EventServiceProvider extends ServiceProvider
+{
 
 	/**
 	 * The event handler mappings for the application.
@@ -11,9 +16,9 @@ class EventServiceProvider extends ServiceProvider {
 	 * @var array
 	 */
 	protected $listen = [
-		'auth.login' => [
-			'App\Handlers\Events\AuthLoginEventHandler',
-		],
+		Login::class => [
+			SetLastLoginDate::class,
+		]
 	];
 
 	/**
@@ -28,5 +33,4 @@ class EventServiceProvider extends ServiceProvider {
 
 		//
 	}
-
 }
