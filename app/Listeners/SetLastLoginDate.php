@@ -2,9 +2,7 @@
 
 namespace App\Listeners;
 
-use Illuminate\Auth\Events\Login;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Auth\Events\Login as LoginEvent;
 
 class SetLastLoginDate
 {
@@ -24,7 +22,7 @@ class SetLastLoginDate
      * @param  object  $event
      * @return void
      */
-    public function handle(Login $event)
+    public function handle(LoginEvent $event)
     {
         $user = $event->user;
         $user->last_login = new \DateTime;
