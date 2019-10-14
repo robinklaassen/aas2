@@ -21,9 +21,11 @@
 	<div class="col-sm-5 form-group">
 		{!! Form::label('geboortedatum', 'Geboortedatum:') !!}
 		@if (isset($member))
-		{!! Form::input('date', 'geboortedatum', $member->geboortedatum->format('Y-m-d'), ['class' => 'form-control', 'placeholder' => 'Format: jjjj-mm-dd']) !!}
+		{!! Form::input('date', 'geboortedatum', $member->geboortedatum->format('Y-m-d'), ['class' => 'form-control',
+		'placeholder' => 'Format: jjjj-mm-dd']) !!}
 		@else
-		{!! Form::input('date', 'geboortedatum', null, ['class' => 'form-control', 'placeholder' => 'Format: jjjj-mm-dd']) !!}
+		{!! Form::input('date', 'geboortedatum', null, ['class' => 'form-control', 'placeholder' => 'Format:
+		jjjj-mm-dd']) !!}
 		@endif
 	</div>
 
@@ -56,7 +58,8 @@
 <div class="row">
 	<div class="col-sm-5 form-group">
 		{!! Form::label('telefoon', 'Telefoonnummer:') !!}
-		{!! Form::text('telefoon', null, ['class' => 'form-control', 'maxlength' => 10, 'placeholder' => '10 cijfers']) !!}
+		{!! Form::text('telefoon', null, ['class' => 'form-control', 'maxlength' => 10, 'placeholder' => '10 cijfers'])
+		!!}
 	</div>
 
 	<div class="col-sm-7 form-group">
@@ -76,12 +79,19 @@
 		{!! Form::hidden('rijbewijs', 0) !!}
 		{!! Form::checkbox('rijbewijs', 1, null, ['style' => 'margin-top:14px;']) !!}
 	</div>
+
+	<div class="col-sm-2 form-group">
+		{!! Form::label('publish_birthday', 'Publiceer verjaardag?') !!}<br />
+		{!! Form::hidden('publish_birthday', 0) !!}
+		{!! Form::checkbox('publish_birthday', 1, null, ['style' => 'margin-top:14px;']) !!}
+	</div>
 </div>
 
 <div class="row">
 	<div class="col-sm-2 form-group">
 		{!! Form::label('eindexamen', 'Niveau eindexamen:') !!}
-		{!! Form::select('eindexamen', ['VMBO' => 'VMBO', 'HAVO' => 'HAVO', 'VWO' => 'VWO'], null, ['class' => 'form-control']) !!}
+		{!! Form::select('eindexamen', ['VMBO' => 'VMBO', 'HAVO' => 'HAVO', 'VWO' => 'VWO'], null, ['class' =>
+		'form-control']) !!}
 	</div>
 
 	<div class="col-sm-3 form-group">
@@ -102,7 +112,8 @@
 
 	<div class="col-sm-2 form-group">
 		{!! Form::label('ranonkeltje', 'Ranonkeltje:') !!}
-		{!! Form::select('ranonkeltje', ['geen' => 'geen', 'digitaal' => 'digitaal', 'papier' => 'papier', 'beide' => 'beide'], null, ['class' => 'form-control']) !!}
+		{!! Form::select('ranonkeltje', ['geen' => 'geen', 'digitaal' => 'digitaal', 'papier' => 'papier', 'beide' =>
+		'beide'], null, ['class' => 'form-control']) !!}
 	</div>
 </div>
 
@@ -118,7 +129,8 @@
 <div class="row">
 	<div class="col-sm-3 form-group">
 		{!! Form::label('soort', 'Soort lid:') !!}
-		{!! Form::select('soort', ['normaal' => 'normaal', 'aspirant' => 'aspirant', 'info' => 'info', 'oud' => 'oud'], null, ['class' => 'form-control']) !!}
+		{!! Form::select('soort', ['normaal' => 'normaal', 'aspirant' => 'aspirant', 'info' => 'info', 'oud' => 'oud'],
+		null, ['class' => 'form-control']) !!}
 	</div>
 
 	<div class="col-sm-2 form-group">
