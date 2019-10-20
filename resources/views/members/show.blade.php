@@ -80,7 +80,7 @@ Mijn profiel
 			<tr>
 				<td>Geboortedatum</td>
 				<td>{{ $member->geboortedatum->format('d-m-Y') }}
-					<small>{{ ($member->publish_birthday) ? '(publiek)' : '(niet publiek)' }}</small>
+					<small>({{ ($member->publish_birthday) ? 'publiek' : 'niet publiek' }} <a title="Gepubliseerde verjaardagen zijn te zien op de startpagina van AAS voor ingelogte leden en gepubliseerd in de anderwijs kalender">?</a>)</small>
 				</td>
 			</tr>
 			<tr>

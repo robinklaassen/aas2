@@ -29,7 +29,13 @@
 		@endif
 	</div>
 
-	<div class="col-sm-7 form-group">
+	<div class="col-sm-2 form-group">
+		{!! Form::label('publish_birthday', 'Publiceer verjaardag?', ["title" => "Gepubliseerde verjaardagen zijn te zien op de startpagina van AAS voor ingelogte leden en gepubliseerd in de anderwijs kalender"]) !!}<br />
+		{!! Form::hidden('publish_birthday', 0) !!}
+		{!! Form::checkbox('publish_birthday', 1, null, ['style' => 'margin-top:14px;']) !!}
+	</div>
+
+	<div class="col-sm-5 form-group">
 		{!! Form::label('geslacht', 'Geslacht:') !!}<br />
 		<div style="margin-top:10px;">
 			{!! Form::radio('geslacht', 'M', 0) !!} Man
@@ -78,12 +84,6 @@
 		{!! Form::label('rijbewijs', 'Rijbewijs?') !!}<br />
 		{!! Form::hidden('rijbewijs', 0) !!}
 		{!! Form::checkbox('rijbewijs', 1, null, ['style' => 'margin-top:14px;']) !!}
-	</div>
-
-	<div class="col-sm-2 form-group">
-		{!! Form::label('publish_birthday', 'Publiceer verjaardag?') !!}<br />
-		{!! Form::hidden('publish_birthday', 0) !!}
-		{!! Form::checkbox('publish_birthday', 1, null, ['style' => 'margin-top:14px;']) !!}
 	</div>
 </div>
 
