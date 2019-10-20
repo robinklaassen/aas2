@@ -74,11 +74,6 @@ class CreateCapabilitiesTable extends Migration
             ["roles::create", "Rollen - Aanmaken"],
             ["roles::delete", "Rollen - Verwijderen"],
             
-            ["roles::info", "Rollen - Inzien"],
-            ["roles::edit", "Rollen - Aanpassen"],
-            ["roles::create", "Rollen - Aanmaken"],
-            ["roles::delete", "Rollen - Verwijderen"],
-            
             // locations
             ["locations::info::basic", "Locaties - Inzien - Basis"],
             ["locations::info::advanced", "Locaties - Inzien - Uitgebreid"],

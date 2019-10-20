@@ -1,7 +1,10 @@
 <?php
 
+use App\Capability;
+use App\Role;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Support\Facades\DB;
 
 class CreateRoleCapabilityTable extends Migration
 {
@@ -27,6 +30,229 @@ class CreateRoleCapabilityTable extends Migration
                 ->on('capabilities')
                 ->onDelete('cascade');
         });
+
+
+
+        $filling = [
+            ["role" => "aasbaas",  "capabilities" => [
+                "participants::info::show::basic",
+                "participants::info::show::system",
+                "participants::info::edit::system",
+                "participants::info::export",
+                "participants::account::create",
+                "participants::account::delete",
+                "members::info::show::basic",
+                "members::info::show::system",
+                "members::account::create",
+                "members::account::delete",
+                "event::show::basic",
+                "event::show::advanced",
+                "event::edit::basic",
+                "event::edit::advanced",
+                "event::create",
+                "event::delete",
+                "roles::info",
+                "roles::edit",
+                "roles::create",
+                "roles::delete",
+                "locations::info::basic",
+                "locations::info::advanced",
+                "locations::edit::basic",
+                "locations::edit::advanced",
+                "locations::create",
+                "locations::delete"
+            ]],
+            ["role" => "board", "capabilities" => [
+                "participants::info::show::basic",
+                "participants::info::show::practical",
+                "participants::account::create",
+                "participants::account::delete",
+                "members::info::show::basic",
+                "members::info::show::practical",
+                "members::info::show::system",
+                "members::info::edit::system",
+                "members::account::create",
+                "members::account::delete",
+                "event::show::basic",
+                "event::show::advanced",
+                "event::edit::basic",
+                "event::edit::advanced",
+                "event::create",
+                "event::delete",
+                "roles::info",
+                "locations::info::basic",
+                "locations::info::advanced",
+                "locations::edit::basic",
+                "locations::edit::advanced",
+                "locations::create",
+                "locations::delete",
+                "comments::show::secret",
+                "comments::edit::secret"
+            ]],
+            ["role" => "president", "capabilities" => [
+                "participants::info::show::basic",
+                "participants::info::show::practical",
+                "participants::account::create",
+                "participants::account::delete",
+                "members::info::show::basic",
+                "members::info::show::practical",
+                "members::info::show::system",
+                "members::info::edit::system",
+                "members::account::create",
+                "members::account::delete",
+                "event::show::basic",
+                "event::show::advanced",
+                "event::edit::basic",
+                "event::edit::advanced",
+                "event::create",
+                "event::delete",
+                "roles::info",
+                "roles::edit",
+                "locations::info::basic",
+                "locations::info::advanced",
+                "locations::edit::basic",
+                "locations::edit::advanced",
+                "locations::create",
+                "locations::delete",
+                "comments::show::secret",
+                "comments::edit::secret"
+            ]],
+            ["role" => "treasurer", "capabilities" => [
+                "participants::info::show::basic",
+                "participants::info::show::finance",
+                "participants::info::show::practical",
+                "participants::info::edit::finance",
+                "participants::account::create",
+                "participants::account::delete",
+                "members::info::show::basic",
+                "members::info::show::finance",
+                "members::info::show::practical",
+                "members::info::show::system",
+                "members::info::edit::finance",
+                "members::info::edit::system",
+                "members::account::create",
+                "members::account::delete",
+                "event::show::basic",
+                "event::show::advanced",
+                "event::edit::basic",
+                "event::edit::advanced",
+                "event::create",
+                "event::delete",
+                "roles::info",
+                "locations::info::basic",
+                "locations::info::advanced",
+                "locations::edit::basic",
+                "locations::edit::advanced",
+                "locations::create",
+                "locations::delete",
+                "comments::show::secret",
+                "comments::edit::secret"
+            ]],
+            ["role" => "kampci", "capabilities" => [
+                "participants::info::show::basic",
+                "participants::info::show::practical",
+                "participants::info::show::system",
+                "participants::info::edit::practical",
+                "participants::info::edit::system",
+                "participants::info::export",
+                "participants::account::create",
+                "participants::account::delete",
+                "members::info::show::basic",
+                "members::info::show::private",
+                "members::info::show::practical",
+                "members::info::show::system",
+                "members::info::edit::basic",
+                "members::info::edit::private",
+                "members::info::edit::practical",
+                "members::info::edit::system",
+                "members::account::create",
+                "members::account::delete",
+                "event::show::basic",
+                "event::show::advanced",
+                "event::edit::basic",
+                "event::edit::advanced",
+                "event::create",
+                "event::delete",
+                "locations::info::basic",
+                "locations::info::advanced",
+                "locations::edit::basic",
+                "locations::edit::advanced",
+                "locations::create",
+                "locations::delete"
+            ]],
+            ["role" => "kantoorci", "capabilities" => [
+                "participants::info::show::basic",
+                "participants::info::show::private",
+                "participants::info::show::practical",
+                "participants::info::show::system",
+                "participants::info::edit::basic",
+                "participants::info::edit::private",
+                "participants::info::edit::practical",
+                "participants::info::edit::system",
+                "participants::info::export",
+                "participants::account::create",
+                "participants::account::delete",
+                "members::info::show::basic",
+                "members::info::show::practical",
+                "event::show::basic",
+                "event::show::advanced",
+                "locations::info::basic"
+            ]],
+            ["role" => "promoci", "capabilities" => [
+                "participants::info::show::basic",
+                "members::info::show::basic",
+                "event::show::basic",
+                "event::show::advanced",
+                "locations::info::basic",
+                "locations::info::advanced"
+            ]],
+            ["role" => "trainerci", "capabilities" => [
+                "participants::info::show::basic",
+                "members::info::show::basic",
+                "members::info::show::practical",
+                "event::show::basic",
+                "event::show::advanced",
+                "locations::info::basic"
+            ]],
+            ["role" => "trainer", "capabilities" => [
+                "participants::info::show::basic",
+                "participants::info::show::practical",
+                "members::info::show::basic",
+                "members::info::show::practical",
+                "event::show::basic",
+                "event::show::advanced",
+                "locations::info::basic",
+                "locations::info::advanced"
+            ]],
+            ["role" => "member", "capabilities" => [
+                //"member::edit:all" for it's own, we need a policy for it 
+                "event::show::basic",
+                "participants::info::show::basic",
+                "event::show::basic",
+                "locations::info::basic"
+            ]],
+            ["role" => "member-see-others", "capabilities" => [
+                "members::info::show::basic",
+                "event::show::basic",
+                "locations::info::basic"
+            ]],
+            ["role" => "old-member", "capabilities" => [
+                "members::info::show::basic",
+                "event::show::basic",
+                "locations::info::basic"
+            ]],
+            ["role" => "participant", "capabilities" => []],
+        ];
+
+        $capas = Capability::all(["id", "name"])->keyBy("name");
+
+        foreach($filling as $role_capa) {
+            $r = Role::where("tag", "=", $role_capa["role"])->firstOrFail();
+            $role_ids = array_map(function($i) use ($capas) {
+                return $capas[$i]["id"];
+            }, $role_capa["capabilities"]);
+            $r->capabilities()->sync($role_ids);
+        }
     }
 
     /**
