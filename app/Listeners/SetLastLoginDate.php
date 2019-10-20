@@ -7,17 +7,7 @@ use Illuminate\Auth\Events\Login as LoginEvent;
 class SetLastLoginDate
 {
     /**
-     * Create the event listener.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
-
-    /**
-     * Handle the event.
+     * Handle the event, sets the user's last_login to current dateTime
      *
      * @param  object  $event
      * @return void
