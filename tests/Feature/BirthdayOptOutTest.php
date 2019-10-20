@@ -37,8 +37,8 @@ class BirthdayOptOutTest extends TestCase
     public function testGoogleCalendar()
     {
         $this
-            ->actingAs($this->member->user)
             ->get('/events/icalendar')
+            ->assertSee('Verjaardag Ranonkeltje van Anderwijs')
             ->assertDontSee('Snow');
     }
 }
