@@ -30,7 +30,9 @@
 	</div>
 
 	<div class="col-sm-2 form-group">
-		{!! Form::label('publish_birthday', 'Publiceer verjaardag?', ["title" => "Gepubliseerde verjaardagen zijn te zien op de startpagina van AAS voor ingelogte leden en gepubliseerd in de anderwijs kalender"]) !!}<br />
+		{!! Form::label('publish_birthday', 'Publiceer verjaardag?',
+		["title" => "Gepubliceerde verjaardagen zijn te zien op de startpagina van AAS voor ingelogde leden" .
+		" en op de digitale Anderwijskalender"]) !!}<br />
 		{!! Form::hidden('publish_birthday', 0) !!}
 		{!! Form::checkbox('publish_birthday', 1, null, ['style' => 'margin-top:14px;']) !!}
 	</div>
