@@ -3,6 +3,8 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
+use Symfony\Component\DomCrawler\Crawler;
+use Sunra\PhpSimple\HtmlDomParser;
 
 class BirthdayOptOutTest extends TestCase
 {
@@ -20,14 +22,13 @@ class BirthdayOptOutTest extends TestCase
      *
      * @return void
      */
-    // FIXME test is failing because of the many sublists on the page
-    // public function testBirthdayList()
-    // {
-    //     $this
-    //         ->actingAs($this->member->user)
-    //         ->get('/lists')
-    //         ->assertDontSee('Snow');
-    // }
+    public function testBirthdayList()
+    {
+        $this
+            ->actingAs($this->member->user)
+            ->get('/lists')
+            ->assertSeeInOrder(['id="verjaardag"', 'Ranonkeltje', 'id="more"']);
+    }
 
     /**
      * Test the Google Calendar export
