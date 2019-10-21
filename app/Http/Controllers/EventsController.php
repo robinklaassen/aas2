@@ -16,9 +16,7 @@ class EventsController extends Controller
 
 	public function __construct()
 	{
-		// You need to be logged in and have admin rights to access
-		// $this->middleware('auth', ['except' => ['iCalendar']]);
-		// $this->middleware('admin', ['except' => ['show', 'iCalendar', 'reviews']]);
+		$this->authorizeResource(Event::class, 'event');
 	}
 
 	/**
@@ -28,6 +26,8 @@ class EventsController extends Controller
 	 */
 	public function index()
 	{
+		$this->authorize("viewAny", Event::class);
+
 		$events = Event::where('type', 'kamp')->get();
 		$trainings = Event::where('type', 'training')->get();
 		$others = Event::where('type', 'overig')->get();
@@ -69,10 +69,10 @@ class EventsController extends Controller
 	{
 		$this->authorize("view", $event);
 		// Redirect the viewer if the user profile is not attached to this event
-		$profile = \Auth::user()->profile;
-		if (!($profile->events->contains('id', $event->id)) && !(\Auth::user()->is_admin)) {
-			return redirect('profile');
-		}
+		// $profile = \Auth::user()->profile;
+		// if (!($profile->events->contains('id', $event->id)) && !(\Auth::user()->is_admin)) {
+		// 	return redirect('profile');
+		// }
 
 		
 		// Obtain participant course information

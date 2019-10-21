@@ -29,6 +29,8 @@ class UserTableSeeder extends Seeder
 		$user->save();
 		$user->privacy = '2018-06-01';
 		$member->user()->save($user);
+		$roles = Role::whereIn("tag", ["aasbaas", "president", "board", "member"])->get();
+		$user->roles()->sync($roles);
 
 		$member = Member::find(2);
 		$user = new User;
@@ -39,6 +41,8 @@ class UserTableSeeder extends Seeder
 		$user->is_admin = 1;
 		$user->privacy = '2018-06-01';
 		$member->user()->save($user);
+		$roles = Role::whereIn("tag", ["treasurer", "board", "member"])->get();
+		$user->roles()->sync($roles);
 
 		$participant = Participant::find(2);
 		$user = new User;
@@ -47,6 +51,9 @@ class UserTableSeeder extends Seeder
 		$user->is_admin = 0;
 		$participant->user()->save($user);
 
+		$roles = Role::whereIn("tag", ["participant"])->get();
+		$user->roles()->sync($roles);
+
 		$member = Member::find(3);
 		$user = new User;
 		$user->username = 'dkrijgsman';
@@ -54,5 +61,8 @@ class UserTableSeeder extends Seeder
 		$user->is_admin = 0;
 		$user->privacy = '2018-06-01';
 		$member->user()->save($user);
+
+		$roles = Role::whereIn("tag", ["member"])->get();
+		$user->roles()->sync($roles);
 	}
 }

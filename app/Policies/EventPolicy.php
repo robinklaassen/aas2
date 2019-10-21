@@ -11,6 +11,12 @@ class EventPolicy
 {
     use HandlesAuthorization;
 
+
+    public function viewAny(User $user)
+    {
+        return $user->hasCapability("event::show::basic");
+    }
+
     /**
      * Determine whether the user can view the event.
      *
@@ -20,7 +26,7 @@ class EventPolicy
      */
     public function view(User $user, Event $event)
     {
-        return true;
+        return $user->hasCapability("event::show::basic");
     }
 
     /**
@@ -31,7 +37,7 @@ class EventPolicy
      */
     public function create(User $user)
     {
-        return $user->hasCapability("create-event");
+        return $user->hasCapability("event::create");
     }
 
     /**
@@ -43,7 +49,7 @@ class EventPolicy
      */
     public function update(User $user, Event $event)
     {
-        return $user->hasCapability("edit-event") && $event->datum_einde < Carbon::now();
+        return $user->hasCapability("event::edit::basic") && $event->datum_einde < Carbon::now();
     }
 
     /**
@@ -55,16 +61,36 @@ class EventPolicy
      */
     public function delete(User $user, Event $event)
     {
-        //
+        return $user->hasCapability("event::delete") ;
     }
 
     public function viewParticipants(User $user, Event $event)
     {
-        return $user->hasCapability("view-event-participants") || ($user->isMember() && $user->profile()->events()->contains($event));
+        return $user->hasCapability("participants::info::show::basic") || ($user->isMember() && $user->profile()->events()->contains($event));
     }
 
     public function exportParticipants(User $user, Event $event)
     {
-        return $user->hasCapability("export-event-participants");
+        return $user->hasCapability("participants::info::export");
+    }
+
+    public function showBasic(User $user, Event $event) 
+    {
+        return $user->hasCapability("event::show::basic");
+    }
+
+    public function showAdvanced(User $user, Event $event) 
+    {
+        return $user->hasCapability("event::show::advanced");
+    }
+
+    public function editBasic(User $user, Event $event) 
+    {
+        return $user->hasCapability("event::edit::basic");
+    }
+
+    public function editAdvanced(User $user, Event $event) 
+    {
+        return $user->hasCapability("event::edit::advanced");
     }
 }

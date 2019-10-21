@@ -20,18 +20,22 @@
 	<div class="col-sm-6">
 		<h1>{{ $event->naam }}</h1>
 	</div>
-	@if (\Auth::user()->is_admin)
 	<div class="col-sm-6">
 		<p class="text-right">
+			@can("editBasic", $event)
 			<a class="btn btn-primary" type="button" href="{{ url('/events', [$event->id, 'edit']) }}" style="margin-top:21px;">Bewerken</a>
+			@endcan
+			@can("editAdvanced", $event)
 			<a class="btn btn-info" type="button" href="{{ url('/events', [$event->id, 'join-members']) }}" style="margin-top:21px;">Leden koppelen</a>
+			@endcan
 			@if ($event->reviews->count() > 0)
 			<a class="btn btn-success" type="button" href="{{ url('/events', [$event->id, 'reviews']) }}" style="margin-top:21px;">Resultaten enquêtes <span class="badge">{{ $event->reviews->count() }}</span></a>
 			@endif
+			@can("delete")
 			<a class="btn btn-danger" type="button" href="{{ url('/events', [$event->id, 'delete']) }}" style="margin-top:21px;">Verwijderen</a>
+			@endcan
 		</p>
 	</div>
-	@endif
 </div>
 
 <hr />
@@ -42,7 +46,7 @@
 	<div class="col-md-6">
 		<table class="table table-hover">
 			<caption>Evenementsgegevens</caption>
-			@if (\Auth::user()->is_admin)
+			@can("showAdvanced", $event)
 			<tr>
 				<td>AAS ID</td>
 				<td>{{ $event->id }}</td>
@@ -55,7 +59,9 @@
 				<td>Type</td>
 				<td>{{ \Str::studly($event->type) }}</td>
 			</tr>
-			@endif
+			@endcan
+
+			@can("showBasic", $event)
 			@if (($event->type == 'kamp') && (\Auth::user()->profile_type != 'App\Participant'))
 			<tr>
 				<td>Start voordag(en)</td>
@@ -72,18 +78,23 @@
 			</tr>
 			<tr>
 				<td>Locatie</td>
-				@if (\Auth::user()->is_admin)
+				@can ("showBasic", $event->location)
 				<td><a href="{{ url('/locations', $event->location->id) }}">{{ $event->location->plaats }}</a></td>
 				@else
 				<td>{{ $event->location->naam }} ({{ $event->location->plaats }})</td>
-				@endif
+				@endcan
 			</tr>
-			@if (\Auth::user()->is_admin)
+			@endcan
+
+
 			@if ($event->type == 'kamp')
+			@can("showAdvanced", $event)
 			<tr>
 				<td>Kampprijs (zonder korting)</td>
 				<td>€ {{ $event->prijs }}</td>
 			</tr>
+			@endcan
+			@can("showBasic", $event)
 			<tr>
 				<td>Streeftal L / D</td>
 				<td>{{ $event->streeftal }} / {{ ($event->streeftal - 1) * 3 }}</td>
@@ -92,6 +103,8 @@
 				<td>Vol</td>
 				<td>{{ ($event->vol) ? 'Ja' : 'Nee' }}</td>
 			</tr>
+			@endcan
+			@can("showAdvanced", $event)
 			<tr>
 				<td>Openbaar</td>
 				<td>{{ ($event->openbaar) ? 'Ja' : 'Nee' }}</td>
@@ -100,7 +113,7 @@
 				<td>Beschrijving (website)</td>
 				<td style="white-space:pre-wrap;">{{ $event->beschrijving }}</td>
 			</tr>
-			@endif
+			@endcan
 			@endif
 		</table>
 	</div>
@@ -122,13 +135,13 @@
 			@foreach($event->members()->orderBy('voornaam')->get() as $member)
 			<tr>
 				<td>
-					@if (\Auth::user()->is_admin)
+					@can("showBasic", $member)
 					<a href="{{ url('/members', $member->id) }}">
-						@endif
 						{{ $member->voornaam }} {{ $member->tussenvoegsel }} {{ $member->achternaam }}
-						@if (\Auth::user()->is_admin)
 					</a>
-					@endif
+					@else
+						{{ $member->voornaam }} {{ $member->tussenvoegsel }} {{ $member->achternaam }}
+					@endcan
 				</td>
 
 				@if ($event->type == 'kamp')
@@ -290,7 +303,7 @@
 	@endforeach
 </table>
 @endcan
-@endisf
+@endif
 
 @endsection
 
