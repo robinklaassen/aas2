@@ -93,4 +93,9 @@ class EventPolicy
     {
         return $user->hasCapability("event::edit::advanced");
     }
+
+    public function editMembers(User $user, Event $event)
+    {
+        return $user->hasCapability("event::edit::advanced");
+    }
 }

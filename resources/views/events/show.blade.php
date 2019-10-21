@@ -152,7 +152,7 @@
 				</td>
 				@endif
 
-				@if (\Auth::user()->is_admin)
+				@can("showAdministrative", $member)
 				<td>{{ $member->pivot->created_at->format('d-m-Y') }}</td>
 
 				@if ($event->type=='kamp')
@@ -164,13 +164,15 @@
 					@endif
 				</td>
 				@endif
+				@endcan
 
+				@can("editMembers", $event)
 				@if ($event->type == 'kamp')
 				<td><a href="{{ url('/events', [$event->id, 'edit-member', $member->id]) }}"><span class="glyphicon glyphicon-edit" aria-hidden="true" data-toggle="tooltip" title="Koppeling bewerken"></span></a></td>
 				@endif
 
 				<td><a href="{{ url('/events', [$event->id, 'remove-member', $member->id]) }}"><span class="glyphicon glyphicon-remove" aria-hidden="true" data-toggle="tooltip" title="Koppeling verwijderen"></a></td>
-				@endif
+				@endcan		
 			</tr>
 			@endforeach
 		</table>
