@@ -69,6 +69,10 @@ class EventPolicy
         return $user->hasCapability("participants::info::show::basic") || ($user->isMember() && $user->profile()->events()->contains($event));
     }
 
+    public function viewParticipantsAdvanced(User $user, Event $event) {
+        return $user->hasCapability("participants::info::show::administrative");
+    }
+
     public function exportParticipants(User $user, Event $event)
     {
         return $user->hasCapability("participants::info::export");
@@ -98,4 +102,40 @@ class EventPolicy
     {
         return $user->hasCapability("event::edit::advanced");
     }
+
+    public function subjectCheck(User $user, Event $event)
+    {
+        return $user->hasCapability("event::subjectcheck");
+    }
+
+    public function mailing(User $user, Event $event)
+    {
+        return $user->hasCapability("event::mailing");
+    }
+
+    public function budget(User $user, Event $event)
+    {
+        return $user->hasCapability("event::budget");
+    }
+
+    public function paymentoverview(User $user, Event $event)
+    {
+        return $user->hasCapability("event::paymentoverview");
+    }
+
+    public function placement(User $user, Event $event)
+    {
+        return $user->hasCapability("event::placement");
+    }
+
+    public function nightRegister(User $user, Event $event)
+    {
+        return $user->hasCapability("event::nightregister");
+    }
+
+    public function questionair(User $user, Event $event)
+    {
+        return $user->isMember() && $user->profile()->events()->contains($event);
+    }
+
 }

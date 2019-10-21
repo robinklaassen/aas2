@@ -178,9 +178,9 @@
 		</table>
 
 		
-		@if (\Auth::user()->is_admin)
+		@can("showAdvanced", $event)
 			@include('partials.comments', [ 'comments' => $event->comments, 'type' => 'App\Event', 'key' => $event->id ])
-		@endif
+		@endcan
 	</div>
 	@endif
 </div>
@@ -189,13 +189,27 @@
 <hr />
 @if (\Auth::user()->is_admin)
 <div style="display: flex; flex-wrap: wrap; justify-content: flex-end;">
+	@can("subjectCheck", $event)
 	<a role="button" class="btn btn-info btn-sm" href="{{ url('/events', [$event->id, 'check', 'all']) }}"><span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span> Vakdekking</a>
+	@endcan
+	@can("mailing", $event)
 	<a role="button" class="btn btn-info btn-sm" href="{{ url('/events', [$event->id, 'email']) }}"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Emailadressen</a>
+	@endcan
+	@can('nightRegister', $event)
 	<a role="button" class="btn btn-info btn-sm" href="{{ url('/events', [$event->id, 'night-register']) }}"><span class="glyphicon glyphicon-tent" aria-hidden="true"></span> Nachtregister</a>
+	@endcan
+	@can("budget", $event)
 	<a role="button" class="btn btn-success btn-sm" href="{{ url('/events', [$event->id, 'budget']) }}"><span class="glyphicon glyphicon-euro" aria-hidden="true"></span> Kampbudget</a>
+	@endcan
+	@can("paymentoverview", $event)
 	<a role="button" class="btn btn-success btn-sm" href="{{ url('/events', [$event->id, 'payments']) }}"><span class="glyphicon glyphicon-usd" aria-hidden="true"></span> Betalingsoverzicht</a>
+	@endcan
+	@can("questionair")
 	<a role="button" class="btn btn-primary btn-sm" href="{{ url('/enquete',[$event->id]) }}"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span> Enqu&ecirc;te</a>
+	@endcan
+	@can("placement")
 	<a role="button" class="btn btn-primary btn-sm" href="{{ url('/events', [$event->id, 'send']) }}"><span class="glyphicon glyphicon-send" aria-hidden="true"></span> Plaatsen</a>
+	@endcan
 	@can('exportParticipants', $event)
 	<a role="button" class="btn btn-primary btn-sm" href="{{ url('/events', [$event->id, 'export']) }}"><span class="glyphicon glyphicon-file" aria-hidden="true"></span> Export</a>
 	@endcan
@@ -214,7 +228,7 @@
 	@if ($event->participants->count())
 	<thead>
 		<tr>
-			@if (\Auth::user()->is_admin)
+			@can("viewParticipantsAdvanced", $event)
 			<th>Naam</th>
 			<th>Niveau</th>
 			<th></th>
@@ -232,26 +246,27 @@
 			<th>Telefoon ouder(s)</th>
 			<th>Woonplaats</th>
 			<th>Aanmelding</th>
-			@endif
+			@endcan
 		</tr>
 	</thead>
 	@endif
 	@foreach($event->participants()->orderBy('voornaam')->get() as $participant)
-	@unless( !(\Auth::user()->is_admin) && !($participant->pivot->geplaatst) )
+	@if( \Auth::user()->can("viewParticipantsAdvanced", $event)  || $participant->pivot->geplaatst )
 	<tr>
 		<td>
-			@if (\Auth::user()->is_admin)
+			@can("showBasic", $participant)
 			<a href="{{ url('/participants', $participant->id) }}">
-				@endif
 				{{ $participant->voornaam }} {{ $participant->tussenvoegsel }} {{ $participant->achternaam }}
-				@if (\Auth::user()->is_admin)
 			</a>
-			@endif
+			@else
+				{{ $participant->voornaam }} {{ $participant->tussenvoegsel }} {{ $participant->achternaam }}
+			@endcan
+			
 		</td>
 
 		<td>{{ $participant->klas }} {{ $participant->niveau }}</td>
 
-		@if (\Auth::user()->is_admin)
+		@can("viewParticipantsAdvanced", $event)
 		<td>
 			@if ($participantIsNew[$participant->id] == 1)
 			<span class="glyphicon glyphicon-baby-formula" data-toggle="tooltip" title="Nieuw dit kamp"></span>
@@ -259,19 +274,20 @@
 		</td>
 
 		<td>{{ $participantCourseString[$participant->id] }}</td>
-		@endif
+		@endcan
 
-		@unless (\Auth::user()->is_admin)
+
+		@cannot("viewParticipantsAdvanced", $event)
 
 		<td>{{ $participant->telefoon_ouder_vast }}</td>
 
 		<td>{{ $participant->plaats }}</td>
 
-		@endunless
+		@endcannot
 
 		<td>{{ $participant->pivot->created_at->format('Y-m-d') }}</td>
 
-		@if (\Auth::user()->is_admin)
+		@can("viewParticipantsAdvanced", $event)
 		<td>
 			@unless ($participant->pivot->datum_betaling == '0000-00-00')
 			{{ substr($participant->pivot->datum_betaling,0,4) .'-'.substr($participant->pivot->datum_betaling,5,2).'-'.substr($participant->pivot->datum_betaling,8,2) }}
@@ -294,14 +310,15 @@
 
 		<td>{{ ($participant->pivot->geplaatst) ? 'Ja' : 'Nee' }}</td>
 
+		@can("editMembers", $event)
 		<td><a href="{{ url('/events', [$event->id, 'edit-participant', $participant->id]) }}"><span class="glyphicon glyphicon-edit" aria-hidden="true" data-toggle="tooltip" title="Inschrijving bewerken"></span></a></td>
-
 		<td><a href="{{ url('/events', [$event->id, 'move-participant', $participant->id]) }}"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true" data-toggle="tooltip" title="Verplaatsen naar ander kamp"></span></a></td>
-
 		<td><a href="{{ url('/events', [$event->id, 'remove-participant', $participant->id]) }}"><span class="glyphicon glyphicon-remove" aria-hidden="true" data-toggle="tooltip" title="Inschrijving verwijderen"></span></a></td>
-		@endif
+		@endcan
+		
+		@endcan
 	</tr>
-	@endunless
+	@endif
 	@endforeach
 </table>
 @endcan
