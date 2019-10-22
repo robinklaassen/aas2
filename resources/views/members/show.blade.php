@@ -19,17 +19,24 @@ Mijn profiel
 	<div class="col-sm-6">
 		<p class="text-right">
 			@if ($viewType == 'profile')
-			<a class="btn btn-primary" type="button" href="{{ url('/profile/edit') }}" style="margin-top:21px;">Bewerken</a>
-			<a class="btn btn-info" type="button" href="{{ url('/profile/on-camp') }}" style="margin-top:21px;">Op kamp</a>
-			<a class="btn btn-success" type="button" href="{{ url('/profile/declare') }}" style="margin-top:21px;">Declaratie</a>
-			<a class="btn btn-warning" type="button" href="{{ url('/profile/password') }}" style="margin-top:21px;">Nieuw wachtwoord</a>
+			<a class="btn btn-primary" type="button" href="{{ url('/profile/edit') }}"
+				style="margin-top:21px;">Bewerken</a>
+			<a class="btn btn-info" type="button" href="{{ url('/profile/on-camp') }}" style="margin-top:21px;">Op
+				kamp</a>
+			<a class="btn btn-success" type="button" href="{{ url('/profile/declare') }}"
+				style="margin-top:21px;">Declaratie</a>
+			<a class="btn btn-warning" type="button" href="{{ url('/profile/password') }}"
+				style="margin-top:21px;">Nieuw wachtwoord</a>
 			@elseif ($viewType == 'admin')
-			<a class="btn btn-primary" type="button" href="{{ url('/members', [$member->id, 'edit']) }}" style="margin-top:21px;">Bewerken</a>
-			<a class="btn btn-info" type="button" href="{{ url('/members', [$member->id, 'on-event']) }}" style="margin-top:21px;">Op evenement</a>
+			<a class="btn btn-primary" type="button" href="{{ url('/members', [$member->id, 'edit']) }}"
+				style="margin-top:21px;">Bewerken</a>
+			<a class="btn btn-info" type="button" href="{{ url('/members', [$member->id, 'on-event']) }}"
+				style="margin-top:21px;">Op evenement</a>
 			<!--
 				<a class="btn btn-info" type="button" href="{{ url('/members', [$member->id, 'add-course']) }}" style="margin-top:21px;">Vak toevoegen</a>
 				-->
-			<a class="btn btn-danger" type="button" href="{{ url('/members', [$member->id, 'delete']) }}" style="margin-top:21px;">Verwijderen</a>
+			<a class="btn btn-danger" type="button" href="{{ url('/members', [$member->id, 'delete']) }}"
+				style="margin-top:21px;">Verwijderen</a>
 			@endif
 		</p>
 	</div>
@@ -55,10 +62,12 @@ Mijn profiel
 			@if ($viewType == 'profile')
 			<a data-toggle="modal" data-target="#uploadPic" style="cursor:pointer;">
 				@endif
-				@if (file_exists(public_path().'/img/profile/full/'.$member->id.'.jpg'))
-				<img src="/img/profile/full/{{$member->id}}.jpg" height="300" @if ($viewType=='profile' ) data-toggle="tooltip" title="Klik om te wijzigen" @endif />
+				@if(file_exists(public_path().'/img/profile/full/'.$member->id.'.jpg'))
+				<img src="/img/profile/full/{{$member->id}}.jpg" height="300" @if($viewType=='profile' )
+					data-toggle="tooltip" title="Klik om te wijzigen" @endif />
 				@else
-				<img src="/img/profile/no-profile-{{ ($member->geslacht == 'M') ? 'm' : 'f' }}.gif" height="300" @if ($viewType=='profile' ) data-toggle="tooltip" title="Klik om te wijzigen" @endif />
+				<img src="/img/profile/no-profile-{{ ($member->geslacht == 'M') ? 'm' : 'f' }}.gif" height="300"
+					@if($viewType=='profile' ) data-toggle="tooltip" title="Klik om te wijzigen" @endif />
 				@endif
 				@if ($viewType == 'profile')
 			</a>
@@ -70,7 +79,12 @@ Mijn profiel
 			<caption>Profiel</caption>
 			<tr>
 				<td>Geboortedatum</td>
-				<td>{{ $member->geboortedatum->format('d-m-Y') }}</td>
+				<td>{{ $member->geboortedatum->format('d-m-Y') }}
+					<small>({{ ($member->publish_birthday) ? 'publiek' : 'niet publiek' }}
+						<a
+							title="Gepubliceerde verjaardagen zijn te zien op de startpagina van AAS voor ingelogde leden en op de digitale Anderwijskalender">?</a>)
+					</small>
+				</td>
 			</tr>
 			<tr>
 				<td>Geslacht</td>
@@ -142,7 +156,8 @@ Mijn profiel
 			</div>
 			<div class="col-md-9">
 				<div class="progress" style="height: 2em;">
-					<div class="progress-bar" role="progressbar" style="width: {{ round(($member->points - $ranks[$member->rank]) / ($ranks[$member->rank + 1] - $ranks[$member->rank]) * 100) }}%;">
+					<div class="progress-bar" role="progressbar"
+						style="width: {{ round(($member->points - $ranks[$member->rank]) / ($ranks[$member->rank + 1] - $ranks[$member->rank]) * 100) }}%;">
 					</div>
 				</div>
 			</div>
@@ -224,7 +239,8 @@ Mijn profiel
 			</tr>
 		</table>
 
-		<p><a data-toggle="modal" data-target="#fellows" style="cursor:pointer;">Met wie ben ik allemaal op kamp geweest?</a></p>
+		<p><a data-toggle="modal" data-target="#fellows" style="cursor:pointer;">Met wie ben ik allemaal op kamp
+				geweest?</a></p>
 
 		<!-- Vakken van dit lid -->
 		<table class="table table-hover">
@@ -237,14 +253,16 @@ Mijn profiel
 							@elseif ($viewType == 'profile')
 							<a href="{{ url('/profile', ['add-course']) }}">
 								@endif
-								<span class="glyphicon glyphicon-plus" aria-hidden="true" data-toggle="tooltip" title="Vak toevoegen"></span>
+								<span class="glyphicon glyphicon-plus" aria-hidden="true" data-toggle="tooltip"
+									title="Vak toevoegen"></span>
 							</a>
 					</div>
 				</div>
 			</caption>
 			@forelse ($member->courses()->orderBy('naam')->get() as $course)
 			<tr>
-				<td> @if ($viewType == 'admin') <a href="{{ url('/courses', $course->id) }}"> @endif {{ $course->naam }} @if ($viewType == 'admin') </a> @endif </td>
+				<td> @if ($viewType == 'admin') <a href="{{ url('/courses', $course->id) }}"> @endif {{ $course->naam }}
+						@if ($viewType == 'admin') </a> @endif </td>
 				<td>{{ $course->pivot->klas }}</td>
 				<td>
 					@if ($viewType == 'admin')
@@ -252,7 +270,8 @@ Mijn profiel
 						@elseif ($viewType == 'profile')
 						<a href="{{ url('/profile', ['edit-course', $course->id]) }}">
 							@endif
-							<span class="glyphicon glyphicon-edit" aria-hidden="true" data-toggle="tooltip" title="Vak bewerken"></span>
+							<span class="glyphicon glyphicon-edit" aria-hidden="true" data-toggle="tooltip"
+								title="Vak bewerken"></span>
 						</a>
 				</td>
 				<td>
@@ -261,7 +280,8 @@ Mijn profiel
 						@elseif ($viewType == 'profile')
 						<a href="{{ url('/profile', ['remove-course', $course->id]) }}">
 							@endif
-							<span class="glyphicon glyphicon-remove" aria-hidden="true" data-toggle="tooltip" title="Vak verwijderen"></span>
+							<span class="glyphicon glyphicon-remove" aria-hidden="true" data-toggle="tooltip"
+								title="Vak verwijderen"></span>
 						</a>
 				</td>
 			</tr>
@@ -277,7 +297,7 @@ Mijn profiel
 </div>
 
 @if (\Auth::user()->is_admin)
-	@include('partials.comments', [ 'comments' => $member->comments, 'type' => 'App\Member', 'key' => $member->id ])
+@include('partials.comments', [ 'comments' => $member->comments, 'type' => 'App\Member', 'key' => $member->id ])
 @endif
 
 <hr />
@@ -295,13 +315,15 @@ Mijn profiel
 				</td>
 				<td>
 					@if ($event->pivot->wissel)
-					<span class="glyphicon glyphicon-hourglass" aria-hidden="true" data-toggle="tooltip" title="Wisselleiding"></span>
+					<span class="glyphicon glyphicon-hourglass" aria-hidden="true" data-toggle="tooltip"
+						title="Wisselleiding"></span>
 					@endif
 				</td>
 				<td>
 					@if (($viewType == 'profile') && ($event->reviews->count() > 0))
 					<a href="{{ url('/profile/reviews', $event->id) }}">
-						<span class="glyphicon glyphicon-dashboard" aria-hidden="true" data-toggle="tooltip" title="Enquetes bekijken"></span>
+						<span class="glyphicon glyphicon-dashboard" aria-hidden="true" data-toggle="tooltip"
+							title="Enquetes bekijken"></span>
 					</a>
 					@endif
 				</td>
@@ -377,7 +399,8 @@ Mijn profiel
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+						aria-hidden="true">&times;</span></button>
 				<h4 class="modal-title" id="myModalLabel">Lijst met acties</h4>
 			</div>
 			<div class="modal-body">
@@ -424,7 +447,8 @@ Mijn profiel
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+						aria-hidden="true">&times;</span></button>
 				<h4 class="modal-title" id="myModalLabel">Ik ben op kamp geweest met:</h4>
 			</div>
 			<div class="modal-body">
@@ -446,7 +470,8 @@ Mijn profiel
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+						aria-hidden="true">&times;</span></button>
 				<h4 class="modal-title" id="uploadPicLabel">Nieuwe foto uploaden</h4>
 			</div>
 			{!! Form::open(['url' => 'profile', 'files' => true]) !!}

@@ -65,6 +65,7 @@ class MemberTableSeeder extends Seeder
 			'vog' => '1',
 			'ervaren_trainer' => '1',
 			'opmerkingen' => 'Winter is coming.',
+			'publish_birthday' => '0',
 		]);
 
 		Member::create([

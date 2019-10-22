@@ -71,7 +71,7 @@ class EventsController extends Controller
 			return redirect('profile');
 		}
 
-		
+
 		// Obtain participant course information
 		$participantCourseString = array();
 		foreach ($event->participants->all() as $p) {
@@ -503,7 +503,7 @@ class EventsController extends Controller
 	public function iCalendar()
 	{
 		$events = Event::orderBy('datum_start', 'asc')->where('openbaar', 1)->get();
-		$members = Member::whereIn('soort', ['normaal', 'aspirant'])->get();
+		$members = Member::whereIn('soort', ['normaal', 'aspirant'])->where('publish_birthday', 1)->get();
 
 		$response = response()->view('events.ical', compact('events', 'members'));
 
