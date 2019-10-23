@@ -26,7 +26,6 @@ class EventsController extends Controller
 	 */
 	public function index()
 	{
-		$this->authorize("viewAny", Event::class);
 
 		$events = Event::where('type', 'kamp')->get();
 		$trainings = Event::where('type', 'training')->get();
@@ -67,7 +66,6 @@ class EventsController extends Controller
 	 */
 	public function show(Event $event)
 	{
-		$this->authorize("view", $event);
 		// Redirect the viewer if the user profile is not attached to this event
 		// $profile = \Auth::user()->profile;
 		// if (!($profile->events->contains('id', $event->id)) && !(\Auth::user()->is_admin)) {

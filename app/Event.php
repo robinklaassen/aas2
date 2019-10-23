@@ -60,4 +60,9 @@ class Event extends Model
 
 		return round($this->reviews()->pluck("cijfer")->avg(), 1);
 	}
+
+	public function hasUser(User $user) {
+
+		return $user->profile->events->contains($this);
+	}
 }

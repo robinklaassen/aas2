@@ -26,7 +26,7 @@ class EventPolicy
      */
     public function view(User $user, Event $event)
     {
-        return $user->hasCapability("event::show::basic");
+        return $user->hasCapability("event::show::basic") || ($user->hasCapability("event::show::participating") && $event->hasUser($user));
     }
 
     /**
@@ -66,7 +66,7 @@ class EventPolicy
 
     public function viewParticipants(User $user, Event $event)
     {
-        return $user->hasCapability("participants::info::show::basic") || ($user->isMember() && $user->profile()->events()->contains($event));
+        return $user->hasCapability("participants::info::show::advanced") || ($user->hasCapability("event::show::participating") && $event->hasUser($user));
     }
 
     public function viewParticipantsAdvanced(User $user, Event $event) {
@@ -80,7 +80,7 @@ class EventPolicy
 
     public function showBasic(User $user, Event $event) 
     {
-        return $user->hasCapability("event::show::basic");
+        return $user->hasCapability("event::show::basic") || ($user->hasCapability("event::show::participating") && $event->hasUser($user));
     }
 
     public function showAdvanced(User $user, Event $event) 
@@ -135,7 +135,7 @@ class EventPolicy
 
     public function questionair(User $user, Event $event)
     {
-        return $user->isMember() && $user->profile()->events()->contains($event);
+        return $user->isMember() && $event->hasUser($user);
     }
 
 }

@@ -235,7 +235,10 @@ class CreateRoleCapabilityTable extends Migration
                 "locations::info::advanced"
             ]],
             ["role" => "member", "capabilities" => [
-                //"member::edit:all" for it's own, we need a policy for it 
+                "members::info::edit::self",
+                "members::info::show::self",
+                "event::show::participating",                
+
                 "event::show::basic",
                 "participants::info::show::basic",
                 "event::show::basic",
@@ -247,11 +250,12 @@ class CreateRoleCapabilityTable extends Migration
                 "locations::info::basic"
             ]],
             ["role" => "old-member", "capabilities" => [
-                "members::info::show::basic",
-                "event::show::basic",
-                "locations::info::basic"
             ]],
-            ["role" => "participant", "capabilities" => []],
+            ["role" => "participant", "capabilities" => [
+                "event::show::participating",
+                "participants::info::show::self",
+                "participants::info::edit::self"
+            ]],
         ];
 
         $capas = Capability::all(["id", "name"])->keyBy("name");

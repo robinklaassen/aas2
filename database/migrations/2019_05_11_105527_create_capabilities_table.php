@@ -21,12 +21,14 @@ class CreateCapabilitiesTable extends Migration
 
         $capa = [
             // participants
+            ["participants::info::show::self", "Deelnemersinfo - Inzien - Zelf"],
             ["participants::info::show::basic", "Deelnemersinfo - Inzien - Basis"],
             ["participants::info::show::private", "Deelnemersinfo - Inzien - Privé"],
             ["participants::info::show::finance", "Deelnemersinfo - Inzien - Financieel"],
             ["participants::info::show::practical", "Deelnemersinfo - Inzien - Praktisch"],
             ["participants::info::show::administrative", "Deelnemersinfo - Inzien - Administratie"],
             
+            ["participants::info::edit::self", "Deelnemersinfo - Aanpassen - Zelf"],
             ["participants::info::edit::basic", "Deelnemersinfo - Aanpassen - Basis"],
             ["participants::info::edit::private", "Deelnemersinfo - Aanpassen - Privé"],
             ["participants::info::edit::finance", "Deelnemersinfo - Aanpassen - Financieel"],
@@ -39,12 +41,14 @@ class CreateCapabilitiesTable extends Migration
             ["participants::account::delete", "Deelnemersaccount - Verwijderen"],
             
             // members
+            ["members::info::show::self", "Leidinginfo - Inzien - Zelf"],
             ["members::info::show::basic", "Leidinginfo - Inzien - Basis"],
             ["members::info::show::private", "Leidinginfo - Inzien - Privé"],
             ["members::info::show::finance", "Leidinginfo - Inzien - Financieel"],
             ["members::info::show::practical", "Leidinginfo - Inzien - Praktisch"],
             ["members::info::show::administrative", "Leidinginfo - Inzien - Administratie"],
-            
+
+            ["members::info::edit::self", "Leidinginfo - Aanpassen - Zelf"],            
             ["members::info::edit::basic", "Leidinginfo - Aanpassen - Basis"],
             ["members::info::edit::private", "Leidinginfo - Aanpassen - Privé"],
             ["members::info::edit::finance", "Leidinginfo - Aanpassen - Financieel"],
@@ -59,6 +63,7 @@ class CreateCapabilitiesTable extends Migration
             ["comments::edit::secret", "Opmerkingen - Aanpassen - geheim"],
             
             // events
+            ["event::show::participating", "Evenement - Inzien - Deelnemend"],
             ["event::show::basic", "Evenement - Inzien - basic"],
             ["event::show::advanced", "Evenement - Inzien - uitgebreid"],
 
