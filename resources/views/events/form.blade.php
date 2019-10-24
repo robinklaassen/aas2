@@ -4,21 +4,25 @@
 		{!! Form::text('naam', null, ['class' => 'form-control']) !!}
 	</div>
 
+	@if (!isset($event) || \Auth::user()->can("editAdvanced", $event) )	
 	<div class="col-md-2 form-group">
 		{!! Form::label('code', 'Code:') !!}
 		{!! Form::text('code', null, ['class' => 'form-control']) !!}
 	</div>
+	@endif
 
 	<div class="col-md-5 form-group">
 		{!! Form::label('location_id', 'Locatie:') !!}
 		{!! Form::select('location_id', $locations, null, ['class' => 'form-control']) !!}
 	</div>
 
+	@if (!isset($event) || \Auth::user()->can("editAdvanced", $event) )	
 	<div class="col-md-2 form-group">
 		{!! Form::label('openbaar', 'Openbaar?') !!}<br />
 		{!! Form::hidden('openbaar', 1) !!}
 		{!! Form::checkbox('openbaar', 1, null, ['style' => 'margin-top:14px;']) !!}
 	</div>
+	@endif
 </div>
 
 <div class="row">
@@ -68,6 +72,7 @@
 		@endif
 	</div>
 
+	@if (!isset($event) || \Auth::user()->can("editAdvanced", $event) )	
 	<div class="col-md-4 form-group">
 		{!! Form::label('prijs', 'Kampprijs (zonder korting):') !!}
 		<div class="input-group">
@@ -75,6 +80,7 @@
 			{!! Form::input('number', 'prijs', null, ['class' => 'form-control', 'min' => 0]) !!}
 		</div>
 	</div>
+	@endif
 
 	<div class="col-md-2 form-group">
 		{!! Form::label('streeftal', 'Streeftal L / D:') !!}
@@ -88,6 +94,7 @@
 	</div>
 </div>
 
+@if (!isset($event) || \Auth::user()->can("editAdvanced", $event) )	
 <div class="row">
 	<div class="col-md-12">
 		<p class="well">
@@ -95,11 +102,14 @@
 		</p>
 	</div>
 </div>
+@endif
 
+@if (!isset($event) || \Auth::user()->can("editAdvanced", $event) )	
 <div class="form-group">
 	{!! Form::label('beschrijving', 'Beschrijving (website):') !!}
 	{!! Form::textarea('beschrijving', null, ['class' => 'form-control', 'rows' => '5']) !!}
 </div>
+@endif
 
 <hr />
 

@@ -61,6 +61,11 @@ class LocationPolicy
         return $user->hasCapability("locations::edit::basic");
     }
 
+    public function editAdvanced(User $user, Location $location) 
+    {
+        return $user->hasCapability("locations::edit::advanced");
+    }
+
     /**
      * Determine whether the user can delete the location.
      *
