@@ -13,7 +13,9 @@ class LocationsController extends Controller
 {
 
 	public function __construct()
-	{ }
+	{
+		$this->authorizeResource(Location::class, 'location');
+	}
 
 	/**
 	 * Display a listing of the resource.
