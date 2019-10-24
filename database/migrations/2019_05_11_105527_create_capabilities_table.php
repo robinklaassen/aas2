@@ -41,6 +41,8 @@ class CreateCapabilitiesTable extends Migration
             ["participants::account::delete", "Deelnemersaccount - Verwijderen"],
             
             // members
+            ["members::old::show", "Leidinginfo - Inzien - Oudleden"],
+
             ["members::info::show::self", "Leidinginfo - Inzien - Zelf"],
             ["members::info::show::basic", "Leidinginfo - Inzien - Basis"],
             ["members::info::show::private", "Leidinginfo - Inzien - Privé"],

@@ -15,7 +15,9 @@ class ParticipantsController extends Controller
 {
 
 	public function __construct()
-	{ }
+	{
+		$this->authorizeResource(Participant::class, 'participant');		
+	}
 
 	/**
 	 * Display a listing of the resource.

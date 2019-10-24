@@ -12,17 +12,14 @@ class MembersController extends Controller
 {
 
 	public function __construct()
-	{ }
+	{ 
+		$this->authorizeResource(Member::class, 'member');
+	}
 
 	# Index page
 	public function index()
 	{
-		// Only for members!
-		if (\Auth::user()->profile_type != "App\Member") {
-			return back();
-		}
-
-		if (\Auth::user()->is_admin) {
+		if (\Auth::user()->can("listOldMembers", Member::class)) {
 			// Show standard index
 			$current_members = Member::orderBy('voornaam', 'asc')->whereIn('soort', ['normaal', 'aspirant', 'info'])->get();
 			$former_members = Member::orderBy('voornaam', 'asc')->where('soort', 'oud')->get();
