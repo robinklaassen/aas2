@@ -62,7 +62,6 @@ class Event extends Model
 	}
 
 	public function hasUser(User $user) {
-
 		return $user->profile->events->contains($this);
 	}
 }

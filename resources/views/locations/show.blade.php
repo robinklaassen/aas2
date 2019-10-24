@@ -15,8 +15,12 @@
 	</div>
 	<div class="col-sm-6">
 		<p class="text-right">
+			@can("update", $location)
 			<a class="btn btn-primary" type="button" href="{{ url('/locations', [$location->id, 'edit']) }}" style="margin-top:21px;">Bewerken</a>
+			@endcan
+			@can("delete", $location)
 			<a class="btn btn-danger" type="button" href="{{ url('/locations', [$location->id, 'delete']) }}" style="margin-top:21px;">Verwijderen</a>
+			@endcan
 		</p>
 	</div>
 </div>
@@ -43,10 +47,12 @@
 				<td>Plaats</td>
 				<td>{{ $location->plaats }}</td>
 			</tr>
+			@can("viewAdvanced", $location)
 			<tr>
 				<td>Beheerder</td>
 				<td>{{ $location->beheerder }}</td>
 			</tr>
+			@endcan
 			<tr>
 				<td>Website</td>
 				<td><a href="{{ $location->website }}">{{ $location->website }}</a></td>
@@ -55,6 +61,7 @@
 				<td>Telefoon</td>
 				<td>{{ $location->telefoon }}</td>
 			</tr>
+			@can("viewAdvanced", $location)
 			<tr>
 				<td>Emailadres</td>
 				<td><a href="mailto:{{ $location->email }}">{{ $location->email }}</a></td>
@@ -63,6 +70,7 @@
 				<td>Prijsinformatie</td>
 				<td style="white-space:pre-wrap;">{!! $location->prijsinfo !!}</td>
 			</tr>
+			@endcan
 
 		</table>
 	</div>
@@ -120,7 +128,7 @@
 
 </div>
 
-@if (\Auth::user()->is_admin)
+@can("viewAdvanced", $location)
 	@include('partials.comments', [ 'comments' => $location->comments, 'type' => 'App\Location', 'key' => $location->id ])
 @endif
 
