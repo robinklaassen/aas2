@@ -19,16 +19,23 @@ Mijn profiel
 	<div class="col-sm-6">
 		<p class="text-right">
 			@if ($viewType == 'profile')
+			@can("editBasic", $member)
 			<a class="btn btn-primary" type="button" href="{{ url('/profile/edit') }}" style="margin-top:21px;">Bewerken</a>
 			<a class="btn btn-info" type="button" href="{{ url('/profile/on-camp') }}" style="margin-top:21px;">Op kamp</a>
+			@endcan
+			@can("editFinance", $member)
 			<a class="btn btn-success" type="button" href="{{ url('/profile/declare') }}" style="margin-top:21px;">Declaratie</a>
+			@endcan
+			@can("editPassword", $member)
 			<a class="btn btn-warning" type="button" href="{{ url('/profile/password') }}" style="margin-top:21px;">Nieuw wachtwoord</a>
+			@endcan
+			
 			@elseif ($viewType == 'admin')
+			@can("editBasic", $member)
 			<a class="btn btn-primary" type="button" href="{{ url('/members', [$member->id, 'edit']) }}" style="margin-top:21px;">Bewerken</a>
 			<a class="btn btn-info" type="button" href="{{ url('/members', [$member->id, 'on-event']) }}" style="margin-top:21px;">Op evenement</a>
-			<!--
-				<a class="btn btn-info" type="button" href="{{ url('/members', [$member->id, 'add-course']) }}" style="margin-top:21px;">Vak toevoegen</a>
-				-->
+			@endcan
+			@can("delete", $member)
 			<a class="btn btn-danger" type="button" href="{{ url('/members', [$member->id, 'delete']) }}" style="margin-top:21px;">Verwijderen</a>
 			@endif
 		</p>

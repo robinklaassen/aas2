@@ -32,7 +32,7 @@ class MemberPolicy
     {
         return ($member->soort == "oud" && $user->hasCapability("members::oud::show"))
             || ($member->soort != "oud" && $user->hasCapability("members::info::show::basic"))
-            || ($user->hasCapability("members::info::show::self") && $user->profile == $member);
+            || ($this->ifSelf("members::info::show::self", $user, $member));
     }
 
     /**
@@ -56,7 +56,7 @@ class MemberPolicy
     public function update(User $user, Member $member)
     {
         return $user->hasCapability("members::info::edit::basic")
-            || $user->hasCapability("members::info::edit::self") && $user->profile == $member;
+            || $this->ifSelf("members::info::edit::self", $user, $member);
     }
 
     /**
@@ -98,5 +98,65 @@ class MemberPolicy
     public function listOldMembers(User $user)
     {
         return $user->hasCapability("members::old::show");
+    }
+
+    public function showFinance(User $user, Member $member)
+    {
+        return $user->hasCapability("members::info::show::finance") || $user->ifSelf("members::info::show::self", $user, $member);
+    }
+
+    public function showPrivate(User $user, Member $member)
+    {
+        return $user->hasCapability("members::info::show::private") || $user->ifSelf("members::info::show::self", $user, $member);
+    }
+
+    public function showPraktical(User $user, Member $member)
+    {
+        return $user->hasCapability("members::info::show::practical") || $user->ifSelf("members::info::show::self", $user, $member);
+    }
+
+    public function showAdministrative(User $user, Member $member)
+    {
+        return $user->hasCapability("members::info::show::administrative") || $user->ifSelf("members::info::show::self", $user, $member);
+    }
+
+    public function showSpecial(User $user, Member $member)
+    {
+        return $user->hasCapability("members::info::show::administrative");
+    }
+
+    public function editBasic(User $user, Member $member)
+    {
+        return $user->hasCapability("members::info::edit::basic") || $user->ifSelf("members::info::edit::self", $user, $member);
+    }
+
+    public function editFinance(User $user, Member $member)
+    {
+        return $user->hasCapability("members::info::edit::finance") || $user->ifSelf("members::info::edit::self", $user, $member);
+    }
+
+    public function editPrivate(User $user, Member $member)
+    {
+        return $user->hasCapability("members::info::edit::private") || $user->ifSelf("members::info::edit::self", $user, $member);
+    }
+
+    public function editPraktical(User $user, Member $member)
+    {
+        return $user->hasCapability("members::info::edit::praktical") || $user->ifSelf("members::info::edit::self", $user, $member);
+    }
+
+    public function editAdministrative(User $user, Member $member)
+    {
+        return $user->hasCapability("members::info::edit::administrative");
+    }
+
+    public function editSpecial(User $user, Member $member)
+    {
+        return $user->hasCapability("members::info::edit::special");
+    }
+
+    private function ifSelf(string $capability, User $user, Member $member): bool
+    {
+        return $user->hasCapability($capability) && $user->profile == $member;
     }
 }
