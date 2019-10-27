@@ -75,6 +75,7 @@ Mijn profiel
 		<!-- Profieltabel -->
 		<table class="table table-hover">
 			<caption>Profiel</caption>
+			@can("showPrivate", $member)
 			<tr>
 				<td>Geboortedatum</td>
 				<td>{{ $member->geboortedatum->format('d-m-Y') }}</td>
@@ -91,10 +92,12 @@ Mijn profiel
 				<td>Postcode</td>
 				<td>{{ $member->postcode }}</td>
 			</tr>
+			@endcan
 			<tr>
 				<td>Woonplaats</td>
 				<td>{{ $member->plaats }}</td>
 			</tr>
+			@can("showPrivate", $member)
 			<tr>
 				<td>Telefoonnummer</td>
 				<td>{{ $member->telefoon }}</td>
@@ -103,14 +106,18 @@ Mijn profiel
 				<td>Emailadres persoonlijk</td>
 				<td><a href="mailto:{{$member->email}}">{{ $member->email }}</a></td>
 			</tr>
+			@endcan
+			@can("showFinancial", $member)
 			<tr>
 				<td>Rekeningnummer</td>
 				<td>{{ $member->iban }}</td>
 			</tr>
+			@endcan
 			<tr>
 				<td>Rijbewijs?</td>
 				<td>{{ $member->rijbewijs == '1' ? 'Ja' : 'Nee' }}</td>
 			</tr>
+			@can("showPrivate", @member)
 			<tr>
 				<td>Niveau eindexamen</td>
 				<td>{{ $member->eindexamen }}</td>
@@ -123,6 +130,7 @@ Mijn profiel
 				<td>Afgestudeerd?</td>
 				<td>{{ $member->afgestudeerd == '1' ? 'Ja' : 'Nee' }}</td>
 			</tr>
+			@endcan
 			<tr>
 				<td>Hoe bij Anderwijs</td>
 				<td>{{ $member->hoebij }}</td>
@@ -131,10 +139,12 @@ Mijn profiel
 				<td>Ranonkeltje</td>
 				<td>{{ $member->ranonkeltje }}</td>
 			</tr>
+			@can("showPractical", $member)
 			<tr>
 				<td>Overige informatie</td>
 				<td style="white-space:pre-wrap;">{{ $member->opmerkingen }}</td>
 			</tr>
+			@endcan
 		</table>
 
 
@@ -142,6 +152,7 @@ Mijn profiel
 
 	<!-- Rechter kolom -->
 	<div class="col-md-6">
+		@can("showAdministrative", $member)
 		<!-- Puntensysteem vak -->
 		<div class="row">
 			<div class="col-md-3">
@@ -172,6 +183,7 @@ Mijn profiel
 				<a data-toggle="modal" data-target="#actions" style="cursor:pointer;">Lijst met acties</a>
 			</div>
 		</div>
+		@endcan
 
 		<hr />
 
@@ -179,7 +191,7 @@ Mijn profiel
 		<!-- Administratietabel -->
 		<table class="table table-hover">
 			<caption>Administratie</caption>
-			@if ($viewType == 'admin')
+			@can("showAdministrative", $member)
 			<tr>
 				<td>AAS ID</td>
 				<td>{{ $member->id }}</td>
@@ -193,10 +205,12 @@ Mijn profiel
 				<td>Account(naam)</td>
 				<td>@if($member->user()->first()) {{ $member->user()->first()->username }} @else -geen- @endif</td>
 			</tr>
+			@endcan
 			<tr>
 				<td>Emailadres bij Anderwijs</td>
 				<td><a href="mailto:{{$member->email_anderwijs}}">{{ $member->email_anderwijs }}</a></td>
 			</tr>
+			@can("showAdministrative", $member)
 			<tr>
 				<td>Heeft VOG ingeleverd?</td>
 				<td>{{ $member->vog == '1' ? 'Ja' : 'Nee' }}</td>
@@ -205,6 +219,8 @@ Mijn profiel
 				<td>Automatische incasso</td>
 				<td>{{ $member->incasso == '1' ? 'Ja' : 'Nee' }}</td>
 			</tr>
+			@endcan
+
 			<tr>
 				<td>Rollen</td>
 				<td>
@@ -215,7 +231,6 @@ Mijn profiel
 					@endif
 				</td>
 			</tr>
-			@if(Auth::user()->hasRole("admin+"))
 			<tr>
 				<td>Rechten</td>
 				<td>
