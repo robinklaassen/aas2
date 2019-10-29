@@ -29,7 +29,7 @@ class UserTableSeeder extends Seeder
 		$user->save();
 		$user->privacy = '2018-06-01';
 		$member->user()->save($user);
-		$roles = Role::whereIn("tag", ["aasbaas", "president", "board", "member"])->get();
+		$roles = Role::whereIn("tag", ["aasbaas", "president", "board", "member", "treasurer"])->get();
 		$user->roles()->sync($roles);
 
 		$member = Member::find(2);
@@ -41,7 +41,7 @@ class UserTableSeeder extends Seeder
 		$user->is_admin = 1;
 		$user->privacy = '2018-06-01';
 		$member->user()->save($user);
-		$roles = Role::whereIn("tag", ["treasurer", "board", "member"])->get();
+		$roles = Role::whereIn("tag", ["kantoorci", "member"])->get();
 		$user->roles()->sync($roles);
 
 		$participant = Participant::find(2);

@@ -14,10 +14,16 @@
 	</div>
 	<div class="col-sm-6">
 		<p class="text-right">
+			@can("create", \App\Member::class)
 			<a class="btn btn-primary" type="button" href="{{ url('members/create') }}" style="margin-top:21px;">Nieuw lid</a>
+			@endcan
+			@can("showAnyPractical", \App\Member::class)
 			<a class="btn btn-info" type="button" href="{{ url('members/search')}}" style="margin-top:21px;">Zoeken op vakdekking</a>
+			@endcan
+			@can("showAnyAdministrative", \App\Member::class)
 			<a class="btn btn-warning" type="button" href="{{ url('members/map') }}" style="margin-top:21px;">Kaart</a>
 			<a class="btn btn-success" type="button" href="{{ url('members/export') }}" style="margin-top:21px;">Exporteren</a>
+			@endcan
 		</p>
 	</div>
 </div>
@@ -29,8 +35,10 @@
   <!-- Nav tabs -->
   <ul class="nav nav-tabs" role="tablist">
     <li role="presentation" class="active"><a href="#huidig" aria-controls="huidig" role="tab" data-toggle="tab">Huidige leden</a></li>
-    <li role="presentation"><a href="#oud" aria-controls="oud" role="tab" data-toggle="tab">Oud-leden</a></li>
-  </ul>
+	@can("listOldMembers", \App\Member::class)
+	<li role="presentation"><a href="#oud" aria-controls="oud" role="tab" data-toggle="tab">Oud-leden</a></li>
+	@endcan
+</ul>
 
   <!-- Tab panes -->
   <div class="tab-content" style="margin-top:20px;">
@@ -43,9 +51,15 @@
 					<th></th>
 					<th>Achternaam</th>
 					<th>Woonplaats</th>
+					@can("showAnyPractical", \App\Member::class)
 					<th>Soort lid</th>
+					@endcan
+					@can("showAnyAdministrative", \App\Member::class)
 					<th>VOG</th>
+					@endcan
+					@can("showAnyPrivate", \App\Member::class)
 					<th>Telefoon</th>
+					@endcan
 					<th>Email</th>
 				</tr>
 			</thead>
@@ -53,11 +67,22 @@
 			<tbody>
 				@foreach ($current_members as $member)
 					<tr>
-						<td><a href="{{ url('/members', $member->id) }}">{{ $member->voornaam }}</a></td>
+						<td>
+							@can("view", $member)
+							<a href="{{ url('/members', $member->id) }}">{{ $member->voornaam }}</a>
+							@else
+							{{ $member->voornaam }}
+							@endcan
+						</td>
 						<td>{{ $member->tussenvoegsel }}</td>
 						<td>{{ $member->achternaam }}</td>
 						<td>{{ $member->plaats }}</td>
+
+						@can("showAnyPractical", \App\Member::class)						
 						<td>{{ $member->soort }}</td>
+						@endcan
+
+						@can("showAnyAdministrative", \App\Member::class)
 						<td>
 							@if ($member->vog)
 								<span style="display:none;">1</span>
@@ -67,7 +92,10 @@
 								<span class="glyphicon glyphicon-remove"></span>
 							@endif
 						</td>
+						@endcan
+						@can("showAnyPrivate", \App\Member::class)
 						<td>{{ $member->telefoon }}</td>
+						@endcan
 						<td><a href="mailto:{{ $member->email_anderwijs }}">{{ $member->email_anderwijs }}</a></td>
 					</tr>
 				@endforeach
@@ -75,6 +103,7 @@
 		</table>
 	</div>
 	
+	@can("listOldMembers", \App\Member::class)
     <div role="tabpanel" class="tab-pane" id="oud">
 		<!-- Tabel oud-leden -->
 		<table class="table table-hover" id="formerMembersTable" data-page-length="25">
@@ -105,6 +134,7 @@
 			</tbody>
 		</table>
 	</div>
+	@endcan
   </div>
 
 </div>

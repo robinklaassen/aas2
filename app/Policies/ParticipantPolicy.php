@@ -18,7 +18,8 @@ class ParticipantPolicy
      */
     public function viewAny(User $user)
     {
-        //
+        // todo
+        return true;
     }
 
     /**
@@ -30,7 +31,8 @@ class ParticipantPolicy
      */
     public function view(User $user, Participant $participant)
     {
-        //
+        // todo
+        return true;
     }
 
     /**
@@ -41,7 +43,8 @@ class ParticipantPolicy
      */
     public function create(User $user)
     {
-        //
+        // todo
+        return true;
     }
 
     /**
@@ -53,7 +56,8 @@ class ParticipantPolicy
      */
     public function update(User $user, Participant $participant)
     {
-        //
+        // todo
+        return true;
     }
 
     /**
@@ -65,7 +69,8 @@ class ParticipantPolicy
      */
     public function delete(User $user, Participant $participant)
     {
-        //
+        // todo
+        return true;
     }
 
     /**
@@ -77,7 +82,8 @@ class ParticipantPolicy
      */
     public function restore(User $user, Participant $participant)
     {
-        //
+        // todo
+        return true;
     }
 
     /**
@@ -89,6 +95,7 @@ class ParticipantPolicy
      */
     public function forceDelete(User $user, Participant $participant)
     {
-        //
+        // todo
+        return true;
     }
 }

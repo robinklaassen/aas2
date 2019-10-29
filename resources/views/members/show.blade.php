@@ -19,6 +19,7 @@ Mijn profiel
 	<div class="col-sm-6">
 		<p class="text-right">
 			@if ($viewType == 'profile')
+
 			@can("editBasic", $member)
 			<a class="btn btn-primary" type="button" href="{{ url('/profile/edit') }}" style="margin-top:21px;">Bewerken</a>
 			<a class="btn btn-info" type="button" href="{{ url('/profile/on-camp') }}" style="margin-top:21px;">Op kamp</a>
@@ -31,12 +32,15 @@ Mijn profiel
 			@endcan
 			
 			@elseif ($viewType == 'admin')
-			@can("editBasic", $member)
+
+			@can("update", $member)
 			<a class="btn btn-primary" type="button" href="{{ url('/members', [$member->id, 'edit']) }}" style="margin-top:21px;">Bewerken</a>
 			<a class="btn btn-info" type="button" href="{{ url('/members', [$member->id, 'on-event']) }}" style="margin-top:21px;">Op evenement</a>
 			@endcan
 			@can("delete", $member)
 			<a class="btn btn-danger" type="button" href="{{ url('/members', [$member->id, 'delete']) }}" style="margin-top:21px;">Verwijderen</a>
+			@endcan
+			
 			@endif
 		</p>
 	</div>
@@ -200,7 +204,6 @@ Mijn profiel
 				<td>Soort lid</td>
 				<td>{{ $member->soort }}</td>
 			</tr>
-			@endif
 			<tr>
 				<td>Account(naam)</td>
 				<td>@if($member->user()->first()) {{ $member->user()->first()->username }} @else -geen- @endif</td>
@@ -221,6 +224,7 @@ Mijn profiel
 			</tr>
 			@endcan
 
+			@can("viewAny", \App\Role::class)
 			<tr>
 				<td>Rollen</td>
 				<td>
@@ -240,72 +244,89 @@ Mijn profiel
 
 				</td>
 			</tr>
-			@endif
-			<!--
-			<tr>
-				<td>Aantal punten</td>
-				<td>{{ $member->points }}</td>
-			</tr>
-			<tr>
-				<td>Level</td>
-				<td>{{ $member->rank }}</td>
-			</tr>
-			-->
-			@if ($viewType == 'admin')
+			@endcan
+
+			@can("showSpecial", $member)
 			<tr>
 				<td>Ervaren trainer</td>
 				<td>{{ $member->ervaren_trainer == '1' ? 'Ja' : 'Nee' }}</td>
 			</tr>
-			@endif
+			@endcan
+			@can("showBasic", $member)
 			<tr>
 				<td>Lid sinds</td>
 				<td>{{ $member->created_at->format('d-m-Y') }}</td>
 			</tr>
+			@endcan
+			@can("showAdministrative", $member)
 			<tr>
 				<td>Laatste update</td>
 				<td>{{ $member->updated_at->format('d-m-Y') }}</td>
 			</tr>
+			@endcan
 		</table>
 
+		@can("showPractical", $member)
 		<p><a data-toggle="modal" data-target="#fellows" style="cursor:pointer;">Met wie ben ik allemaal op kamp geweest?</a></p>
+		@endcan
 
+		@can("showPractical", $member)
 		<!-- Vakken van dit lid -->
 		<table class="table table-hover">
 			<caption>
 				<div style="clear:both;">
 					<div style="float:left;">Vakken</div>
+					@can("editPractical", $member)
 					<div style="float:right;">
 						@if ($viewType == 'admin')
 						<a href="{{ url('/members', [$member->id, 'add-course']) }}">
-							@elseif ($viewType == 'profile')
-							<a href="{{ url('/profile', ['add-course']) }}">
-								@endif
-								<span class="glyphicon glyphicon-plus" aria-hidden="true" data-toggle="tooltip" title="Vak toevoegen"></span>
-							</a>
+							<span class="glyphicon glyphicon-plus" aria-hidden="true" data-toggle="tooltip" title="Vak toevoegen"></span>
+						</a>
+						@else
+						<a href="{{ url('/profile', ['add-course']) }}">
+							<span class="glyphicon glyphicon-plus" aria-hidden="true" data-toggle="tooltip" title="Vak toevoegen"></span>						
+						</a>
+						@endif
+						@endcan
 					</div>
 				</div>
 			</caption>
 			@forelse ($member->courses()->orderBy('naam')->get() as $course)
 			<tr>
-				<td> @if ($viewType == 'admin') <a href="{{ url('/courses', $course->id) }}"> @endif {{ $course->naam }} @if ($viewType == 'admin') </a> @endif </td>
+
+				<td> 
+					@can("view", $course)
+					<a href="{{ url('/courses', $course->id) }}">  {{ $course->naam }} </a>
+					@else
+					{{ $course->naam }}
+					@endcan
+				</td>
 				<td>{{ $course->pivot->klas }}</td>
 				<td>
+					@can("editPractical", $member)
 					@if ($viewType == 'admin')
 					<a href="{{ url('/members', [$member->id, 'edit-course', $course->id]) }}">
-						@elseif ($viewType == 'profile')
-						<a href="{{ url('/profile', ['edit-course', $course->id]) }}">
-							@endif
-							<span class="glyphicon glyphicon-edit" aria-hidden="true" data-toggle="tooltip" title="Vak bewerken"></span>
-						</a>
+						<span class="glyphicon glyphicon-edit" aria-hidden="true" data-toggle="tooltip" title="Vak bewerken"></span>
+					</a>
+					@elseif ($viewType == 'profile')
+					<a href="{{ url('/profile', ['edit-course', $course->id]) }}">
+						<span class="glyphicon glyphicon-edit" aria-hidden="true" data-toggle="tooltip" title="Vak bewerken"></span>
+					</a>
+					@endif
+					@endcan
 				</td>
 				<td>
+					@can("editPractical", $member)
 					@if ($viewType == 'admin')
 					<a href="{{ url('/members', [$member->id, 'remove-course', $course->id]) }}">
-						@elseif ($viewType == 'profile')
+						<span class="glyphicon glyphicon-remove" aria-hidden="true" data-toggle="tooltip" title="Vak verwijderen"></span>
+					</a>
+					@elseif ($viewType == 'profile')
 						<a href="{{ url('/profile', ['remove-course', $course->id]) }}">
-							@endif
 							<span class="glyphicon glyphicon-remove" aria-hidden="true" data-toggle="tooltip" title="Vak verwijderen"></span>
 						</a>
+					@endif
+					@endcan
 				</td>
 			</tr>
 			@empty
@@ -314,12 +335,13 @@ Mijn profiel
 			</tr>
 			@endforelse
 		</table>
-
+		@endcan
+		
 	</div>
 
 </div>
 
-@if (\Auth::user()->is_admin)
+@can("viewAny", \App\Comment::class)
 	@include('partials.comments', [ 'comments' => $member->comments, 'type' => 'App\Member', 'key' => $member->id ])
 @endif
 
@@ -334,7 +356,12 @@ Mijn profiel
 			@forelse ($member->events()->where('type','kamp')->orderBy('datum_start', 'desc')->get() as $event)
 			<tr>
 				<td>
+					@can("view", $event)
 					<a href="{{ url('/events', $event->id) }}">{{ $event->naam }}</a>
+					@else
+					{{ $event->naam }}
+					@endcan
+
 				</td>
 				<td>
 					@if ($event->pivot->wissel)
@@ -349,11 +376,11 @@ Mijn profiel
 					@endif
 				</td>
 				<td>
-					@if ($viewType == 'admin')
+					@can("showAdvanced", $event)
 					{{ $event->code }}
-					@elseif ($viewType == 'profile')
+					@else
 					{{ $event->datum_start->format('d-m-Y') }}
-					@endif
+					@endcan
 				</td>
 			</tr>
 			@empty
@@ -371,14 +398,18 @@ Mijn profiel
 			@forelse ($member->events()->where('type','training')->orderBy('datum_start', 'desc')->get() as $event)
 			<tr>
 				<td>
+					@can("view", $event)
 					<a href="{{ url('/events', $event->id) }}">{{ $event->naam }}</a>
+					@else
+					{{ $event->naam }}
+					@endcan
 				</td>
 				<td>
-					@if ($viewType == 'admin')
+					@can("showAdvanced", $event)					
 					{{ $event->code }}
-					@elseif ($viewType == 'profile')
+					@else
 					{{ $event->datum_start->format('d-m-Y') }}
-					@endif
+					@endcan
 				</td>
 			</tr>
 			@empty
@@ -396,14 +427,18 @@ Mijn profiel
 			@forelse ($member->events()->where('type','overig')->orderBy('datum_start', 'desc')->get() as $event)
 			<tr>
 				<td>
+					@can("view", $event)
 					<a href="{{ url('/events', $event->id) }}">{{ $event->naam }}</a>
+					@else
+					{{ $event->naam }}
+					@endcan
 				</td>
 				<td>
-					@if ($viewType == 'admin')
+					@can("showAdvanced", $event)					
 					{{ $event->code }}
-					@elseif ($viewType == 'profile')
+					@else
 					{{ $event->datum_start->format('d-m-Y') }}
-					@endif
+					@endcan
 				</td>
 			</tr>
 			@empty
@@ -415,6 +450,7 @@ Mijn profiel
 	</div>
 </div>
 
+@can("showAdministrative", $member)
 <!-- Modal: punten -->
 <div class="modal fade" id="actions" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
@@ -461,7 +497,9 @@ Mijn profiel
 		</div>
 	</div>
 </div>
+@endcan
 
+@can("showPractical", $member)
 <!-- Modal: met wie op kamp geweest -->
 <div class="modal fade" id="fellows" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 	<div class="modal-dialog">
@@ -483,7 +521,9 @@ Mijn profiel
 		</div>
 	</div>
 </div>
+@endcan
 
+@if ($viewType == 'profile')
 <!-- Modal: foto uploaden -->
 <div class="modal fade" id="uploadPic" tabindex="-1" role="dialog" aria-labelledby="uploadPicLabel" aria-hidden="true">
 	<div class="modal-dialog">
@@ -505,5 +545,6 @@ Mijn profiel
 		</div>
 	</div>
 </div>
+@endif
 
 @endsection

@@ -10,6 +10,10 @@ class CommentPolicy
 {
     use HandlesAuthorization;
 
+    public function viewAny(User $user)
+    {
+        return $user->hasCapability("comments::show");
+    }
 
     /**
      * Determine whether the user can view the comment.
@@ -20,7 +24,8 @@ class CommentPolicy
      */
     public function view(User $user, Comment $comment)
     {
-        return $user->is_admin == 1 && (!$comment->is_secret || $user->is_admin == 2);
+        return ($user->hasCapability("comments::show::secret") && $comment->is_secret)
+            || (!$comment->is_secret && $user->hasCapability("comments::show"));
     }
 
     /**
@@ -31,7 +36,7 @@ class CommentPolicy
      */
     public function create(User $user)
     {
-        return true;
+        return $user->hasCapability("comments::create");
     }
 
     /**
@@ -43,7 +48,11 @@ class CommentPolicy
      */
     public function update(User $user, Comment $comment)
     {
-        return $comment->user_id == $user->id;
+
+        return $this->view($user, $comment)
+            && ((!$comment->is_secret && $user->hasCapability("comments::edit"))
+                || ($comment->is_secret && $user->hasCapability("comments::edit::secret"))
+                ||  $comment->user_id == $user->id);
     }
 
     /**
@@ -55,7 +64,8 @@ class CommentPolicy
      */
     public function delete(User $user, Comment $comment)
     {
-        return $user->is_admin && $comment->user_id == $user->id || $user->is_admin == 2;
+        return  $this->view($user, $comment)
+            && ($user->hasCapability("comments::delete") || $comment->user_id == $user->id);
     }
 
     /**
@@ -67,7 +77,7 @@ class CommentPolicy
      */
     public function restore(User $user, Comment $comment)
     {
-        return $user->is_admin;
+        return $this->delete($user, $comment);
     }
 
     /**
@@ -79,6 +89,6 @@ class CommentPolicy
      */
     public function forceDelete(User $user, Comment $comment)
     {
-        return $user->is_admin == 2;
+        return $this->delete($user, $comment);
     }
 }

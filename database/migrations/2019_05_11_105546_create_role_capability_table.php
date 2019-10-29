@@ -71,9 +71,16 @@ class CreateRoleCapabilityTable extends Migration
                 "members::info::show::basic",
                 "members::info::show::practical",
                 "members::info::show::administrative",
+                "members::oud::show",
                 "members::info::edit::administrative",
                 "members::account::create",
                 "members::account::delete",
+
+                "members::info::edit::basic",
+                "members::info::edit::private",
+                "members::info::edit::practical",
+                "members::info::edit::administrative",
+
                 "event::show::basic",
                 "event::show::advanced",
                 "event::edit::basic",
@@ -88,8 +95,13 @@ class CreateRoleCapabilityTable extends Migration
                 "locations::edit::advanced",
                 "locations::create",
                 "locations::delete",
+
+                "comments::show",
+                "comments::edit",
+                "comments::create",
+                "comments::delete",
                 "comments::show::secret",
-                "comments::edit::secret"
+                "comments::edit::secret",
             ]],
             ["role" => "president", "capabilities" => [
                 "participants::info::show::basic",
@@ -100,7 +112,13 @@ class CreateRoleCapabilityTable extends Migration
                 "members::info::show::basic",
                 "members::info::show::practical",
                 "members::info::show::administrative",
+                "members::oud::show",
+
+                "members::info::edit::basic",
+                "members::info::edit::private",
+                "members::info::edit::practical",
                 "members::info::edit::administrative",
+
                 "members::account::create",
                 "members::account::delete",
                 "event::show::basic",
@@ -117,8 +135,13 @@ class CreateRoleCapabilityTable extends Migration
                 "locations::edit::advanced",
                 "locations::create",
                 "locations::delete",
+
+                "comments::show",
+                "comments::edit",
+                "comments::create",
+                "comments::delete",
                 "comments::show::secret",
-                "comments::edit::secret"
+                "comments::edit::secret",
             ]],
             ["role" => "treasurer", "capabilities" => [
                 "participants::info::show::basic",
@@ -132,6 +155,7 @@ class CreateRoleCapabilityTable extends Migration
                 "members::info::show::finance",
                 "members::info::show::practical",
                 "members::info::show::administrative",
+                "members::oud::show",
                 "members::info::edit::finance",
                 "members::info::edit::administrative",
                 "members::account::create",
@@ -168,6 +192,7 @@ class CreateRoleCapabilityTable extends Migration
                 "members::info::show::private",
                 "members::info::show::practical",
                 "members::info::show::administrative",
+                "members::oud::show",
                 "members::info::edit::basic",
                 "members::info::edit::private",
                 "members::info::edit::practical",
@@ -188,7 +213,10 @@ class CreateRoleCapabilityTable extends Migration
                 "locations::edit::basic",
                 "locations::edit::advanced",
                 "locations::create",
-                "locations::delete"
+                "locations::delete",
+
+                "comments::create",
+                "comments::show"
             ]],
             ["role" => "kantoorci", "capabilities" => [
                 "participants::info::show::basic",
@@ -205,13 +233,17 @@ class CreateRoleCapabilityTable extends Migration
                 "members::old::show",
                 "members::info::show::basic",
                 "members::info::show::practical",
+                "members::oud::show",
                 "event::show::basic",
                 "event::show::advanced",
                 "event::subjectcheck",
                 "event::mailing",
                 "event::paymentoverview",
                 "event::placement",
-                "locations::info::basic"
+                "locations::info::basic",
+
+                "comments::create",
+                "comments::show"
             ]],
             ["role" => "promoci", "capabilities" => [
                 "participants::info::show::basic",
@@ -220,7 +252,10 @@ class CreateRoleCapabilityTable extends Migration
                 "event::show::basic",
                 "event::show::advanced",
                 "locations::info::basic",
-                "locations::info::advanced"
+                "locations::info::advanced",
+
+                "comments::create",
+                "comments::show"
             ]],
             ["role" => "trainerci", "capabilities" => [
                 "participants::info::show::basic",
@@ -228,7 +263,10 @@ class CreateRoleCapabilityTable extends Migration
                 "members::info::show::practical",
                 "event::show::basic",
                 "event::show::advanced",
-                "locations::info::basic"
+                "locations::info::basic",
+
+                "comments::create",
+                "comments::show"
             ]],
             ["role" => "trainer", "capabilities" => [
                 "participants::info::show::basic",
@@ -243,7 +281,7 @@ class CreateRoleCapabilityTable extends Migration
             ["role" => "member", "capabilities" => [
                 "members::info::edit::self",
                 "members::info::show::self",
-                "event::show::participating",                
+                "event::show::participating",
 
                 "event::show::basic",
                 "participants::info::show::basic",
@@ -255,8 +293,7 @@ class CreateRoleCapabilityTable extends Migration
                 "event::show::basic",
                 "locations::info::basic"
             ]],
-            ["role" => "old-member", "capabilities" => [
-            ]],
+            ["role" => "old-member", "capabilities" => []],
             ["role" => "participant", "capabilities" => [
                 "event::show::participating",
                 "participants::info::show::self",
@@ -266,9 +303,9 @@ class CreateRoleCapabilityTable extends Migration
 
         $capas = Capability::all(["id", "name"])->keyBy("name");
 
-        foreach($filling as $role_capa) {
+        foreach ($filling as $role_capa) {
             $r = Role::where("tag", "=", $role_capa["role"])->firstOrFail();
-            $role_ids = array_map(function($i) use ($capas) {
+            $role_ids = array_map(function ($i) use ($capas) {
                 return $capas[$i]["id"];
             }, $role_capa["capabilities"]);
             $r->capabilities()->sync($role_ids);

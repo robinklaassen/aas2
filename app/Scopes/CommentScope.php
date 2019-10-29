@@ -17,7 +17,7 @@ class CommentScope implements Scope
      */
     public function apply(Builder $builder, Model $model)
     {
-        if (\Auth::check() && \Auth::user()->is_admin != 2) {
+        if (\Auth::check() && !\Auth::user()->can("showSecret", \App\Comment::class)) {
             $builder->where('is_secret', '=', false);
         }
 

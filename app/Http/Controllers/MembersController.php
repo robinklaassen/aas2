@@ -12,13 +12,16 @@ class MembersController extends Controller
 {
 
 	public function __construct()
-	{ 
+	{
 		$this->authorizeResource(Member::class, 'member');
 	}
 
 	# Index page
 	public function index()
 	{
+		$current_members = Member::orderBy('voornaam', 'asc')->whereIn('soort', ['normaal', 'aspirant', 'info'])->get();
+		$former_members = Member::orderBy('voornaam', 'asc')->where('soort', 'oud')->get();
+		return view('members.index', compact('current_members', 'former_members'));
 		if (\Auth::user()->can("listOldMembers", Member::class)) {
 			// Show standard index
 			$current_members = Member::orderBy('voornaam', 'asc')->whereIn('soort', ['normaal', 'aspirant', 'info'])->get();
