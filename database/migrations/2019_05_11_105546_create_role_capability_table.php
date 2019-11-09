@@ -65,8 +65,11 @@ class CreateRoleCapabilityTable extends Migration
             ["role" => "board", "capabilities" => [
                 "participants::info::show::basic",
                 "participants::info::show::practical",
+                "participants::info::show::private",
+                "participants::info::show::administrative",
                 "participants::account::create",
                 "participants::account::delete",
+
                 "members::old::show",
                 "members::info::show::basic",
                 "members::info::show::practical",
@@ -105,9 +108,11 @@ class CreateRoleCapabilityTable extends Migration
             ]],
             ["role" => "president", "capabilities" => [
                 "participants::info::show::basic",
+                "participants::info::show::private",
                 "participants::info::show::practical",
                 "participants::account::create",
                 "participants::account::delete",
+
                 "members::old::show",
                 "members::info::show::basic",
                 "members::info::show::practical",

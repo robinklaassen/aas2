@@ -43,7 +43,7 @@ class MemberPolicy
      */
     public function create(User $user)
     {
-        return $user->hasCapability("members::create");
+        return $user->hasCapability("members::account::create");
     }
 
     /**
@@ -68,7 +68,7 @@ class MemberPolicy
      */
     public function delete(User $user, Member $member)
     {
-        return $user->hasCapability("members::delete");
+        return $user->hasCapability("members::account::delete");
     }
 
     /**
@@ -80,7 +80,7 @@ class MemberPolicy
      */
     public function restore(User $user, Member $member)
     {
-        return $user->hasCapability("members::create");
+        return $user->hasCapability("members::account::create");
     }
 
     /**
@@ -92,7 +92,7 @@ class MemberPolicy
      */
     public function forceDelete(User $user, Member $member)
     {
-        return $user->hasCapability("members::delete");
+        return $user->hasCapability("members::account::delete");
     }
 
     public function listOldMembers(User $user)

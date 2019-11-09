@@ -18,8 +18,7 @@ class ParticipantPolicy
      */
     public function viewAny(User $user)
     {
-        // todo
-        return true;
+        return $user->hasCapability("participants::info::show::basic");
     }
 
     /**
@@ -31,8 +30,7 @@ class ParticipantPolicy
      */
     public function view(User $user, Participant $participant)
     {
-        // todo
-        return true;
+        return $user->hasCapability("participants::info::show::basic") || $this->ifSelf("participants::info::show::self", $user, $participant);
     }
 
     /**
@@ -43,8 +41,7 @@ class ParticipantPolicy
      */
     public function create(User $user)
     {
-        // todo
-        return true;
+        return $user->hasCapability("participants::account::create");
     }
 
     /**
@@ -56,8 +53,7 @@ class ParticipantPolicy
      */
     public function update(User $user, Participant $participant)
     {
-        // todo
-        return true;
+        return $user->hasCapability("participants::info::edit::basic") || $this->ifSelf("participants::info::edit::self", $user, $participant);
     }
 
     /**
@@ -69,8 +65,7 @@ class ParticipantPolicy
      */
     public function delete(User $user, Participant $participant)
     {
-        // todo
-        return true;
+        return $user->hasCapability("participants::account::delete");
     }
 
     /**
@@ -82,8 +77,7 @@ class ParticipantPolicy
      */
     public function restore(User $user, Participant $participant)
     {
-        // todo
-        return true;
+        return $user->hasCapability("participants::account::create");
     }
 
     /**
@@ -95,7 +89,36 @@ class ParticipantPolicy
      */
     public function forceDelete(User $user, Participant $participant)
     {
-        // todo
-        return true;
+        return $user->hasCapability("participants::account::delete");
+    }
+
+    public function showFinance(User $user, Participant $participant)
+    {
+        return $user->hasCapability("participants::info::show::finance") || $this->ifSelf("participants::info::show::self", $user, $participant);
+    }
+
+    public function showPrivate(User $user, Participant $participant)
+    {
+        return $user->hasCapability("participants::info::show::private") || $this->ifSelf("participants::info::show::self", $user, $participant);
+    }
+
+    public function showPractical(User $user, Participant $participant)
+    {
+        return $user->hasCapability("participants::info::show::practical") || $this->ifSelf("participants::info::show::self", $user, $participant);
+    }
+
+    public function showAdministrative(User $user, Participant $participant)
+    {
+        return $user->hasCapability("participants::info::show::administrative");
+    }
+
+    public function changePassword(User $user, $participant)
+    {
+        return $user->hasCapability("participants::info::edit::administrative") ||  $user->profile == $participant;
+    }
+
+    private function ifSelf(string $capability, User $user, Participant $participant): bool
+    {
+        return $user->hasCapability($capability) && $user->profile == $participant;
     }
 }
