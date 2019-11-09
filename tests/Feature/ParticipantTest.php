@@ -39,6 +39,7 @@ class ParticipantTest extends TestCase
             ->actingAs($this->user)
             ->get('/participants/1')
             ->assertStatus(200)
-            ->assertSee('Bewerken', 'Elst', 'Meikamp');
+            ->assertSee('Elst', 'Meikamp')
+            ->assertDontSee('Bewerken'); // doesn't have edit right
     }
 }
