@@ -15,8 +15,8 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	use Authenticatable, CanResetPassword, Notifiable;
 
 	/**
-	 * Generates a new new password used for users
-	 * Exclude look alike characters: O 0 o, i I L l, V v W w, s S 5
+	 * Generates a new new password for users
+	 * Excludes lookalike characters: O 0 o, i I L l, V v W w, s S 5
 	 */
 	public static function generatePassword(): string
 	{
