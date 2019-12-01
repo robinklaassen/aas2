@@ -16,6 +16,7 @@ use App\Helpers\Payment\EventPayment;
 use App\Facades\Mollie;
 use App\Mail\internal\NewMemberNotification;
 use App\Mail\members\MemberRegistrationConfirmation;
+use App\User;
 use Illuminate\Support\Carbon;
 
 class RegistrationController extends Controller
@@ -115,9 +116,7 @@ class RegistrationController extends Controller
 			$username = $thename . $i;
 		}
 
-		// Create password
-		$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-		$password = substr(str_shuffle($chars), 0, 10);
+		$password = User::generatePassword();
 
 		// Attach account
 		$user = new \App\User;
@@ -244,8 +243,7 @@ class RegistrationController extends Controller
 		}
 
 		// Create password
-		$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-		$password = substr(str_shuffle($chars), 0, 10);
+		$password = User::generatePassword();
 
 		// Attach account
 		$user = new \App\User;

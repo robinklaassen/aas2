@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ResetPassword;
+use App\User;
 
 # The PasswordController handles an external password reset. Changing your password when logged in is handled by the UserController.
 class PasswordController extends Controller
@@ -43,8 +44,7 @@ class PasswordController extends Controller
 			]);
 		} else {
 			// Reset password
-			$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-			$password = substr(str_shuffle($chars), 0, 10);
+			$password = User::generatePassword();
 			$user->password = bcrypt($password);
 			$user->save();
 

@@ -15,6 +15,18 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	use Authenticatable, CanResetPassword, Notifiable;
 
 	/**
+	 * Generates a new new password used for users
+	 * Exclude look alike characters: O 0 o, i I L l, V v W w, s S 5
+	 */
+	public static function generatePassword(): string
+	{
+		$chars = "abcdefghjklmnpqrtuxyzABCDEFGHJKMNPQRTUXYZ2346789";
+		$password = substr(str_shuffle($chars), 0, 10);
+
+		return $password;
+	}
+
+	/**
 	 * The database table used by the model.
 	 *
 	 * @var string
