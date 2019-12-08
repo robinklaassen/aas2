@@ -66,10 +66,12 @@ Mijn profiel
 			@if ($viewType == 'profile')
 			<a data-toggle="modal" data-target="#uploadPic" style="cursor:pointer;">
 				@endif
-				@if (file_exists(public_path().'/img/profile/full/'.$member->id.'.jpg'))
-				<img src="/img/profile/full/{{$member->id}}.jpg" height="300" @if ($viewType=='profile' ) data-toggle="tooltip" title="Klik om te wijzigen" @endif />
+				@if(file_exists(public_path().'/img/profile/full/'.$member->id.'.jpg'))
+				<img src="/img/profile/full/{{$member->id}}.jpg" height="300" @if($viewType=='profile' )
+					data-toggle="tooltip" title="Klik om te wijzigen" @endif />
 				@else
-				<img src="/img/profile/no-profile-{{ ($member->geslacht == 'M') ? 'm' : 'f' }}.gif" height="300" @if ($viewType=='profile' ) data-toggle="tooltip" title="Klik om te wijzigen" @endif />
+				<img src="/img/profile/no-profile-{{ ($member->geslacht == 'M') ? 'm' : 'f' }}.gif" height="300"
+					@if($viewType=='profile' ) data-toggle="tooltip" title="Klik om te wijzigen" @endif />
 				@endif
 				@if ($viewType == 'profile')
 			</a>
@@ -82,7 +84,12 @@ Mijn profiel
 			@can("showPrivate", $member)
 			<tr>
 				<td>Geboortedatum</td>
-				<td>{{ $member->geboortedatum->format('d-m-Y') }}</td>
+				<td>{{ $member->geboortedatum->format('d-m-Y') }}
+					<small>({{ ($member->publish_birthday) ? 'publiek' : 'niet publiek' }}
+						<a
+							title="Gepubliceerde verjaardagen zijn te zien op de startpagina van AAS voor ingelogde leden en op de digitale Anderwijskalender">?</a>)
+					</small>
+				</td>
 			</tr>
 			<tr>
 				<td>Geslacht</td>
@@ -164,7 +171,8 @@ Mijn profiel
 			</div>
 			<div class="col-md-9">
 				<div class="progress" style="height: 2em;">
-					<div class="progress-bar" role="progressbar" style="width: {{ round(($member->points - $ranks[$member->rank]) / ($ranks[$member->rank + 1] - $ranks[$member->rank]) * 100) }}%;">
+					<div class="progress-bar" role="progressbar"
+						style="width: {{ round(($member->points - $ranks[$member->rank]) / ($ranks[$member->rank + 1] - $ranks[$member->rank]) * 100) }}%;">
 					</div>
 				</div>
 			</div>
@@ -365,13 +373,15 @@ Mijn profiel
 				</td>
 				<td>
 					@if ($event->pivot->wissel)
-					<span class="glyphicon glyphicon-hourglass" aria-hidden="true" data-toggle="tooltip" title="Wisselleiding"></span>
+					<span class="glyphicon glyphicon-hourglass" aria-hidden="true" data-toggle="tooltip"
+						title="Wisselleiding"></span>
 					@endif
 				</td>
 				<td>
 					@if (($viewType == 'profile') && ($event->reviews->count() > 0))
 					<a href="{{ url('/profile/reviews', $event->id) }}">
-						<span class="glyphicon glyphicon-dashboard" aria-hidden="true" data-toggle="tooltip" title="Enquetes bekijken"></span>
+						<span class="glyphicon glyphicon-dashboard" aria-hidden="true" data-toggle="tooltip"
+							title="Enquetes bekijken"></span>
 					</a>
 					@endif
 				</td>
@@ -456,7 +466,8 @@ Mijn profiel
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+						aria-hidden="true">&times;</span></button>
 				<h4 class="modal-title" id="myModalLabel">Lijst met acties</h4>
 			</div>
 			<div class="modal-body">
@@ -505,7 +516,8 @@ Mijn profiel
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+						aria-hidden="true">&times;</span></button>
 				<h4 class="modal-title" id="myModalLabel">Ik ben op kamp geweest met:</h4>
 			</div>
 			<div class="modal-body">
@@ -529,7 +541,8 @@ Mijn profiel
 	<div class="modal-dialog">
 		<div class="modal-content">
 			<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+						aria-hidden="true">&times;</span></button>
 				<h4 class="modal-title" id="uploadPicLabel">Nieuwe foto uploaden</h4>
 			</div>
 			{!! Form::open(['url' => 'profile', 'files' => true]) !!}

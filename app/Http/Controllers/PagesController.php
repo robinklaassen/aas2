@@ -27,9 +27,7 @@ class PagesController extends Controller
 			// Member homepage
 
 			// Today's birthdays
-			$bdates = \App\Member::where('soort', '<>', 'oud')->pluck('geboortedatum', 'id')->toArray();
-			$m = date('m');
-			$d = date('d');
+			$bdates = \App\Member::where('soort', '<>', 'oud')->where('publish_birthday', 1)->pluck('geboortedatum', 'id')->toArray();
 			$today = [];
 			foreach ($bdates as $id => $date) {
 				if ($date->isBirthday()) {
@@ -186,7 +184,7 @@ class PagesController extends Controller
 		$aspirantList = \App\Member::where('soort', 'aspirant')->orderBy('voornaam')->get();
 
 		// Verjaardagen
-		$members = \App\Member::whereIn('soort', ['normaal', 'aspirant'])->get();
+		$members = \App\Member::whereIn('soort', ['normaal', 'aspirant'])->where('publish_birthday', 1)->get();
 		foreach ($members as $member) {
 			$datum = $member->geboortedatum;
 			$dag = $datum->day;

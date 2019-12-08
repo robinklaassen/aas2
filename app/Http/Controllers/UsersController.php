@@ -91,8 +91,7 @@ class UsersController extends Controller
 			}
 
 			// Create password
-			$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-			$password = substr(str_shuffle($chars), 0, 10);
+			$password = User::generatePassword();
 
 			// Attach account
 			$user = new \App\User;
@@ -135,8 +134,7 @@ class UsersController extends Controller
 			}
 
 			// Create password
-			$chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-			$password = substr(str_shuffle($chars), 0, 10);
+			$password = User::generatePassword();
 
 			// Attach account
 			$user = new \App\User;
