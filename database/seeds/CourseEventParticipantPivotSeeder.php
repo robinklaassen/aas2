@@ -1,9 +1,11 @@
 <?php
 
+use App\Event;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 
-class CourseEventParticipantPivotSeeder extends Seeder {
+class CourseEventParticipantPivotSeeder extends Seeder
+{
 
 	/**
 	 * Run the database seeds.
@@ -13,7 +15,7 @@ class CourseEventParticipantPivotSeeder extends Seeder {
 	public function run()
 	{
 		DB::table('course_event_participant')->delete();
-		
+
 		DB::table('course_event_participant')->insert([
 			['course_id' => 1, 'event_id' => 1, 'participant_id' => 1, 'info' => 'Moeilijkheden zijn vooral grammatica en spelling'],
 			['course_id' => 2, 'event_id' => 1, 'participant_id' => 1, 'info' => 'Ai kent spiek inglies ferrie wel'],
@@ -21,7 +23,10 @@ class CourseEventParticipantPivotSeeder extends Seeder {
 			['course_id' => 3, 'event_id' => 1, 'participant_id' => 2, 'info' => 'Bij het volgende vak staat niets'],
 			['course_id' => 4, 'event_id' => 1, 'participant_id' => 2, 'info' => null]
 		]);
-		
-	}
 
+		// $event = DB::table("events")->where("code", "N8990")->first();
+		// DB::table('course_event_participant')->insert([
+		// 	['course_id' => 1, 'event_id' => $event->id, 'participant_id' => 1, 'info' => 'Je ne compres pas']
+		// ]);
+	}
 }

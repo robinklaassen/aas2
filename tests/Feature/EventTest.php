@@ -41,4 +41,14 @@ class EventTest extends TestCase
             ->assertStatus(200)
             ->assertSee('Bewerken', 'Venlo', 'Ranonkeltje', 'Vakdekking', 'Annabelle');
     }
+
+    public function testExport()
+    {
+        // exports  event 1, it has participants with and without courses
+        $response = $this
+            ->actingAs($this->user)
+            ->get('/events/1/export')
+            ->assertStatus(200)
+            ->assertHeader("Content-Type", "application/pdf");
+    }
 }
