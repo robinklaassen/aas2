@@ -4,7 +4,8 @@ use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 use App\Participant;
 
-class EventParticipantPivotSeeder extends Seeder {
+class EventParticipantPivotSeeder extends Seeder
+{
 
 	/**
 	 * Run the database seeds.
@@ -14,14 +15,17 @@ class EventParticipantPivotSeeder extends Seeder {
 	public function run()
 	{
 		DB::table('event_participant')->delete();
-		
+
 		$participant = Participant::find(1);
 		$participant->events()->attach(1);
-		
+
 		$participant = Participant::find(2);
 		$participant->events()->attach(1);
 		$participant->events()->updateExistingPivot(1, ['datum_betaling' => '2015-05-22']);
-		
-	}
 
+		// This participant is added without courses.
+		$participant = Participant::find(3);
+		$participant->events()->attach(1);
+		$participant->events()->updateExistingPivot(1, ['datum_betaling' => '2019-12-01']);
+	}
 }
