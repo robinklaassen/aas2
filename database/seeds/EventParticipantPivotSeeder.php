@@ -23,14 +23,9 @@ class EventParticipantPivotSeeder extends Seeder
 		$participant->events()->attach(1);
 		$participant->events()->updateExistingPivot(1, ['datum_betaling' => '2015-05-22']);
 
-
-		// $event = DB::table("events")->where("code", "N8990")->first();
+		// This participant is added without courses.
 		$participant = Participant::find(3);
 		$participant->events()->attach(1);
 		$participant->events()->updateExistingPivot(1, ['datum_betaling' => '2019-12-01']);
-
-		$participant = Participant::find(1);
-		$participant->events()->attach(1);
-		$participant->events()->updateExistingPivot(1, ['datum_betaling' => '2019-11-01']);
 	}
 }
