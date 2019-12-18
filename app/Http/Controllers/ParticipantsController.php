@@ -16,7 +16,7 @@ class ParticipantsController extends Controller
 
 	public function __construct()
 	{
-		$this->authorizeResource(Participant::class, 'participant');		
+		$this->authorizeResource(Participant::class, 'participant');
 	}
 
 	/**
@@ -114,6 +114,7 @@ class ParticipantsController extends Controller
 
 	public function delete(Participant $participant)
 	{
+		$this->authorize("delete", $participant);
 		return view('participants.delete', compact('participant'));
 	}
 

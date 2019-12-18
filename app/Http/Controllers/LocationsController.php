@@ -97,6 +97,7 @@ class LocationsController extends Controller
 
 	public function delete(Location $location)
 	{
+		$this->authorize("delete", $location);
 		return view('locations.delete', compact('location'));
 	}
 

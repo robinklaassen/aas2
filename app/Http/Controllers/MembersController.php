@@ -83,6 +83,7 @@ class MembersController extends Controller
 	# Delete confirmation
 	public function delete(Member $member)
 	{
+		$this->authorize("delete", $member);
 		return view('members.delete', compact('member'));
 	}
 
