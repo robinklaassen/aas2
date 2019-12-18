@@ -2,6 +2,7 @@ BEGIN:VCALENDAR
 METHOD:PUBLISH
 VERSION:2.0
 PRODID:-//Vereniging Anderwijs//Evenementenkalender//NL
+@can("viewAny", $event)
 @foreach ($events as $event)
 BEGIN:VEVENT
 SUMMARY:{{$event->naam}}
@@ -12,6 +13,7 @@ DTEND;TZID=Europe/Amsterdam:{{$event->datum_eind->format("Ymd")}}T{{str_replace(
 LOCATION:{{$event->location->adres}}, {{$event->location->postcode}} {{$event->location->plaats}}
 END:VEVENT
 @endforeach
+@endcan
 @foreach ($members as $member)
 BEGIN:VEVENT
 SUMMARY:Verjaardag {{$member->volnaam}}

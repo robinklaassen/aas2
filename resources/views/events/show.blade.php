@@ -168,7 +168,7 @@
 				@endif
 				@endcan
 
-				@can("editMembers", $event)
+				@can("editEventParticipation", $member)
 				@if ($event->type == 'kamp')
 				<td><a href="{{ url('/events', [$event->id, 'edit-member', $member->id]) }}"><span class="glyphicon glyphicon-edit" aria-hidden="true" data-toggle="tooltip" title="Koppeling bewerken"></span></a></td>
 				@endif
@@ -189,7 +189,6 @@
 
 @if ($event->type == 'kamp' && $showAll)
 <hr />
-@if (\Auth::user()->is_admin)
 <div style="display: flex; flex-wrap: wrap; justify-content: flex-end;">
 	@can("subjectCheck", $event)
 	<a role="button" class="btn btn-info btn-sm" href="{{ url('/events', [$event->id, 'check', 'all']) }}"><span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span> Vakdekking</a>
@@ -216,11 +215,6 @@
 	<a role="button" class="btn btn-primary btn-sm" href="{{ url('/events', [$event->id, 'export']) }}"><span class="glyphicon glyphicon-file" aria-hidden="true"></span> Export</a>
 	@endcan
 </div>
-@elseif (\Auth::user()->profile_type == "App\Member")
-<div style="display: flex; flex-wrap: wrap; justify-content: flex-end;">
-	<a role="button" class="btn btn-primary btn-sm" href="{{ url('/enquete',[$event->id]) }}"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span> Enqu&ecirc;te</a>
-</div>
-@endif
 
 @can('viewParticipants', $event)
 <table class="table table-hover" id="participantsTable">

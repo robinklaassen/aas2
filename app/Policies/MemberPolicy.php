@@ -175,8 +175,13 @@ class MemberPolicy
         return $user->hasCapability("members::info::edit::special");
     }
 
+    public function editEventParticipation(User $user, Member $member)
+    {
+        return $this->ifSelf("members::info::edit::self", $user, $member) || $user->hasCapability("members::event::edit");
+    }
+
     private function ifSelf(string $capability, User $user, Member $member): bool
     {
-        return $user->hasCapability($capability) && $user->profile == $member;
+        return $user->hasCapability($capability) && $user->profile_type === "App\Member" && $user->profile_id === $member->id;
     }
 }

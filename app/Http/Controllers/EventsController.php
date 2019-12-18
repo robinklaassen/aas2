@@ -164,15 +164,19 @@ class EventsController extends Controller
 	}
 
 	// Edit a member from this event
-	public function editMember(Event $event, $member_id)
+	public function editMember(Event $event, Member $member)
 	{
-		$member = $event->members->find($member_id);
+		$this->authorize("editEventParticipation", $member);
+		$member = $event->members()->findOrFail($member->id);
+
 		return view('events.editMember', compact('event', 'member'));
 	}
 
-	public function editMemberSave(Event $event, $member_id, Request $request)
+	public function editMemberSave(Event $event, Member $member, Request $request)
 	{
-		$event->members()->updateExistingPivot($member_id, ['wissel' => $request->wissel, 'wissel_datum_start' => $request->wissel_datum_start, 'wissel_datum_eind' => $request->wissel_datum_eind]);
+		$this->authorize("editEventParticipation", $member);
+		$event->members()->updateExistingPivot($member, ['wissel' => $request->wissel, 'wissel_datum_start' => $request->wissel_datum_start, 'wissel_datum_eind' => $request->wissel_datum_eind]);
+
 
 		return redirect('events/' . $event->id)->with([
 			'flash_message' => 'De leiding op dit evenement is bewerkt!'
@@ -249,7 +253,7 @@ class EventsController extends Controller
 	# Export participant info for this camp
 	public function export(Event $event)
 	{
-		$this->authorize("exportParticipants");
+		$this->authorize("exportParticipants", $event);
 
 		// Redirect if not camp
 		if ($event->type != 'kamp') {
@@ -307,6 +311,8 @@ class EventsController extends Controller
 	# Check course coverage (vakdekking)
 	public function check(Event $event, $type)
 	{
+		$this->authorize("subjectCheck", $event);
+
 		// Redirect if not camp
 		if ($event->type != 'kamp') {
 			return redirect('events');
@@ -398,6 +404,7 @@ class EventsController extends Controller
 	# Calculate camp budget
 	public function budget(Event $event)
 	{
+		$this->authorize("budget", $event);
 
 		$data = new \StdClass();
 
@@ -439,6 +446,7 @@ class EventsController extends Controller
 	# Output email addresses as plain text list
 	public function email(Event $event)
 	{
+		$this->authorize("mailing", $event);
 
 		$email['members'] = "";
 		$num['members'] = 0;
@@ -476,12 +484,14 @@ class EventsController extends Controller
 	# Send all participants on camp (confirm)
 	public function sendConfirm(Event $event)
 	{
+		$this->authorize("placement", $event);
 		return view('events.sendAll', compact('event'));
 	}
 
 	# Send all participants on camp (execute)
 	public function send(Event $event)
 	{
+		$this->authorize("placement", $event);
 
 		$ids = $event->participants()->pluck('id')->toArray();
 
@@ -497,12 +507,14 @@ class EventsController extends Controller
 	# Generate payments overview
 	public function payments(Event $event)
 	{
+		$this->authorize("paymentoverview", $event);
 		return Excel::download(new EventPaymentReport($event), date('Y-m-d') . ' Betalingsoverzicht ' . $event->code . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
 	}
 
 	# Generate night register
 	public function nightRegister(Event $event)
 	{
+		$this->authorize("nightRegister", $event);
 		return Excel::download(new EventNightRegisterReport($event), date('Y-m-d') . ' Nachtregister ' . $event->location->plaats . ' ' . $event->code . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
 	}
 
