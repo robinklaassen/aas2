@@ -74,6 +74,7 @@ class CreateCapabilitiesTable extends Migration
             ["event::show::participating", "Evenement - Inzien - Deelnemend"],
             ["event::show::basic", "Evenement - Inzien - basic"],
             ["event::show::advanced", "Evenement - Inzien - uitgebreid"],
+            ["event::show::review", "Evenement - Inzien - reviews"],
 
             ["event::edit::basic", "Evenement - Aanpassen - basic"],
             ["event::edit::advanced", "Evenement - Aanpassen - uitgebreid"],

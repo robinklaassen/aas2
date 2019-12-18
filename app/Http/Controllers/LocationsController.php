@@ -112,6 +112,7 @@ class LocationsController extends Controller
 	# Enqueteresultaten
 	public function reviews(Location $location, Event $event)
 	{
+		$this->authorize("viewReviewResults", $event);
 		// Repeatedly set options and create charts using a helper function based on LavaCharts
 
 		$options = [

@@ -211,6 +211,8 @@ class MembersController extends Controller
 	# Search members by coverage
 	public function search(\Illuminate\Http\Request $request)
 	{
+		$this->authorize("viewAny", \App\Member::class);
+
 		$courses = $request->input('courses', []);
 		$vog = $request->input('vog', 0);
 

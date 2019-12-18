@@ -61,7 +61,7 @@ class EventPolicy
      */
     public function delete(User $user, Event $event)
     {
-        return $user->hasCapability("event::delete") ;
+        return $user->hasCapability("event::delete");
     }
 
     public function viewParticipants(User $user, Event $event)
@@ -69,7 +69,8 @@ class EventPolicy
         return $user->hasCapability("participants::info::show::advanced") || ($user->hasCapability("event::show::participating") && $event->hasUser($user));
     }
 
-    public function viewParticipantsAdvanced(User $user, Event $event) {
+    public function viewParticipantsAdvanced(User $user, Event $event)
+    {
         return $user->hasCapability("participants::info::show::administrative");
     }
 
@@ -78,22 +79,22 @@ class EventPolicy
         return $user->hasCapability("participants::info::export");
     }
 
-    public function showBasic(User $user, Event $event) 
+    public function showBasic(User $user, Event $event)
     {
         return $user->hasCapability("event::show::basic") || ($user->hasCapability("event::show::participating") && $event->hasUser($user));
     }
 
-    public function showAdvanced(User $user, Event $event) 
+    public function showAdvanced(User $user, Event $event)
     {
         return $user->hasCapability("event::show::advanced");
     }
 
-    public function editBasic(User $user, Event $event) 
+    public function editBasic(User $user, Event $event)
     {
         return $user->hasCapability("event::edit::basic");
     }
 
-    public function editAdvanced(User $user, Event $event) 
+    public function editAdvanced(User $user, Event $event)
     {
         return $user->hasCapability("event::edit::advanced");
     }
@@ -138,4 +139,9 @@ class EventPolicy
         return $user->isMember() && $event->hasUser($user);
     }
 
+    public function viewReviewResults(User $user, Event $event)
+    {
+        // TODO: check if the user participated
+        return $user->hasCapability("event::show::review");
+    }
 }

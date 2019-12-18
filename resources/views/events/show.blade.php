@@ -28,9 +28,11 @@
 			@can("editAdvanced", $event)
 			<a class="btn btn-info" type="button" href="{{ url('/events', [$event->id, 'join-members']) }}" style="margin-top:21px;">Leden koppelen</a>
 			@endcan
+			@can("viewReviewResults", $event)
 			@if ($event->reviews->count() > 0)
 			<a class="btn btn-success" type="button" href="{{ url('/events', [$event->id, 'reviews']) }}" style="margin-top:21px;">Resultaten enquêtes <span class="badge">{{ $event->reviews->count() }}</span></a>
 			@endif
+			@endcan
 			@can("delete")
 			<a class="btn btn-danger" type="button" href="{{ url('/events', [$event->id, 'delete']) }}" style="margin-top:21px;">Verwijderen</a>
 			@endcan

@@ -549,16 +549,17 @@ class EventsController extends Controller
 	public function reviews(Event $event)
 	{
 
-		// Auth: either have to be admin or have gone on this camp as a member
-		if (!(\Auth::user()->is_admin)) {
+		$this->authorize("viewReviewResults", $event);
+		// // Auth: either have to be admin or have gone on this camp as a member
+		// if (!(\Auth::user()->is_admin)) {
 
-			$is_member = (\Auth::user()->profile_type == "App\Member");
-			$on_camp = \Auth::user()->profile->events->contains("id", $event->id);
+		// 	$is_member = (\Auth::user()->profile_type == "App\Member");
+		// 	$on_camp = \Auth::user()->profile->events->contains("id", $event->id);
 
-			if (!($is_member && $on_camp)) {
-				return redirect()->back();
-			}
-		}
+		// 	if (!($is_member && $on_camp)) {
+		// 		return redirect()->back();
+		// 	}
+		// }
 
 		// Repeatedly set options and create charts using a helper function based on LavaCharts
 

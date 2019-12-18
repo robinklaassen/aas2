@@ -86,6 +86,7 @@ class CreateRoleCapabilityTable extends Migration
 
                 "event::show::basic",
                 "event::show::advanced",
+                "event::show::review",
                 "event::edit::basic",
                 "event::edit::advanced",
                 "event::subjectcheck",
@@ -206,6 +207,7 @@ class CreateRoleCapabilityTable extends Migration
                 "members::account::delete",
                 "event::show::basic",
                 "event::show::advanced",
+                "event::show::review",
                 "event::edit::basic",
                 "event::edit::advanced",
                 "event::subjectcheck",
@@ -241,6 +243,7 @@ class CreateRoleCapabilityTable extends Migration
                 "members::oud::show",
                 "event::show::basic",
                 "event::show::advanced",
+                "event::show::review",
                 "event::subjectcheck",
                 "event::mailing",
                 "event::paymentoverview",
