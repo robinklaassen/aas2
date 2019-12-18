@@ -3,15 +3,14 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
-use App\Comment;
-use App\Policies\CommentPolicy;
+
 
 
 class AuthServiceProvider extends ServiceProvider
 {
 
     protected $policies = [
-        Comment::class => CommentPolicy::class,
+        'App\Comment' => 'App\Policies\CommentPolicy',
         'App\Event' => 'App\Policies\EventPolicy',
         'App\Member' => 'App\Policies\MemberPolicy',
         'App\Location' => 'App\Policies\LocationPolicy',

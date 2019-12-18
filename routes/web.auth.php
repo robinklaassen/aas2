@@ -29,12 +29,12 @@ Route::delete('profile/remove-course/{course}', 'ProfileController@removeCourse'
 Route::get('profile/reviews/{event}', 'ProfileController@reviews');
 
 # Comments
-Route::get("comments/{comment}/delete", "CommentsController@delete")->middleware('can:delete,comment');
-Route::delete("comments/{comment}", "CommentsController@destroy")->middleware('can:delete,comment');
-Route::get("comments/{comment}/edit", "CommentsController@edit")->middleware('can:update,comment');
-Route::patch("comments/{comment}", "CommentsController@update")->middleware('can:update,comment');
-Route::get("comments/new", "CommentsController@create")->middleware('can:create,App\Comment');
-Route::post("comments", "CommentsController@store")->middleware('can:create,App\Comment');
+Route::get("comments/{comment}/delete", "CommentsController@delete");
+Route::delete("comments/{comment}", "CommentsController@destroy");
+Route::get("comments/{comment}/edit", "CommentsController@edit");
+Route::patch("comments/{comment}", "CommentsController@update");
+Route::get("comments/new", "CommentsController@create");
+Route::post("comments", "CommentsController@store");
 
 # Other
 Route::get("accept-privacy", "PagesController@showAcceptPrivacyStatement")->name("show-accept-privacy");

@@ -9,6 +9,12 @@ use Illuminate\Http\Request;
 class CommentsController extends Controller
 {
 
+
+    public function __construct()
+    {
+        $this->authorizeResource(Comment::class, 'comment');
+    }
+
     public function edit(Comment $comment, Request $request)
     {
         $origin = $request->query("origin", "/");
@@ -56,6 +62,7 @@ class CommentsController extends Controller
 
     public function delete(Comment $comment, Request $request)
     {
+        $this->authorize("delete", $comment);
         return view('comments.delete', compact('comment'));
     }
 
