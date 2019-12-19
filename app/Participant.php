@@ -81,4 +81,9 @@ class Participant extends Model
 	{
 		return $this::INCOME_DISCOUNT_TABLE[$this->inkomen];
 	}
+
+	public function isUser(User $user)
+	{
+		return $this->user()->id === $user->id;
+	}
 }

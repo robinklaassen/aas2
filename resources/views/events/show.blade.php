@@ -306,9 +306,12 @@
 
 		<td>{{ ($participant->pivot->geplaatst) ? 'Ja' : 'Nee' }}</td>
 
-		@can("editMembers", $event)
+		@can("editParticipant", $event, $participant)
 		<td><a href="{{ url('/events', [$event->id, 'edit-participant', $participant->id]) }}"><span class="glyphicon glyphicon-edit" aria-hidden="true" data-toggle="tooltip" title="Inschrijving bewerken"></span></a></td>
 		<td><a href="{{ url('/events', [$event->id, 'move-participant', $participant->id]) }}"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true" data-toggle="tooltip" title="Verplaatsen naar ander kamp"></span></a></td>
+		@endcan
+		
+		@can("deleteParticipant", $event, $participant)
 		<td><a href="{{ url('/events', [$event->id, 'remove-participant', $participant->id]) }}"><span class="glyphicon glyphicon-remove" aria-hidden="true" data-toggle="tooltip" title="Inschrijving verwijderen"></span></a></td>
 		@endcan
 		

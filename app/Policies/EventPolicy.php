@@ -4,6 +4,8 @@ namespace App\Policies;
 
 use App\User;
 use App\Event;
+use App\Member;
+use App\Participant;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Carbon\Carbon;
 
@@ -99,10 +101,36 @@ class EventPolicy
         return $user->hasCapability("event::edit::advanced");
     }
 
-    public function editMembers(User $user, Event $event)
+    public function addMembers(User $user, Event $event)
     {
-        return $user->hasCapability("event::edit::advanced");
+        return $user->hasCapability("event::add::members");
     }
+
+    public function editMember(User $user, Event $event, Member $member)
+    {
+        return $user->hasCapability("event::edit::members") || ($member->isUser($user) && $user->hasCapability("members::info::edit::self"));
+    }
+
+    public function deleteMember(User $user, Event $event, Member $member)
+    {
+        return $user->hasCapability("event::delete::participants");
+    }
+
+    public function addParticipants(User $user, Event $event)
+    {
+        return $user->hasCapability("event::add::participants");
+    }
+
+    public function editParticipant(User $user, Event $event, Participant $participant)
+    {
+        return $user->hasCapability("event::edit::participants") || ($participant->isUser($user) && $user->hasCapability("participants::info::edit::self"));
+    }
+
+    public function deleteParticipant(User $user, Event $event, Participant $participant)
+    {
+        return $user->hasCapability("event::delete::participants");
+    }
+
 
     public function subjectCheck(User $user, Event $event)
     {

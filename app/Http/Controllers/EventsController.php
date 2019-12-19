@@ -540,6 +540,7 @@ class EventsController extends Controller
 	# Join members to event (form)
 	public function joinMembers(Event $event)
 	{
+		$this->authorize("editMembers", $event);
 		$members = Member::where('soort', '<>', 'oud')->orderBy('voornaam')->get();
 
 		return view('events.join-members', compact('event', 'members'));
@@ -548,6 +549,7 @@ class EventsController extends Controller
 	# Join members to event (save)
 	public function joinMembersSave(Event $event, Request $request)
 	{
+		$this->authorize("editMembers", $event);
 		foreach ($request->members as $member_id) {
 			$event->members()->attach($member_id);
 		}
