@@ -37,7 +37,8 @@ class CreateCapabilitiesTable extends Migration
 
             ["participants::info::export", "Deelnemersinfo - Export - Leiding"],
 
-            ["participants::event::edit", "Deelnemerdeelname wijzigen"],
+            //  Todo move this to event, see sheet for event::(edit|add|delete):participants rights
+            // ["participants::event::edit", "Deelnemerdeelname wijzigen"],
 
             ["participants::account::create", "Deelnemersaccount - Aanmaken"],
             ["participants::account::delete", "Deelnemersaccount - Verwijderen"],
@@ -60,7 +61,8 @@ class CreateCapabilitiesTable extends Migration
             ["members::info::edit::practical", "Leidinginfo - Aanpassen - Praktisch"],
             ["members::info::edit::administrative", "Leidinginfo - Aanpassen - Administratie"],
 
-            ["members::event::edit", "Leidingdeelname wijzigen"],
+            //  Todo move this to event, see sheet for event::(edit|add|delete):members rights
+            // ["members::event::edit", "Leidingdeelname wijzigen"],
 
             ["members::account::create", "Leidingsaccount - Aanmaken"],
             ["members::account::delete", "Leidingsaccount - Verwijderen"],
