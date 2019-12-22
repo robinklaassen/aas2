@@ -118,6 +118,11 @@ class ParticipantPolicy
         return $user->hasCapability("participants::info::edit::administrative") ||  $this->ifSelf("participants::info::edit::self", $user, $participant);
     }
 
+    public function onCamp(User $user, Participant $participant)
+    {
+        return $user->can("addParticipant", \App\Event::class) ||  $this->ifSelf("participants::info::edit::self", $user, $participant);
+    }
+
     private function ifSelf(string $capability, User $user, Participant $participant): bool
     {
         return $user->hasCapability($capability) && $user->profile_type === "App\Participant" && $user->profile_id === $participant->id;

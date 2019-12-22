@@ -67,6 +67,10 @@ class CreateRoleCapabilityTable extends Migration
                 "participants::info::show::administrative",
                 "participants::account::create",
                 "participants::account::delete",
+                "participants::info::edit::basic",
+                "participants::info::edit::private",
+                "participants::info::edit::practical",
+                "participants::info::edit::administrative",
 
                 "members::old::show",
                 "members::info::show::basic",

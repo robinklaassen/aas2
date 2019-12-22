@@ -20,17 +20,19 @@ Mijn profiel
 		<p class="text-right">
 			@if ($viewType == 'profile')
 			
-			@can("editBasic", $participant)
+			@can("update", $participant)
 			<a class="btn btn-primary" type="button" href="{{ url('/profile/edit') }}" style="margin-top:21px;">Bewerken</a>
+			@endcan
+			@can("addParticipants", \App\Event::class)
 			<a class="btn btn-info" type="button" href="{{ url('/profile/on-camp') }}" style="margin-top:21px;">Op kamp</a>
 			@endcan
 
-			@can("editPassword", $participant)
+			@can("changePassword", $participant)
 			<a class="btn btn-warning" type="button" href="{{ url('/profile/password') }}" style="margin-top:21px;">Nieuw wachtwoord</a>
 			@endcan
 			@elseif ($viewType == 'admin')
 
-			@can("editBasic", $participant)
+			@can("update", $participant)
 			<a class="btn btn-primary" type="button" href="{{ url('/participants', [$participant->id, 'edit']) }}" style="margin-top:21px;">Bewerken</a>
 			<a class="btn btn-info" type="button" href="{{ url('/participants', [$participant->id, 'on-event']) }}" style="margin-top:21px;">Op kamp</a>
 			@endcan

@@ -175,6 +175,11 @@ class MemberPolicy
         return $user->hasCapability("members::info::edit::special");
     }
 
+    public function OnCamp(User $user, Member $member)
+    {
+        return $user->can("addMember", \App\Event::class) ||  $this->ifSelf("members::info::edit::self", $user, $member);
+    }
+
     private function ifSelf(string $capability, User $user, Member $member): bool
     {
         return $user->hasCapability($capability) && $user->profile_type === "App\Member" && $user->profile_id === $member->id;
