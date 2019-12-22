@@ -530,6 +530,7 @@ class EventsController extends Controller
 	# Generate iCal stream of events
 	public function iCalendar()
 	{
+
 		$events = Event::orderBy('datum_start', 'asc')->where('openbaar', 1)->get();
 		$members = Member::whereIn('soort', ['normaal', 'aspirant'])->where('publish_birthday', 1)->get();
 
