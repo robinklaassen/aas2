@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use Mollie\Mollie_API_Client;
 use Carbon\Carbon;
 use App\Event;
+use App\Review;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Arr;
 
@@ -23,7 +22,7 @@ class PagesController extends Controller
 	# Homepage
 	public function home()
 	{
-		if (\Auth::user()->profile_type == "App\Member") {
+		if (Auth::user()->profile_type == "App\Member") {
 			// Member homepage
 
 			// Today's birthdays
@@ -39,7 +38,7 @@ class PagesController extends Controller
 				$member = \App\Member::find($id);
 				$member->leeftijd = date('Y') - $member->geboortedatum->year;
 				$member->ikjarig = false;
-				if (\Auth::user()->profile->id == $id) {
+				if (Auth::user()->profile->id == $id) {
 					$member->ikjarig = true;
 				}
 				$today[$k] = $member;
@@ -60,9 +59,9 @@ class PagesController extends Controller
 				// Admins and members who go on camp can click the link
 				$klikbaar = false;
 
-				$events = \Auth::user()->profile->events->pluck('id');
+				$events = Auth::user()->profile->events->pluck('id');
 
-				if (\Auth::user()->is_admin) {
+				if (Auth::user()->is_admin) {
 					$klikbaar = true;
 				} else if ($events->contains($id)) {
 					$klikbaar = true;
@@ -97,7 +96,7 @@ class PagesController extends Controller
 			// Participant homepage
 
 			// Birthday check!
-			$bday = \Auth::user()->profile->geboortedatum;
+			$bday = Auth::user()->profile->geboortedatum;
 			$congrats = ($bday->isBirthday()) ? 1 : 0;
 
 			return view('pages.home-participant', compact('congrats'));
@@ -123,7 +122,7 @@ class PagesController extends Controller
 			'overig' => 'overige activiteiten'
 		];
 		foreach ($types as $type => $typename) {
-			$most = \DB::table('event_member')
+			$most = DB::table('event_member')
 				->selectRaw('count(event_id) as count, member_id')
 				->join('events', 'event_member.event_id', '=', 'events.id')
 				->where('type', $type)
@@ -161,6 +160,9 @@ class PagesController extends Controller
 		}
 		$stats['average_days_reg'] = round(array_sum($days_arr) / count($days_arr));
 
+		$stats['average_review_score'] = round(Review::pluck('cijfer')->avg(), 2);
+		$stats['num_reviews'] = Review::all()->count();
+
 		// Ranonkeltje
 		$ranonkeltjePapier = \App\Member::whereIn('ranonkeltje', ['papier', 'beide'])->orderBy('voornaam', 'asc')->get();
 		$ranonkeltjeDigitaal = \App\Member::whereIn('ranonkeltje', ['digitaal', 'beide'])->orderBy('voornaam', 'asc')->get();
@@ -170,7 +172,7 @@ class PagesController extends Controller
 		$oldTrainerList = \App\Member::where('ervaren_trainer', 1)->where('soort', 'oud')->orderBy('voornaam', 'asc')->get();
 
 		// Niet betaalde deelnemers
-		$unpaidList = \DB::table('event_participant')
+		$unpaidList = DB::table('event_participant')
 			->select('participant_id', 'voornaam', 'tussenvoegsel', 'achternaam', 'event_id', 'naam', 'code', 'event_participant.created_at as inschrijving')
 			->where('datum_betaling', '0000-00-00')
 			->join('events', 'event_participant.event_id', '=', 'events.id')
