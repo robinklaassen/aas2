@@ -118,21 +118,6 @@ class ParticipantPolicy
         return $user->hasCapability("participants::info::edit::administrative") ||  $this->ifSelf("participants::info::edit::self", $user, $participant);
     }
 
-    public function addEventParticipation(User $user, Participant $participant)
-    {
-        return $user->hasCapability("participants::event::edit")  ||  $this->ifSelf("participants::info::edit::self", $user, $participant);
-    }
-
-    public function editEventParticipation(User $user, Participant $participant, Event $event)
-    {
-        return $user->hasCapability("participants::event::edit")  ||  $this->ifSelf("participants::info::edit::self", $user, $participant);
-    }
-
-    public function deleteEventParticipation(User $user, Participant $participant, Event $event)
-    {
-        return $user->hasCapability("participants::event::delete");
-    }
-
     private function ifSelf(string $capability, User $user, Participant $participant): bool
     {
         return $user->hasCapability($capability) && $user->profile_type === "App\Participant" && $user->profile_id === $participant->id;

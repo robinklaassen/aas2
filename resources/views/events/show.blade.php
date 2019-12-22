@@ -154,9 +154,9 @@
 				</td>
 				@endif
 
-				@can("showAdministrative", $member)
 				<td>{{ $member->pivot->created_at->format('d-m-Y') }}</td>
-
+				
+				@can("showAdministrative", $member)
 				@if ($event->type=='kamp')
 				<td>
 					@if ($member->vog)
@@ -168,13 +168,21 @@
 				@endif
 				@endcan
 
-				@can("editEventParticipation", $member)
 				@if ($event->type == 'kamp')
+				@can("editMember", [$event, $member])
 				<td><a href="{{ url('/events', [$event->id, 'edit-member', $member->id]) }}"><span class="glyphicon glyphicon-edit" aria-hidden="true" data-toggle="tooltip" title="Koppeling bewerken"></span></a></td>
+				@else
+				<td></td>
+				@endcan		
+				
 				@endif
 
+				@can("removeMember", [$event, $member])
 				<td><a href="{{ url('/events', [$event->id, 'remove-member', $member->id]) }}"><span class="glyphicon glyphicon-remove" aria-hidden="true" data-toggle="tooltip" title="Koppeling verwijderen"></a></td>
-				@endcan		
+				@else
+				<td></td>
+				@endcan
+			
 			</tr>
 			@endforeach
 		</table>
@@ -233,9 +241,6 @@
 			<th>Betaling</th>
 			<th>Inkomensverklaring</th>
 			<th>Geplaatst</th>
-			<th></th>
-			<th></th>
-			<th></th>
 			@else
 			<th>Naam</th>
 			<th>Niveau</th>
@@ -243,6 +248,9 @@
 			<th>Woonplaats</th>
 			<th>Aanmelding</th>
 			@endcan
+			<th></th>
+			<th></th>
+			<th></th>
 		</tr>
 	</thead>
 	@endif
@@ -303,19 +311,23 @@
 			<span class="glyphicon glyphicon-ok" aria-hidden="true" data-toggle="tooltip" title="Inkomensverklaring niet nodig"></span>
 			@endunless
 		</td>
-
 		<td>{{ ($participant->pivot->geplaatst) ? 'Ja' : 'Nee' }}</td>
-
-		@can("editParticipant", $event, $participant)
+		@endcan
+		
+		@can("editParticipant", [$event, $participant])
 		<td><a href="{{ url('/events', [$event->id, 'edit-participant', $participant->id]) }}"><span class="glyphicon glyphicon-edit" aria-hidden="true" data-toggle="tooltip" title="Inschrijving bewerken"></span></a></td>
 		<td><a href="{{ url('/events', [$event->id, 'move-participant', $participant->id]) }}"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true" data-toggle="tooltip" title="Verplaatsen naar ander kamp"></span></a></td>
+		@else
+		<td></td>
+		<td></td>
 		@endcan
 		
-		@can("deleteParticipant", $event, $participant)
+		@can("removeParticipant", [$event, $participant])
 		<td><a href="{{ url('/events', [$event->id, 'remove-participant', $participant->id]) }}"><span class="glyphicon glyphicon-remove" aria-hidden="true" data-toggle="tooltip" title="Inschrijving verwijderen"></span></a></td>
+		@else
+		<td></td>
 		@endcan
 		
-		@endcan
 	</tr>
 	@endif
 	@endforeach

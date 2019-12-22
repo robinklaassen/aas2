@@ -103,32 +103,32 @@ class EventPolicy
 
     public function addMembers(User $user, Event $event)
     {
-        return $user->hasCapability("event::add::members");
+        return $user->hasCapability("event::members::add");
     }
 
     public function editMember(User $user, Event $event, Member $member)
     {
-        return $user->hasCapability("event::edit::members") || ($member->isUser($user) && $user->hasCapability("members::info::edit::self"));
+        return $user->hasCapability("event::members::edit") || ($member->isUser($user) && $user->hasCapability("members::info::edit::self"));
     }
 
-    public function deleteMember(User $user, Event $event, Member $member)
+    public function removeMember(User $user, Event $event, Member $member)
     {
-        return $user->hasCapability("event::delete::participants");
+        return $user->hasCapability("event::members::remove");
     }
 
     public function addParticipants(User $user, Event $event)
     {
-        return $user->hasCapability("event::add::participants");
+        return $user->hasCapability("event::participants::add");
     }
 
     public function editParticipant(User $user, Event $event, Participant $participant)
     {
-        return $user->hasCapability("event::edit::participants") || ($participant->isUser($user) && $user->hasCapability("participants::info::edit::self"));
+        return $user->hasCapability("event::participants::edit") || ($participant->isUser($user) && $user->hasCapability("participants::info::edit::self"));
     }
 
-    public function deleteParticipant(User $user, Event $event, Participant $participant)
+    public function removeParticipant(User $user, Event $event, Participant $participant)
     {
-        return $user->hasCapability("event::delete::participants");
+        return $user->hasCapability("event::participants::remove");
     }
 
 

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Event;
 use App\Member;
+use App\Participant;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Exports\EventNightRegisterReport;
@@ -166,7 +167,7 @@ class EventsController extends Controller
 	// Edit a member from this event
 	public function editMember(Event $event, Member $member)
 	{
-		$this->authorize("editEventParticipation", $member);
+		$this->authorize("editMember", $event, $member);
 		$member = $event->members()->findOrFail($member->id);
 
 		return view('events.editMember', compact('event', 'member'));
@@ -174,7 +175,7 @@ class EventsController extends Controller
 
 	public function editMemberSave(Event $event, Member $member, Request $request)
 	{
-		$this->authorize("editEventParticipation", $member);
+		$this->authorize("editMember", $event, $member);
 		$event->members()->updateExistingPivot($member, ['wissel' => $request->wissel, 'wissel_datum_start' => $request->wissel_datum_start, 'wissel_datum_eind' => $request->wissel_datum_eind]);
 
 
@@ -184,26 +185,30 @@ class EventsController extends Controller
 	}
 
 	// Remove (detach) a member from this event
-	public function removeMemberConfirm(Event $event, $member_id)
+	public function removeMemberConfirm(Event $event, Member $member)
 	{
-		$member = \App\Member::findOrFail($member_id);
+		$this->authorize("removeMember", $event, $member);
 		return view('events.removeMember', compact('event', 'member'));
 	}
 
-	public function removeMember(Event $event, $member_id)
+	public function removeMember(Event $event, Member $member)
 	{
-		$event->members()->detach($member_id);
+		$this->authorize("removeMember", $event, $member);
+
+		$event->members()->detach($member->id);
 		return redirect('events/' . $event->id)->with([
 			'flash_message' => 'Het lid is van dit evenement verwijderd!'
 		]);
 	}
 
 	// Edit a participant from this event (date of payment and course info)
-	public function editParticipant(Event $event, $participant_id)
+	public function editParticipant(Event $event, Participant $participant)
 	{
-		$participant = $event->participants->find($participant_id);
+		$this->authorize("editParticipant", $event, $participant);
 
-		$result = \DB::table('course_event_participant')->select('course_id', 'info')->whereParticipantIdAndEventId($participant_id, $event->id)->get();
+		$participant = $event->participants->find($participant->id);
+
+		$result = \DB::table('course_event_participant')->select('course_id', 'info')->whereParticipantIdAndEventId($participant->id, $event->id)->get();
 		$retrieved_courses = [];
 		foreach ($result as $row) {
 			$retrieved_courses[] = ['id' => $row->course_id, 'info' => $row->info];
@@ -212,19 +217,21 @@ class EventsController extends Controller
 		return view('events.editParticipant', compact('event', 'participant', 'retrieved_courses'));
 	}
 
-	public function editParticipantSave(Event $event, $participant_id, Request $request)
+	public function editParticipantSave(Event $event, Participant $participant, Request $request)
 	{
+		$this->authorize("editParticipant", $event, $participant);
+
 		// Update datum_betaling and geplaatst in pivot table
-		$event->participants()->updateExistingPivot($participant_id, ['datum_betaling' => $request->datum_betaling, 'geplaatst' => $request->geplaatst]);
+		$event->participants()->updateExistingPivot($participant->id, ['datum_betaling' => $request->datum_betaling, 'geplaatst' => $request->geplaatst]);
 
 		// Delete all current courses
-		\DB::table('course_event_participant')->whereParticipantIdAndEventId($participant_id, $event->id)->delete();
+		\DB::table('course_event_participant')->whereParticipantIdAndEventId($participant->id, $event->id)->delete();
 
 		// Insert new courses
 		foreach (array_unique($request->vak) as $key => $course_id) {
 			if ($course_id) {
 				\DB::table('course_event_participant')->insert(
-					['course_id' => $course_id, 'event_id' => $event->id, 'participant_id' => $participant_id, 'info' => $request->vakinfo[$key]]
+					['course_id' => $course_id, 'event_id' => $event->id, 'participant_id' => $participant->id, 'info' => $request->vakinfo[$key]]
 				);
 			}
 		}
@@ -235,16 +242,18 @@ class EventsController extends Controller
 	}
 
 	// Remove (detach) a participant from this event
-	public function removeParticipantConfirm(Event $event, $participant_id)
+	public function removeParticipantConfirm(Event $event, Participant $participant)
 	{
-		$participant = \App\Participant::findOrFail($participant_id);
+		$this->authorize("removeParticipant", $event, $participant);
 		return view('events.removeParticipant', compact('event', 'participant'));
 	}
 
-	public function removeParticipant(Event $event, $participant_id)
+	public function removeParticipant(Event $event, Participant $participant)
 	{
-		$event->participants()->detach($participant_id);
-		\DB::table('course_event_participant')->where('event_id', $event->id)->where('participant_id', $participant_id)->delete();
+		$this->authorize("removeParticipant", $event, $participant);
+
+		$event->participants()->detach($participant->id);
+		\DB::table('course_event_participant')->where('event_id', $event->id)->where('participant_id', $participant->id)->delete();
 		return redirect('events/' . $event->id)->with([
 			'flash_message' => 'De deelnemer is van dit evenement verwijderd!'
 		]);
@@ -540,7 +549,7 @@ class EventsController extends Controller
 	# Join members to event (form)
 	public function joinMembers(Event $event)
 	{
-		$this->authorize("editMembers", $event);
+		$this->authorize("addMembers", $event);
 		$members = Member::where('soort', '<>', 'oud')->orderBy('voornaam')->get();
 
 		return view('events.join-members', compact('event', 'members'));
@@ -549,7 +558,7 @@ class EventsController extends Controller
 	# Join members to event (save)
 	public function joinMembersSave(Event $event, Request $request)
 	{
-		$this->authorize("editMembers", $event);
+		$this->authorize("addMembers", $event);
 		foreach ($request->members as $member_id) {
 			$event->members()->attach($member_id);
 		}

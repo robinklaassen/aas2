@@ -37,8 +37,6 @@ class CreateCapabilitiesTable extends Migration
 
             ["participants::info::export", "Deelnemersinfo - Export - Leiding"],
 
-            //  Todo move this to event, see sheet for event::(edit|add|delete):participants rights
-            // ["participants::event::edit", "Deelnemerdeelname wijzigen"],
 
             ["participants::account::create", "Deelnemersaccount - Aanmaken"],
             ["participants::account::delete", "Deelnemersaccount - Verwijderen"],
@@ -60,9 +58,6 @@ class CreateCapabilitiesTable extends Migration
             ["members::info::edit::finance", "Leidinginfo - Aanpassen - Financieel"],
             ["members::info::edit::practical", "Leidinginfo - Aanpassen - Praktisch"],
             ["members::info::edit::administrative", "Leidinginfo - Aanpassen - Administratie"],
-
-            //  Todo move this to event, see sheet for event::(edit|add|delete):members rights
-            // ["members::event::edit", "Leidingdeelname wijzigen"],
 
             ["members::account::create", "Leidingsaccount - Aanmaken"],
             ["members::account::delete", "Leidingsaccount - Verwijderen"],
@@ -94,6 +89,14 @@ class CreateCapabilitiesTable extends Migration
             ["event::paymentoverview", "Evenement - knop - Betalingsoverzicht"],
             ["event::placement", "Evenement - knop - Plaatsen"],
             ["event::nightregister", "Evenement - knop - Nachtregister"],
+
+            ["event::members::add", "Evenement - Leiding - Toevoegen"],
+            ["event::members::edit", "Evenement - Leiding - Aanpassen"],
+            ["event::members::remove", "Evenement - Leiding - Verwijderen"],
+
+            ["event::participants::add", "Evenement - Deelnemers - Toevoegen"],
+            ["event::participants::edit", "Evenement - Deelnemers - Wijzigen"],
+            ["event::participants::remove", "Evenement - Deelnemers - Verwijderen"],
 
             // roles
             ["roles::info", "Rollen - Inzien"],
