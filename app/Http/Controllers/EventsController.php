@@ -167,7 +167,7 @@ class EventsController extends Controller
 	// Edit a member from this event
 	public function editMember(Event $event, Member $member)
 	{
-		$this->authorize("editMember", $event, $member);
+		$this->authorize("editMember", [$event, $member]);
 		$member = $event->members()->findOrFail($member->id);
 
 		return view('events.editMember', compact('event', 'member'));
@@ -175,7 +175,7 @@ class EventsController extends Controller
 
 	public function editMemberSave(Event $event, Member $member, Request $request)
 	{
-		$this->authorize("editMember", $event, $member);
+		$this->authorize("editMember", [$event, $member]);
 		$event->members()->updateExistingPivot($member, ['wissel' => $request->wissel, 'wissel_datum_start' => $request->wissel_datum_start, 'wissel_datum_eind' => $request->wissel_datum_eind]);
 
 
@@ -187,13 +187,13 @@ class EventsController extends Controller
 	// Remove (detach) a member from this event
 	public function removeMemberConfirm(Event $event, Member $member)
 	{
-		$this->authorize("removeMember", $event, $member);
+		$this->authorize("removeMember", [$event, $member]);
 		return view('events.removeMember', compact('event', 'member'));
 	}
 
 	public function removeMember(Event $event, Member $member)
 	{
-		$this->authorize("removeMember", $event, $member);
+		$this->authorize("removeMember", [$event, $member]);
 
 		$event->members()->detach($member->id);
 		return redirect('events/' . $event->id)->with([
@@ -204,7 +204,7 @@ class EventsController extends Controller
 	// Edit a participant from this event (date of payment and course info)
 	public function editParticipant(Event $event, Participant $participant)
 	{
-		$this->authorize("editParticipant", $event, $participant);
+		$this->authorize("editParticipant", [$event, $participant]);
 
 		$participant = $event->participants->find($participant->id);
 
@@ -219,7 +219,7 @@ class EventsController extends Controller
 
 	public function editParticipantSave(Event $event, Participant $participant, Request $request)
 	{
-		$this->authorize("editParticipant", $event, $participant);
+		$this->authorize("editParticipant", [$event, $participant]);
 
 		// Update datum_betaling and geplaatst in pivot table
 		$event->participants()->updateExistingPivot($participant->id, ['datum_betaling' => $request->datum_betaling, 'geplaatst' => $request->geplaatst]);
@@ -244,13 +244,13 @@ class EventsController extends Controller
 	// Remove (detach) a participant from this event
 	public function removeParticipantConfirm(Event $event, Participant $participant)
 	{
-		$this->authorize("removeParticipant", $event, $participant);
+		$this->authorize("removeParticipant", [$event, $participant]);
 		return view('events.removeParticipant', compact('event', 'participant'));
 	}
 
 	public function removeParticipant(Event $event, Participant $participant)
 	{
-		$this->authorize("removeParticipant", $event, $participant);
+		$this->authorize("removeParticipant", [$event, $participant]);
 
 		$event->participants()->detach($participant->id);
 		\DB::table('course_event_participant')->where('event_id', $event->id)->where('participant_id', $participant->id)->delete();
