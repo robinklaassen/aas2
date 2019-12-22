@@ -130,12 +130,14 @@ class ParticipantsController extends Controller
 	# Send participant on event (form)
 	public function onEvent(Participant $participant)
 	{
+		$this->authorize("onEvent", $participant);
 		return view('participants.onEvent', compact('participant'));
 	}
 
 	# Send participant on event (update database)
 	public function onEventSave(Participant $participant, Request $request)
 	{
+		$this->authorize("onEvent", $participant);
 		// Sync 'event_participant' pivot table
 		$status = $participant->events()->sync([$request->selected_event], false);
 		if ($status['attached'] != []) {

@@ -101,7 +101,7 @@ class EventPolicy
         return $user->hasCapability("event::edit::advanced");
     }
 
-    public function addMembers(User $user, Event $event)
+    public function addMember(User $user)
     {
         return $user->hasCapability("event::members::add");
     }
@@ -116,7 +116,7 @@ class EventPolicy
         return $user->hasCapability("event::members::remove");
     }
 
-    public function addParticipants(User $user, Event $event)
+    public function addParticipants(User $user)
     {
         return $user->hasCapability("event::participants::add");
     }

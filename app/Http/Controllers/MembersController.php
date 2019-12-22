@@ -100,12 +100,14 @@ class MembersController extends Controller
 	# Send member on event (form)
 	public function onEvent(Member $member)
 	{
+		$this->authorize("onEvent", $member);
 		return view('members.onEvent', compact('member'));
 	}
 
 	# Send member on event (update database)
 	public function onEventSave(Member $member)
 	{
+		$this->authorize("onEvent", $member);
 		// Should not be attached if the member has already been sent on this event! That's why we use sync instead of attach, without detaching (second parameter false)
 		$status = $member->events()->sync([\Request::input('selected_event')], false);
 		$message = ($status['attached'] == []) ? 'Het lid is reeds op dit evenement gestuurd!' : 'Het lid is op evenement gestuurd!';

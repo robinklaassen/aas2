@@ -23,7 +23,7 @@ Mijn profiel
 			@can("editBasic", $member)
 			<a class="btn btn-primary" type="button" href="{{ url('/profile/edit') }}" style="margin-top:21px;">Bewerken</a>
 			@endcan
-			@can("onCamp", $member)
+			@can("onEvent", $member)
 			<a class="btn btn-info" type="button" href="{{ url('/profile/on-camp') }}" style="margin-top:21px;">Op kamp</a>
 			@endcan
 			@can("editFinance", $member)
@@ -38,7 +38,7 @@ Mijn profiel
 			@can("update", $member)
 			<a class="btn btn-primary" type="button" href="{{ url('/members', [$member->id, 'edit']) }}" style="margin-top:21px;">Bewerken</a>
 			@endcan
-			@can("onCamp", $member)
+			@can("onEvent", $member)
 			<a class="btn btn-info" type="button" href="{{ url('/members', [$member->id, 'on-event']) }}" style="margin-top:21px;">Op evenement</a>
 			@endcan
 			@can("delete", $member)

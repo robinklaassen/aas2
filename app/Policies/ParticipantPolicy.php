@@ -118,7 +118,7 @@ class ParticipantPolicy
         return $user->hasCapability("participants::info::edit::administrative") ||  $this->ifSelf("participants::info::edit::self", $user, $participant);
     }
 
-    public function onCamp(User $user, Participant $participant)
+    public function onEvent(User $user, Participant $participant)
     {
         return $user->can("addParticipant", \App\Event::class) ||  $this->ifSelf("participants::info::edit::self", $user, $participant);
     }
