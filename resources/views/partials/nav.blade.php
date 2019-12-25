@@ -27,8 +27,10 @@
 						<li class="{{ substr(Request::path(),0,9) == 'locations' ? 'active' : ''}}"><a href="{{ url('/locations') }}">Locaties</a></li>
 						@endcan
 
-						@if (Auth::user()->is_admin)
+						@can("viewAny", \App\Course::class)
 						<li class="{{ substr(Request::path(),0,7) == 'courses' ? 'active' : ''}}"><a href="{{ url('/courses') }}">Vakken</a></li>
+						@endcan
+						@if (Auth::user()->is_admin)
 						<li class="{{ substr(Request::path(),0,7) == 'actions' ? 'active' : ''}}"><a href="{{ url('/actions') }}">Punten</a></li>
 						<li class="{{ substr(Request::path(),0,5) == 'lists' ? 'active' : ''}}"><a href="{{ url('/lists') }}">Lijsten</a></li>
 						<li class="{{ substr(Request::path(),0,6) == 'graphs' ? 'active' : ''}}"><a href="{{ url('/graphs') }}">Grafieken</a></li>

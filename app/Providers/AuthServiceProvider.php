@@ -15,6 +15,8 @@ class AuthServiceProvider extends ServiceProvider
         'App\Member' => 'App\Policies\MemberPolicy',
         'App\Location' => 'App\Policies\LocationPolicy',
         'App\Role' => 'App\Policies\RolePolicy',
+        'App\Course' => 'App\Policies\CoursePolicy',
+
     ];
 
     public function boot()
