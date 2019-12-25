@@ -112,6 +112,10 @@ class CreateCapabilitiesTable extends Migration
             ["locations::create", "Locaties - Aanmaken"],
             ["locations::delete", "Locaties - Verwijderen"],
 
+            ["courses::show", "Courses - Inzien"],
+            ["courses::create", "Courses - Aanmaken"],
+            ["courses::edit", "Courses - Aanpassen"],
+            ["courses::delete", "Courses - Verwijderen"]
 
         ];
         $all = array_map(function ($i) {

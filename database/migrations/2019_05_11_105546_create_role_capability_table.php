@@ -58,7 +58,13 @@ class CreateRoleCapabilityTable extends Migration
                 "locations::edit::basic",
                 "locations::edit::advanced",
                 "locations::create",
-                "locations::delete"
+                "locations::delete",
+
+                "courses::show",
+                "courses::create",
+                "courses::edit",
+                "courses::delete"
+
             ]],
             ["role" => "board", "capabilities" => [
                 "participants::info::show::basic",
