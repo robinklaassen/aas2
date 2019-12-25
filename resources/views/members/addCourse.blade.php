@@ -9,7 +9,7 @@
 <!-- Dit is het formulier voor het toevoegen van een nieuw vak aan een lid -->
 
 @if ($viewType == 'admin')
-	<h1>Vak toevoegen aan {{ $member->voornaam }}</h1>
+	<h1>Vak toevoegen voor {{ $member->voornaam }}</h1>
 @elseif ($viewType == 'profile')
 	<h1>Nieuw vak toevoegen</h1>
 @endif

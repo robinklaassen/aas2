@@ -290,15 +290,9 @@ Mijn profiel
 					<div style="float:left;">Vakken</div>
 					@can("editPractical", $member)
 					<div style="float:right;">
-						@if ($viewType == 'admin')
-						<a href="{{ url('/members', [$member->id, 'add-course']) }}">
+						<a href="{{ $viewType == 'admin' ? url('/members', [$member->id, 'add-course']) : url('/profile', ['add-course'])  }}">
 							<span class="glyphicon glyphicon-plus" aria-hidden="true" data-toggle="tooltip" title="Vak toevoegen"></span>
 						</a>
-						@else
-						<a href="{{ url('/profile', ['add-course']) }}">
-							<span class="glyphicon glyphicon-plus" aria-hidden="true" data-toggle="tooltip" title="Vak toevoegen"></span>						
-						</a>
-						@endif
 						@endcan
 					</div>
 				</div>

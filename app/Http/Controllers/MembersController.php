@@ -119,6 +119,7 @@ class MembersController extends Controller
 	# Add course for this member (form)
 	public function addCourse(Member $member)
 	{
+		$this->authorize("editPractical", $member);
 		$viewType = 'admin';
 		return view('members.addCourse', compact('member', 'viewType'));
 	}
@@ -126,6 +127,7 @@ class MembersController extends Controller
 	# Add course for this member (update database)
 	public function addCourseSave(Member $member)
 	{
+		$this->authorize("editPractical", $member);
 		$status = $member->courses()->sync([\Request::input('selected_course')], false);
 		if ($status['attached'] == []) {
 			$message = 'Vak reeds toegevoegd!';
@@ -141,6 +143,7 @@ class MembersController extends Controller
 	# Edit course for this member (form)
 	public function editCourse(Member $member, $course_id)
 	{
+		$this->authorize("editPractical", $member);
 		$course = $member->courses->find($course_id);
 		$viewType = 'admin';
 		return view('members.editCourse', compact('member', 'course', 'viewType'));
@@ -149,6 +152,7 @@ class MembersController extends Controller
 	# Edit course for this member (update database)
 	public function editCourseSave(Member $member, $course_id)
 	{
+		$this->authorize("editPractical", $member);
 		$member->courses()->updateExistingPivot($course_id, ['klas' => \Request::input('klas')]);
 		return redirect('members/' . $member->id)->with([
 			'flash_message' => 'Het vak is bewerkt!'
@@ -158,6 +162,7 @@ class MembersController extends Controller
 	# Remove (detach) a course from this member (form)
 	public function removeCourseConfirm(Member $member, $course_id)
 	{
+		$this->authorize("editPractical", $member);
 		$course = \App\Course::findOrFail($course_id);
 		$viewType = 'admin';
 		return view('members.removeCourse', compact('member', 'course', 'viewType'));
@@ -166,6 +171,7 @@ class MembersController extends Controller
 	# Remove (detach) a course from this member (update database)
 	public function removeCourse(Member $member, $course_id)
 	{
+		$this->authorize("editPractical", $member);
 		$member->courses()->detach($course_id);
 		return redirect('members/' . $member->id)->with([
 			'flash_message' => 'Het vak is van dit lid verwijderd!'
@@ -181,6 +187,7 @@ class MembersController extends Controller
 	# Show all members on a Google Map
 	public function map()
 	{
+		$this->authorize("viewAny", Member::class);
 		$members = Member::where('soort', '<>', 'oud')->orderBy('soort')->get();
 
 		// Create member data for map
