@@ -23,7 +23,7 @@ Mijn profiel
 			@can("update", $participant)
 			<a class="btn btn-primary" type="button" href="{{ url('/profile/edit') }}" style="margin-top:21px;">Bewerken</a>
 			@endcan
-			@can("addParticipants", \App\Event::class)
+			@can("onEvent", $participant)
 			<a class="btn btn-info" type="button" href="{{ url('/profile/on-camp') }}" style="margin-top:21px;">Op kamp</a>
 			@endcan
 
@@ -196,13 +196,11 @@ Mijn profiel
 					@endif
 				</td>
 				<td>
-					@if ($viewType == 'admin')
-					<a href="{{ url('/participants', [$participant->id, 'edit-event', $event->id]) }}">
-						@elseif ($viewType == 'profile')
-						<a href="{{ url('/profile/edit-camp', $event->id) }}">
-							@endif
-							<span class="glyphicon glyphicon-edit" data-toggle="tooltip" title="Vakken bewerken" aria-hidden="true"></span></a>
-				</td>
+					@can("editParticipant", [$event, $participant])
+					<a href="{{ $viewType == 'admin' ? url('/participants', [$participant->id, 'edit-event', $event->id]) : url('/profile/edit-camp', $event->id)}}">
+						<span class="glyphicon glyphicon-edit" data-toggle="tooltip" title="Vakken bewerken" aria-hidden="true"></span></a>
+					@endcan
+					</td>
 			</tr>
 			@empty
 			<tr>

@@ -99,12 +99,6 @@ class EventsController extends Controller
 			$participantIsNew[$participant->id] = ($num == 0) ? 1 : 0;
 		}
 
-		// Check if all information should be shown (not to unplaced participant profile)
-		$showAll = true;
-		if (\Auth::user()->profile_type == "App\Participant" && !($profile->events()->find($event->id)->pivot->geplaatst)) {
-			$showAll = false;
-		}
-
 		// Check number of participants to show
 		if (\Auth::user()->is_admin) {
 			$numberOfParticipants = $event->participants->count();
@@ -112,7 +106,7 @@ class EventsController extends Controller
 			$numberOfParticipants = $event->participants()->wherePivot('geplaatst', 1)->count();
 		}
 
-		return view('events.show', compact('event', 'participantCourseString', 'participantIsNew', 'showAll', 'numberOfParticipants'));
+		return view('events.show', compact('event', 'participantCourseString', 'participantIsNew', 'numberOfParticipants'));
 	}
 
 	/**

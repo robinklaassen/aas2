@@ -123,7 +123,7 @@ class EventPolicy
 
     public function editParticipant(User $user, Event $event, Participant $participant)
     {
-        return $user->hasCapability("event::participants::edit") || ($participant->isUser($user) && $user->hasCapability("participants::info::edit::self"));
+        return $user->hasCapability("event::participants::edit") || ($event->datum_start->gt(Carbon::now()) && $participant->isUser($user) && $user->hasCapability("participants::info::edit::self"));
     }
 
     public function removeParticipant(User $user, Event $event, Participant $participant)

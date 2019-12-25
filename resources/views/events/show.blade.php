@@ -121,7 +121,6 @@
 	</div>
 
 	<!-- Overzicht leiding -->
-	@if ($showAll)
 	<div class="col-md-6">
 		<table class="table table-hover">
 			<caption>
@@ -192,10 +191,9 @@
 			@include('partials.comments', [ 'comments' => $event->comments, 'type' => 'App\Event', 'key' => $event->id ])
 		@endcan
 	</div>
-	@endif
 </div>
 
-@if ($event->type == 'kamp' && $showAll)
+@if ($event->type == 'kamp')
 <hr />
 <div style="display: flex; flex-wrap: wrap; justify-content: flex-end;">
 	@can("subjectCheck", $event)
