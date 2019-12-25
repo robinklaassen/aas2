@@ -18,7 +18,7 @@ class CoursePolicy
      */
     public function viewAny(User $user)
     {
-        return $user->capabilities("courses::show");
+        return $user->hasCapability("courses::show");
     }
 
     /**
@@ -30,7 +30,7 @@ class CoursePolicy
      */
     public function view(User $user, Course $course)
     {
-        return $user->capabilities("courses::show");
+        return $user->hasCapability("courses::show");
     }
 
     /**
@@ -41,7 +41,7 @@ class CoursePolicy
      */
     public function create(User $user)
     {
-        return $user->capabilities("courses::create");
+        return $user->hasCapability("courses::create");
     }
 
     /**
@@ -53,7 +53,7 @@ class CoursePolicy
      */
     public function update(User $user, Course $course)
     {
-        return $user->capabilities("courses::edit");
+        return $user->hasCapability("courses::edit");
     }
 
     /**
@@ -65,7 +65,7 @@ class CoursePolicy
      */
     public function delete(User $user, Course $course)
     {
-        return $user->capabilities("courses::delete");
+        return $user->hasCapability("courses::delete");
     }
 
     /**
@@ -77,7 +77,7 @@ class CoursePolicy
      */
     public function restore(User $user, Course $course)
     {
-        return $user->capabilities("courses::create");
+        return $user->hasCapability("courses::create");
     }
 
     /**
@@ -90,6 +90,6 @@ class CoursePolicy
     public function forceDelete(User $user, Course $course)
     {
 
-        return $user->capabilities("courses::delete");
+        return $user->hasCapability("courses::delete");
     }
 }
