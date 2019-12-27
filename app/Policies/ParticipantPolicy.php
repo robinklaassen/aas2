@@ -113,6 +113,27 @@ class ParticipantPolicy
         return $user->hasCapability("participants::info::show::administrative");
     }
 
+    public function editFinance(User $user, Participant $participant)
+    {
+        return $user->hasCapability("participants::info::edit::finance") || $this->ifSelf("participants::info::show::self", $user, $participant);
+    }
+
+    public function editPrivate(User $user, Participant $participant)
+    {
+        return $user->hasCapability("participants::info::edit::private") || $this->ifSelf("participants::info::show::self", $user, $participant);
+    }
+
+    public function editPractical(User $user, Participant $participant)
+    {
+        return $user->hasCapability("participants::info::edit::practical") || $this->ifSelf("participants::info::show::self", $user, $participant);
+    }
+
+    public function editAdministrative(User $user, Participant $participant)
+    {
+        return $user->hasCapability("participants::info::edit::administrative");
+    }
+
+
     public function changePassword(User $user, Participant $participant)
     {
         return $user->hasCapability("participants::info::edit::administrative") ||  $this->ifSelf("participants::info::edit::self", $user, $participant);

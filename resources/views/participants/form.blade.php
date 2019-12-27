@@ -18,6 +18,7 @@
 </div>
 
 <div class="row">
+	@can("editPrivate", $participant)
 	<div class="col-sm-4 form-group">
 		{!! Form::label('geboortedatum', 'Geboortedatum:') !!}
 		@if (isset($participant))
@@ -46,6 +47,7 @@
 		{!! Form::label('postcode', 'Postcode:') !!}
 		{!! Form::text('postcode', null, ['class' => 'form-control', 'placeholder' => 'Format: 0000 AA']) !!}
 	</div>
+	@endcan
 
 	<div class="col-sm-6 form-group">
 		{!! Form::label('plaats', 'Woonplaats:') !!}
@@ -53,6 +55,7 @@
 	</div>
 </div>
 
+@can("editPrivate", $participant)
 <div class="row">
 	<div class="col-sm-4 form-group">
 		{!! Form::label('telefoon_ouder_vast', 'Telefoonnummer ouder (vast):') !!}
@@ -87,8 +90,10 @@
 		{!! Form::select('mag_gemaild', [1 => 'Ja', 0 => 'Nee'], null, ['class' => 'form-control']) !!}
 	</div>
 </div>
+@endcan
 
 <div class="row">
+	@can("editPractical", $participant)
 	<div class="col-sm-4 form-group">
 		{!! Form::label('school', 'Naam school:') !!}
 		{!! Form::text('school', null, ['class' => 'form-control']) !!}
@@ -103,6 +108,7 @@
 		{!! Form::label('klas', 'Klas:') !!}
 		{!! Form::input('number', 'klas', null, ['class' => 'form-control', 'min' => 1, 'max' => 6, 'step' => 1]) !!}
 	</div>
+	@endcan
 
 	<div class="col-sm-4 form-group">
 		{!! Form::label('hoebij', 'Hoe bij Anderwijs?') !!}
@@ -110,26 +116,25 @@
 	</div>
 </div>
 
-@if ($viewType == 'admin')
-
+@can("editFinance", $participant)
 <div class="row">
 	<div class="col-sm-4 form-group">
 		{!! Form::label('inkomen', 'Bruto maandinkomen:') !!}
 		{!! Form::select('inkomen', ['Meer dan € 3400 (geen korting)', 'Tussen € 2200 en € 3400 (korting: 15%)', 'Tussen € 1300 en € 2200 (korting: 30%)', 'Minder dan € 1300 (korting: 50%)'], null, ['class' => 'form-control']) !!}
 	</div>
 </div>
+@endcan
 
-@endif
-
+@can("editPrivate", $participant)
 <div class="form-group">
 	{!! Form::label('opmerkingen', 'Overige informatie:') !!}
 	{!! Form::textarea('opmerkingen', null, ['class' => 'form-control']) !!}
 </div>
+@endcan
 
-@if ($viewType == 'admin')
 
+@can("editAdministrative", $participant)
 <h3>Administratie</h3>
-
 <div class="row">
 	<div class="col-sm-5 form-group">
 		{!! Form::label('inkomensverklaring', 'Inkomensverklaring binnen op:') !!}
@@ -140,8 +145,7 @@
 		@endif
 	</div>
 </div>
-
-@endif
+@endcan
 
 <div class="form-group">
 	{!! Form::submit('Opslaan', ['class' => 'btn btn-primary form-control']) !!}
