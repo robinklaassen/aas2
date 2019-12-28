@@ -237,6 +237,7 @@ class MembersController extends Controller
 
 		$members = [];
 
+		$level = [];
 		foreach ($allMembers as $member) {
 			$status = true;
 

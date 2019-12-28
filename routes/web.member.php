@@ -65,9 +65,9 @@ Route::get('events/{event}/reviews', 'EventsController@reviews');
 Route::get('events/{event}', 'EventsController@show');
 
 # Member things
+Route::get('members/search', 'MembersController@search');
 Route::resource('members', 'MembersController');
 
-Route::get('members/search', 'MembersController@search');
 Route::get('members/{member}/on-event', 'MembersController@onEvent');
 Route::put('members/{member}/on-event', 'MembersController@onEventSave');
 Route::get('members/{member}/add-course', 'MembersController@addCourse');
@@ -156,4 +156,3 @@ Route::post(
     'UsersController@storeForParticipant'
 );
 Route::resource('users', 'UsersController');
-
