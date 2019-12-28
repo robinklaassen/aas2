@@ -23,7 +23,8 @@ class RegistrationController extends Controller
 {
 
 	public function __construct()
-	{ }
+	{
+	}
 
 	# Member registration form
 	public function registerMember()
@@ -190,9 +191,9 @@ class RegistrationController extends Controller
 	}
 
 	# Participant registration handler
-	public function storeParticipant(Requests\ParticipantRequest $request)
+	public function storeParticipant(Requests\NewParticipantRequest $request)
 	{
-		// Validation done in Request\ParticipantRequest
+		// Validation done in Request\NewParticipantRequest
 		// Additional one-time validation items here
 		$this->validate($request, [
 			'voorwaarden' => 'required',
