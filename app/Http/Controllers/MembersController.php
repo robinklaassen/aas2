@@ -221,6 +221,7 @@ class MembersController extends Controller
 	public function search(\Illuminate\Http\Request $request)
 	{
 		$this->authorize("viewAny", \App\Member::class);
+		$this->authorize("showAnyPractical", \App\Member::class);
 
 		$courses = $request->input('courses', []);
 		$vog = $request->input('vog', 0);
@@ -228,7 +229,11 @@ class MembersController extends Controller
 		$courseList = \App\Course::orderBy('naam')->pluck('naam', 'id')->toArray();
 		$courseCodes = \App\Course::pluck('code', 'id')->toArray();
 
-		$allMembers = \App\Member::where('soort', '<>', 'oud')->where('vog', '>=', $vog)->orderBy('voornaam')->get();
+		$allMembers = \App\Member::where('soort', '<>', 'oud');
+		if (\Auth::user()->can("showAnyAdministrative", \App\Member::class)) {
+			$allMembers = $allMembers->where('vog', '>=', $vog);
+		}
+		$allMembers = $allMembers->orderBy('voornaam')->get();
 
 		$members = [];
 

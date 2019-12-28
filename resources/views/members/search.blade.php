@@ -30,11 +30,13 @@
 	</div>
 	
 	<!--<input type="hidden" name="vog" value="0">-->
+	@can("showAnyAdministrative", \App\Member::class)
 	<div class="checkbox" style="margin: 0 20px;">
 		<label>
 			<input type="checkbox" name="vog" id="vog" value="1" checked> Moet VOG hebben
 		</label>
 	</div>
+	@endcan
 	
 	<button type="submit" class="btn btn-primary">Zoeken</button>
 	
@@ -49,7 +51,9 @@
 		<tr>
 			<th>Naam</th>
 			<th>Soort lid</th>
+			@can("showAnyAdministrative", \App\Member::class)
 			<th>VOG</th>
+			@endcan
 			@foreach ($courses as $course_id)
 				<th>{{$courseCodes[$course_id]}}</th>
 			@endforeach
@@ -60,6 +64,7 @@
 			<tr>
 				<td><a href="{{ url('/members', $member->id) }}">{{$member->voornaam}} {{$member->tussenvoegsel}} {{$member->achternaam}}</a></td>
 				<td>{{$member->soort}}</td>
+				@can("showAnyAdministrative", \App\Member::class)
 				<td>
 					@if ($member->vog)
 						<span style="display:none;">1</span>
@@ -69,6 +74,7 @@
 						<span class="glyphicon glyphicon-remove"></span>
 					@endif
 				</td>
+				@endcan
 				@foreach ($courses as $course_id)
 					<td>{{$level[$member->id][$course_id]}}</td>
 				@endforeach
