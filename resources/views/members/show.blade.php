@@ -20,7 +20,7 @@ Mijn profiel
 		<p class="text-right">
 			@if ($viewType == 'profile')
 
-			@can("editBasic", $member)
+			@can("update", $member)
 			<a class="btn btn-primary" type="button" href="{{ url('/profile/edit') }}" style="margin-top:21px;">Bewerken</a>
 			@endcan
 			@can("onEvent", $member)
@@ -132,7 +132,7 @@ Mijn profiel
 				<td>Rijbewijs?</td>
 				<td>{{ $member->rijbewijs == '1' ? 'Ja' : 'Nee' }}</td>
 			</tr>
-			@can("showPrivate", @member)
+			@can("showPrivate", $member)
 			<tr>
 				<td>Niveau eindexamen</td>
 				<td>{{ $member->eindexamen }}</td>

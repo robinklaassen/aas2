@@ -140,11 +140,6 @@ class MemberPolicy
         return $user->hasCapability("members::info::show::administrative");
     }
 
-    public function editBasic(User $user, Member $member)
-    {
-        return $user->hasCapability("members::info::edit::basic") || $this->ifSelf("members::info::edit::self", $user, $member);
-    }
-
     public function editFinance(User $user, Member $member)
     {
         return $user->hasCapability("members::info::edit::finance") || $this->ifSelf("members::info::edit::self", $user, $member);

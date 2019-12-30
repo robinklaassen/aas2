@@ -22,7 +22,7 @@
 	</div>
 	<div class="col-sm-6">
 		<p class="text-right">
-			@can("editBasic", $event)
+			@can("update", $event)
 			<a class="btn btn-primary" type="button" href="{{ url('/events', [$event->id, 'edit']) }}" style="margin-top:21px;">Bewerken</a>
 			@endcan
 			@can("editAdvanced", $event)

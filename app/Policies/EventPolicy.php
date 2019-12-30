@@ -91,11 +91,6 @@ class EventPolicy
         return $user->hasCapability("event::show::advanced");
     }
 
-    public function editBasic(User $user, Event $event)
-    {
-        return $user->hasCapability("event::edit::basic");
-    }
-
     public function editAdvanced(User $user, Event $event)
     {
         return $user->hasCapability("event::edit::advanced");
