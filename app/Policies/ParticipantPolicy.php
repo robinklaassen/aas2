@@ -93,9 +93,14 @@ class ParticipantPolicy
         return $user->hasCapability("participants::account::delete");
     }
 
+    public function showAnyFinance(User $user)
+    {
+        return $user->hasCapability("participants::info::show::finance");
+    }
+
     public function showFinance(User $user, Participant $participant)
     {
-        return $user->hasCapability("participants::info::show::finance") || $this->ifSelf("participants::info::show::self", $user, $participant);
+        return $this->showAnyFinance($user) || $this->ifSelf("participants::info::show::self", $user, $participant);
     }
 
     public function showPrivate(User $user, Participant $participant)

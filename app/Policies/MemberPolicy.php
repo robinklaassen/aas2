@@ -108,7 +108,7 @@ class MemberPolicy
 
     public function showFinance(User $user, Member $member)
     {
-        return $user->hasCapability("members::info::show::finance") || $this->ifSelf("members::info::show::self", $user, $member);
+        return $this->showAnyFinance($user) || $this->ifSelf("members::info::show::self", $user, $member);
     }
 
     public function showPrivate(User $user, Member $member)
