@@ -53,7 +53,7 @@ Mijn profiel
 <hr />
 
 <!-- Geen KMG waarschuwing -->
-@if ($viewType == 'admin' && $member->kmg == 0)
+@if (\Auth::user()->can("showAdministrative", $member) && $member->kmg == 0)
 <div class="alert alert-dismissible alert-warning alert-important">
 	<button type="button" class="close" data-dismiss="alert">x</button>
 	<p><span class="glyphicon glyphicon-exclamation-sign"></span>&nbsp;&nbsp;Dit lid heeft nog geen KMG gehad!</p>
