@@ -100,6 +100,12 @@ class MemberPolicy
         return $user->hasCapability("members::old::show");
     }
 
+    public function showAnyFinance(User $user)
+    {
+        return $user->hasCapability("members::info::show::finance");
+    }
+
+
     public function showFinance(User $user, Member $member)
     {
         return $user->hasCapability("members::info::show::finance") || $this->ifSelf("members::info::show::self", $user, $member);
@@ -160,9 +166,14 @@ class MemberPolicy
         return $user->hasCapability("members::info::edit::password") || $this->ifSelf("members::info::edit::self", $user, $member);
     }
 
-    public function editAdministrative(User $user, Member $member)
+    public function editAnyAdministrative(User $user)
     {
         return $user->hasCapability("members::info::edit::administrative");
+    }
+
+    public function editAdministrative(User $user, Member $member)
+    {
+        return $this->editAnyAdministrative($user);
     }
 
     public function editSpecial(User $user, Member $member)
