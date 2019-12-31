@@ -19,14 +19,30 @@
 	<li role="presentation"><a href="#kmg" aria-controls="kmg" role="tab" data-toggle="tab">KMG</a></li>
 	@endcan
 	
-	<!-- TODO: which right? -->
+	@if(\Auth::user()->can("viewAny", \App\Member::class) || \Auth::user()->can("viewAny", \App\Participant::class)  )
 	<li role="presentation"><a href="#eventloos" aria-controls="eventloos" role="tab" data-toggle="tab">Kamploos</a></li>
+	@endif
 
+	@can("showAnyPrivate", \App\Participant::class)
 	<li role="presentation"><a href="#mailing" aria-controls="mailing" role="tab" data-toggle="tab">Mailing</a></li>
+	@endcan
+
+	@can("viewAny", \App\Member::class)
 	<li role="presentation"><a href="#aspirant" aria-controls="aspirant" role="tab" data-toggle="tab">Aspiranten</a></li>
+	@endcan
+
+	@can("showAnyPrivate", \App\Member::class)
 	<li role="presentation"><a href="#ranonkeltje" aria-controls="ranonkeltje" role="tab" data-toggle="tab">Ranonkeltje</a></li>
+	@endcan
+
+	@can("showAnySpecial", \App\Member::class)
 	<li role="presentation"><a href="#trainers" aria-controls="trainers" role="tab" data-toggle="tab">Ervaren trainers</a></li>
+	@endcan
+
+	@can("viewAny", \App\Member::class)
 	<li role="presentation"><a href="#verjaardag" aria-controls="verjaardag" role="tab" data-toggle="tab">Verjaardagen</a></li>
+	@endcan
+
 	<li role="presentation"><a href="#more" aria-controls="more" role="tab" data-toggle="tab">Meer lijsten?</a></li>
 </ul>
 
@@ -115,6 +131,7 @@
 		<p>Let op, een inschrijfdatum van 01-01-2000 betekent 'datum onbekend' (inschrijving komt dan van vóór AAS 2.0)</p>
 		
 		<div class="row">
+			@can("viewAny", \App\Member::class)
 			<div class="col-md-6">
 				<h3>Evenementloze leden<br/><small>Exclusief oud-leden</small></h3>
 				@if ($membersWithoutEvents->count())
@@ -140,7 +157,9 @@
 					<p>Geen geregistreerde leden zonder evenement. Super!</p>
 				@endif
 			</div>
+			@endcan
 			
+			@can("viewAny", \App\Participant::class)
 			<div class="col-md-6">
 				<h3>Kamploze deelnemers</h3>
 				@if ($participantsWithoutCamps->count())
@@ -164,11 +183,13 @@
 					<p>Geen geregistreerde deelnemers zonder kamp. Super!</p>
 				@endif
 			</div>
+			@endcan
 			
 		</div>
 		
 	</div>
 	
+	@can("showAnyPrivate", \App\Participant::class)
 	<div role="tabpanel" class="tab-pane" id="mailing">
 		<h3>Mailing aan deelnemers</h3>
 		<p>{{ $participantMailingList->count() }} deelnemers jonger dan 19, die gemaild mogen worden.</p>
@@ -180,7 +201,9 @@
 		<h4>Emailadressen deelnemers</h4>
 		<p>{{ implode(", ", $participantMailingList->pluck('email_deelnemer')->toArray()) }}</p>
 	</div>
+	@endcan
 	
+	@can("viewAny", \App\Member::class)
 	<div role="tabpanel" class="tab-pane" id="aspirant">
 		<h3>Aspirant-leden</h3>
 		<table class="table table-hover">
@@ -206,7 +229,9 @@
 			</tbody>
 		</table>
 	</div>
+	@endcan
 
+	@can("showAnyPrivate", \App\Member::class)
 	<div role="tabpanel" class="tab-pane" id="ranonkeltje">
 		<h3>Leden die Ranonkeltje op papier willen ontvangen ({{ count($ranonkeltjePapier) }})</h3>
 		<table class="table table-hover">
@@ -257,7 +282,9 @@
 		<h4>Mailinglijst</h4>
 		<p>{{ implode(', ', $ranonkeltjeDigitaal->pluck('email_anderwijs')->toArray()) }}</p>
 	</div>
+	@endcan
 	
+	@can("showAnySpecial", \App\Member::class)
 	<div role="tabpanel" class="tab-pane" id="trainers">
 
 		<p>Geeft iemand aan niet meer te willen trainen? Haal dan het vinkje 'ervaren trainer' bij die persoon weg.</p>
@@ -310,7 +337,9 @@
 		<h4>Mailinglijst <small>(denk aan de BCC!)</small></h4>
 		<p>{{ implode(', ', $oldTrainerList->pluck('email')->toArray()) }}</p>
 	</div>
+	@endcan
 	
+	@can("viewAny", \App\Member::class)
 	<div role="tabpanel" class="tab-pane" id="verjaardag">
 		<h3>Verjaardagskalender</h3>
 		<p><i>Normale en aspirantleden</i></p>
@@ -338,9 +367,10 @@
 		</div>
 		</div>
 	</div>
+	@endcan
 	
 	<div role="tabpanel" class="tab-pane" id="more">
-		Wil je een nieuwe lijst in dit rijtje? Vraag het even lief aan Robin. En: hoe specifieker je verzoek, hoe beter.
+		Wil je een nieuwe lijst in dit rijtje? Vraag het even lief aan de <a href="mailto:aasbazen@anderwijs.nl">aasbazen</a>. En: hoe specifieker je verzoek, hoe beter.
 	</div>
 	
 </div>

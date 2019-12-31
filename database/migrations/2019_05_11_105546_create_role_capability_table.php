@@ -85,6 +85,9 @@ class CreateRoleCapabilityTable extends Migration
                 "members::oud::show",
                 "members::info::edit::administrative",
 
+                "members::info::show::special",
+                "members::info::edit::special",
+
                 "members::account::create",
                 "members::account::delete",
 
@@ -299,6 +302,9 @@ class CreateRoleCapabilityTable extends Migration
                 "event::show::basic",
                 "event::show::advanced",
                 "locations::info::basic",
+                "members::info::show::special",
+                "members::info::edit::special",
+
 
                 "comments::create",
                 "comments::show"

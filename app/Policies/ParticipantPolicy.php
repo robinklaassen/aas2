@@ -103,9 +103,14 @@ class ParticipantPolicy
         return $this->showAnyFinance($user) || $this->ifSelf("participants::info::show::self", $user, $participant);
     }
 
+    public function showAnyPrivate(User $user)
+    {
+        return $user->hasCapability("participants::info::show::private");
+    }
+
     public function showPrivate(User $user, Participant $participant)
     {
-        return $user->hasCapability("participants::info::show::private") || $this->ifSelf("participants::info::show::self", $user, $participant);
+        return $this->showAnyPrivate($user) || $this->ifSelf("participants::info::show::self", $user, $participant);
     }
 
     public function showPractical(User $user, Participant $participant)

@@ -141,9 +141,14 @@ class MemberPolicy
         return $user->hasCapability("members::info::show::administrative");
     }
 
+    public function showAnySpecial(User $user)
+    {
+        return $user->hasCapability("members::info::show::special");
+    }
+
     public function showSpecial(User $user, Member $member)
     {
-        return $user->hasCapability("members::info::show::administrative");
+        return $this->showAnySpecial($user);
     }
 
     public function editFinance(User $user, Member $member)

@@ -50,6 +50,8 @@ class CreateCapabilitiesTable extends Migration
             ["members::info::show::finance", "Leidinginfo - Inzien - Financieel"],
             ["members::info::show::practical", "Leidinginfo - Inzien - Praktisch"],
             ["members::info::show::administrative", "Leidinginfo - Inzien - Administratie"],
+            ["members::info::show::special", "Leidinginfo - Inzien - Speciaal"],
+
             ["members::oud::show", "Leidinginfo - Inzien - Oudleden"],
 
             ["members::info::edit::self", "Leidinginfo - Aanpassen - Zelf"],
@@ -58,6 +60,7 @@ class CreateCapabilitiesTable extends Migration
             ["members::info::edit::finance", "Leidinginfo - Aanpassen - Financieel"],
             ["members::info::edit::practical", "Leidinginfo - Aanpassen - Praktisch"],
             ["members::info::edit::administrative", "Leidinginfo - Aanpassen - Administratie"],
+            ["members::info::edit::special", "Leidinginfo - Aanpassen - Speciaal"],
 
             ["members::account::create", "Leidingsaccount - Aanmaken"],
             ["members::account::delete", "Leidingsaccount - Verwijderen"],
