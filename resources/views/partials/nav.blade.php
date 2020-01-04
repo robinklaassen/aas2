@@ -37,9 +37,9 @@
 						@can("viewAny", \App\Participant::class)
 						<li class="{{ substr(Request::path(),0,6) == 'graphs' ? 'active' : ''}}"><a href="{{ url('/graphs') }}">Grafieken</a></li>
 						@endcan
-						@if (Auth::user()->is_admin)
+						@can("viewAny", \App\User::class)
 						<li class="{{ substr(Request::path(),0,5) == 'users' ? 'active' : ''}}"><a href="{{ url('/users') }}">Gebruikers</a></li>
-						@endif
+						@endcan
 
 					</ul>
 					

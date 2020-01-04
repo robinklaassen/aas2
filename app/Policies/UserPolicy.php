@@ -17,20 +17,13 @@ class UserPolicy
      */
     public function viewAny(User $user)
     {
-        return true;
+        return $this->createMember($user) ||
+            $this->createParticipant($user) ||
+            $user->hasCapability("members::account::update") ||
+            $user->hasCapability("members::account::delete") ||
+            $user->hasCapability("participants::account::delete");
     }
 
-    /**
-     * Determine whether the user can view the model.
-     *
-     * @param  \App\User  $user
-     * @param  \App\User  $model
-     * @return mixed
-     */
-    public function view(User $user, User $model)
-    {
-        return true;
-    }
 
     public function create(User $user)
     {
@@ -47,18 +40,6 @@ class UserPolicy
         return $user->hasCapability("members::account::create");
     }
 
-
-    /**
-     * Determine whether the user can update the model.
-     *
-     * @param  \App\User  $user
-     * @param  \App\User  $model
-     * @return mixed
-     */
-    public function update(User $user, User $model)
-    {
-        return true;
-    }
 
     public function changePassword(User $user, User $model)
     {
