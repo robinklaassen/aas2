@@ -14,8 +14,12 @@
 	</div>
 	<div class="col-sm-6">
 		<p class="text-right">
+			@can("createMember", \App\User::class)
 			<a class="btn btn-primary" type="button" href="{{ url('users/create-for-member') }}" style="margin-top:21px;">Nieuwe gebruiker (lid)</a>
+			@endcan
+			@can("createParticipant", \App\User::class)
 			<a class="btn btn-primary" type="button" href="{{ url('users/create-for-participant') }}" style="margin-top:21px;">Nieuwe gebruiker (deelnemer)</a>
+			@endcan
 		</p>
 	</div>
 </div>
@@ -56,13 +60,21 @@
 							<td>{{ ($user->is_admin) ? 'Ja' : 'Nee' }} @if ($user->is_admin == 2) + @endif</td>
 							<td>{{ $user->created_at->toDateString() }}</td>
 							<td>@if ($user->last_login) {{ $user->last_login->toDateString() }} @endif</td>
-							<td><a href="{{ url('/users', [$user->id, 'password']) }}"><span class="glyphicon glyphicon-barcode" data-toggle="tooltip" title="Nieuw wachtwoord"></span></a></td>
+							<td>
+								@can("changePassword", $user)
+								<a href="{{ url('/users', [$user->id, 'password']) }}"><span class="glyphicon glyphicon-barcode" data-toggle="tooltip" title="Nieuw wachtwoord"></span></a>
+								@endcan
+							</td>
 							<td>
 							@if (\Auth::user()->is_admin == 2)
 								<a href="{{ url('/users', [$user->id, 'admin']) }}"><span class="glyphicon glyphicon-king" data-toggle="tooltip" title="Admin-rechten wijzigen"></span></a>
 							@endif
 							</td>
-							<td><a href="{{ url('/users', [$user->id, 'delete']) }}"><span class="glyphicon glyphicon-remove" data-toggle="tooltip" title="Verwijderen"></span></a></td>
+							<td>
+								@can("delete", $user)
+								<a href="{{ url('/users', [$user->id, 'delete']) }}"><span class="glyphicon glyphicon-remove" data-toggle="tooltip" title="Verwijderen"></span></a>
+								@endcan
+							</td>
 						</tr>
 					@endforeach
 				</tbody>
@@ -89,8 +101,16 @@
 							<td><a href="{{ url('/participants', $user->profile->id) }}">{{ $user->profile->voornaam }} {{ $user->profile->tussenvoegsel }} {{ $user->profile->achternaam }}</a></td>
 							<td>{{ $user->created_at->toDateString() }}</td>
 							<td>@if ($user->last_login) {{ $user->last_login->toDateString() }} @endif</td>
-							<td><a href="{{ url('/users', [$user->id, 'password']) }}"><span class="glyphicon glyphicon-barcode" data-toggle="tooltip" title="Nieuw wachtwoord"></span></a></td>
-							<td><a href="{{ url('/users', [$user->id, 'delete']) }}"><span class="glyphicon glyphicon-remove" data-toggle="tooltip" title="Verwijderen"></span></a></td>
+							<td>
+								@can("changePassword", $user)
+								<a href="{{ url('/users', [$user->id, 'password']) }}"><span class="glyphicon glyphicon-barcode" data-toggle="tooltip" title="Nieuw wachtwoord"></span></a>
+								@endcan
+							</td>
+							<td>
+								@can("delete", $user)
+								<a href="{{ url('/users', [$user->id, 'delete']) }}"><span class="glyphicon glyphicon-remove" data-toggle="tooltip" title="Verwijderen"></span></a>
+								@endcan
+							</td>
 						</tr>
 					@endforeach
 				</tbody>

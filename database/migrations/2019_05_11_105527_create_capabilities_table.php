@@ -34,6 +34,7 @@ class CreateCapabilitiesTable extends Migration
             ["participants::info::edit::finance", "Deelnemersinfo - Aanpassen - Financieel"],
             ["participants::info::edit::practical", "Deelnemersinfo - Aanpassen - Praktisch"],
             ["participants::info::edit::administrative", "Deelnemersinfo - Aanpassen - Administratie"],
+            ["participants::info::edit::password", "Deelnemersinfo - Aanpassen - Wachtwoord"],
 
             ["participants::info::export", "Deelnemersinfo - Export - Leiding"],
 
@@ -61,8 +62,10 @@ class CreateCapabilitiesTable extends Migration
             ["members::info::edit::practical", "Leidinginfo - Aanpassen - Praktisch"],
             ["members::info::edit::administrative", "Leidinginfo - Aanpassen - Administratie"],
             ["members::info::edit::special", "Leidinginfo - Aanpassen - Speciaal"],
+            ["members::info::edit::password", "Leidinginfo - Aanpassen - Wachtwoord"],
 
             ["members::account::create", "Leidingsaccount - Aanmaken"],
+            ["members::account::update", "Leidingaccount - Rechten aanpassen"],
             ["members::account::delete", "Leidingsaccount - Verwijderen"],
 
             // comments
