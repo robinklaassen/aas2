@@ -64,5 +64,65 @@ class UserTableSeeder extends Seeder
 
 		$roles = Role::whereIn("tag", ["member"])->get();
 		$user->roles()->sync($roles);
+
+
+		$member = Member::find(5);
+		$user = new User;
+		$user->username = 'penningmeester';
+		$user->password = bcrypt('penningmeester');
+		$user->is_admin = 0;
+		$user->privacy = '2018-06-01';
+		$member->user()->save($user);
+
+		$roles = Role::whereIn("tag", ["member", "treasurer", "board"])->get();
+		$user->roles()->sync($roles);
+
+
+		$member = Member::find(6);
+		$user = new User;
+		$user->username = 'kampci';
+		$user->password = bcrypt('kampci');
+		$user->is_admin = 0;
+		$user->privacy = '2018-06-01';
+		$member->user()->save($user);
+
+		$roles = Role::whereIn("tag", ["kampci"])->get();
+		$user->roles()->sync($roles);
+
+
+		$member = Member::find(7);
+		$user = new User;
+		$user->username = 'aasbaas';
+		$user->password = bcrypt('aasbaas');
+		$user->is_admin = 0;
+		$user->privacy = '2018-06-01';
+		$member->user()->save($user);
+
+		$roles = Role::whereIn("tag", ["member", "aasbaas"])->get();
+		$user->roles()->sync($roles);
+
+
+		$member = Member::find(8);
+		$user = new User;
+		$user->username = 'promoci';
+		$user->password = bcrypt('promoci');
+		$user->is_admin = 0;
+		$user->privacy = '2018-06-01';
+		$member->user()->save($user);
+
+		$roles = Role::whereIn("tag", ["member", "promoci"])->get();
+		$user->roles()->sync($roles);
+
+
+		$member = Member::find(9);
+		$user = new User;
+		$user->username = 'kantoorci';
+		$user->password = bcrypt('kantoorci');
+		$user->is_admin = 0;
+		$user->privacy = '2018-06-01';
+		$member->user()->save($user);
+
+		$roles = Role::whereIn("tag", ["member", "kantoorci"])->get();
+		$user->roles()->sync($roles);
 	}
 }
