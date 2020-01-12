@@ -268,12 +268,17 @@ class EventsController extends Controller
 		$participants = $event->participants()->orderBy('voornaam')->get();
 		$num_participants_placed = $event->participants()->wherePivot('geplaatst', 1)->count();
 
+		foreach ($participants as $row) {
+			$participantCourses[$row->id] = array();
+		}
+
 		// Construct course array
 		$result = \DB::table('course_event_participant')
 			->where('event_id', '=', $event->id)
 			->join('courses', 'course_event_participant.course_id', '=', 'courses.id')
 			->orderBy('courses.naam')
 			->get();
+
 		foreach ($result as $row) {
 			$participantCourses[$row->participant_id][] = ['naam' => $row->naam, 'info' => $row->info];
 		}

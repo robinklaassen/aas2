@@ -1,14 +1,14 @@
 @extends('master')
 
 @section('title')
-	Lijsten
+Lijsten
 @endsection
 
 @section('content')
 
 <h1>Lijsten</h1>
 
-<hr/>
+<hr />
 
 <ul class="nav nav-tabs" role="tablist">
 	<li role="presentation" class="active"><a href="#stats" aria-controls="stats" role="tab" data-toggle="tab">Statistieken</a></li>
@@ -57,8 +57,8 @@
 					<th>Meeste {{ $types[$type] }} ({{ $thing['count'] }})</th>
 					<td>
 						@foreach ($thing['members'] as $m)
-							{{ $m->volnaam }}
-							<br/>
+						{{ $m->volnaam }}
+						<br />
 						@endforeach
 					</td>
 				</tr>
@@ -66,6 +66,10 @@
 				<tr>
 					<th>Gemiddeld aantal dagen tussen registratie en kamp (deelnemers)</th>
 					<td>{{ $stats['average_days_reg'] }}
+				</tr>
+				<tr>
+					<th>Gemiddeld cijfer uit enquêtes</th>
+					<td>{{ $stats['average_review_score'] }} (uit {{ $stats['num_reviews'] }} enquêtes)
 				</tr>
 			</tbody>
 		</table>
@@ -85,16 +89,19 @@
 			</thead>
 			<tbody>
 				@foreach ($unpaidList as $unpaid)
-					<tr>
-						<td><a href="{{ url('/participants', $unpaid->participant_id) }}">{{ $unpaid->voornaam }} {{ $unpaid->tussenvoegsel }} {{ $unpaid->achternaam }}</a></td>
-						<td><a href="{{ url('/events', $unpaid->event_id) }}">{{ $unpaid->naam }} ({{ $unpaid->code }})</a></td>
-						<td>{{ substr($unpaid->inschrijving,8,2).'-'.substr($unpaid->inschrijving,5,2).'-'.substr($unpaid->inschrijving,0,4) }}</td>
-					</tr>
+				<tr>
+					<td><a href="{{ url('/participants', $unpaid->participant_id) }}">{{ $unpaid->voornaam }}
+							{{ $unpaid->tussenvoegsel }} {{ $unpaid->achternaam }}</a></td>
+					<td><a href="{{ url('/events', $unpaid->event_id) }}">{{ $unpaid->naam }} ({{ $unpaid->code }})</a>
+					</td>
+					<td>{{ substr($unpaid->inschrijving,8,2).'-'.substr($unpaid->inschrijving,5,2).'-'.substr($unpaid->inschrijving,0,4) }}
+					</td>
+				</tr>
 				@endforeach
 			</tbody>
 		</table>
 		@else
-			<p>Alle deelnemers hebben betaald. Gelukkig!</p>
+		<p>Alle deelnemers hebben betaald. Gelukkig!</p>
 		@endif
 	</div>
 	@endcan
@@ -112,30 +119,33 @@
 			</thead>
 			<tbody>
 				@foreach ($kmgList as $member)
-					<tr>
-						<td><a href="{{ url('/members', $member->id) }}">{{ $member->voornaam }} {{ $member->tussenvoegsel }} {{ $member->achternaam }}</a></td>
-						<td>{{ $member->soort }}</td>
-					</tr>
+				<tr>
+					<td><a href="{{ url('/members', $member->id) }}">{{ $member->voornaam }}
+							{{ $member->tussenvoegsel }} {{ $member->achternaam }}</a></td>
+					<td>{{ $member->soort }}</td>
+				</tr>
 				@endforeach
 			</tbody>
 		</table>
 		@else
-			<p>Alle leden hebben een KMG gehad. Gelukkig!</p>
+		<p>Alle leden hebben een KMG gehad. Gelukkig!</p>
 		@endif
 	</div>
 	@endcan
 	
 
 	<div role="tabpanel" class="tab-pane" id="eventloos">
-		
-		<p>Let op, een inschrijfdatum van 01-01-2000 betekent 'datum onbekend' (inschrijving komt dan van vóór AAS 2.0)</p>
-		
+
+		<p>
+			Let op, een inschrijfdatum van 01-01-2000 betekent 'datum onbekend' (inschrijving komt dan van vóór AAS 2.0)
+		</p>
+
 		<div class="row">
 			@can("viewAny", \App\Member::class)
 			<div class="col-md-6">
-				<h3>Evenementloze leden<br/><small>Exclusief oud-leden</small></h3>
+				<h3>Evenementloze leden<br /><small>Exclusief oud-leden</small></h3>
 				@if ($membersWithoutEvents->count())
-					<table class="table table-hover">
+				<table class="table table-hover">
 					<thead>
 						<tr>
 							<th>Naam</th>
@@ -145,16 +155,16 @@
 					</thead>
 					<tbody>
 						@foreach ($membersWithoutEvents as $member)
-							<tr>
-								<td><a href="{{ url('/members', $member->id) }}">{{ $member->volnaam }}</a></td>
-								<td>{{ $member->soort }}</td>
-								<td>{{ $member->created_at->format('d-m-Y') }}</td>
-							</tr>
+						<tr>
+							<td><a href="{{ url('/members', $member->id) }}">{{ $member->volnaam }}</a></td>
+							<td>{{ $member->soort }}</td>
+							<td>{{ $member->created_at->format('d-m-Y') }}</td>
+						</tr>
 						@endforeach
 					</tbody>
 				</table>
 				@else
-					<p>Geen geregistreerde leden zonder evenement. Super!</p>
+				<p>Geen geregistreerde leden zonder evenement. Super!</p>
 				@endif
 			</div>
 			@endcan
@@ -163,7 +173,7 @@
 			<div class="col-md-6">
 				<h3>Kamploze deelnemers</h3>
 				@if ($participantsWithoutCamps->count())
-					<table class="table table-hover">
+				<table class="table table-hover">
 					<thead>
 						<tr>
 							<th>Naam</th>
@@ -172,21 +182,21 @@
 					</thead>
 					<tbody>
 						@foreach ($participantsWithoutCamps as $part)
-							<tr>
-								<td><a href="{{ url('/participants', $part->id) }}">{{ $part->volnaam }}</a></td>
-								<td>{{ $part->created_at->format('d-m-Y') }}</td>
-							</tr>
+						<tr>
+							<td><a href="{{ url('/participants', $part->id) }}">{{ $part->volnaam }}</a></td>
+							<td>{{ $part->created_at->format('d-m-Y') }}</td>
+						</tr>
 						@endforeach
 					</tbody>
 				</table>
 				@else
-					<p>Geen geregistreerde deelnemers zonder kamp. Super!</p>
+				<p>Geen geregistreerde deelnemers zonder kamp. Super!</p>
 				@endif
 			</div>
 			@endcan
 			
 		</div>
-		
+
 	</div>
 	
 	@can("showAnyPrivate", \App\Participant::class)
@@ -194,10 +204,10 @@
 		<h3>Mailing aan deelnemers</h3>
 		<p>{{ $participantMailingList->count() }} deelnemers jonger dan 19, die gemaild mogen worden.</p>
 		<p>Denk eraan, adressen <strong>altijd in de BCC</strong> zetten!</p>
-		
+
 		<h4>Emailadressen ouders</h4>
 		<p>{{ implode(", ", $participantMailingList->pluck('email_ouder')->toArray()) }}</p>
-		
+
 		<h4>Emailadressen deelnemers</h4>
 		<p>{{ implode(", ", $participantMailingList->pluck('email_deelnemer')->toArray()) }}</p>
 	</div>
@@ -217,14 +227,15 @@
 			</thead>
 			<tbody>
 				@forelse ($aspirantList as $member)
-					<tr>
-						<td><a href="{{ url('/members', $member->id) }}">{{ $member->voornaam }} {{ $member->tussenvoegsel }} {{ $member->achternaam }}</a></td>
-						<td><a href="mailto:{{$member->email_anderwijs}}">{{ $member->email_anderwijs }}</a></td>
-						<td>{{ $member->created_at->format('d-m-Y') }}</td>
-						<td>{{ $member->updated_at->format('d-m-Y') }}</td>
-					</tr>
+				<tr>
+					<td><a href="{{ url('/members', $member->id) }}">{{ $member->voornaam }}
+							{{ $member->tussenvoegsel }} {{ $member->achternaam }}</a></td>
+					<td><a href="mailto:{{$member->email_anderwijs}}">{{ $member->email_anderwijs }}</a></td>
+					<td>{{ $member->created_at->format('d-m-Y') }}</td>
+					<td>{{ $member->updated_at->format('d-m-Y') }}</td>
+				</tr>
 				@empty
-					<p>Alle leden hebben een KMG gehad. Gelukkig!</p>
+				<p>Alle leden hebben een KMG gehad. Gelukkig!</p>
 				@endforelse
 			</tbody>
 		</table>
@@ -246,13 +257,13 @@
 			</thead>
 			<tbody>
 				@foreach ($ranonkeltjePapier as $member)
-					<tr>
-						<td><a href="{{ url('/members', $member->id) }}">{{ $member->volnaam }}</a></td>
-						<td>{{ $member->adres }}</td>
-						<td>{{ $member->postcode }}</td>
-						<td>{{ $member->plaats }}</td>
-						<td>{{ $member->soort }}</td>
-					</tr>
+				<tr>
+					<td><a href="{{ url('/members', $member->id) }}">{{ $member->volnaam }}</a></td>
+					<td>{{ $member->adres }}</td>
+					<td>{{ $member->postcode }}</td>
+					<td>{{ $member->plaats }}</td>
+					<td>{{ $member->soort }}</td>
+				</tr>
 				@endforeach
 			</tbody>
 		</table>
@@ -270,11 +281,11 @@
 			</thead>
 			<tbody>
 				@foreach ($ranonkeltjeDigitaal as $member)
-					<tr>
-						<td><a href="{{ url('/members', $member->id) }}">{{ $member->volnaam }}</a></td>
-						<td>{{ $member->email_anderwijs }}</td>
-						<td>{{ $member->soort }}</td>
-					</tr>
+				<tr>
+					<td><a href="{{ url('/members', $member->id) }}">{{ $member->volnaam }}</a></td>
+					<td>{{ $member->email_anderwijs }}</td>
+					<td>{{ $member->soort }}</td>
+				</tr>
 				@endforeach
 			</tbody>
 		</table>
@@ -301,12 +312,12 @@
 			</thead>
 			<tbody>
 				@foreach ($trainerList as $m)
-					<tr>
-						<td><a href="{{ url('/members', $m->id) }}">{{ $m->volnaam }}</a></td>
-						<td>{{ $m->telefoon }}</td>
-						<td><a href="mailto:{{$m->email_anderwijs}}">{{ $m->email_anderwijs }}</a></td>
-						<td>{{ $m->soort }}</td>
-					</tr>
+				<tr>
+					<td><a href="{{ url('/members', $m->id) }}">{{ $m->volnaam }}</a></td>
+					<td>{{ $m->telefoon }}</td>
+					<td><a href="mailto:{{$m->email_anderwijs}}">{{ $m->email_anderwijs }}</a></td>
+					<td>{{ $m->soort }}</td>
+				</tr>
 				@endforeach
 			</tbody>
 		</table>
@@ -325,11 +336,11 @@
 			</thead>
 			<tbody>
 				@foreach ($oldTrainerList as $m)
-					<tr>
-						<td><a href="{{ url('/members', $m->id) }}">{{ $m->volnaam }}</a></td>
-						<td>{{ $m->telefoon }}</td>
-						<td><a href="mailto:{{$m->email}}">{{ $m->email }}</a></td>
-					</tr>
+				<tr>
+					<td><a href="{{ url('/members', $m->id) }}">{{ $m->volnaam }}</a></td>
+					<td>{{ $m->telefoon }}</td>
+					<td><a href="mailto:{{$m->email}}">{{ $m->email }}</a></td>
+				</tr>
 				@endforeach
 			</tbody>
 		</table>
@@ -344,35 +355,36 @@
 		<h3>Verjaardagskalender</h3>
 		<p><i>Normale en aspirantleden</i></p>
 		<div class="row">
-		<div class="col-md-6">
-			<table class="table table-hover">
-				<thead>
-					<tr>
-						<th>Naam</th>
-						<th colspan="2">Verjaardag</th>
-						<th>is nu</th>
-					</tr>
-				</thead>
-				<tbody>
-					@foreach ($birthdayList as $member)
+			<div class="col-md-6">
+				<table class="table table-hover">
+					<thead>
+						<tr>
+							<th>Naam</th>
+							<th colspan="2">Verjaardag</th>
+							<th>is nu</th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach ($birthdayList as $member)
 						<tr class="{{ ($member['vandaag']) ? 'info' : '' }}">
 							<td><a href="{{ url('/members', $member['id']) }}">{{ $member['naam'] }}</a></td>
 							<td>{{ $member['dag'] }}</td>
 							<td>{{ $monthName[$member['maand']] }}</td>
 							<td>{{ $member['leeftijd']}}</td>
 						</tr>
-					@endforeach
-				</tbody>
-			</table>
-		</div>
+						@endforeach
+					</tbody>
+				</table>
+			</div>
 		</div>
 	</div>
 	@endcan
 	
 	<div role="tabpanel" class="tab-pane" id="more">
-		Wil je een nieuwe lijst in dit rijtje? Vraag het even lief aan de <a href="mailto:aasbazen@anderwijs.nl">aasbazen</a>. En: hoe specifieker je verzoek, hoe beter.
+		Wil je een nieuwe lijst in dit rijtje? Vraag het even lief aan een <a href="mailto:aasbazen@anderwijs.nl">aasbaas</a>.
+		En: hoe specifieker je verzoek, hoe beter.
 	</div>
-	
+
 </div>
 
 @endsection
