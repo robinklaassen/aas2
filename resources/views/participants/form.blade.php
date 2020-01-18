@@ -86,6 +86,12 @@
 		{!! Form::label('mag_gemaild', 'Mailings ontvangen:') !!}
 		{!! Form::select('mag_gemaild', [1 => 'Ja', 0 => 'Nee'], null, ['class' => 'form-control']) !!}
 	</div>
+
+	<div class="col-sm-2 form-group">
+		{!! Form::label('post', 'Informatie ontvangen per post:') !!}
+		{!! Form::checkbox('post', 1, null, ['style' => 'margin-top:14px;']) !!}
+	</div>
+
 </div>
 
 <div class="row">
