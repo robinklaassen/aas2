@@ -186,6 +186,12 @@
 	<tr>
 		<td colspan="2">CONTACTGEGEVENS OUDER</td>
 	</tr>
+
+	<tr>
+		<td>Kamp informatie</td>
+		<td>{{ $participant->information_channel_description }}</td>
+	</tr>
+
 	<tr>
 		<td>Adres</td>
 		<td>{{ $participant->adres }}</td>
