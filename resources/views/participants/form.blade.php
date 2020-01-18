@@ -83,13 +83,20 @@
 	</div>
 
 	<div class="col-sm-2 form-group">
-		{!! Form::label('mag_gemaild', 'Mailings ontvangen:') !!}
-		{!! Form::select('mag_gemaild', [1 => 'Ja', 0 => 'Nee'], null, ['class' => 'form-control']) !!}
+		<label for="mag_gemaild">
+			Mailing ontvangen
+			<span class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="tooltip" title="Dit gaat alleen om nieuwsbrieven en kortingsacties. Bij deelname aan een kamp ontvangt u altijd mail.">
+		</label>
+		{!! Form::select('mag_gemaild', [0 => "Nee", 1=> "Ja"], 0, ['class' => 'form-control']) !!}
+		<i class="glyph">
 	</div>
 
 	<div class="col-sm-2 form-group">
-		{!! Form::label('post', 'Informatie ontvangen per post:') !!}
-		{!! Form::checkbox('post', 1, null, ['style' => 'margin-top:14px;']) !!}
+		<label for="post">
+			Kamp informatie 
+			<span class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="tooltip" title="Informatie over uw kamp deelname worden met u gedeeld via email en post.">
+		</label>
+		{!! Form::select('information_channel', \App\Participant::INFORMATION_CHANNEL, 0, ['class' => 'form-control']) !!}
 	</div>
 
 </div>

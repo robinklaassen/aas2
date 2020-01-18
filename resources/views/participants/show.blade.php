@@ -81,8 +81,18 @@ Mijn profiel
 				<td><a href="mailto:{{$participant->email_deelnemer}}">{{ $participant->email_deelnemer }}</a></td>
 			</tr>
 			<tr>
-				<td>Mailings ontvangen <span class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="tooltip" title="Dit gaat alleen om nieuwsbrieven en kortingsacties. Bij deelname aan een kamp ontvangt u altijd mail."></span></td>
-				<td>{{ $participant->mag_gemaild ? "Ja" : "Nee" }}</a></td>
+				<td>
+					Mailings ontvangen 
+					<span class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="tooltip" title="Dit gaat alleen om nieuwsbrieven en kortingsacties. Bij deelname aan een kamp ontvangt u altijd mail."></span>
+				</td>
+				<td>{{ $participant->mag_gemaild ? "Ja" : "Nee" }}</td>
+			</tr>
+			<tr>
+				<td>
+					Kamp informatie
+					<span class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="tooltip" title="Informatie over uw kamp deelname worden met u gedeeld via email en post."></span>
+				</td>
+				<td>{{ $participant->information_channel_description }}</td>
 			</tr>
 			<tr>
 				<td>Inkomen</td>

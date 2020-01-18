@@ -19,6 +19,10 @@ class Participant extends Model
 		2 => 0.7,
 		3 => 0.5
 	];
+	const INFORMATION_CHANNEL = [
+		"postal and email" => "Via post en e-mail",
+		"only email" => "Alleen e-mail"
+	];
 
 	protected $guarded = ['id', 'created_at', 'updated_at'];
 
@@ -80,5 +84,10 @@ class Participant extends Model
 	public function getIncomeBasedDiscountAttribute(): float
 	{
 		return $this::INCOME_DISCOUNT_TABLE[$this->inkomen];
+	}
+
+	public function getInformationChannelDescriptionAttribute()
+	{
+		return $this::INFORMATION_CHANNEL[$this->information_channel];
 	}
 }
