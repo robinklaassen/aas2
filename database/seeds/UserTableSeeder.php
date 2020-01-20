@@ -86,7 +86,7 @@ class UserTableSeeder extends Seeder
 		$user->privacy = '2018-06-01';
 		$member->user()->save($user);
 
-		$roles = Role::whereIn("tag", ["kampci"])->get();
+		$roles = Role::whereIn("tag", ["member", "kampci"])->get();
 		$user->roles()->sync($roles);
 
 
