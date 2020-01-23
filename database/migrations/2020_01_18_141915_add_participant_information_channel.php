@@ -14,8 +14,8 @@ class AddParticipantInformationChannel extends Migration
     public function up()
     {
         Schema::table('participants', function (Blueprint $table) {
-            $table->enum('information_channel', ["postal and email", "only email"])
-                ->default("postal and email");
+            $table->enum('information_channel', ["postal-and-email", "only-email"])
+                ->default("postal-and-email");
         });
     }
 

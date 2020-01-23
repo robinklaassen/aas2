@@ -188,11 +188,6 @@
 	</tr>
 
 	<tr>
-		<td>Kamp informatie</td>
-		<td>{{ $participant->information_channel_description }}</td>
-	</tr>
-
-	<tr>
 		<td>Adres</td>
 		<td>{{ $participant->adres }}</td>
 	</tr>

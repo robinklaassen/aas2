@@ -82,15 +82,8 @@ Mijn profiel
 			</tr>
 			<tr>
 				<td>
-					Mailings ontvangen 
-					<span class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="tooltip" title="Dit gaat alleen om nieuwsbrieven en kortingsacties. Bij deelname aan een kamp ontvangt u altijd mail."></span>
-				</td>
-				<td>{{ $participant->mag_gemaild ? "Ja" : "Nee" }}</td>
-			</tr>
-			<tr>
-				<td>
-					Kamp informatie
-					<span class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="tooltip" title="Informatie over uw kamp deelname worden met u gedeeld via email en post."></span>
+					Informatie ontvangen via 
+					<span class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="tooltip" title="Informatie over deelname aan het kamp kunt u via email en post ontvangen.">
 				</td>
 				<td>{{ $participant->information_channel_description }}</td>
 			</tr>
@@ -162,6 +155,17 @@ Mijn profiel
 			@endif
 		</table>
 
+		<table class="table table-hover">
+			<caption>Promotie</caption>
+
+			<tr>
+				<td>
+					Mailings ontvangen 
+					<span class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="tooltip" title="Dit gaat alleen om nieuwsbrieven en kortingsacties. Bij deelname aan een kamp ontvangt u altijd mail."></span>
+				</td>
+				<td>{{ $participant->mag_gemaild ? "Ja" : "Nee" }}</td>
+			</tr>
+		</table>
 		<!-- Kampen -->
 		<table class="table table-hover">
 			<caption>Kampen</caption>
