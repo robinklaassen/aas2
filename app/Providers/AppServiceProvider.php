@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
@@ -15,7 +16,21 @@ class AppServiceProvider extends ServiceProvider
 	 */
 	public function boot()
 	{
-		//
+		Blade::if('role', function ($roles) {
+			if (!is_array($roles)) {
+				$roles = [$roles];
+			}
+			return Auth::user()->hasAnyRole($roles);
+		});
+
+		Blade::directive('canany', function ($expression) {
+			list($capa, $cls, $entity) = explode(",", $expression);
+			return "<?php if (isset($entity) && \Auth::user()->can($capa, $entity) || \Auth::user()->($capa + 'Any', $cls)); ?>";
+		});
+
+		Blade::directive('endcanany', function ($b) {
+			return "<?php endif; ?> ";
+		});
 	}
 
 	/**

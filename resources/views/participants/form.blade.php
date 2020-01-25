@@ -18,7 +18,7 @@
 </div>
 
 <div class="row">
-	@can("editPrivate", $participant)
+	@canany("editPrivate",\App\Participant::class, "test")
 	<div class="col-sm-4 form-group">
 		{!! Form::label('geboortedatum', 'Geboortedatum:') !!}
 		@if (isset($participant))
@@ -47,7 +47,7 @@
 		{!! Form::label('postcode', 'Postcode:') !!}
 		{!! Form::text('postcode', null, ['class' => 'form-control', 'placeholder' => 'Format: 0000 AA']) !!}
 	</div>
-	@endcan
+	@endcanany
 
 	<div class="col-sm-6 form-group">
 		{!! Form::label('plaats', 'Woonplaats:') !!}

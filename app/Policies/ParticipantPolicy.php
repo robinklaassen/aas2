@@ -93,24 +93,24 @@ class ParticipantPolicy
         return $user->hasCapability("participants::account::delete");
     }
 
-    public function showAnyFinance(User $user)
+    public function showFinanceAny(User $user)
     {
         return $user->hasCapability("participants::info::show::finance");
     }
 
     public function showFinance(User $user, Participant $participant)
     {
-        return $this->showAnyFinance($user) || $this->ifSelf("participants::info::show::self", $user, $participant);
+        return $this->showFinanceAny($user) || $this->ifSelf("participants::info::show::self", $user, $participant);
     }
 
-    public function showAnyPrivate(User $user)
+    public function showPrivateAny(User $user)
     {
         return $user->hasCapability("participants::info::show::private");
     }
 
     public function showPrivate(User $user, Participant $participant)
     {
-        return $this->showAnyPrivate($user) || $this->ifSelf("participants::info::show::self", $user, $participant);
+        return $this->showPrivateAny($user) || $this->ifSelf("participants::info::show::self", $user, $participant);
     }
 
     public function showPractical(User $user, Participant $participant)
@@ -118,31 +118,45 @@ class ParticipantPolicy
         return $user->hasCapability("participants::info::show::practical") || $this->ifSelf("participants::info::show::self", $user, $participant);
     }
 
-    public function showAdministrative(User $user, Participant $participant)
+    public function showAdministrativeAny(User $user)
     {
         return $user->hasCapability("participants::info::show::administrative");
     }
 
+    public function editFinanceAny(User $user)
+    {
+        return $user->hasCapability("participants::info::edit::finance");
+    }
+
     public function editFinance(User $user, Participant $participant)
     {
-        return $user->hasCapability("participants::info::edit::finance") || $this->ifSelf("participants::info::show::self", $user, $participant);
+        return $this->editFinanceAny($user) || $this->ifSelf("participants::info::show::self", $user, $participant);
+    }
+
+    public function editPrivateAny(User $user)
+    {
+        return $user->hasCapability("participants::info::edit::private");
     }
 
     public function editPrivate(User $user, Participant $participant)
     {
-        return $user->hasCapability("participants::info::edit::private") || $this->ifSelf("participants::info::show::self", $user, $participant);
+        return $this->editPrivateAny($user) || $this->ifSelf("participants::info::show::self", $user, $participant);
+    }
+
+    public function editPracticalAny(User $user)
+    {
+        return $user->hasCapability("participants::info::edit::practical");
     }
 
     public function editPractical(User $user, Participant $participant)
     {
-        return $user->hasCapability("participants::info::edit::practical") || $this->ifSelf("participants::info::show::self", $user, $participant);
+        return $this->editPracticalAny($user) || $this->ifSelf("participants::info::show::self", $user, $participant);
     }
 
-    public function editAdministrative(User $user, Participant $participant)
+    public function editAdministrativeAny(User $user)
     {
         return $user->hasCapability("participants::info::edit::administrative");
     }
-
 
     public function changePassword(User $user, Participant $participant)
     {

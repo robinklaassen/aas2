@@ -100,7 +100,7 @@ class MemberPolicy
         return $user->hasCapability("members::old::show");
     }
 
-    public function showAnyFinance(User $user)
+    public function showFinanceAny(User $user)
     {
         return $user->hasCapability("members::info::show::finance");
     }
@@ -108,15 +108,15 @@ class MemberPolicy
 
     public function showFinance(User $user, Member $member)
     {
-        return $this->showAnyFinance($user) || $this->ifSelf("members::info::show::self", $user, $member);
+        return $this->showFinanceAny($user) || $this->ifSelf("members::info::show::self", $user, $member);
     }
 
     public function showPrivate(User $user, Member $member)
     {
-        return $this->showAnyPrivate($user) || $this->ifSelf("members::info::show::self", $user, $member);
+        return $this->showPrivateAny($user) || $this->ifSelf("members::info::show::self", $user, $member);
     }
 
-    public function showAnyPrivate(User $user)
+    public function showPrivateAny(User $user)
     {
         return $user->hasCapability("members::info::show::private");
     }

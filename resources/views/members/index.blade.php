@@ -57,7 +57,7 @@
 					@can("showAnyAdministrative", \App\Member::class)
 					<th>VOG</th>
 					@endcan
-					@can("showAnyPrivate", \App\Member::class)
+					@can("showPrivateAny", \App\Member::class)
 					<th>Telefoon</th>
 					@endcan
 					<th>Email</th>
@@ -93,7 +93,7 @@
 							@endif
 						</td>
 						@endcan
-						@can("showAnyPrivate", \App\Member::class)
+						@can("showPrivateAny", \App\Member::class)
 						<td>{{ $member->telefoon }}</td>
 						@endcan
 						<td><a href="mailto:{{ $member->email_anderwijs }}">{{ $member->email_anderwijs }}</a></td>

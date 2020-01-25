@@ -12,19 +12,19 @@ Lijsten
 
 <ul class="nav nav-tabs" role="tablist">
 	<li role="presentation" class="active"><a href="#stats" aria-controls="stats" role="tab" data-toggle="tab">Statistieken</a></li>
-	@can("showAnyFinance", \App\Participant::class)
+	@can("showFinanceAny", \App\Participant::class)
 	<li role="presentation"><a href="#onbetaald" aria-controls="onbetaald" role="tab" data-toggle="tab">Betalingen</a></li>
 	@endcan
 
-	@if(\Auth::user()->hasRole("kampci"))
+	@role("kampci")
 	<li role="presentation"><a href="#kmg" aria-controls="kmg" role="tab" data-toggle="tab">KMG</a></li>
-	@endif
+	@endrole
 	
-	@if(\Auth::user()->hasAnyRole(["kantoorci", "kampci"]))
+	@role(["kantoorci", "kampci"])
 	<li role="presentation"><a href="#eventloos" aria-controls="eventloos" role="tab" data-toggle="tab">Kamploos</a></li>
-	@endif
+	@endrole
 
-	@can("showAnyPrivate", \App\Participant::class)
+	@can("showPrivateAny", \App\Participant::class)
 	<li role="presentation"><a href="#mailing" aria-controls="mailing" role="tab" data-toggle="tab">Mailing</a></li>
 	@endcan
 
@@ -32,7 +32,7 @@ Lijsten
 	<li role="presentation"><a href="#aspirant" aria-controls="aspirant" role="tab" data-toggle="tab">Aspiranten</a></li>
 	@endcan
 
-	@can("showAnyPrivate", \App\Member::class)
+	@can("showPrivateAny", \App\Member::class)
 	<li role="presentation"><a href="#ranonkeltje" aria-controls="ranonkeltje" role="tab" data-toggle="tab">Ranonkeltje</a></li>
 	@endcan
 
@@ -76,7 +76,7 @@ Lijsten
 		</table>
 	</div>
 
-	@can("showAnyFinance", \App\Participant::class)
+	@can("showFinanceAny", \App\Participant::class)
 	<div role="tabpanel" class="tab-pane" id="onbetaald">
 		<h3>Deelnemers die nog niet betaald hebben</h3>
 		@if ($unpaidList)
@@ -107,7 +107,7 @@ Lijsten
 	</div>
 	@endcan
 
-	@if(\Auth::user()->hasRole("kampci"))
+	@role("kampci"))
 	<div role="tabpanel" class="tab-pane" id="kmg">
 		<h3>Leden die nog geen KMG gehad hebben</h3>
 		@if ($kmgList->count())
@@ -132,9 +132,9 @@ Lijsten
 		<p>Alle leden hebben een KMG gehad. Gelukkig!</p>
 		@endif
 	</div>
-	@endif
+	@endrole
 	
-	@if(\Auth::user()->hasAnyRole(["kantoorci", "kampci"]))
+	@role(["kantoorci", "kampci"]))
 	<div role="tabpanel" class="tab-pane" id="eventloos">
 
 		<p>
@@ -199,9 +199,9 @@ Lijsten
 		</div>
 
 	</div>
-	@endif
+	@endrole
 	
-	@can("showAnyPrivate", \App\Participant::class)
+	@can("showPrivateAny", \App\Participant::class)
 	<div role="tabpanel" class="tab-pane" id="mailing">
 		<h3>Mailing aan deelnemers</h3>
 		<p>{{ $participantMailingList->count() }} deelnemers jonger dan 19, die gemaild mogen worden.</p>
@@ -244,7 +244,7 @@ Lijsten
 	</div>
 	@endcan
 
-	@can("showAnyPrivate", \App\Member::class)
+	@can("showPrivateAny", \App\Member::class)
 	<div role="tabpanel" class="tab-pane" id="ranonkeltje">
 		<h3>Leden die Ranonkeltje op papier willen ontvangen ({{ count($ranonkeltjePapier) }})</h3>
 		<table class="table table-hover">
