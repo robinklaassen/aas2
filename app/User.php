@@ -64,7 +64,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
 	public function hasRole($tag)
 	{
-		return $this->roles()->with("tag", "=", $tag)->count() > 0;
+		return $this->roles()->where("tag", "=", $tag)->count() > 0;
+	}
+
+	public function hasAnyRole($roles)
+	{
+		return $this->roles()->whereIn("tag", $roles)->count() > 0;
 	}
 
 	public function capabilities()
@@ -93,7 +98,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	{
 		return $this->profile_type === "App\Participant";
 	}
-	
+
 	public function getVolnaamAttribute()
 	{
 		if ($this->id != 0) {

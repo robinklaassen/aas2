@@ -15,11 +15,12 @@ Lijsten
 	@can("showAnyFinance", \App\Participant::class)
 	<li role="presentation"><a href="#onbetaald" aria-controls="onbetaald" role="tab" data-toggle="tab">Betalingen</a></li>
 	@endcan
-	@can("showAnyAdministrative", \App\Member::class)
+
+	@if(\Auth::user()->hasRole("kampci"))
 	<li role="presentation"><a href="#kmg" aria-controls="kmg" role="tab" data-toggle="tab">KMG</a></li>
-	@endcan
+	@endif
 	
-	@if(\Auth::user()->can("viewAny", \App\Member::class) || \Auth::user()->can("viewAny", \App\Participant::class)  )
+	@if(\Auth::user()->hasAnyRole(["kantoorci", "kampci"]))
 	<li role="presentation"><a href="#eventloos" aria-controls="eventloos" role="tab" data-toggle="tab">Kamploos</a></li>
 	@endif
 
@@ -106,7 +107,7 @@ Lijsten
 	</div>
 	@endcan
 
-	@can("showAnyAdministrative", \App\Member::class)
+	@if(\Auth::user()->hasRole("kampci"))
 	<div role="tabpanel" class="tab-pane" id="kmg">
 		<h3>Leden die nog geen KMG gehad hebben</h3>
 		@if ($kmgList->count())
@@ -131,9 +132,9 @@ Lijsten
 		<p>Alle leden hebben een KMG gehad. Gelukkig!</p>
 		@endif
 	</div>
-	@endcan
+	@endif
 	
-
+	@if(\Auth::user()->hasAnyRole(["kantoorci", "kampci"]))
 	<div role="tabpanel" class="tab-pane" id="eventloos">
 
 		<p>
@@ -198,6 +199,7 @@ Lijsten
 		</div>
 
 	</div>
+	@endif
 	
 	@can("showAnyPrivate", \App\Participant::class)
 	<div role="tabpanel" class="tab-pane" id="mailing">

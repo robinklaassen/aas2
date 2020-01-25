@@ -68,12 +68,12 @@ class EventPolicy
 
     public function viewParticipants(User $user, Event $event)
     {
-        return $user->hasCapability("participants::info::show::advanced") || ($user->hasCapability("event::show::participating") && $event->hasUser($user));
+        return $this->showAdvanced($user, $event) || ($user->hasCapability("event::show::participating") && $event->hasUser($user));
     }
 
     public function viewParticipantsAdvanced(User $user, Event $event)
     {
-        return $user->hasCapability("participants::info::show::administrative");
+        return $this->viewParticipants($user, $event) && $user->hasCapability("participants::info::show::administrative");
     }
 
     public function exportParticipants(User $user, Event $event)

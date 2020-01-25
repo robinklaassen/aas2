@@ -236,7 +236,6 @@ Mijn profiel
 			</tr>
 			@endcan
 
-			@can("viewAny", \App\Role::class)
 			<tr>
 				<td>Rollen</td>
 				<td>
@@ -247,6 +246,7 @@ Mijn profiel
 					@endif
 				</td>
 			</tr>
+			@if(\Auth::user()->hasRole("aasbaas") || \App::environment("local"))
 			<tr>
 				<td>Rechten</td>
 				<td>
@@ -256,7 +256,7 @@ Mijn profiel
 
 				</td>
 			</tr>
-			@endcan
+			@endif
 
 			@can("showSpecial", $member)
 			<tr>

@@ -41,7 +41,6 @@ class EventsController extends Controller
 	 */
 	public function create()
 	{
-		$this->authorize("create");
 		return view('events.create');
 	}
 
@@ -52,7 +51,6 @@ class EventsController extends Controller
 	 */
 	public function store(Requests\EventRequest $request)
 	{
-		$this->authorize("create");
 		Event::create($request->all());
 		return redirect('events')->with([
 			'flash_message' => 'Het evenement is aangemaakt!'
