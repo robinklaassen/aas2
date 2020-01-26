@@ -30,7 +30,7 @@
 						@can("viewAny", \App\Course::class)
 						<li class="{{ substr(Request::path(),0,7) == 'courses' ? 'active' : ''}}"><a href="{{ url('/courses') }}">Vakken</a></li>
 						@endcan
-						@can("editAnyAdministrative", \App\Member::class)
+						@can("editAdministrativeAny", \App\Member::class)
 						<li class="{{ substr(Request::path(),0,7) == 'actions' ? 'active' : ''}}"><a href="{{ url('/actions') }}">Punten</a></li>
 						@endcan
 						<li class="{{ substr(Request::path(),0,5) == 'lists' ? 'active' : ''}}"><a href="{{ url('/lists') }}">Lijsten</a></li>

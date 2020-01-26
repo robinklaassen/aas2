@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Mail\members\NewUserMember;
 use App\Mail\participants\NewUserParticipant;
+use App\Role;
 
 class UsersController extends Controller
 {
@@ -107,6 +108,9 @@ class UsersController extends Controller
 			$user->is_admin = $request->is_admin;
 			$member->user()->save($user);
 
+			$roles = Role::whereIn("tag", ["member"]);
+			$member->roles()->sync($roles);
+
 			// Send email
 			Mail::send(new NewUserMember($member, $username, $password));
 
@@ -150,6 +154,9 @@ class UsersController extends Controller
 			$user->username = $username;
 			$user->password = bcrypt($password);
 			$participant->user()->save($user);
+
+			$roles = Role::whereIn("tag", ["participant"]);
+			$participant->roles()->sync($roles);
 
 			// Send email
 			Mail::send(

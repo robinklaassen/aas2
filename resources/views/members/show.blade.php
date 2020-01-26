@@ -236,6 +236,7 @@ Mijn profiel
 			</tr>
 			@endcan
 
+			@if($member->user()->exists())
 			<tr>
 				<td>Rollen</td>
 				<td>
@@ -256,6 +257,7 @@ Mijn profiel
 
 				</td>
 			</tr>
+			@endif
 			@endif
 
 			@can("showSpecial", $member)

@@ -23,13 +23,15 @@ class AppServiceProvider extends ServiceProvider
 			return Auth::user()->hasAnyRole($roles);
 		});
 
+
 		Blade::directive('canany', function ($expression) {
-			list($capa, $cls, $entity) = explode(",", $expression);
-			return "<?php if (isset($entity) && \Auth::user()->can($capa, $entity) || \Auth::user()->($capa + 'Any', $cls)); ?>";
+			list($capa, $cls, $entity) = array_map("trim", explode(",", $expression));
+			$data = "<?php if (isset($entity) && \Auth::user()->can($capa, $entity) || \Auth::user()->can($capa . 'Any', $cls)): ?>";
+			return $data;
 		});
 
 		Blade::directive('endcanany', function ($b) {
-			return "<?php endif; ?> ";
+			return "<?php endif; ?>";
 		});
 	}
 

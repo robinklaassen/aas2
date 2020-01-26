@@ -18,7 +18,7 @@
 </div>
 
 <div class="row">
-	@canany("editPrivate",\App\Participant::class, "test")
+	@canany("editPrivate", \App\Participant::class, $participant)
 	<div class="col-sm-4 form-group">
 		{!! Form::label('geboortedatum', 'Geboortedatum:') !!}
 		@if (isset($participant))
@@ -55,7 +55,7 @@
 	</div>
 </div>
 
-@can("editPrivate", $participant)
+@canany("editPrivate", \App\Participant::class,  $participant)
 <div class="row">
 	<div class="col-sm-4 form-group">
 		{!! Form::label('telefoon_ouder_vast', 'Telefoonnummer ouder (vast):') !!}
@@ -90,10 +90,10 @@
 		{!! Form::select('mag_gemaild', [1 => 'Ja', 0 => 'Nee'], null, ['class' => 'form-control']) !!}
 	</div>
 </div>
-@endcan
+@endcanany
 
 <div class="row">
-	@can("editPractical", $participant)
+	@canany("editPractical",  \App\Participant::class, $participant)
 	<div class="col-sm-4 form-group">
 		{!! Form::label('school', 'Naam school:') !!}
 		{!! Form::text('school', null, ['class' => 'form-control']) !!}
@@ -108,7 +108,7 @@
 		{!! Form::label('klas', 'Klas:') !!}
 		{!! Form::input('number', 'klas', null, ['class' => 'form-control', 'min' => 1, 'max' => 6, 'step' => 1]) !!}
 	</div>
-	@endcan
+	@endcanany
 
 	<div class="col-sm-4 form-group">
 		{!! Form::label('hoebij', 'Hoe bij Anderwijs?') !!}
@@ -116,24 +116,24 @@
 	</div>
 </div>
 
-@can("editFinance", $participant)
+@canany("editFinance",  \App\Participant::class, $participant)
 <div class="row">
 	<div class="col-sm-4 form-group">
 		{!! Form::label('inkomen', 'Bruto maandinkomen:') !!}
 		{!! Form::select('inkomen', ['Meer dan € 3400 (geen korting)', 'Tussen € 2200 en € 3400 (korting: 15%)', 'Tussen € 1300 en € 2200 (korting: 30%)', 'Minder dan € 1300 (korting: 50%)'], null, ['class' => 'form-control']) !!}
 	</div>
 </div>
-@endcan
+@endcanany
 
-@can("editPrivate", $participant)
+@canany("editPrivate", \App\Participant::class,  $participant)
 <div class="form-group">
 	{!! Form::label('opmerkingen', 'Overige informatie:') !!}
 	{!! Form::textarea('opmerkingen', null, ['class' => 'form-control']) !!}
 </div>
-@endcan
+@endcanany
 
 
-@can("editAdministrative", $participant)
+@canany("editAdministrative", \App\Participant::class,  $participant)
 <h3>Administratie</h3>
 <div class="row">
 	<div class="col-sm-5 form-group">
@@ -145,7 +145,7 @@
 		@endif
 	</div>
 </div>
-@endcan
+@endcanany
 
 <div class="form-group">
 	{!! Form::submit('Opslaan', ['class' => 'btn btn-primary form-control']) !!}

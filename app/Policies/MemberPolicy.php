@@ -111,59 +111,75 @@ class MemberPolicy
         return $this->showFinanceAny($user) || $this->ifSelf("members::info::show::self", $user, $member);
     }
 
-    public function showPrivate(User $user, Member $member)
-    {
-        return $this->showPrivateAny($user) || $this->ifSelf("members::info::show::self", $user, $member);
-    }
-
     public function showPrivateAny(User $user)
     {
         return $user->hasCapability("members::info::show::private");
     }
 
-    public function showPractical(User $user, Member $member)
+    public function showPrivate(User $user, Member $member)
     {
-        return $this->showAnyPractical($user) || $this->ifSelf("members::info::show::self", $user, $member);
+        return $this->showPrivateAny($user) || $this->ifSelf("members::info::show::self", $user, $member);
     }
 
-    public function showAnyPractical(User $user)
+
+    public function showPracticalAny(User $user)
     {
         return $user->hasCapability("members::info::show::practical");
     }
 
-    public function showAdministrative(User $user, Member $member)
+    public function showPractical(User $user, Member $member)
     {
-        return $this->showAnyAdministrative($user) || $this->ifSelf("members::info::show::self", $user, $member);
+        return $this->showPracticalAny($user) || $this->ifSelf("members::info::show::self", $user, $member);
     }
 
-    public function showAnyAdministrative(User $user)
+    public function showAdministrativeAny(User $user)
     {
         return $user->hasCapability("members::info::show::administrative");
     }
 
-    public function showAnySpecial(User $user)
+    public function showAdministrative(User $user, Member $member)
+    {
+        return $this->showAdministrativeAny($user) || $this->ifSelf("members::info::show::self", $user, $member);
+    }
+
+    public function showSpecialAny(User $user)
     {
         return $user->hasCapability("members::info::show::special");
     }
 
     public function showSpecial(User $user, Member $member)
     {
-        return $this->showAnySpecial($user);
+        return $this->showSpecialAny($user);
+    }
+
+    public function editFinanceAny(User $user)
+    {
+        return $user->hasCapability("members::info::edit::finance");
     }
 
     public function editFinance(User $user, Member $member)
     {
-        return $user->hasCapability("members::info::edit::finance") || $this->ifSelf("members::info::edit::self", $user, $member);
+        return $this->editFinanceAny($user) || $this->ifSelf("members::info::edit::self", $user, $member);
+    }
+
+    public function editPrivateAny(User $user)
+    {
+        return $user->hasCapability("members::info::edit::private");
     }
 
     public function editPrivate(User $user, Member $member)
     {
-        return $user->hasCapability("members::info::edit::private") || $this->ifSelf("members::info::edit::self", $user, $member);
+        return $this->editPrivateAny($user) || $this->ifSelf("members::info::edit::self", $user, $member);
+    }
+
+    public function editPracticalAny(User $user)
+    {
+        return $user->hasCapability("members::info::edit::practical");
     }
 
     public function editPractical(User $user, Member $member)
     {
-        return $user->hasCapability("members::info::edit::practical") || $this->ifSelf("members::info::edit::self", $user, $member);
+        return $this->editPracticalAny($user) || $this->ifSelf("members::info::edit::self", $user, $member);
     }
 
     public function editPassword(User $user, Member $member)
@@ -171,19 +187,25 @@ class MemberPolicy
         return $user->hasCapability("members::info::edit::password") || $this->ifSelf("members::info::edit::self", $user, $member);
     }
 
-    public function editAnyAdministrative(User $user)
+    public function editAdministrativeAny(User $user)
     {
         return $user->hasCapability("members::info::edit::administrative");
     }
 
     public function editAdministrative(User $user, Member $member)
     {
-        return $this->editAnyAdministrative($user);
+        return $this->editAdministrativeAny($user);
     }
+
+    public function editSpecialAny(User $user)
+    {
+        return $user->hasCapability("members::info::edit::special");
+    }
+
 
     public function editSpecial(User $user, Member $member)
     {
-        return $user->hasCapability("members::info::edit::special");
+        return $this->editSpecialAny($user);
     }
 
     public function onEvent(User $user, Member $member)

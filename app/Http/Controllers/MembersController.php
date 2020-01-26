@@ -53,7 +53,7 @@ class MembersController extends Controller
 	public function store(Requests\MemberRequest $request)
 	{
 
-		Member::create($request->all());
+		Member::create($request->except("roles"));
 		return redirect('members')->with([
 			'flash_message' => 'Het lid is aangemaakt!'
 		]);
@@ -221,7 +221,7 @@ class MembersController extends Controller
 	public function search(\Illuminate\Http\Request $request)
 	{
 		$this->authorize("viewAny", \App\Member::class);
-		$this->authorize("showAnyPractical", \App\Member::class);
+		$this->authorize("showPracticalAny", \App\Member::class);
 
 		$courses = $request->input('courses', []);
 		$vog = $request->input('vog', 0);
@@ -230,7 +230,7 @@ class MembersController extends Controller
 		$courseCodes = \App\Course::pluck('code', 'id')->toArray();
 
 		$allMembers = \App\Member::where('soort', '<>', 'oud');
-		if (\Auth::user()->can("showAnyAdministrative", \App\Member::class)) {
+		if (\Auth::user()->can("showAdministrativeAny", \App\Member::class)) {
 			$allMembers = $allMembers->where('vog', '>=', $vog);
 		}
 		$allMembers = $allMembers->orderBy('voornaam')->get();
@@ -254,14 +254,6 @@ class MembersController extends Controller
 			}
 		}
 
-		/*
-		$members = \DB::table('course_member')
-			->whereIn('course_id', $courses)
-			->join('members', 'course_member.member_id', '=', 'members.id')
-			->where('soort','<>','oud')
-			->orderBy('voornaam')
-			->get();
-		*/
 		return view('members.search', compact('courseList', 'courseCodes', 'courses', 'vog', 'members', 'level'));
 	}
 }

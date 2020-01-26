@@ -17,10 +17,10 @@
 			@can("create", \App\Member::class)
 			<a class="btn btn-primary" type="button" href="{{ url('members/create') }}" style="margin-top:21px;">Nieuw lid</a>
 			@endcan
-			@can("showAnyPractical", \App\Member::class)
+			@can("showPracticalAny", \App\Member::class)
 			<a class="btn btn-info" type="button" href="{{ url('members/search')}}" style="margin-top:21px;">Zoeken op vakdekking</a>
 			@endcan
-			@can("showAnyAdministrative", \App\Member::class)
+			@can("showAdministrativeAny", \App\Member::class)
 			<a class="btn btn-warning" type="button" href="{{ url('members/map') }}" style="margin-top:21px;">Kaart</a>
 			<a class="btn btn-success" type="button" href="{{ url('members/export') }}" style="margin-top:21px;">Exporteren</a>
 			@endcan
@@ -51,10 +51,10 @@
 					<th></th>
 					<th>Achternaam</th>
 					<th>Woonplaats</th>
-					@can("showAnyPractical", \App\Member::class)
+					@can("showPracticalAny", \App\Member::class)
 					<th>Soort lid</th>
 					@endcan
-					@can("showAnyAdministrative", \App\Member::class)
+					@can("showAdministrativeAny", \App\Member::class)
 					<th>VOG</th>
 					@endcan
 					@can("showPrivateAny", \App\Member::class)
@@ -78,11 +78,11 @@
 						<td>{{ $member->achternaam }}</td>
 						<td>{{ $member->plaats }}</td>
 
-						@can("showAnyPractical", \App\Member::class)						
+						@can("showPracticalAny", \App\Member::class)						
 						<td>{{ $member->soort }}</td>
 						@endcan
 
-						@can("showAnyAdministrative", \App\Member::class)
+						@can("showAdministrativeAny", \App\Member::class)
 						<td>
 							@if ($member->vog)
 								<span style="display:none;">1</span>

@@ -36,7 +36,7 @@ Lijsten
 	<li role="presentation"><a href="#ranonkeltje" aria-controls="ranonkeltje" role="tab" data-toggle="tab">Ranonkeltje</a></li>
 	@endcan
 
-	@can("showAnySpecial", \App\Member::class)
+	@can("showSpecialAny", \App\Member::class)
 	<li role="presentation"><a href="#trainers" aria-controls="trainers" role="tab" data-toggle="tab">Ervaren trainers</a></li>
 	@endcan
 
@@ -297,7 +297,7 @@ Lijsten
 	</div>
 	@endcan
 	
-	@can("showAnySpecial", \App\Member::class)
+	@can("showSpecialAny", \App\Member::class)
 	<div role="tabpanel" class="tab-pane" id="trainers">
 
 		<p>Geeft iemand aan niet meer te willen trainen? Haal dan het vinkje 'ervaren trainer' bij die persoon weg.</p>
