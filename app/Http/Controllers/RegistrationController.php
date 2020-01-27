@@ -127,7 +127,7 @@ class RegistrationController extends Controller
 		$user->privacy = Carbon::now();
 		$member->user()->save($user);
 
-		$roles = Role::whereIn("tag", ["member"]);
+		$roles = Role::whereIn("tag", ["member"])->get();
 		$user->roles()->sync($roles);
 
 		$camp = Event::findOrFail($request->selected_camp);
@@ -257,7 +257,7 @@ class RegistrationController extends Controller
 		$user->privacy = Carbon::now();
 		$participant->user()->save($user);
 
-		$roles = Role::whereIn("tag", ["participant"]);
+		$roles = Role::whereIn("tag", ["participant"])->get();
 		$user->roles()->sync($roles);
 
 		// Income table

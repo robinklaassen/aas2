@@ -108,7 +108,7 @@ class UsersController extends Controller
 			$user->is_admin = $request->is_admin;
 			$member->user()->save($user);
 
-			$roles = Role::whereIn("tag", ["member"]);
+			$roles = Role::whereIn("tag", ["member"])->get();
 			$member->roles()->sync($roles);
 
 			// Send email
@@ -155,7 +155,7 @@ class UsersController extends Controller
 			$user->password = bcrypt($password);
 			$participant->user()->save($user);
 
-			$roles = Role::whereIn("tag", ["participant"]);
+			$roles = Role::whereIn("tag", ["participant"])->get();
 			$participant->roles()->sync($roles);
 
 			// Send email
