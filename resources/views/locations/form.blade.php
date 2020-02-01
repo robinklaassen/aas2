@@ -23,12 +23,12 @@
 </div>
 
 <div class="row">
-	@if (!isset($location) || \Auth::user()->can("editAdvanced", $location) )
+	@canany("editAdvanced", \App\Location::class, $location)
 	<div class="col-sm-5 form-group">
 		{!! Form::label('beheerder', 'Beheerder:') !!}
 		{!! Form::text('beheerder', null, ['class' => 'form-control']) !!}
 	</div>
-	@endif
+	@endcanany
 
 	<div class="col-sm-7 form-group">
 		{!! Form::label('website', 'Website:') !!}
@@ -43,21 +43,20 @@
 	</div>
 
 
-	@if (!isset($location) || \Auth::user()->can("editAdvanced", $location) )
+	@canany("editAdvanced", \App\Location::class, $location)
 	<div class="col-sm-7 form-group">
 		{!! Form::label('email', 'Emailadres:') !!}
 		{!! Form::email('email', null, ['class' => 'form-control']) !!}
 	</div>
-	@endif
+	@endcanany
 </div>
 
-
-@if (!isset($location) || \Auth::user()->can("editAdvanced", $location) )
+@canany("editAdvanced", \App\Location::class, $location)
 <div class="form-group">
 	{!! Form::label('prijsinfo', 'Prijsinformatie:') !!}
 	{!! Form::textarea('prijsinfo', null, ['class' => 'form-control']) !!}
 </div>
-@endif
+@endcanany
 
 <div class="form-group">
 	{!! Form::submit('Opslaan', ['class' => 'btn btn-primary form-control']) !!}

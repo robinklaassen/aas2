@@ -61,9 +61,16 @@ class LocationPolicy
         return $user->hasCapability("locations::edit::basic");
     }
 
-    public function editAdvanced(User $user, Location $location)
+
+    public function editAdvancedAny(User $user)
     {
         return $user->hasCapability("locations::edit::advanced");
+    }
+
+
+    public function editAdvanced(User $user, Location $location)
+    {
+        return $this->editAdvancedAny($user);
     }
 
     /**
