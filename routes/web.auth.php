@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Middleware\UnderConstruction;
+
 Route::get('home', 'PagesController@home');
 Route::get('info', 'PagesController@info');
 Route::get('run-script', 'PagesController@runScript');
@@ -109,6 +111,8 @@ Route::get('events/{event}', 'EventsController@show');
 
 # Member things
 Route::get('members/search', 'MembersController@search');
+Route::get('members/export', 'MembersController@export');
+Route::get('members/map', 'MembersController@map')->middleware(UnderConstruction::class);
 Route::resource('members', 'MembersController');
 
 Route::get('members/{member}/on-event', 'MembersController@onEvent');
@@ -132,8 +136,6 @@ Route::delete(
     'MembersController@removeCourse'
 );
 Route::get('members/{member}/delete', 'MembersController@delete');
-Route::get('members/export', 'MembersController@export');
-Route::get('members/map', 'MembersController@map');
 
 Route::get('lists', 'PagesController@lists');
 Route::get('graphs', 'PagesController@graphs');
@@ -178,7 +180,7 @@ Route::put(
 );
 Route::get('participants/{participant}/delete', 'ParticipantsController@delete');
 Route::get('participants/export', 'ParticipantsController@export');
-Route::get('participants/map', 'ParticipantsController@map');
+Route::get('participants/map', 'ParticipantsController@map')->middleware(UnderConstruction::class);
 Route::resource('participants', 'ParticipantsController');
 
 
