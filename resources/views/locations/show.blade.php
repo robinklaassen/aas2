@@ -26,8 +26,8 @@
 </div>
 
 <hr />
-
-<div id="map-canvas" style="width:100%; height:300px; margin-bottom:10px;"></div>
+{{-- 
+<div id="map-canvas" style="width:100%; height:300px; margin-bottom:10px;"></div> --}}
 
 <div class="row">
 
@@ -134,6 +134,8 @@
 
 @endsection
 
+<?php
+/*
 @section('header')
 <!-- Load Google maps script -->
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script>
@@ -170,4 +172,5 @@
 	}
 	google.maps.event.addDomListener(window, 'load', initialize);
 </script>
-@endsection
+@endsection */
+?>

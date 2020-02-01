@@ -15,7 +15,7 @@
 	<div class="col-sm-6">
 		<p class="text-right">
 			<a class="btn btn-primary" type="button" href="{{ url('participants/create') }}" style="margin-top:21px;">Nieuwe deelnemer</a>
-			<a class="btn btn-warning" type="button" href="{{ url('participants/map') }}" style="margin-top:21px;">Kaart</a>
+			{{-- <a class="btn btn-warning" type="button" href="{{ url('participants/map') }}" style="margin-top:21px;">Kaart</a> --}}
 			<a class="btn btn-success" type="button" href="{{ url('participants/export') }}" style="margin-top:21px;">Exporteren</a>
 		</p>
 	</div>
