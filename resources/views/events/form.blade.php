@@ -4,35 +4,35 @@
 		{!! Form::text('naam', null, ['class' => 'form-control']) !!}
 	</div>
 
-	@if (!isset($event) || \Auth::user()->can("editAdvanced", $event) )	
+	@canany("editAdvanced", \App\Event::class, $event)
 	<div class="col-md-2 form-group">
 		{!! Form::label('code', 'Code:') !!}
 		{!! Form::text('code', null, ['class' => 'form-control']) !!}
 	</div>
-	@endif
+	@endcanany
 
 	<div class="col-md-5 form-group">
 		{!! Form::label('location_id', 'Locatie:') !!}
 		{!! Form::select('location_id', $locations, null, ['class' => 'form-control']) !!}
 	</div>
 
-	@if (!isset($event) || \Auth::user()->can("editAdvanced", $event) )	
+	@canany("editAdvanced", \App\Event::class, $event)	
 	<div class="col-md-2 form-group">
 		{!! Form::label('openbaar', 'Openbaar?') !!}<br />
 		{!! Form::hidden('openbaar', 1) !!}
 		{!! Form::checkbox('openbaar', 1, null, ['style' => 'margin-top:14px;']) !!}
 	</div>
-	@endif
+	@endcanany
 </div>
 
 <div class="row">
 	<div class="col-md-3 form-group">
 		{!! Form::label('datum_start', 'Datum start:') !!}
-		@if (isset($event))
-		{!! Form::input('date', 'datum_start', $event->datum_start->format('Y-m-d'), ['class' => 'form-control', 'placeholder' => 'Format: jjjj-mm-dd']) !!}
-		@else
-		{!! Form::input('date', 'datum_start', null, ['class' => 'form-control', 'placeholder' => 'Format: jjjj-mm-dd']) !!}
-		@endif
+		{!! Form::input(
+			'date', 'datum_start',
+			isset($event) ? $event->datum_start->format('Y-m-d') : null,
+			['class' => 'form-control', 'placeholder' => 'Format: jjjj-mm-dd'])
+		!!}
 	</div>
 
 	<div class="col-md-2 form-group">
@@ -42,11 +42,12 @@
 
 	<div class="col-md-3 form-group">
 		{!! Form::label('datum_eind', 'Datum eind:') !!}
-		@if (isset($event))
-		{!! Form::input('date', 'datum_eind', $event->datum_eind->format('Y-m-d'), ['class' => 'form-control', 'placeholder' => 'Format: jjjj-mm-dd']) !!}
-		@else
-		{!! Form::input('date', 'datum_eind', null, ['class' => 'form-control', 'placeholder' => 'Format: jjjj-mm-dd']) !!}
-		@endif
+		{!! Form::input(
+			'date', 'datum_eind',
+			isset($event) ? $event->datum_eind->format('Y-m-d') : null,
+			['class' => 'form-control', 'placeholder' => 'Format: jjjj-mm-dd']
+			)
+		!!}
 	</div>
 
 	<div class="col-md-2 form-group">
@@ -65,14 +66,14 @@
 <div class="row">
 	<div class="col-md-4 form-group">
 		{!! Form::label('datum_voordag', 'Start voordag(en):') !!}
-		@if (isset($event) && $event->datum_voordag !== null)
-		{!! Form::input('date', 'datum_voordag', $event->datum_voordag->format('Y-m-d'), ['class' => 'form-control', 'placeholder' => 'Format: jjjj-mm-dd']) !!}
-		@else
-		{!! Form::input('date', 'datum_voordag', null, ['class' => 'form-control', 'placeholder' => 'Format: jjjj-mm-dd']) !!}
-		@endif
+		{!! Form::input(
+			'date', 'datum_voordag',
+			(isset($event) && $event->datum_voordag !== null) ? $event->datum_voordag->format('Y-m-d') : null,
+			['class' => 'form-control', 'placeholder' => 'Format: jjjj-mm-dd'])
+		!!}
 	</div>
 
-	@if (!isset($event) || \Auth::user()->can("editAdvanced", $event) )	
+	@canany("editAdvanced", \App\Event::class, $event)	
 	<div class="col-md-4 form-group">
 		{!! Form::label('prijs', 'Kampprijs (zonder korting):') !!}
 		<div class="input-group">
@@ -80,7 +81,7 @@
 			{!! Form::input('number', 'prijs', null, ['class' => 'form-control', 'min' => 0]) !!}
 		</div>
 	</div>
-	@endif
+	@endcanany
 
 	<div class="col-md-2 form-group">
 		{!! Form::label('streeftal', 'Streeftal L / D:') !!}
@@ -94,7 +95,7 @@
 	</div>
 </div>
 
-@if (!isset($event) || \Auth::user()->can("editAdvanced", $event) )	
+@canany("editAdvanced", \App\Event::class, $event)
 <div class="row">
 	<div class="col-md-12">
 		<p class="well">
@@ -102,14 +103,14 @@
 		</p>
 	</div>
 </div>
-@endif
+@endcanany
 
-@if (!isset($event) || \Auth::user()->can("editAdvanced", $event) )	
+@canany("editAdvanced", \App\Event::class, $event)	
 <div class="form-group">
 	{!! Form::label('beschrijving', 'Beschrijving (website):') !!}
 	{!! Form::textarea('beschrijving', null, ['class' => 'form-control', 'rows' => '5']) !!}
 </div>
-@endif
+@endcanany
 
 <hr />
 

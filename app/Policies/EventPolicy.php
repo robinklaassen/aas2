@@ -66,34 +66,35 @@ class EventPolicy
         return $user->hasCapability("event::delete");
     }
 
-    public function viewParticipants(User $user, Event $event)
-    {
-        return $this->showAdvanced($user, $event) || ($user->hasCapability("event::show::participating") && $event->hasUser($user));
-    }
 
-    public function viewParticipantsAdvanced(User $user, Event $event)
+    public function showBasicAny(User $user)
     {
-        return $this->viewParticipants($user, $event) && $user->hasCapability("participants::info::show::administrative");
-    }
-
-    public function exportParticipants(User $user, Event $event)
-    {
-        return $user->hasCapability("participants::info::export");
+        return $user->hasCapability("event::show::basic");
     }
 
     public function showBasic(User $user, Event $event)
     {
-        return $user->hasCapability("event::show::basic") || ($user->hasCapability("event::show::participating") && $event->hasUser($user));
+        return $this->showBasicAny($user) || ($user->hasCapability("event::show::participating") && $event->hasUser($user));
     }
 
-    public function showAdvanced(User $user, Event $event)
+    public function showAdvancedAny(User $user)
     {
         return $user->hasCapability("event::show::advanced");
     }
 
-    public function editAdvanced(User $user, Event $event)
+    public function showAdvanced(User $user, Event $event)
+    {
+        return $this->showAdvancedAny($user);
+    }
+
+    public function editAdvancedAny(User $user)
     {
         return $user->hasCapability("event::edit::advanced");
+    }
+
+    public function editAdvanced(User $user, Event $event)
+    {
+        return $this->editAdvancedAny($user);
     }
 
     public function addMember(User $user)
@@ -111,7 +112,25 @@ class EventPolicy
         return $user->hasCapability("event::members::remove");
     }
 
-    public function addParticipants(User $user)
+    public function viewParticipants(User $user, Event $event)
+    {
+        return $this->showAdvanced($user, $event) || ($user->hasCapability("event::show::participating") && $event->hasUser($user));
+    }
+
+    public function viewParticipantsAdvanced(User $user, Event $event)
+    {
+        return $this->viewParticipants($user, $event) && $user->hasCapability("participants::info::show::administrative");
+    }
+
+    public function exportParticipants(User $user, Event $event)
+    {
+        return $user->hasCapability("participants::info::export");
+    }
+
+    /**
+     * Function is not bound to an event instance because it was invoked on the participantPolicy before an event is selected
+     */
+    public function addParticipant(User $user)
     {
         return $user->hasCapability("event::participants::add");
     }
