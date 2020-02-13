@@ -6,8 +6,12 @@ use Carbon\Carbon;
 
 class DateHelper
 {
-    public static function Format(Carbon $date)
+    const FORMAT = 'd-m-Y';
+    public static function Format($date)
     {
-        return $date !== null ? $date->format('d-m-Y') : null;
+        if ($date instanceof Carbon) {
+            return $date->format(DateHelper::FORMAT);
+        }
+        return null;
     }
 }

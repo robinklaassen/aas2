@@ -1,8 +1,12 @@
-<?php namespace App\Http\Requests;
+<?php
+
+namespace App\Http\Requests;
 
 use App\Http\Requests\Request;
+use Symfony\Component\Console\Input\Input;
 
-class EventRequest extends Request {
+class EventRequest extends Request
+{
 
 	/**
 	 * Determine if the user is authorized to make this request.
@@ -27,10 +31,11 @@ class EventRequest extends Request {
 			'type' => 'required',
 			'datum_start' => 'required|regex:/\d{4}-\d{2}-\d{2}/',
 			'datum_eind' => 'required|regex:/\d{4}-\d{2}-\d{2}/',
-			'datum_voordag' => 'sometimes|nullable|regex:/\d{4}-\d{2}-\d{2}/',
+			'datum_voordag' => 'bail|required_if:type,kamp|nullable|regex:/\d{4}-\d{2}-\d{2}/',
 			'prijs' => 'sometimes|nullable|numeric',
-			'location_id' => 'required'
+			'location_id' => 'required',
+			'tijd_start' => 'required|regex:/\d{2}:\d{2}/',
+			'tijd_eind' => 'required|regex:/\d{2}:\d{2}/'
 		];
 	}
-
 }
