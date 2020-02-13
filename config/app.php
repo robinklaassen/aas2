@@ -207,6 +207,7 @@ return [
 		'Lava' 		=> 'Khill\Lavacharts\Laravel\LavachartsFacade',
 		'Arr'		=> 'Illuminate\Support\Arr',
 		'Str'		=> 'Illuminate\Support\Str',
+		'Date'		=> App\Helpers\DateHelper::class
 	],
 
 ];

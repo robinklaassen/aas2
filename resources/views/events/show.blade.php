@@ -59,16 +59,16 @@
 			@if (($event->type == 'kamp') && (\Auth::user()->profile_type != 'App\Participant'))
 			<tr>
 				<td>Start voordag(en)</td>
-				<td>{{ $event->datum_voordag->format('d-m-Y') }}</td>
+				<td>{{ Date::Format($event->datum_voordag) }}</td>
 			</tr>
 			@endif
 			<tr>
 				<td>Start evenement</td>
-				<td>{{ $event->datum_start->format('d-m-Y') }} {{ $event->tijd_start }}</td>
+				<td>{{ Date::Format($event->datum_start) }} {{ $event->tijd_start }}</td>
 			</tr>
 			<tr>
 				<td>Eind evenement</td>
-				<td>{{ $event->datum_eind->format('d-m-Y') }} {{ $event->tijd_eind }}</td>
+				<td>{{ Date::Format($event->datum_eind) }} {{ $event->tijd_eind }}</td>
 			</tr>
 			<tr>
 				<td>Locatie</td>
