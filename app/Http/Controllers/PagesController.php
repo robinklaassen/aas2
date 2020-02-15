@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use App\Event;
+use App\Helpers\DateHelper;
 use App\Review;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Arr;
@@ -17,7 +18,8 @@ class PagesController extends Controller
 {
 
 	public function __construct()
-	{ }
+	{
+	}
 
 	# Homepage
 	public function home()
@@ -575,14 +577,14 @@ class PagesController extends Controller
 				'naam' => $naam,
 				'code' => $event->code,
 				'voordag_tekst' => ($event->type == 'kamp') ? 'Voordag:<br/>' : null,
-				'datum_voordag' => ($event->type == 'kamp') ? $event->datum_voordag->format('d-m-Y') . '<br/>' : null,
+				'datum_voordag' => ($event->type == 'kamp') ? DateHelper::Format($event->datum_voordag) . '<br/>' : null,
 				'tijd_voordag' => ($event->type == 'kamp') ?
 					'&nbsp;<br/>' : null,
 				'weekdag_start' => $weekdays[$event->datum_start->format('N')],
-				'datum_start' => $event->datum_start->format('d-m-Y'),
+				'datum_start' => DateHelper::Format($event->datum_start),
 				'tijd_start' => substr($event->tijd_start, 0, 5),
 				'weekdag_eind' => $weekdays[$event->datum_eind->format('N')],
-				'datum_eind' => $event->datum_eind->format('d-m-Y'),
+				'datum_eind' => DateHelper::Format($event->datum_eind),
 				'tijd_eind' => substr($event->tijd_eind, 0, 5),
 				'aantal_dagen' => $event->datum_eind->diffInDays($event->datum_start),
 				'kamphuis_naam' => $event->location->naam,
