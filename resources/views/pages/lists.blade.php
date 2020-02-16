@@ -18,7 +18,7 @@ Lijsten
 	<li role="presentation"><a href="#kmg" aria-controls="kmg" role="tab" data-toggle="tab">KMG</a></li>
 	<li role="presentation"><a href="#eventloos" aria-controls="eventloos" role="tab" data-toggle="tab">Kamploos</a>
 	</li>
-	<li role="presentation"><a href="#mailing" aria-controls="mailing" role="tab" data-toggle="tab">Mailing Deelnemers</a></li>
+	<li role="presentation"><a href="#mailing" aria-controls="mailing" role="tab" data-toggle="tab">Mailing deelnemers</a></li>
 	<li role="presentation"><a href="#old-members" aria-controls="mailing" role="tab" data-toggle="tab">Oud-leden</a></li>
 	<li role="presentation"><a href="#aspirant" aria-controls="aspirant" role="tab" data-toggle="tab">Aspiranten</a>
 	</li>
@@ -202,8 +202,8 @@ Lijsten
 	</div>
 
 	<div role="tabpanel" class="tab-pane" id="old-members">
-		<h3>Oudleden</h3>
-		<p>{{ $oldMembers->count() }} Oud-leden.</p>
+		<h3>Oud-leden</h3>
+		<p>{{ $oldMembers->count() }} oud-leden.</p>
 
 		<table class="table table-hover">
 			<thead>

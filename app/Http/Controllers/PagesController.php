@@ -232,7 +232,7 @@ class PagesController extends Controller
 			return $member->events->count() == 0;
 		});
 
-		$oldMembers = \App\Member::where('soort', '=', 'oud')->orderBy('created_at')->get();
+		$oldMembers = \App\Member::where('soort', 'oud')->orderBy('created_at')->get();
 
 		$participantsWithoutCamps = \App\Participant::orderBy('created_at')->get()->filter(function ($part) {
 			return $part->events->count() == 0;
