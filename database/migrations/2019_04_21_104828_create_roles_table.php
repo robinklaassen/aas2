@@ -26,17 +26,17 @@ class CreateRolesTable extends Migration
             ["Bestuurslid", "board"],
             ["Voorzitter", "president"],
             ["Penningmeester", "treasurer"],
-            ["Kampcommissielid", "kampci"],
+            ["Kampcommissie", "kampci"],
             ["Kantoorcommissie", "kantoorci"],
-            ["Promocommissielid", "promoci"],
-            ["Trainerscommissielid", "trainerci"],
+            ["Promocommissie", "promoci"],
+            ["Trainingscommissie", "trainerci"],
             ["Trainer", "trainer"],
-            ["Normaallid", "member"],
-            ["Normaallid kijken andere", "member-see-others"],
-            ["Oudlid", "old-member"],
+            ["Normaal lid", "member"],
             ["Deelnemer", "participant"]
         ];
-        $all = array_map(function ($i) { return [ "title" => $i[0], "tag" => $i[1] ]; }, $roles);
+        $all = array_map(function ($i) {
+            return ["title" => $i[0], "tag" => $i[1]];
+        }, $roles);
 
         DB::table("roles")->insert($all);
     }

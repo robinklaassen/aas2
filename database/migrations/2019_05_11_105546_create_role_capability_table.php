@@ -333,12 +333,6 @@ class CreateRoleCapabilityTable extends Migration
                 "event::show::basic",
                 "locations::info::basic"
             ]],
-            ["role" => "member-see-others", "capabilities" => [
-                "members::info::show::basic",
-                "event::show::basic",
-                "locations::info::basic"
-            ]],
-            ["role" => "old-member", "capabilities" => []],
             ["role" => "participant", "capabilities" => [
                 "event::show::participating",
                 "participants::info::show::self",
