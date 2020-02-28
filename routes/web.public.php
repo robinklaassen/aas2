@@ -13,3 +13,6 @@ Route::get('camps-report', 'PagesController@campsReport');
 # Review things
 Route::get('enquete/{event}', 'ReviewsController@review');
 Route::post('enquete/{event}', 'ReviewsController@reviewPost');
+
+# icalendar routes    
+Route::get('events/icalendar', 'EventsController@iCalendar');

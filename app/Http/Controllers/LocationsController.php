@@ -13,7 +13,9 @@ class LocationsController extends Controller
 {
 
 	public function __construct()
-	{ }
+	{
+		$this->authorizeResource(Location::class, 'location');
+	}
 
 	/**
 	 * Display a listing of the resource.
@@ -95,6 +97,7 @@ class LocationsController extends Controller
 
 	public function delete(Location $location)
 	{
+		$this->authorize("delete", $location);
 		return view('locations.delete', compact('location'));
 	}
 
@@ -109,6 +112,7 @@ class LocationsController extends Controller
 	# Enqueteresultaten
 	public function reviews(Location $location, Event $event)
 	{
+		$this->authorize("viewReviewResults", $event);
 		// Repeatedly set options and create charts using a helper function based on LavaCharts
 
 		$options = [

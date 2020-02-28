@@ -12,17 +12,17 @@ class MembersController extends Controller
 {
 
 	public function __construct()
-	{ }
+	{
+		$this->authorizeResource(Member::class, 'member');
+	}
 
 	# Index page
 	public function index()
 	{
-		// Only for members!
-		if (\Auth::user()->profile_type != "App\Member") {
-			return back();
-		}
-
-		if (\Auth::user()->is_admin) {
+		$current_members = Member::orderBy('voornaam', 'asc')->whereIn('soort', ['normaal', 'aspirant', 'info'])->get();
+		$former_members = Member::orderBy('voornaam', 'asc')->where('soort', 'oud')->get();
+		return view('members.index', compact('current_members', 'former_members'));
+		if (\Auth::user()->can("listOldMembers", Member::class)) {
 			// Show standard index
 			$current_members = Member::orderBy('voornaam', 'asc')->whereIn('soort', ['normaal', 'aspirant', 'info'])->get();
 			$former_members = Member::orderBy('voornaam', 'asc')->where('soort', 'oud')->get();
@@ -53,7 +53,7 @@ class MembersController extends Controller
 	public function store(Requests\MemberRequest $request)
 	{
 
-		Member::create($request->all());
+		Member::create($request->except("roles"));
 		return redirect('members')->with([
 			'flash_message' => 'Het lid is aangemaakt!'
 		]);
@@ -69,7 +69,12 @@ class MembersController extends Controller
 	# Update member in DB
 	public function update(Member $member, Requests\MemberRequest $request)
 	{
-		$member->update($request->all());
+		$member->update($request->except("roles"));
+		$user = $member->user()->first();
+		if ($user) {
+			$user->roles()->sync($request->input("roles"));
+		}
+
 		return redirect('members/' . $member->id)->with([
 			'flash_message' => 'Het lid is bewerkt!'
 		]);
@@ -78,6 +83,7 @@ class MembersController extends Controller
 	# Delete confirmation
 	public function delete(Member $member)
 	{
+		$this->authorize("delete", $member);
 		return view('members.delete', compact('member'));
 	}
 
@@ -94,12 +100,14 @@ class MembersController extends Controller
 	# Send member on event (form)
 	public function onEvent(Member $member)
 	{
+		$this->authorize("onEvent", $member);
 		return view('members.onEvent', compact('member'));
 	}
 
 	# Send member on event (update database)
 	public function onEventSave(Member $member)
 	{
+		$this->authorize("onEvent", $member);
 		// Should not be attached if the member has already been sent on this event! That's why we use sync instead of attach, without detaching (second parameter false)
 		$status = $member->events()->sync([\Request::input('selected_event')], false);
 		$message = ($status['attached'] == []) ? 'Het lid is reeds op dit evenement gestuurd!' : 'Het lid is op evenement gestuurd!';
@@ -111,6 +119,7 @@ class MembersController extends Controller
 	# Add course for this member (form)
 	public function addCourse(Member $member)
 	{
+		$this->authorize("editPractical", $member);
 		$viewType = 'admin';
 		return view('members.addCourse', compact('member', 'viewType'));
 	}
@@ -118,6 +127,7 @@ class MembersController extends Controller
 	# Add course for this member (update database)
 	public function addCourseSave(Member $member)
 	{
+		$this->authorize("editPractical", $member);
 		$status = $member->courses()->sync([\Request::input('selected_course')], false);
 		if ($status['attached'] == []) {
 			$message = 'Vak reeds toegevoegd!';
@@ -133,6 +143,7 @@ class MembersController extends Controller
 	# Edit course for this member (form)
 	public function editCourse(Member $member, $course_id)
 	{
+		$this->authorize("editPractical", $member);
 		$course = $member->courses->find($course_id);
 		$viewType = 'admin';
 		return view('members.editCourse', compact('member', 'course', 'viewType'));
@@ -141,6 +152,7 @@ class MembersController extends Controller
 	# Edit course for this member (update database)
 	public function editCourseSave(Member $member, $course_id)
 	{
+		$this->authorize("editPractical", $member);
 		$member->courses()->updateExistingPivot($course_id, ['klas' => \Request::input('klas')]);
 		return redirect('members/' . $member->id)->with([
 			'flash_message' => 'Het vak is bewerkt!'
@@ -150,6 +162,7 @@ class MembersController extends Controller
 	# Remove (detach) a course from this member (form)
 	public function removeCourseConfirm(Member $member, $course_id)
 	{
+		$this->authorize("editPractical", $member);
 		$course = \App\Course::findOrFail($course_id);
 		$viewType = 'admin';
 		return view('members.removeCourse', compact('member', 'course', 'viewType'));
@@ -158,6 +171,7 @@ class MembersController extends Controller
 	# Remove (detach) a course from this member (update database)
 	public function removeCourse(Member $member, $course_id)
 	{
+		$this->authorize("editPractical", $member);
 		$member->courses()->detach($course_id);
 		return redirect('members/' . $member->id)->with([
 			'flash_message' => 'Het vak is van dit lid verwijderd!'
@@ -167,15 +181,13 @@ class MembersController extends Controller
 	# Export all members to Excel
 	public function export()
 	{
-		// Specificy columns in order to exclude 'opmerkingen_geheim'
-		//$members = Member::get(['id', 'voornaam', 'tussenvoegsel', 'achternaam', 'geslacht', 'geboortedatum', 'adres', 'postcode', 'plaats', 'telefoon', 'email', 'email_anderwijs', 'iban', 'soort', 'eindexamen', 'studie', 'afgestudeerd', 'hoebij', 'kmg', 'ranonkeltje', 'vog', 'ervaren_trainer', 'incasso', 'datum_af', 'opmerkingen', 'opmerkingen_admin', 'created_at', 'updated_at']);
-
 		return Excel::download(new MembersExport, date('Y-m-d') . ' AAS leden.xlsx');
 	}
 
 	# Show all members on a Google Map
 	public function map()
 	{
+		$this->authorize("viewAny", Member::class);
 		$members = Member::where('soort', '<>', 'oud')->orderBy('soort')->get();
 
 		// Create member data for map
@@ -208,16 +220,24 @@ class MembersController extends Controller
 	# Search members by coverage
 	public function search(\Illuminate\Http\Request $request)
 	{
+		$this->authorize("viewAny", \App\Member::class);
+		$this->authorize("showPracticalAny", \App\Member::class);
+
 		$courses = $request->input('courses', []);
 		$vog = $request->input('vog', 0);
 
 		$courseList = \App\Course::orderBy('naam')->pluck('naam', 'id')->toArray();
 		$courseCodes = \App\Course::pluck('code', 'id')->toArray();
 
-		$allMembers = \App\Member::where('soort', '<>', 'oud')->where('vog', '>=', $vog)->orderBy('voornaam')->get();
+		$allMembers = \App\Member::where('soort', '<>', 'oud');
+		if (\Auth::user()->can("showAdministrativeAny", \App\Member::class)) {
+			$allMembers = $allMembers->where('vog', '>=', $vog);
+		}
+		$allMembers = $allMembers->orderBy('voornaam')->get();
 
 		$members = [];
 
+		$level = [];
 		foreach ($allMembers as $member) {
 			$status = true;
 
@@ -234,14 +254,6 @@ class MembersController extends Controller
 			}
 		}
 
-		/*
-		$members = \DB::table('course_member')
-			->whereIn('course_id', $courses)
-			->join('members', 'course_member.member_id', '=', 'members.id')
-			->where('soort','<>','oud')
-			->orderBy('voornaam')
-			->get();
-		*/
 		return view('members.search', compact('courseList', 'courseCodes', 'courses', 'vog', 'members', 'level'));
 	}
 }

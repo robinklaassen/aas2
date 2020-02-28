@@ -1,8 +1,13 @@
-<?php namespace App\Providers;
+<?php
 
+namespace App\Providers;
+
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 
-class AppServiceProvider extends ServiceProvider {
+class AppServiceProvider extends ServiceProvider
+{
 
 	/**
 	 * Bootstrap any application services.
@@ -11,7 +16,23 @@ class AppServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-		//
+		Blade::if('role', function ($roles) {
+			if (!is_array($roles)) {
+				$roles = [$roles];
+			}
+			return Auth::user()->hasAnyRole($roles);
+		});
+
+
+		Blade::directive('canany', function ($expression) {
+			list($capa, $cls, $entity) = array_map("trim", explode(",", $expression));
+			$data = "<?php if (isset($entity) && \Auth::user()->can($capa, $entity) || \Auth::user()->can($capa . 'Any', $cls)): ?>";
+			return $data;
+		});
+
+		Blade::directive('endcanany', function ($b) {
+			return "<?php endif; ?>";
+		});
 	}
 
 	/**
@@ -30,5 +51,4 @@ class AppServiceProvider extends ServiceProvider {
 			'App\Services\Registrar'
 		);
 	}
-
 }

@@ -1,5 +1,7 @@
 <?php
 
+use App\Capability;
+
 /*
 |--------------------------------------------------------------------------
 | Application Routes
@@ -18,9 +20,3 @@ Route::middleware(['guest'])->group(base_path("routes/web.guest.php"));
 
 // user routes
 Route::middleware(['auth'])->group(base_path("routes/web.auth.php"));
-
-// admin only
-Route::middleware(["auth", "member", "admin"])->group(base_path("routes/web.admin.php"));
-
-// member only
-Route::middleware(["auth", "member"])->group(base_path("routes/web.member.php"));

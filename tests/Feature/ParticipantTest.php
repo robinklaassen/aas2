@@ -36,9 +36,10 @@ class ParticipantTest extends TestCase
     public function testShow()
     {
         $response = $this
-            ->actingAs($this->user)
+            ->actingAs(\App\User::findOrFail(4))
             ->get('/participants/1')
             ->assertStatus(200)
-            ->assertSee('Bewerken', 'Elst', 'Meikamp');
+            ->assertSee('Elst', 'Meikamp')
+            ->assertDontSee('Bewerken'); // doesn't have edit right
     }
 }

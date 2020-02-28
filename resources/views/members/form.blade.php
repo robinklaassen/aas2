@@ -17,6 +17,7 @@
 	</div>
 </div>
 
+@canany("editPrivate", \App\Member::class, $member)
 <div class="row">
 	<div class="col-sm-5 form-group">
 		{!! Form::label('geboortedatum', 'Geboortedatum:') !!}
@@ -45,8 +46,10 @@
 		</div>
 	</div>
 </div>
+@endcanany
 
 <div class="row">
+	@canany("editPrivate", \App\Member::class, $member)
 	<div class="col-sm-5 form-group">
 		{!! Form::label('adres', 'Adres:') !!}
 		{!! Form::text('adres', null, ['class' => 'form-control']) !!}
@@ -56,6 +59,7 @@
 		{!! Form::label('postcode', 'Postcode:') !!}
 		{!! Form::text('postcode', null, ['class' => 'form-control', 'placeholder' => 'Format: 0000 AA']) !!}
 	</div>
+	@endcanany
 
 	<div class="col-sm-5 form-group">
 		{!! Form::label('plaats', 'Woonplaats:') !!}
@@ -64,6 +68,7 @@
 </div>
 
 <div class="row">
+	@canany("editPrivate",\App\Member::class, $member)
 	<div class="col-sm-5 form-group">
 		{!! Form::label('telefoon', 'Telefoonnummer:') !!}
 		{!! Form::text('telefoon', null, ['class' => 'form-control', 'maxlength' => 10, 'placeholder' => '10 cijfers'])
@@ -74,13 +79,16 @@
 		{!! Form::label('email', 'Emailadres:') !!}
 		{!! Form::email('email', null, ['class' => 'form-control']) !!}
 	</div>
+	@endcanany
 </div>
 
 <div class="row">
+	@canany("editFinancial", \App\Member::class, $member)
 	<div class="col-sm-5 form-group">
 		{!! Form::label('iban', 'Rekeningnummer (IBAN):') !!}
 		{!! Form::text('iban', null, ['class' => 'form-control']) !!}
 	</div>
+	@endcanany
 
 	<div class="col-sm-2 form-group">
 		{!! Form::label('rijbewijs', 'Rijbewijs?') !!}<br />
@@ -90,6 +98,7 @@
 </div>
 
 <div class="row">
+	@canany("editPrivate", \App\Member::class, $member)
 	<div class="col-sm-2 form-group">
 		{!! Form::label('eindexamen', 'Niveau eindexamen:') !!}
 		{!! Form::select('eindexamen', ['VMBO' => 'VMBO', 'HAVO' => 'HAVO', 'VWO' => 'VWO'], null, ['class' =>
@@ -106,6 +115,7 @@
 		{!! Form::hidden('afgestudeerd', 0) !!}
 		{!! Form::checkbox('afgestudeerd', 1, null, ['style' => 'margin-top:14px;']) !!}
 	</div>
+	@endcanany
 
 	<div class="col-sm-3 form-group">
 		{!! Form::label('hoebij', 'Hoe bij Anderwijs?') !!}
@@ -119,16 +129,19 @@
 	</div>
 </div>
 
+@canany("editPractical", \App\Member::class, $member)
 <div class="form-group">
 	{!! Form::label('opmerkingen', 'Overige informatie:') !!}
 	{!! Form::textarea('opmerkingen', null, ['class' => 'form-control']) !!}
 </div>
+@endcanany
 
-@if ($viewType == 'admin')
 
+@canany("editAdministrative", \App\Member::class, $member)
 <h3>Administratie</h3>
 
 <div class="row">
+
 	<div class="col-sm-3 form-group">
 		{!! Form::label('soort', 'Soort lid:') !!}
 		{!! Form::select('soort', ['normaal' => 'normaal', 'aspirant' => 'aspirant', 'info' => 'info', 'oud' => 'oud'],
@@ -154,11 +167,13 @@
 		{!! Form::email('email_anderwijs', null, ['class' => 'form-control']) !!}
 	</div>
 
+	@canany("editSpecial", \App\Member::class, $member)
 	<div class="col-sm-2 form-group">
 		{!! Form::label('ervaren_trainer', 'Ervaren trainer?') !!}<br />
 		{!! Form::hidden('ervaren_trainer', 0) !!}
 		{!! Form::checkbox('ervaren_trainer', 1, null, ['style' => 'margin-top:14px;']) !!}
 	</div>
+	@endcanany
 
 	<div class="col-sm-2 form-group">
 		{!! Form::label('incasso', 'Automatische incasso?') !!}<br />
@@ -166,8 +181,29 @@
 		{!! Form::checkbox('incasso', 1, null, ['style' => 'margin-top:14px;']) !!}
 	</div>
 </div>
+@endcanany
 
-
+@if(isset($member) && $member->user()->exists())
+@canany("editAdministrative", \App\Member::class, $member)
+<div class="row">
+	<div class="form-group">
+		<div class="col-sm-3">
+			{!! Form::label('roles', 'Rollen:') !!}
+		</div>
+		<div class="col-sm-9">
+		@foreach (App\Role::all() as $role)
+			<div class="form-check">
+				<label class="form-check-label">
+				{!! Form::checkbox('roles[]', $role->id, isset($member) ? $member->hasRole($role->tag) : false, ['class' => 'form-check-input']) !!}
+				{{ $role->title }}
+				@if (\Auth::user()->hasRole("admin+"))  ({{ $role->tag }}) @endif
+				</label>
+			</div>
+		@endforeach
+		</div>
+	</div>
+</div>
+@endcanany
 @endif
 
 <div class="form-group">

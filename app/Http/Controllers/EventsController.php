@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Event;
 use App\Member;
+use App\Participant;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Exports\EventNightRegisterReport;
@@ -16,9 +17,7 @@ class EventsController extends Controller
 
 	public function __construct()
 	{
-		// You need to be logged in and have admin rights to access
-		// $this->middleware('auth', ['except' => ['iCalendar']]);
-		// $this->middleware('admin', ['except' => ['show', 'iCalendar', 'reviews']]);
+		$this->authorizeResource(Event::class, 'event');
 	}
 
 	/**
@@ -28,6 +27,7 @@ class EventsController extends Controller
 	 */
 	public function index()
 	{
+
 		$events = Event::where('type', 'kamp')->get();
 		$trainings = Event::where('type', 'training')->get();
 		$others = Event::where('type', 'overig')->get();
@@ -66,10 +66,10 @@ class EventsController extends Controller
 	public function show(Event $event)
 	{
 		// Redirect the viewer if the user profile is not attached to this event
-		$profile = \Auth::user()->profile;
-		if (!($profile->events->contains('id', $event->id)) && !(\Auth::user()->is_admin)) {
-			return redirect('profile');
-		}
+		// $profile = \Auth::user()->profile;
+		// if (!($profile->events->contains('id', $event->id)) && !(\Auth::user()->is_admin)) {
+		// 	return redirect('profile');
+		// }
 
 
 		// Obtain participant course information
@@ -97,12 +97,6 @@ class EventsController extends Controller
 			$participantIsNew[$participant->id] = ($num == 0) ? 1 : 0;
 		}
 
-		// Check if all information should be shown (not to unplaced participant profile)
-		$showAll = true;
-		if (\Auth::user()->profile_type == "App\Participant" && !($profile->events()->find($event->id)->pivot->geplaatst)) {
-			$showAll = false;
-		}
-
 		// Check number of participants to show
 		if (\Auth::user()->is_admin) {
 			$numberOfParticipants = $event->participants->count();
@@ -110,7 +104,7 @@ class EventsController extends Controller
 			$numberOfParticipants = $event->participants()->wherePivot('geplaatst', 1)->count();
 		}
 
-		return view('events.show', compact('event', 'participantCourseString', 'participantIsNew', 'showAll', 'numberOfParticipants'));
+		return view('events.show', compact('event', 'participantCourseString', 'participantIsNew', 'numberOfParticipants'));
 	}
 
 	/**
@@ -121,6 +115,7 @@ class EventsController extends Controller
 	 */
 	public function edit(Event $event)
 	{
+		$this->authorize("update", $event);
 		return view('events.edit', compact('event'));
 	}
 
@@ -132,6 +127,7 @@ class EventsController extends Controller
 	 */
 	public function update(Event $event, Requests\EventRequest $request)
 	{
+		$this->authorize("update", $event);
 		$event->update($request->all());
 		return redirect('events/' . $event->id)->with([
 			'flash_message' => 'Het evenement is bewerkt!'
@@ -147,11 +143,13 @@ class EventsController extends Controller
 
 	public function delete(Event $event)
 	{
+		$this->authorize("delete", $event);
 		return view('events.delete', compact('event'));
 	}
 
 	public function destroy(Event $event)
 	{
+		$this->authorize("delete", $event);
 		$event->delete();
 		return redirect('events')->with([
 			'flash_message' => 'Het evenement is verwijderd!'
@@ -159,15 +157,19 @@ class EventsController extends Controller
 	}
 
 	// Edit a member from this event
-	public function editMember(Event $event, $member_id)
+	public function editMember(Event $event, Member $member)
 	{
-		$member = $event->members->find($member_id);
+		$this->authorize("editMember", [$event, $member]);
+		$member = $event->members()->findOrFail($member->id);
+
 		return view('events.editMember', compact('event', 'member'));
 	}
 
-	public function editMemberSave(Event $event, $member_id, Request $request)
+	public function editMemberSave(Event $event, Member $member, Request $request)
 	{
-		$event->members()->updateExistingPivot($member_id, ['wissel' => $request->wissel, 'wissel_datum_start' => $request->wissel_datum_start, 'wissel_datum_eind' => $request->wissel_datum_eind]);
+		$this->authorize("editMember", [$event, $member]);
+		$event->members()->updateExistingPivot($member, ['wissel' => $request->wissel, 'wissel_datum_start' => $request->wissel_datum_start, 'wissel_datum_eind' => $request->wissel_datum_eind]);
+
 
 		return redirect('events/' . $event->id)->with([
 			'flash_message' => 'De leiding op dit evenement is bewerkt!'
@@ -175,26 +177,30 @@ class EventsController extends Controller
 	}
 
 	// Remove (detach) a member from this event
-	public function removeMemberConfirm(Event $event, $member_id)
+	public function removeMemberConfirm(Event $event, Member $member)
 	{
-		$member = \App\Member::findOrFail($member_id);
+		$this->authorize("removeMember", [$event, $member]);
 		return view('events.removeMember', compact('event', 'member'));
 	}
 
-	public function removeMember(Event $event, $member_id)
+	public function removeMember(Event $event, Member $member)
 	{
-		$event->members()->detach($member_id);
+		$this->authorize("removeMember", [$event, $member]);
+
+		$event->members()->detach($member->id);
 		return redirect('events/' . $event->id)->with([
 			'flash_message' => 'Het lid is van dit evenement verwijderd!'
 		]);
 	}
 
 	// Edit a participant from this event (date of payment and course info)
-	public function editParticipant(Event $event, $participant_id)
+	public function editParticipant(Event $event, Participant $participant)
 	{
-		$participant = $event->participants->find($participant_id);
+		$this->authorize("editParticipant", [$event, $participant]);
 
-		$result = \DB::table('course_event_participant')->select('course_id', 'info')->whereParticipantIdAndEventId($participant_id, $event->id)->get();
+		$participant = $event->participants->find($participant->id);
+
+		$result = \DB::table('course_event_participant')->select('course_id', 'info')->whereParticipantIdAndEventId($participant->id, $event->id)->get();
 		$retrieved_courses = [];
 		foreach ($result as $row) {
 			$retrieved_courses[] = ['id' => $row->course_id, 'info' => $row->info];
@@ -203,19 +209,21 @@ class EventsController extends Controller
 		return view('events.editParticipant', compact('event', 'participant', 'retrieved_courses'));
 	}
 
-	public function editParticipantSave(Event $event, $participant_id, Request $request)
+	public function editParticipantSave(Event $event, Participant $participant, Request $request)
 	{
+		$this->authorize("editParticipant", [$event, $participant]);
+
 		// Update datum_betaling and geplaatst in pivot table
-		$event->participants()->updateExistingPivot($participant_id, ['datum_betaling' => $request->datum_betaling, 'geplaatst' => $request->geplaatst]);
+		$event->participants()->updateExistingPivot($participant->id, ['datum_betaling' => $request->datum_betaling, 'geplaatst' => $request->geplaatst]);
 
 		// Delete all current courses
-		\DB::table('course_event_participant')->whereParticipantIdAndEventId($participant_id, $event->id)->delete();
+		\DB::table('course_event_participant')->whereParticipantIdAndEventId($participant->id, $event->id)->delete();
 
 		// Insert new courses
 		foreach (array_unique($request->vak) as $key => $course_id) {
 			if ($course_id) {
 				\DB::table('course_event_participant')->insert(
-					['course_id' => $course_id, 'event_id' => $event->id, 'participant_id' => $participant_id, 'info' => $request->vakinfo[$key]]
+					['course_id' => $course_id, 'event_id' => $event->id, 'participant_id' => $participant->id, 'info' => $request->vakinfo[$key]]
 				);
 			}
 		}
@@ -226,16 +234,18 @@ class EventsController extends Controller
 	}
 
 	// Remove (detach) a participant from this event
-	public function removeParticipantConfirm(Event $event, $participant_id)
+	public function removeParticipantConfirm(Event $event, Participant $participant)
 	{
-		$participant = \App\Participant::findOrFail($participant_id);
+		$this->authorize("removeParticipant", [$event, $participant]);
 		return view('events.removeParticipant', compact('event', 'participant'));
 	}
 
-	public function removeParticipant(Event $event, $participant_id)
+	public function removeParticipant(Event $event, Participant $participant)
 	{
-		$event->participants()->detach($participant_id);
-		\DB::table('course_event_participant')->where('event_id', $event->id)->where('participant_id', $participant_id)->delete();
+		$this->authorize("removeParticipant", [$event, $participant]);
+
+		$event->participants()->detach($participant->id);
+		\DB::table('course_event_participant')->where('event_id', $event->id)->where('participant_id', $participant->id)->delete();
 		return redirect('events/' . $event->id)->with([
 			'flash_message' => 'De deelnemer is van dit evenement verwijderd!'
 		]);
@@ -244,6 +254,8 @@ class EventsController extends Controller
 	# Export participant info for this camp
 	public function export(Event $event)
 	{
+		$this->authorize("exportParticipants", $event);
+
 		// Redirect if not camp
 		if ($event->type != 'kamp') {
 			return redirect('events');
@@ -305,6 +317,8 @@ class EventsController extends Controller
 	# Check course coverage (vakdekking)
 	public function check(Event $event, $type)
 	{
+		$this->authorize("subjectCheck", $event);
+
 		// Redirect if not camp
 		if ($event->type != 'kamp') {
 			return redirect('events');
@@ -396,6 +410,7 @@ class EventsController extends Controller
 	# Calculate camp budget
 	public function budget(Event $event)
 	{
+		$this->authorize("budget", $event);
 
 		$data = new \StdClass();
 
@@ -437,6 +452,7 @@ class EventsController extends Controller
 	# Output email addresses as plain text list
 	public function email(Event $event)
 	{
+		$this->authorize("mailing", $event);
 
 		$email['members'] = "";
 		$num['members'] = 0;
@@ -474,12 +490,14 @@ class EventsController extends Controller
 	# Send all participants on camp (confirm)
 	public function sendConfirm(Event $event)
 	{
+		$this->authorize("placement", $event);
 		return view('events.sendAll', compact('event'));
 	}
 
 	# Send all participants on camp (execute)
 	public function send(Event $event)
 	{
+		$this->authorize("placement", $event);
 
 		$ids = $event->participants()->pluck('id')->toArray();
 
@@ -495,18 +513,21 @@ class EventsController extends Controller
 	# Generate payments overview
 	public function payments(Event $event)
 	{
+		$this->authorize("paymentoverview", $event);
 		return Excel::download(new EventPaymentReport($event), date('Y-m-d') . ' Betalingsoverzicht ' . $event->code . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
 	}
 
 	# Generate night register
 	public function nightRegister(Event $event)
 	{
+		$this->authorize("nightRegister", $event);
 		return Excel::download(new EventNightRegisterReport($event), date('Y-m-d') . ' Nachtregister ' . $event->location->plaats . ' ' . $event->code . '.xlsx', \Maatwebsite\Excel\Excel::XLSX);
 	}
 
 	# Generate iCal stream of events
 	public function iCalendar()
 	{
+
 		$events = Event::orderBy('datum_start', 'asc')->where('openbaar', 1)->get();
 		$members = Member::whereIn('soort', ['normaal', 'aspirant'])->where('publish_birthday', 1)->get();
 
@@ -526,6 +547,7 @@ class EventsController extends Controller
 	# Join members to event (form)
 	public function joinMembers(Event $event)
 	{
+		$this->authorize("addMember", $event);
 		$members = Member::where('soort', '<>', 'oud')->orderBy('voornaam')->get();
 
 		return view('events.join-members', compact('event', 'members'));
@@ -534,6 +556,7 @@ class EventsController extends Controller
 	# Join members to event (save)
 	public function joinMembersSave(Event $event, Request $request)
 	{
+		$this->authorize("addMember", $event);
 		foreach ($request->members as $member_id) {
 			$event->members()->attach($member_id);
 		}
@@ -547,16 +570,17 @@ class EventsController extends Controller
 	public function reviews(Event $event)
 	{
 
-		// Auth: either have to be admin or have gone on this camp as a member
-		if (!(\Auth::user()->is_admin)) {
+		$this->authorize("viewReviewResults", $event);
+		// // Auth: either have to be admin or have gone on this camp as a member
+		// if (!(\Auth::user()->is_admin)) {
 
-			$is_member = (\Auth::user()->profile_type == "App\Member");
-			$on_camp = \Auth::user()->profile->events->contains("id", $event->id);
+		// 	$is_member = (\Auth::user()->profile_type == "App\Member");
+		// 	$on_camp = \Auth::user()->profile->events->contains("id", $event->id);
 
-			if (!($is_member && $on_camp)) {
-				return redirect()->back();
-			}
-		}
+		// 	if (!($is_member && $on_camp)) {
+		// 		return redirect()->back();
+		// 	}
+		// }
 
 		// Repeatedly set options and create charts using a helper function based on LavaCharts
 

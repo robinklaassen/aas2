@@ -19,13 +19,28 @@ Mijn profiel
 	<div class="col-sm-6">
 		<p class="text-right">
 			@if ($viewType == 'profile')
+			
+			@can("update", $participant)
 			<a class="btn btn-primary" type="button" href="{{ url('/profile/edit') }}" style="margin-top:21px;">Bewerken</a>
+			@endcan
+			@can("onEvent", $participant)
 			<a class="btn btn-info" type="button" href="{{ url('/profile/on-camp') }}" style="margin-top:21px;">Op kamp</a>
+			@endcan
+
+			@can("changePassword", $participant)
 			<a class="btn btn-warning" type="button" href="{{ url('/profile/password') }}" style="margin-top:21px;">Nieuw wachtwoord</a>
+			@endcan
 			@elseif ($viewType == 'admin')
+
+			@can("update", $participant)
 			<a class="btn btn-primary" type="button" href="{{ url('/participants', [$participant->id, 'edit']) }}" style="margin-top:21px;">Bewerken</a>
 			<a class="btn btn-info" type="button" href="{{ url('/participants', [$participant->id, 'on-event']) }}" style="margin-top:21px;">Op kamp</a>
+			@endcan
+
+			@can("delete", $participant)
 			<a class="btn btn-danger" type="button" href="{{ url('/participants', [$participant->id, 'delete']) }}" style="margin-top:21px;">Verwijderen</a>
+			@endcan
+
 			@endif
 		</p>
 	</div>
@@ -40,6 +55,7 @@ Mijn profiel
 		<!-- Profieltabel -->
 		<table class="table table-hover">
 			<caption>Profiel</caption>
+			@can("showPrivate", $participant)
 			<tr>
 				<td>Geboortedatum</td>
 				<td>{{ $participant->geboortedatum->format('d-m-Y') }}</td>
@@ -56,10 +72,12 @@ Mijn profiel
 				<td>Postcode</td>
 				<td>{{ $participant->postcode }}</td>
 			</tr>
+			@endcan
 			<tr>
 				<td>Woonplaats</td>
 				<td>{{ $participant->plaats }}</td>
 			</tr>
+			@can("showPrivate", $participant)
 			<tr>
 				<td>Telefoonnummer ouder (vast)</td>
 				<td>{{ $participant->telefoon_ouder_vast }}</td>
@@ -84,10 +102,14 @@ Mijn profiel
 				<td>Mailings ontvangen <span class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="tooltip" title="Dit gaat alleen om nieuwsbrieven en kortingsacties. Bij deelname aan een kamp ontvangt u altijd mail."></span></td>
 				<td>{{ $participant->mag_gemaild ? "Ja" : "Nee" }}</a></td>
 			</tr>
+			@endcan
+			@can("showFinance", $participant)
 			<tr>
 				<td>Inkomen</td>
 				<td>{{ $income[$participant->inkomen] }}</td>
 			</tr>
+			@endcan
+			@can("showPractical", $participant)
 			<tr>
 				<td>School</td>
 				<td>{{ $participant->school }}</td>
@@ -100,14 +122,17 @@ Mijn profiel
 				<td>Klas</td>
 				<td>{{ $participant->klas }}</td>
 			</tr>
+			@endcan
 			<tr>
 				<td>Hoe bij Anderwijs</td>
 				<td>{{ $participant->hoebij }}</td>
 			</tr>
+			@can("showPrivate", $participant)
 			<tr>
 				<td>Overige informatie</td>
 				<td style="white-space:pre-wrap;">{{ $participant->opmerkingen }}</td>
 			</tr>
+			@endcan
 		</table>
 
 
@@ -118,12 +143,11 @@ Mijn profiel
 		<!-- Administratietabel -->
 		<table class="table table-hover">
 			<caption>Administratie</caption>
-			@if ($viewType == 'admin')
+			@can("showAdministrative", $participant)
 			<tr>
 				<td>AAS ID</td>
 				<td>{{ $participant->id }}</td>
 			</tr>
-			@endif
 			<tr>
 				<td>Account(naam)</td>
 				<td>@if($participant->user()->first()) {{ $participant->user()->first()->username }} @else -geen- @endif</td>
@@ -136,7 +160,8 @@ Mijn profiel
 				<td>Laatste update</td>
 				<td>{{ $participant->updated_at->format('d-m-Y') }}</td>
 			</tr>
-			@if ($viewType == 'admin')
+			@endcan
+			@can("showFinance", $participant)
 			<tr>
 				@unless ($participant->inkomen == 0)
 				<td>Inkomensverklaring</td>
@@ -149,7 +174,7 @@ Mijn profiel
 				</td>
 				@endunless
 			</tr>
-			@endif
+			@endcan
 		</table>
 
 		<!-- Kampen -->
@@ -159,11 +184,11 @@ Mijn profiel
 			<tr>
 				<td><a href="{{ url('/events', $event->id) }}">{{ $event->naam }}</a></td>
 				<td>
-					@if ($viewType == 'admin')
+					@can("showAdvanced", $event)
 					{{ $event->code }}
-					@elseif ($viewType == 'profile')
+					@else
 					{{ $event->datum_start->format('d-m-Y') }}
-					@endif
+					@endcan
 				</td>
 				<td>
 					@if ($courseOnCamp != [])
@@ -171,13 +196,11 @@ Mijn profiel
 					@endif
 				</td>
 				<td>
-					@if ($viewType == 'admin')
-					<a href="{{ url('/participants', [$participant->id, 'edit-event', $event->id]) }}">
-						@elseif ($viewType == 'profile')
-						<a href="{{ url('/profile/edit-camp', $event->id) }}">
-							@endif
-							<span class="glyphicon glyphicon-edit" data-toggle="tooltip" title="Vakken bewerken" aria-hidden="true"></span></a>
-				</td>
+					@can("editParticipant", [$event, $participant])
+					<a href="{{ $viewType == 'admin' ? url('/participants', [$participant->id, 'edit-event', $event->id]) : url('/profile/edit-camp', $event->id)}}">
+						<span class="glyphicon glyphicon-edit" data-toggle="tooltip" title="Vakken bewerken" aria-hidden="true"></span></a>
+					@endcan
+					</td>
 			</tr>
 			@empty
 			<tr>
@@ -190,11 +213,11 @@ Mijn profiel
 		<p>De opgegeven informatie per vak kunt u bekijken door op 'vakken bewerken' te klikken.</p>
 		@endif
 
-		@if (\Auth::user()->is_admin)
+		@can("showAdministrative", $participant)
 			<div>
 				@include('partials.comments', [ 'comments' => $participant->comments, 'type' => 'App\Participant', 'key' => $participant->id ])
 			</div>
-		@endif
+		@endcan
 	</div>
 
 

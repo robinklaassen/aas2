@@ -11,23 +11,43 @@ Lijsten
 <hr />
 
 <ul class="nav nav-tabs" role="tablist">
-	<li role="presentation" class="active"><a href="#stats" aria-controls="stats" role="tab"
-			data-toggle="tab">Statistieken</a></li>
-	<li role="presentation"><a href="#onbetaald" aria-controls="onbetaald" role="tab" data-toggle="tab">Betalingen</a>
-	</li>
+	<li role="presentation" class="active"><a href="#stats" aria-controls="stats" role="tab" data-toggle="tab">Statistieken</a></li>
+	@can("showFinanceAny", \App\Participant::class)
+	<li role="presentation"><a href="#onbetaald" aria-controls="onbetaald" role="tab" data-toggle="tab">Betalingen</a></li>
+	@endcan
+
+	@role("kampci")
 	<li role="presentation"><a href="#kmg" aria-controls="kmg" role="tab" data-toggle="tab">KMG</a></li>
-	<li role="presentation"><a href="#eventloos" aria-controls="eventloos" role="tab" data-toggle="tab">Kamploos</a>
-	</li>
-	<li role="presentation"><a href="#mailing" aria-controls="mailing" role="tab" data-toggle="tab">Mailing deelnemers</a></li>
+	@endrole
+	
+	@role(["kantoorci", "kampci"])
+	<li role="presentation"><a href="#eventloos" aria-controls="eventloos" role="tab" data-toggle="tab">Kamploos</a></li>
+	@endrole
+
+	@can("showPrivateAny", \App\Participant::class)
+	<li role="presentation"><a href="#mailing" aria-controls="mailing" role="tab" data-toggle="tab">Mailing</a></li>
+	@endcan
+
+	@can("viewAny", \App\Member::class)
+	<li role="presentation"><a href="#aspirant" aria-controls="aspirant" role="tab" data-toggle="tab">Aspiranten</a></li>
+	@endcan
+
+	@can("viewAny", \App\Member::class)
 	<li role="presentation"><a href="#old-members" aria-controls="mailing" role="tab" data-toggle="tab">Oud-leden</a></li>
-	<li role="presentation"><a href="#aspirant" aria-controls="aspirant" role="tab" data-toggle="tab">Aspiranten</a>
-	</li>
-	<li role="presentation"><a href="#ranonkeltje" aria-controls="ranonkeltje" role="tab"
-			data-toggle="tab">Ranonkeltje</a></li>
-	<li role="presentation"><a href="#trainers" aria-controls="trainers" role="tab" data-toggle="tab">Ervaren
-			trainers</a></li>
-	<li role="presentation"><a href="#verjaardag" aria-controls="verjaardag" role="tab"
-			data-toggle="tab">Verjaardagen</a></li>
+	@endcan
+
+	@can("showPrivateAny", \App\Member::class)
+	<li role="presentation"><a href="#ranonkeltje" aria-controls="ranonkeltje" role="tab" data-toggle="tab">Ranonkeltje</a></li>
+	@endcan
+
+	@can("showSpecialAny", \App\Member::class)
+	<li role="presentation"><a href="#trainers" aria-controls="trainers" role="tab" data-toggle="tab">Ervaren trainers</a></li>
+	@endcan
+
+	@can("viewAny", \App\Member::class)
+	<li role="presentation"><a href="#verjaardag" aria-controls="verjaardag" role="tab" data-toggle="tab">Verjaardagen</a></li>
+	@endcan
+
 	<li role="presentation"><a href="#more" aria-controls="more" role="tab" data-toggle="tab">Meer lijsten?</a></li>
 </ul>
 
@@ -60,6 +80,7 @@ Lijsten
 		</table>
 	</div>
 
+	@can("showFinanceAny", \App\Participant::class)
 	<div role="tabpanel" class="tab-pane" id="onbetaald">
 		<h3>Deelnemers die nog niet betaald hebben</h3>
 		@if ($unpaidList)
@@ -88,7 +109,9 @@ Lijsten
 		<p>Alle deelnemers hebben betaald. Gelukkig!</p>
 		@endif
 	</div>
+	@endcan
 
+	@role("kampci"))
 	<div role="tabpanel" class="tab-pane" id="kmg">
 		<h3>Leden die nog geen KMG gehad hebben</h3>
 		@if ($kmgList->count())
@@ -113,7 +136,9 @@ Lijsten
 		<p>Alle leden hebben een KMG gehad. Gelukkig!</p>
 		@endif
 	</div>
-
+	@endrole
+	
+	@role(["kantoorci", "kampci"]))
 	<div role="tabpanel" class="tab-pane" id="eventloos">
 
 		<p>
@@ -121,7 +146,7 @@ Lijsten
 		</p>
 
 		<div class="row">
-
+			@can("viewAny", \App\Member::class)
 			<div class="col-md-6">
 				<h3>Evenementloze leden<br /><small>Exclusief oud-leden</small></h3>
 				@if ($membersWithoutEvents->count())
@@ -147,7 +172,9 @@ Lijsten
 				<p>Geen geregistreerde leden zonder evenement. Super!</p>
 				@endif
 			</div>
-
+			@endcan
+			
+			@can("viewAny", \App\Participant::class)
 			<div class="col-md-6">
 				<h3>Kamploze deelnemers</h3>
 				@if ($participantsWithoutCamps->count())
@@ -171,11 +198,14 @@ Lijsten
 				<p>Geen geregistreerde deelnemers zonder kamp. Super!</p>
 				@endif
 			</div>
-
+			@endcan
+			
 		</div>
 
 	</div>
-
+	@endrole
+	
+	@can("showPrivateAny", \App\Participant::class)
 	<div role="tabpanel" class="tab-pane" id="mailing">
 		<h3>Mailing aan deelnemers</h3>
 		<p>{{ $participantMailingList->count() }} deelnemers jonger dan 19, die gemaild mogen worden.</p>
@@ -234,7 +264,9 @@ Lijsten
 		</div>
 
 	</div>
-
+	@endcan
+	
+	@can("viewAny", \App\Member::class)
 	<div role="tabpanel" class="tab-pane" id="aspirant">
 		<h3>Aspirant-leden</h3>
 		<table class="table table-hover">
@@ -261,7 +293,9 @@ Lijsten
 			</tbody>
 		</table>
 	</div>
+	@endcan
 
+	@can("showPrivateAny", \App\Member::class)
 	<div role="tabpanel" class="tab-pane" id="ranonkeltje">
 		<h3>Leden die Ranonkeltje op papier willen ontvangen ({{ count($ranonkeltjePapier) }})</h3>
 		<table class="table table-hover">
@@ -312,7 +346,9 @@ Lijsten
 		<h4>Mailinglijst</h4>
 		<p>{{ implode(', ', $ranonkeltjeDigitaal->pluck('email_anderwijs')->toArray()) }}</p>
 	</div>
-
+	@endcan
+	
+	@can("showSpecialAny", \App\Member::class)
 	<div role="tabpanel" class="tab-pane" id="trainers">
 
 		<p>Geeft iemand aan niet meer te willen trainen? Haal dan het vinkje 'ervaren trainer' bij die persoon weg.</p>
@@ -377,7 +413,9 @@ Lijsten
 			<pre id="list-old-trainers">{{ implode(', ', $oldTrainerList->pluck('email')->toArray()) }}</pre>
 		</div>
 	</div>
-
+	@endcan
+	
+	@can("viewAny", \App\Member::class)
 	<div role="tabpanel" class="tab-pane" id="verjaardag">
 		<h3>Verjaardagskalender</h3>
 		<p><i>Normale en aspirantleden</i></p>
@@ -405,9 +443,10 @@ Lijsten
 			</div>
 		</div>
 	</div>
-
+	@endcan
+	
 	<div role="tabpanel" class="tab-pane" id="more">
-		Wil je een nieuwe lijst in dit rijtje? Vraag het even lief aan een AAS-baas.
+		Wil je een nieuwe lijst in dit rijtje? Vraag het even lief aan een <a href="mailto:aasbazen@anderwijs.nl">aasbaas</a>.
 		En: hoe specifieker je verzoek, hoe beter.
 	</div>
 

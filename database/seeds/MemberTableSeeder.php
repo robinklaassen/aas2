@@ -41,7 +41,7 @@ class MemberTableSeeder extends Seeder
 			'vog' => '1',
 			'ervaren_trainer' => '1',
 			'incasso' => '1',
-			'opmerkingen' => 'Ik ben het allergaafste spookje ooit! En ook nog eens heel bescheiden.',
+			'opmerkingen' => 'Ik ben het allergaafste spookje ooit! En ook nog eens heel bescheiden. (president)',
 		]);
 
 		Member::create([
@@ -64,7 +64,7 @@ class MemberTableSeeder extends Seeder
 			'ranonkeltje' => '0',
 			'vog' => '1',
 			'ervaren_trainer' => '1',
-			'opmerkingen' => 'Winter is coming.',
+			'opmerkingen' => 'Winter is coming. (kantoor-ci)',
 			'publish_birthday' => '0',
 		]);
 
@@ -113,6 +113,126 @@ class MemberTableSeeder extends Seeder
 			'vog' => '1',
 			'ervaren_trainer' => '1',
 			'opmerkingen' => 'Ik ben doof aan één kant en slechtziend aan de andere.'
+		]);
+
+		Member::create([
+			'voornaam' => 'Marlies',
+			'tussenvoegsel' => '',
+			'achternaam' => 'Overje',
+			'geslacht' => 'V',
+			'geboortedatum' => '1992-01-21',
+			'adres' => 'De Donk 12',
+			'postcode' => '4824 CS',
+			'plaats' => 'Breda',
+			'telefoon' => '0698763541',
+			'email' => 'm.overje@freedom.nl',
+			'email_anderwijs' => '',
+			'soort' => 'normaal',
+			'eindexamen' => 'VWO',
+			'studie' => 'Econometrie',
+			'afgestudeerd' => '1',
+			'hoebij' => 'Gelubd door Ranonkeltje',
+			'kmg' => '1',
+			'ranonkeltje' => '1',
+			'vog' => '1',
+			'ervaren_trainer' => '0',
+			'opmerkingen' => 'Ben goed met geld enzo. Penningmeester.'
+		]);
+
+		Member::create([
+			'voornaam' => 'Suzanne',
+			'tussenvoegsel' => 'van der',
+			'achternaam' => 'Laars',
+			'geslacht' => 'V',
+			'geboortedatum' => '1994-06-14',
+			'adres' => 'Haanderik 174',
+			'postcode' => '3401 EZ',
+			'plaats' => 'IJsselstein',
+			'telefoon' => '0679561005',
+			'email' => 's.vanderlaars@freedom.nl',
+			'email_anderwijs' => '',
+			'soort' => 'normaal',
+			'eindexamen' => 'VWO',
+			'studie' => 'Wiskunde',
+			'afgestudeerd' => '1',
+			'hoebij' => 'Oud deelnemer',
+			'kmg' => '1',
+			'ranonkeltje' => '1',
+			'vog' => '1',
+			'ervaren_trainer' => '1',
+			'opmerkingen' => 'Kamp-ci.'
+		]);
+
+		Member::create([
+			'voornaam' => 'Janus',
+			'tussenvoegsel' => '',
+			'achternaam' => 'Mathijssen',
+			'geslacht' => 'M',
+			'geboortedatum' => '1994-02-02',
+			'adres' => 'Dorpsstraat 25',
+			'postcode' => '1689 GG',
+			'plaats' => 'Zwaag',
+			'telefoon' => '0668547635',
+			'email' => 'j.mathijssen@kpnmail.nl',
+			'email_anderwijs' => '',
+			'soort' => 'normaal',
+			'eindexamen' => 'VWO',
+			'studie' => 'Informatica',
+			'afgestudeerd' => '1',
+			'hoebij' => 'INTERNET',
+			'kmg' => '1',
+			'ranonkeltje' => '0',
+			'vog' => '0',
+			'ervaren_trainer' => '0',
+			'opmerkingen' => 'Aasbaas.'
+		]);
+
+		Member::create([
+			'voornaam' => 'Fleur',
+			'tussenvoegsel' => '',
+			'achternaam' => 'Appelhof',
+			'geslacht' => 'V',
+			'geboortedatum' => '1993-11-13',
+			'adres' => 'Cornelis Matersweg 135',
+			'postcode' => '1943 GZ',
+			'plaats' => 'Beverwijk',
+			'telefoon' => '0689446284',
+			'email' => 'f.appelhof@kpnmail.nl',
+			'email_anderwijs' => '',
+			'soort' => 'normaal',
+			'eindexamen' => 'VWO',
+			'studie' => 'Communicatie wetenschappen',
+			'afgestudeerd' => '1',
+			'hoebij' => 'Google',
+			'kmg' => '1',
+			'ranonkeltje' => '0',
+			'vog' => '0',
+			'ervaren_trainer' => '0',
+			'opmerkingen' => 'promo-ci.'
+		]);
+
+		Member::create([
+			'voornaam' => 'Bouke',
+			'tussenvoegsel' => '',
+			'achternaam' => 'Bout',
+			'geslacht' => 'M',
+			'geboortedatum' => '1995-07-15',
+			'adres' => 'Ringdijk Zuid 101',
+			'postcode' => '4506 HD',
+			'plaats' => 'Cadzand',
+			'telefoon' => '0640932312',
+			'email' => 'bouke@bout.nl',
+			'email_anderwijs' => '',
+			'soort' => 'normaal',
+			'eindexamen' => 'VWO',
+			'studie' => 'Communicatie wetenschappen',
+			'afgestudeerd' => '1',
+			'hoebij' => 'Google',
+			'kmg' => '1',
+			'ranonkeltje' => '0',
+			'vog' => '0',
+			'ervaren_trainer' => '0',
+			'opmerkingen' => 'kantoor-ci.'
 		]);
 	}
 }

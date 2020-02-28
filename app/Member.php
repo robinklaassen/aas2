@@ -260,11 +260,22 @@ class Member extends Model
 		return $fellows;
 	}
 
+	public function hasRole($title)
+	{
+		$user = $this->user()->first();
+		return $user ? $user->hasRole($title) : false;
+	}
+
 	public function getAnderwijsEmail()
 	{
 		return [
 			"email" => $this->email_anderwijs,
 			"name" => $this->volnaam
 		];
+	}
+
+	public function isUser(User $user)
+	{
+		return $this->user->id === $user->id;
 	}
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Event;
 use App\Participant;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -15,7 +16,9 @@ class ParticipantsController extends Controller
 {
 
 	public function __construct()
-	{ }
+	{
+		$this->authorizeResource(Participant::class, 'participant');
+	}
 
 	/**
 	 * Display a listing of the resource.
@@ -112,6 +115,7 @@ class ParticipantsController extends Controller
 
 	public function delete(Participant $participant)
 	{
+		$this->authorize("delete", $participant);
 		return view('participants.delete', compact('participant'));
 	}
 
@@ -127,12 +131,14 @@ class ParticipantsController extends Controller
 	# Send participant on event (form)
 	public function onEvent(Participant $participant)
 	{
+		$this->authorize("onEvent", $participant);
 		return view('participants.onEvent', compact('participant'));
 	}
 
 	# Send participant on event (update database)
 	public function onEventSave(Participant $participant, Request $request)
 	{
+		$this->authorize("onEvent", $participant);
 		// Sync 'event_participant' pivot table
 		$status = $participant->events()->sync([$request->selected_event], false);
 		if ($status['attached'] != []) {
@@ -152,10 +158,10 @@ class ParticipantsController extends Controller
 	}
 
 	# Edit participant on event (form)
-	public function editEvent(Participant $participant, $event_id)
+	public function editEvent(Participant $participant, Event $event)
 	{
-		$event = \App\Event::findOrFail($event_id);
-		$result = \DB::table('course_event_participant')->select('course_id', 'info')->whereParticipantIdAndEventId($participant->id, $event_id)->get();
+		$this->authorize("editParticipant", $event, $participant);
+		$result = \DB::table('course_event_participant')->select('course_id', 'info')->whereParticipantIdAndEventId($participant->id, $event->id)->get();
 		$retrieved_courses = [];
 		foreach ($result as $row) {
 			$retrieved_courses[] = ['id' => $row->course_id, 'info' => $row->info];
@@ -164,16 +170,17 @@ class ParticipantsController extends Controller
 	}
 
 	# Edit participant on event (update database)
-	public function editEventSave(Participant $participant, $event_id, Request $request)
+	public function editEventSave(Participant $participant, Event $event, Request $request)
 	{
+		$this->authorize("editParticipant", $event, $participant);
 		// Delete all current courses
-		\DB::table('course_event_participant')->whereParticipantIdAndEventId($participant->id, $event_id)->delete();
+		\DB::table('course_event_participant')->whereParticipantIdAndEventId($participant->id, $event->id)->delete();
 
 		// Insert new courses
 		foreach (array_unique($request->vak) as $key => $course_id) {
 			if ($course_id) {
 				\DB::table('course_event_participant')->insert(
-					['course_id' => $course_id, 'event_id' => $event_id, 'participant_id' => $participant->id, 'info' => $request->vakinfo[$key]]
+					['course_id' => $course_id, 'event_id' => $event->id, 'participant_id' => $participant->id, 'info' => $request->vakinfo[$key]]
 				);
 			}
 		}
@@ -192,6 +199,7 @@ class ParticipantsController extends Controller
 	# Show all last years participants on a Google Map
 	public function map()
 	{
+		$this->authorize("viewAny", Participant::class);
 		// Create necessary dates
 		$now = new \DateTime('now');
 		$nowf = $now->format('Y-m-d');
