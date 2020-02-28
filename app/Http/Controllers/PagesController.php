@@ -113,6 +113,11 @@ class PagesController extends Controller
 	# Useful lists
 	public function lists()
 	{
+
+		if (!\Auth::user()->hasRole("member")) {
+			abort(403, 'Onvoldoende rechten om lijsten in te zien');
+		}
+
 		// Stats
 		$stats = [];
 

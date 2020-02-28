@@ -48,7 +48,7 @@ class CommentsController extends Controller
         $entity = $model::findOrFail($request->get("entity_id"));
 
         if ($request->input("is_secret") && !\Auth::user()->hasCapability("comments::edit::secret")) {
-            abort(403, 'Cannot create secret comment');
+            abort(403, 'Onvoldoende rechten om een geheime comment te plaatsen');
         }
 
         $comment = new Comment($request->all());
