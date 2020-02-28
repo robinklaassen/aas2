@@ -21,7 +21,7 @@ class AddRolesToExistingUsers extends Migration
             select u.id, :role, 0, NOW()
             from users u
             where u.profile_type = :type
-        '
+        ';
 
         DB::statement($query, [
             "type" => "App\\Participant",
