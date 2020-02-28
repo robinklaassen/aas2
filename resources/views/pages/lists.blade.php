@@ -32,6 +32,10 @@ Lijsten
 	<li role="presentation"><a href="#aspirant" aria-controls="aspirant" role="tab" data-toggle="tab">Aspiranten</a></li>
 	@endcan
 
+	@can("viewAny", \App\Member::class)
+	<li role="presentation"><a href="#old-members" aria-controls="mailing" role="tab" data-toggle="tab">Oud-leden</a></li>
+	@endcan
+
 	@can("showPrivateAny", \App\Member::class)
 	<li role="presentation"><a href="#ranonkeltje" aria-controls="ranonkeltje" role="tab" data-toggle="tab">Ranonkeltje</a></li>
 	@endcan
@@ -208,10 +212,57 @@ Lijsten
 		<p>Denk eraan, adressen <strong>altijd in de BCC</strong> zetten!</p>
 
 		<h4>Emailadressen ouders</h4>
-		<p>{{ implode(", ", $participantMailingList->pluck('email_ouder')->toArray()) }}</p>
+
+		<div class="list">
+			<div class="copy-btn">
+				<button class="btn" onclick="copyToClipboard(this, '#list-parents')">Copy</button>
+			</div>
+			<pre id="list-parents">{{ implode(", ", $participantMailingList->pluck('email_ouder')->toArray()) }}</pre>
+		</div>
 
 		<h4>Emailadressen deelnemers</h4>
-		<p>{{ implode(", ", $participantMailingList->pluck('email_deelnemer')->toArray()) }}</p>
+		
+		<div class="list">
+			<div class="copy-btn">
+				<button class="btn" onclick="copyToClipboard(this, '#list-participants')">Copy</button>
+			</div>
+			<pre id="list-participants">{{ implode(", ", $participantMailingList->pluck('email_deelnemer')->toArray()) }}</pre>
+		</div>
+		
+	</div>
+
+	<div role="tabpanel" class="tab-pane" id="old-members">
+		<h3>Oud-leden</h3>
+		<p>{{ $oldMembers->count() }} oud-leden.</p>
+
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th>Naam</th>
+					<th>Geregistreerd op</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach ($oldMembers as $memb)
+					<tr>
+						<td>{{ $memb->volnaam }}</td>
+						<td>{{ $memb->created_at }}</td>
+					</tr>	
+				@endforeach
+			</tbody>
+		</table>
+		
+		
+		<h4>Emailadressen</h4>
+		<p>Denk eraan, adressen <strong>altijd in de BCC</strong> zetten!</p>
+
+		<div class="list">
+			<div class="copy-btn">
+				<button class="btn" onclick="copyToClipboard(this, '#list-old-members')">Copy</button>
+			</div>
+			<pre id="list-old-members">{{ implode(", ", $oldMembers->pluck('email')->toArray()) }}</pre>
+		</div>
+
 	</div>
 	@endcan
 	
@@ -325,7 +376,13 @@ Lijsten
 		</table>
 
 		<h4>Mailinglijst</h4>
-		<p>{{ implode(', ', $trainerList->pluck('email_anderwijs')->toArray()) }}</p>
+		
+		<div class="list">
+			<div class="copy-btn">
+				<button class="btn" onclick="copyToClipboard(this, '#list-experienced-trainers')">Copy</button>
+			</div>
+			<pre id="list-experienced-trainers">{{ implode(', ', $trainerList->pluck('email_anderwijs')->toArray()) }}</pre>
+		</div>
 
 		<h3>Ervaren trainers (oud-leden)</h3>
 		<table class="table table-hover">
@@ -348,7 +405,13 @@ Lijsten
 		</table>
 
 		<h4>Mailinglijst <small>(denk aan de BCC!)</small></h4>
-		<p>{{ implode(', ', $oldTrainerList->pluck('email')->toArray()) }}</p>
+
+		<div class="list">
+			<div class="copy-btn">
+				<button class="btn" onclick="copyToClipboard(this, '#list-old-trainers')">Copy</button>
+			</div>
+			<pre id="list-old-trainers">{{ implode(', ', $oldTrainerList->pluck('email')->toArray()) }}</pre>
+		</div>
 	</div>
 	@endcan
 	
@@ -388,5 +451,53 @@ Lijsten
 	</div>
 
 </div>
+
+<style>
+	.copy-btn {
+		float: right;
+		position: relative;
+	}
+	.copy-btn .btn {
+		position: absolute;
+		right:0;
+		top: 0;
+		background: transparent;
+		color: #818a91;
+		font-size: 12px;
+		padding: 4px 8px;
+	}
+
+	.copy-btn .btn:hover {
+		background: #027de7;
+		color: white;
+	}
+
+
+</style>
+<script>
+	function copyToClipboard(el, id) {
+		var copyEl = document.querySelector(id);
+		var copyText = copyEl.textContent;
+
+		var range = document.createRange();
+		range.selectNodeContents(copyEl);
+		var sel = window.getSelection();
+		sel.removeAllRanges();
+		sel.addRange(range);
+
+		document.execCommand("copy");
+
+		$(el).tooltip({
+			title: "Gekopieerd",
+			trigger: "manual"
+		});
+		$(el).tooltip("show");
+
+		setTimeout(function() {
+			$(el).tooltip("hide");
+		}, 3000);
+		
+	}
+</script>
 
 @endsection
