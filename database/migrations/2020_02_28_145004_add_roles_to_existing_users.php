@@ -18,8 +18,8 @@ class AddRolesToExistingUsers extends Migration
 
 
         DB::statement('
-            insert into user_role (user_id , role_id, created_at)
-            select u.id, :role, NOW()
+            insert into user_role (user_id , role_id, created_by, created_at)
+            select u.id, :role, 0, NOW()
               from users u
              where u.profile_type = :type
         ', [
@@ -28,8 +28,8 @@ class AddRolesToExistingUsers extends Migration
         ]);
 
         DB::statement('
-            insert into user_role (user_id , role_id, created_at)
-            select u.id, :role, NOW()
+            insert into user_role (user_id , role_id, created_by, created_at)
+            select u.id, :role, 0, NOW()
               from users u
              where u.profile_type = :type 
         ', [
