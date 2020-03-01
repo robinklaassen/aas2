@@ -35,11 +35,15 @@ Mijn profiel
 			
 			@elseif ($viewType == 'admin')
 
+
 			@can("update", $member)
 			<a class="btn btn-primary" type="button" href="{{ url('/members', [$member->id, 'edit']) }}" style="margin-top:21px;">Bewerken</a>
 			@endcan
 			@can("onEvent", $member)
 			<a class="btn btn-info" type="button" href="{{ url('/members', [$member->id, 'on-event']) }}" style="margin-top:21px;">Op evenement</a>
+			@endcan
+			@can("editPassword", $member)
+			<a class="btn btn-warning" type="button" href="{{ url('/users', [$member->user->id, 'password']) }}" style="margin-top:21px;">Nieuw wachtwoord</a>
 			@endcan
 			@can("delete", $member)
 			<a class="btn btn-danger" type="button" href="{{ url('/members', [$member->id, 'delete']) }}" style="margin-top:21px;">Verwijderen</a>
