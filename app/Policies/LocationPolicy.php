@@ -33,9 +33,17 @@ class LocationPolicy
         return $user->hasCapability("locations::info::basic");
     }
 
-    public function viewAdvanced(User $user, Location $location)
+
+
+    public function viewAdvancedAny(User $user)
     {
         return $user->hasCapability("locations::info::advanced");
+    }
+
+
+    public function viewAdvanced(User $user, Location $location)
+    {
+        return $this->viewAdvancedAny($user);
     }
 
     /**

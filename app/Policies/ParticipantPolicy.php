@@ -19,7 +19,7 @@ class ParticipantPolicy
      */
     public function viewAny(User $user)
     {
-        return $user->hasCapability("participants::info::show::basic");
+        return $user->hasCapability("participants::info::list");
     }
 
     /**
