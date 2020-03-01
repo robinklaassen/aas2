@@ -65,12 +65,6 @@ class EventsController extends Controller
 	 */
 	public function show(Event $event)
 	{
-		// Redirect the viewer if the user profile is not attached to this event
-		// $profile = \Auth::user()->profile;
-		// if (!($profile->events->contains('id', $event->id)) && !(\Auth::user()->is_admin)) {
-		// 	return redirect('profile');
-		// }
-
 
 		// Obtain participant course information
 		$participantCourseString = array();
@@ -98,7 +92,7 @@ class EventsController extends Controller
 		}
 
 		// Check number of participants to show
-		if (\Auth::user()->is_admin) {
+		if (\Auth::user()->can("viewParticipantsAdvanced", $event)) {
 			$numberOfParticipants = $event->participants->count();
 		} else {
 			$numberOfParticipants = $event->participants()->wherePivot('geplaatst', 1)->count();
