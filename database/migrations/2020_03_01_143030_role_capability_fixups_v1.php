@@ -16,7 +16,6 @@ class RoleCapabilityFixupsV1 extends Migration
      */
     public function up()
     {
-        // remove participants show basic info for members
         function removeCapability($role, $capa)
         {
             $capa = Capability::where("name", "=", $capa)->firstOrFail();
@@ -31,17 +30,46 @@ class RoleCapabilityFixupsV1 extends Migration
             $role->capabilities()->attach($capa->id);
         }
 
+
+        // Remove show basic participant info from members
         removeCapability("member", "participants::info::show::basic");
 
+
+        // add seperate participants list capability
         DB::table("capabilities")->insert(["name" => "participants::info::list", "description" => "Deelnemerinfo - Lijst"]);
+
         addCapability("board", "participants::info::list");
         addCapability("kantoorci", "participants::info::list");
         addCapability("kantoorci", "participants::info::list");
         removeCapability("kampci", "participants::account::create");
         removeCapability("kampci", "participants::account::delete");
 
+
+        // add change password rights
         addCapability("kampci", "members::info::edit::password");
         addCapability("aasbaas", "members::info::edit::password");
+
+
+        // add member private info for board
+        addCapability("board", "members::info::show::private");
+
+
+        // Capabilities for actions
+        DB::table("capabilities")->insert([
+            ["name" => "actions::show", "description" => "Punten Acties - Inzien"],
+            ["name" => "actions::create", "description" => "Punten Acties - Aanmaken"],
+            ["name" => "actions::edit", "description" => "Punten Acties - Aanpassen"],
+            ["name" => "actions::delete", "description" => "Punten Acties - Verwijderen"],
+        ]);
+        addCapability("board", "actions::show");
+        addCapability("board", "actions::create");
+        addCapability("board", "actions::edit");
+        addCapability("board", "actions::delete");
+
+        addCapability("promoci", "actions::show");
+        addCapability("promoci", "actions::create");
+        addCapability("promoci", "actions::edit");
+        addCapability("promoci", "actions::delete");
     }
 
     /**

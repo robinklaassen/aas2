@@ -18,7 +18,7 @@
 			<a class="btn btn-primary" type="button" href="{{ url('participants/create') }}" style="margin-top:21px;">Nieuwe deelnemer</a>
 			@endcan
 			
-			<a class="btn btn-success" type="button" href="{{ url('participants/export') }}" style="margin-top:21px;">Exporteren</a>
+			{{-- <a class="btn btn-success" type="button" href="{{ url('participants/export') }}" style="margin-top:21px;">Exporteren</a> --}}
 		</p>
 	</div>
 </div>
