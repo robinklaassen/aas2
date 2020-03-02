@@ -41,6 +41,8 @@ class RoleCapabilityFixupsV1 extends Migration
         addCapability("board", "participants::info::list");
         addCapability("kantoorci", "participants::info::list");
         addCapability("kantoorci", "participants::info::list");
+
+        // remove participant account creation for participants
         removeCapability("kampci", "participants::account::create");
         removeCapability("kampci", "participants::account::delete");
 
@@ -70,6 +72,11 @@ class RoleCapabilityFixupsV1 extends Migration
         addCapability("promoci", "actions::create");
         addCapability("promoci", "actions::edit");
         addCapability("promoci", "actions::delete");
+
+        DB::table("roles")->insert([
+            "title" => "ranonkeltje",
+            "tag" => "ranonkeltje"
+        ]);
     }
 
     /**

@@ -113,7 +113,6 @@ class UserTableSeeder extends Seeder
 		$roles = Role::whereIn("tag", ["member", "promoci"])->get();
 		$user->roles()->sync($roles);
 
-
 		$member = Member::find(9);
 		$user = new User;
 		$user->username = 'kantoorci';
@@ -122,7 +121,15 @@ class UserTableSeeder extends Seeder
 		$user->privacy = '2018-06-01';
 		$member->user()->save($user);
 
-		$roles = Role::whereIn("tag", ["member", "kantoorci"])->get();
+		$member = Member::find(10);
+		$user = new User;
+		$user->username = 'redacteur';
+		$user->password = bcrypt('redacteur');
+		$user->is_admin = 0;
+		$user->privacy = '2018-06-01';
+		$member->user()->save($user);
+
+		$roles = Role::whereIn("tag", ["member", "ranonkeltje"])->get();
 		$user->roles()->sync($roles);
 	}
 }

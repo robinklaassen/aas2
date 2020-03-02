@@ -36,9 +36,9 @@ Lijsten
 	<li role="presentation"><a href="#old-members" aria-controls="mailing" role="tab" data-toggle="tab">Oud-leden</a></li>
 	@endcan
 
-	@can("showPrivateAny", \App\Member::class)
+	@role("ranonkeltje")
 	<li role="presentation"><a href="#ranonkeltje" aria-controls="ranonkeltje" role="tab" data-toggle="tab">Ranonkeltje</a></li>
-	@endcan
+	@endrole
 
 	@can("showSpecialAny", \App\Member::class)
 	<li role="presentation"><a href="#trainers" aria-controls="trainers" role="tab" data-toggle="tab">Ervaren trainers</a></li>
@@ -295,7 +295,7 @@ Lijsten
 	</div>
 	@endcan
 
-	@can("showPrivateAny", \App\Member::class)
+	@role("ranonkeltje")
 	<div role="tabpanel" class="tab-pane" id="ranonkeltje">
 		<h3>Leden die Ranonkeltje op papier willen ontvangen ({{ count($ranonkeltjePapier) }})</h3>
 		<table class="table table-hover">
@@ -344,9 +344,16 @@ Lijsten
 		</table>
 
 		<h4>Mailinglijst</h4>
-		<p>{{ implode(', ', $ranonkeltjeDigitaal->pluck('email_anderwijs')->toArray()) }}</p>
+
+		<div class="list">
+			<div class="copy-btn">
+				<button class="btn" onclick="copyToClipboard(this, '#list-ranonkeltje-mail')">Copy</button>
+			</div>
+			<pre id="list-ranonkeltje-mail">{{ implode(', ', $ranonkeltjeDigitaal->pluck('email_anderwijs')->toArray()) }}</pre>
+		</div>
+
 	</div>
-	@endcan
+	@endrole
 	
 	@can("showSpecialAny", \App\Member::class)
 	<div role="tabpanel" class="tab-pane" id="trainers">
