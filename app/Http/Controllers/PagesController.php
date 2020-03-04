@@ -248,6 +248,9 @@ class PagesController extends Controller
 		$startDate = Carbon::now()->subYears(19);
 		$participantMailingList = \App\Participant::where('mag_gemaild', 1)->where('geboortedatum', '>', $startDate->toDateString())->get();
 
+		// TODO: this
+		$inschrijvingen = [];
+
 		return view('pages.lists', compact(
 			'stats',
 			'types',
@@ -261,6 +264,7 @@ class PagesController extends Controller
 			'birthdayList',
 			'monthName',
 			'membersWithoutEvents',
+			'inschrijvingen',
 			'participantsWithoutCamps',
 			'participantMailingList',
 			'oldMembers'

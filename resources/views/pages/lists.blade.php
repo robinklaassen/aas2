@@ -40,6 +40,10 @@ Lijsten
 	<li role="presentation"><a href="#ranonkeltje" aria-controls="ranonkeltje" role="tab" data-toggle="tab">Ranonkeltje</a></li>
 	@endrole
 
+	@role(["promoci","kampci","kantoorci"])
+	<li role="presentation"><a href="#inschrijvingen" aria-controls="inschrijvingen" role="tab" data-toggle="tab">Inschrijvingen</a></li>
+	@endrole
+
 	@can("showSpecialAny", \App\Member::class)
 	<li role="presentation"><a href="#trainers" aria-controls="trainers" role="tab" data-toggle="tab">Ervaren trainers</a></li>
 	@endcan
@@ -352,6 +356,33 @@ Lijsten
 			<pre id="list-ranonkeltje-mail">{{ implode(', ', $ranonkeltjeDigitaal->pluck('email_anderwijs')->toArray()) }}</pre>
 		</div>
 
+	</div>
+	@endrole
+
+	@role(["promoci","kantoorci","kampci"])
+	<div role="tabpanel" class="tab-pane" id="inschrijvingen">
+		<h3>Deelnemer inschrijvingen in het laatste half jaar</h3>
+		<table class="table table-hover">
+			<thead>
+				<th>Naam</th>
+				<th>Kamp</th>
+				<th>Inschrijving</th>
+				<th>Hoe bij</th>
+			</thead>
+			<tbody>
+				
+				@foreach($inschrijvingen as $part)
+					<tr>
+						<td><a href="{{ url('/participants', $part->id) }}">{{ $part->volnaam }}</a></td>
+						<td>{{ $part->naam }}</td>
+						<td>{{ $part->naam }}</td>
+						<td>{{ $part->naam }}</td>
+						<td>{{ $part->naam }}</td>
+
+					</tr>
+				@endforeach
+			</tbody>
+		</table>
 	</div>
 	@endrole
 	
