@@ -89,20 +89,24 @@ Mijn profiel
 		<!-- Profieltabel -->
 		<table class="table table-hover">
 			<caption>Profiel</caption>
-			@can("showPrivate", $member)
+			@if(\Auth::user()->can("showPrivate", $member) || $member->publish_birthday)
 			<tr>
 				<td>Geboortedatum</td>
 				<td>{{ $member->geboortedatum->format('d-m-Y') }}
+					@can("showPrivate", $member)
 					<small>({{ ($member->publish_birthday) ? 'publiek' : 'niet publiek' }}
 						<a
 							title="Gepubliceerde verjaardagen zijn te zien op de startpagina van AAS voor ingelogde leden en op de digitale Anderwijskalender">?</a>)
 					</small>
+					@endcan
 				</td>
 			</tr>
+			@endcan
 			<tr>
 				<td>Geslacht</td>
 				<td>{{ $member->geslacht }}</td>
 			</tr>
+			@can("showPrivate", $member)
 			<tr>
 				<td>Adres</td>
 				<td>{{ $member->adres }}</td>
@@ -132,10 +136,12 @@ Mijn profiel
 				<td>{{ $member->iban }}</td>
 			</tr>
 			@endcan
+			@can("showPrivate", $member)
 			<tr>
 				<td>Rijbewijs?</td>
 				<td>{{ $member->rijbewijs == '1' ? 'Ja' : 'Nee' }}</td>
 			</tr>
+			@endcan
 			@can("showPrivate", $member)
 			<tr>
 				<td>Niveau eindexamen</td>

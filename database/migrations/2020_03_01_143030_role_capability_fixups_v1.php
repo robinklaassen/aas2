@@ -77,6 +77,9 @@ class RoleCapabilityFixupsV1 extends Migration
             "title" => "ranonkeltje",
             "tag" => "ranonkeltje"
         ]);
+
+        // Members see basic info of other members
+        addCapability("member", "members::info::show::basic");
     }
 
     /**
