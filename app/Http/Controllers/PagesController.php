@@ -252,7 +252,7 @@ class PagesController extends Controller
 		$inschrijvingen = DB::table('event_participant')
 			->join("participants", 'event_participant.participant_id', '=', 'participants.id')
 			->join("events", 'event_participant.event_id', '=', 'events.id')
-			->where("event_participant.created_at", ">", Db::raw("DATE_SUB(NOW(), interval 1 year)"))
+			->where("event_participant.created_at", ">", Db::raw("DATE_SUB(NOW(), interval 6 month)"))
 			->select([
 				"event_participant.participant_id",
 				"event_participant.event_id",
