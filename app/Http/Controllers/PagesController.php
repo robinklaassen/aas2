@@ -249,7 +249,14 @@ class PagesController extends Controller
 		$participantMailingList = \App\Participant::where('mag_gemaild', 1)->where('geboortedatum', '>', $startDate->toDateString())->get();
 
 		// TODO: this
-		$inschrijvingen = [];
+		$inschrijvingen = DB::statement("
+			SELECT *
+			  FROM event_participant ep 
+			  JOIN participants p ON ep.participant_id = p.id
+			  JOIN events e on ep.event_id = e.id
+			  WHERE ep.created_at > DATE_SUB(NOW(), interval 1 year) 
+			  ORDER BY ep.created_at desc ");
+		dd($inschrijvingen);
 
 		return view('pages.lists', compact(
 			'stats',
