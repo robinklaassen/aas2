@@ -40,7 +40,7 @@ Lijsten
 	<li role="presentation"><a href="#ranonkeltje" aria-controls="ranonkeltje" role="tab" data-toggle="tab">Ranonkeltje</a></li>
 	@endrole
 
-	@role(["promoci","kampci","kantoorci"])
+	@role(["promoci","kampci","kantoorci","board"])
 	<li role="presentation"><a href="#inschrijvingen" aria-controls="inschrijvingen" role="tab" data-toggle="tab">Inschrijvingen</a></li>
 	@endrole
 
@@ -359,13 +359,14 @@ Lijsten
 	</div>
 	@endrole
 
-	@role(["promoci","kantoorci","kampci"])
+	@role(["promoci","kantoorci","kampci","board"])
 	<div role="tabpanel" class="tab-pane" id="inschrijvingen">
 		<h3>Deelnemer inschrijvingen in het laatste half jaar</h3>
 		<table class="table table-hover">
 			<thead>
 				<th>Naam</th>
 				<th>Kamp</th>
+				<th></th>
 				<th>Inschrijving</th>
 				<th>Hoe bij</th>
 			</thead>
@@ -373,11 +374,15 @@ Lijsten
 				
 				@foreach($inschrijvingen as $part)
 					<tr>
-						<td><a href="{{ url('/participants', $part->id) }}">{{ $part->volnaam }}</a></td>
-						<td>{{ $part->naam }}</td>
-						<td>{{ $part->naam }}</td>
-						<td>{{ $part->naam }}</td>
-						<td>{{ $part->naam }}</td>
+						<td><a href="{{ url('/participants', $part->participant_id) }}">{{ str_replace('  ', ' ', $part->voornaam . ' ' . $part->tussenvoegsel . ' ' . $part->achternaam) }}</a></td>
+						<td><a href="{{ url('/event', $part->event_id) }}">{{ $part->kamp_naam }}</a></td>
+						<td>
+							@if($part->is_nieuw)
+								<span class="glyphicon glyphicon-baby-formula" data-toggle="tooltip" title="Nieuw dit kamp"></span>
+							@endif
+						</td>
+						<td>{{ $part->kamp_aanmeld_datum }}</td>
+						<td>{{ $part->hoebij }}</td>
 
 					</tr>
 				@endforeach

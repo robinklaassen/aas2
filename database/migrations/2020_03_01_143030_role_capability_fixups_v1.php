@@ -68,10 +68,6 @@ class RoleCapabilityFixupsV1 extends Migration
         addCapability("board", "actions::edit");
         addCapability("board", "actions::delete");
 
-        addCapability("promoci", "actions::show");
-        addCapability("promoci", "actions::create");
-        addCapability("promoci", "actions::edit");
-        addCapability("promoci", "actions::delete");
 
         DB::table("roles")->insert([
             "title" => "ranonkeltje",
