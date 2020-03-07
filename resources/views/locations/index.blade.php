@@ -15,7 +15,9 @@
 	</div>
 	<div class="col-sm-6">
 		<p class="text-right">
+			@can("create", \App\Location::class)
 			<a class="btn btn-primary" type="button" href="{{ url('locations/create') }}" style="margin-top:21px;">Nieuwe locatie</a>
+			@endcan
 		</p>
 	</div>
 </div>
@@ -29,8 +31,10 @@
 			<tr>
 				<th>Naam</th>
 				<th>Plaats</th>
+				@can("viewAdvancedAny", \App\Location::class)
 				<th>Telefoon</th>
 				<th>Email</th>
+				@endcan
 				<th><span data-toggle="tooltip" title="Kampen">K</span></th>
 				<th><span data-toggle="tooltip" title="Trainingen">T</span></th>
 				<th><span data-toggle="tooltip" title="Overige evenementen">O</span></th>
@@ -43,8 +47,10 @@
 					<tr>
 						<td><a href="{{ url('/locations', $location->id) }}">{{ $location->naam }}</a></td>
 						<td>{{ $location->plaats }}</td>
+						@can("viewAdvancedAny", \App\Location::class)
 						<td>{{ $location->telefoon }}</td>
 						<td><a href="mailto:{{ $location->email }}">{{ $location->email }}</a></td>
+						@endcan
 						<td>{{ $location->events()->where('type','kamp')->count() }}</td>
 						<td>{{ $location->events()->where('type','training')->count() }}</td>
 						<td>{{ $location->events()->where('type','overig')->count() }}</td>

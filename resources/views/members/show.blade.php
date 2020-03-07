@@ -35,11 +35,15 @@ Mijn profiel
 			
 			@elseif ($viewType == 'admin')
 
+
 			@can("update", $member)
 			<a class="btn btn-primary" type="button" href="{{ url('/members', [$member->id, 'edit']) }}" style="margin-top:21px;">Bewerken</a>
 			@endcan
 			@can("onEvent", $member)
 			<a class="btn btn-info" type="button" href="{{ url('/members', [$member->id, 'on-event']) }}" style="margin-top:21px;">Op evenement</a>
+			@endcan
+			@can("editPassword", $member)
+			<a class="btn btn-warning" type="button" href="{{ url('/users', [$member->user->id, 'password']) }}" style="margin-top:21px;">Nieuw wachtwoord</a>
 			@endcan
 			@can("delete", $member)
 			<a class="btn btn-danger" type="button" href="{{ url('/members', [$member->id, 'delete']) }}" style="margin-top:21px;">Verwijderen</a>
@@ -85,20 +89,24 @@ Mijn profiel
 		<!-- Profieltabel -->
 		<table class="table table-hover">
 			<caption>Profiel</caption>
-			@can("showPrivate", $member)
+			@if(\Auth::user()->can("showPrivate", $member) || $member->publish_birthday)
 			<tr>
 				<td>Geboortedatum</td>
 				<td>{{ $member->geboortedatum->format('d-m-Y') }}
+					@can("showPrivate", $member)
 					<small>({{ ($member->publish_birthday) ? 'publiek' : 'niet publiek' }}
 						<a
 							title="Gepubliceerde verjaardagen zijn te zien op de startpagina van AAS voor ingelogde leden en op de digitale Anderwijskalender">?</a>)
 					</small>
+					@endcan
 				</td>
 			</tr>
+			@endcan
 			<tr>
 				<td>Geslacht</td>
 				<td>{{ $member->geslacht }}</td>
 			</tr>
+			@can("showPrivate", $member)
 			<tr>
 				<td>Adres</td>
 				<td>{{ $member->adres }}</td>
@@ -128,10 +136,12 @@ Mijn profiel
 				<td>{{ $member->iban }}</td>
 			</tr>
 			@endcan
+			@can("showPrivate", $member)
 			<tr>
 				<td>Rijbewijs?</td>
 				<td>{{ $member->rijbewijs == '1' ? 'Ja' : 'Nee' }}</td>
 			</tr>
+			@endcan
 			@can("showPrivate", $member)
 			<tr>
 				<td>Niveau eindexamen</td>

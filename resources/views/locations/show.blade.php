@@ -57,11 +57,11 @@
 				<td>Website</td>
 				<td><a href="{{ $location->website }}">{{ $location->website }}</a></td>
 			</tr>
+			@can("viewAdvanced", $location)
 			<tr>
 				<td>Telefoon</td>
 				<td>{{ $location->telefoon }}</td>
 			</tr>
-			@can("viewAdvanced", $location)
 			<tr>
 				<td>Emailadres</td>
 				<td><a href="mailto:{{ $location->email }}">{{ $location->email }}</a></td>

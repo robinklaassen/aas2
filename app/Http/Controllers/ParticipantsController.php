@@ -193,6 +193,9 @@ class ParticipantsController extends Controller
 	# Export all participants to Excel
 	public function export()
 	{
+		// 20200301, this exports holds all information for partcipants, lets first be clear for whom this export is.
+		abort(403);
+
 		return Excel::download(new ParticipantsExport, date('Y-m-d') . ' AAS Deelnemers.xlsx');
 	}
 

@@ -1,4 +1,6 @@
-<?php namespace App\Http\Controllers;
+<?php
+
+namespace App\Http\Controllers;
 
 use App\Action;
 use App\Http\Requests;
@@ -6,29 +8,30 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 
-class ActionsController extends Controller {
+class ActionsController extends Controller
+{
 
 	public function __construct()
 	{
-		// You need to be logged in and have admin rights to access
-		$this->middleware('auth');
-		$this->middleware('admin');
+		$this->authorizeResource(Action::class, 'action');
 	}
-	
+
 	/**
 	 * Display a listing of the resource.
 	 *
 	 * @return Response
 	 */
 	public function index()
-	{	
+	{
 		$actions = Action::orderBy('date')->get();
-		
+
 		$members = [];
 		foreach (\App\Member::orderBy('voornaam')->get() as $member) {
-			if ($member->points > 0) {$members[] = $member;}
+			if ($member->points > 0) {
+				$members[] = $member;
+			}
 		};
-		
+
 		return view('actions.index', compact('actions', 'members'));
 	}
 
@@ -99,9 +102,10 @@ class ActionsController extends Controller {
 	 */
 	public function delete(Action $action)
 	{
+		$this->authorize("delete", $action);
 		return view('actions.delete', compact('action'));
 	}
-	
+
 	public function destroy(Action $action)
 	{
 		$action->delete();
@@ -109,5 +113,4 @@ class ActionsController extends Controller {
 			'flash_message' => 'De actie is verwijderd!'
 		]);
 	}
-
 }
