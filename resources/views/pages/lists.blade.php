@@ -11,17 +11,20 @@ Lijsten
 <hr />
 
 <ul class="nav nav-tabs" role="tablist">
-	<li role="presentation" class="active"><a href="#stats" aria-controls="stats" role="tab" data-toggle="tab">Statistieken</a></li>
+	<li role="presentation" class="active"><a href="#stats" aria-controls="stats" role="tab"
+			data-toggle="tab">Statistieken</a></li>
 	@can("showFinanceAny", \App\Participant::class)
-	<li role="presentation"><a href="#onbetaald" aria-controls="onbetaald" role="tab" data-toggle="tab">Betalingen</a></li>
+	<li role="presentation"><a href="#onbetaald" aria-controls="onbetaald" role="tab" data-toggle="tab">Betalingen</a>
+	</li>
 	@endcan
 
 	@role("kampci")
 	<li role="presentation"><a href="#kmg" aria-controls="kmg" role="tab" data-toggle="tab">KMG</a></li>
 	@endrole
-	
+
 	@role(["kantoorci", "kampci"])
-	<li role="presentation"><a href="#eventloos" aria-controls="eventloos" role="tab" data-toggle="tab">Kamploos</a></li>
+	<li role="presentation"><a href="#eventloos" aria-controls="eventloos" role="tab" data-toggle="tab">Kamploos</a>
+	</li>
 	@endrole
 
 	@can("showPrivateAny", \App\Participant::class)
@@ -29,27 +32,33 @@ Lijsten
 	@endcan
 
 	@can("viewAny", \App\Member::class)
-	<li role="presentation"><a href="#aspirant" aria-controls="aspirant" role="tab" data-toggle="tab">Aspiranten</a></li>
+	<li role="presentation"><a href="#aspirant" aria-controls="aspirant" role="tab" data-toggle="tab">Aspiranten</a>
+	</li>
 	@endcan
 
-	@can("viewAny", \App\Member::class)
-	<li role="presentation"><a href="#old-members" aria-controls="mailing" role="tab" data-toggle="tab">Oud-leden</a></li>
+	@can("showPrivateAny", \App\Member::class)
+	<li role="presentation"><a href="#old-members" aria-controls="mailing" role="tab" data-toggle="tab">Oud-leden</a>
+	</li>
 	@endcan
 
 	@role("ranonkeltje")
-	<li role="presentation"><a href="#ranonkeltje" aria-controls="ranonkeltje" role="tab" data-toggle="tab">Ranonkeltje</a></li>
+	<li role="presentation"><a href="#ranonkeltje" aria-controls="ranonkeltje" role="tab"
+			data-toggle="tab">Ranonkeltje</a></li>
 	@endrole
 
 	@role(["promoci","kampci","kantoorci","board"])
-	<li role="presentation"><a href="#inschrijvingen" aria-controls="inschrijvingen" role="tab" data-toggle="tab">Inschrijvingen</a></li>
+	<li role="presentation"><a href="#inschrijvingen" aria-controls="inschrijvingen" role="tab"
+			data-toggle="tab">Inschrijvingen</a></li>
 	@endrole
 
 	@can("showSpecialAny", \App\Member::class)
-	<li role="presentation"><a href="#trainers" aria-controls="trainers" role="tab" data-toggle="tab">Ervaren trainers</a></li>
+	<li role="presentation"><a href="#trainers" aria-controls="trainers" role="tab" data-toggle="tab">Ervaren
+			trainers</a></li>
 	@endcan
 
 	@can("viewAny", \App\Member::class)
-	<li role="presentation"><a href="#verjaardag" aria-controls="verjaardag" role="tab" data-toggle="tab">Verjaardagen</a></li>
+	<li role="presentation"><a href="#verjaardag" aria-controls="verjaardag" role="tab"
+			data-toggle="tab">Verjaardagen</a></li>
 	@endcan
 
 	<li role="presentation"><a href="#more" aria-controls="more" role="tab" data-toggle="tab">Meer lijsten?</a></li>
@@ -141,7 +150,7 @@ Lijsten
 		@endif
 	</div>
 	@endrole
-	
+
 	@role(["kantoorci", "kampci"]))
 	<div role="tabpanel" class="tab-pane" id="eventloos">
 
@@ -177,7 +186,7 @@ Lijsten
 				@endif
 			</div>
 			@endcan
-			
+
 			@can("viewAny", \App\Participant::class)
 			<div class="col-md-6">
 				<h3>Kamploze deelnemers</h3>
@@ -203,12 +212,12 @@ Lijsten
 				@endif
 			</div>
 			@endcan
-			
+
 		</div>
 
 	</div>
 	@endrole
-	
+
 	@can("showPrivateAny", \App\Participant::class)
 	<div role="tabpanel" class="tab-pane" id="mailing">
 		<h3>Mailing aan deelnemers</h3>
@@ -225,14 +234,15 @@ Lijsten
 		</div>
 
 		<h4>Emailadressen deelnemers</h4>
-		
+
 		<div class="list">
 			<div class="copy-btn">
 				<button class="btn" onclick="copyToClipboard(this, '#list-participants')">Copy</button>
 			</div>
-			<pre id="list-participants">{{ implode(", ", $participantMailingList->pluck('email_deelnemer')->toArray()) }}</pre>
+			<pre
+				id="list-participants">{{ implode(", ", $participantMailingList->pluck('email_deelnemer')->toArray()) }}</pre>
 		</div>
-		
+
 	</div>
 
 	<div role="tabpanel" class="tab-pane" id="old-members">
@@ -248,15 +258,15 @@ Lijsten
 			</thead>
 			<tbody>
 				@foreach ($oldMembers as $memb)
-					<tr>
-						<td>{{ $memb->volnaam }}</td>
-						<td>{{ $memb->created_at }}</td>
-					</tr>	
+				<tr>
+					<td>{{ $memb->volnaam }}</td>
+					<td>{{ $memb->created_at }}</td>
+				</tr>
 				@endforeach
 			</tbody>
 		</table>
-		
-		
+
+
 		<h4>Emailadressen</h4>
 		<p>Denk eraan, adressen <strong>altijd in de BCC</strong> zetten!</p>
 
@@ -269,7 +279,7 @@ Lijsten
 
 	</div>
 	@endcan
-	
+
 	@can("viewAny", \App\Member::class)
 	<div role="tabpanel" class="tab-pane" id="aspirant">
 		<h3>Aspirant-leden</h3>
@@ -353,7 +363,8 @@ Lijsten
 			<div class="copy-btn">
 				<button class="btn" onclick="copyToClipboard(this, '#list-ranonkeltje-mail')">Copy</button>
 			</div>
-			<pre id="list-ranonkeltje-mail">{{ implode(', ', $ranonkeltjeDigitaal->pluck('email_anderwijs')->toArray()) }}</pre>
+			<pre
+				id="list-ranonkeltje-mail">{{ implode(', ', $ranonkeltjeDigitaal->pluck('email_anderwijs')->toArray()) }}</pre>
 		</div>
 
 	</div>
@@ -371,26 +382,29 @@ Lijsten
 				<th>Hoe bij</th>
 			</thead>
 			<tbody>
-				
-				@foreach($inschrijvingen as $part)
-					<tr>
-						<td><a href="{{ url('/participants', $part->participant_id) }}">{{ str_replace('  ', ' ', $part->voornaam . ' ' . $part->tussenvoegsel . ' ' . $part->achternaam) }}</a></td>
-						<td><a href="{{ url('/event', $part->event_id) }}">{{ $part->kamp_naam }}</a></td>
-						<td>
-							@if($part->is_nieuw)
-								<span class="glyphicon glyphicon-baby-formula" data-toggle="tooltip" title="Nieuw dit kamp"></span>
-							@endif
-						</td>
-						<td>{{ $part->kamp_aanmeld_datum }}</td>
-						<td>{{ $part->hoebij }}</td>
 
-					</tr>
+				@foreach($inschrijvingen as $part)
+				<tr>
+					<td><a
+							href="{{ url('/participants', $part->participant_id) }}">{{ str_replace('  ', ' ', $part->voornaam . ' ' . $part->tussenvoegsel . ' ' . $part->achternaam) }}</a>
+					</td>
+					<td><a href="{{ url('/event', $part->event_id) }}">{{ $part->kamp_naam }}</a></td>
+					<td>
+						@if($part->is_nieuw)
+						<span class="glyphicon glyphicon-baby-formula" data-toggle="tooltip"
+							title="Nieuw dit kamp"></span>
+						@endif
+					</td>
+					<td>{{ $part->kamp_aanmeld_datum }}</td>
+					<td>{{ $part->hoebij }}</td>
+
+				</tr>
 				@endforeach
 			</tbody>
 		</table>
 	</div>
 	@endrole
-	
+
 	@can("showSpecialAny", \App\Member::class)
 	<div role="tabpanel" class="tab-pane" id="trainers">
 
@@ -419,12 +433,13 @@ Lijsten
 		</table>
 
 		<h4>Mailinglijst</h4>
-		
+
 		<div class="list">
 			<div class="copy-btn">
 				<button class="btn" onclick="copyToClipboard(this, '#list-experienced-trainers')">Copy</button>
 			</div>
-			<pre id="list-experienced-trainers">{{ implode(', ', $trainerList->pluck('email_anderwijs')->toArray()) }}</pre>
+			<pre
+				id="list-experienced-trainers">{{ implode(', ', $trainerList->pluck('email_anderwijs')->toArray()) }}</pre>
 		</div>
 
 		<h3>Ervaren trainers (oud-leden)</h3>
@@ -457,7 +472,7 @@ Lijsten
 		</div>
 	</div>
 	@endcan
-	
+
 	@can("viewAny", \App\Member::class)
 	<div role="tabpanel" class="tab-pane" id="verjaardag">
 		<h3>Verjaardagskalender</h3>
@@ -487,9 +502,10 @@ Lijsten
 		</div>
 	</div>
 	@endcan
-	
+
 	<div role="tabpanel" class="tab-pane" id="more">
-		Wil je een nieuwe lijst in dit rijtje? Vraag het even lief aan een <a href="mailto:aasbazen@anderwijs.nl">aasbaas</a>.
+		Wil je een nieuwe lijst in dit rijtje? Vraag het even lief aan een <a
+			href="mailto:aasbazen@anderwijs.nl">aasbaas</a>.
 		En: hoe specifieker je verzoek, hoe beter.
 	</div>
 
@@ -500,9 +516,10 @@ Lijsten
 		float: right;
 		position: relative;
 	}
+
 	.copy-btn .btn {
 		position: absolute;
-		right:0;
+		right: 0;
 		top: 0;
 		background: transparent;
 		color: #818a91;
@@ -514,8 +531,6 @@ Lijsten
 		background: #027de7;
 		color: white;
 	}
-
-
 </style>
 <script>
 	function copyToClipboard(el, id) {
