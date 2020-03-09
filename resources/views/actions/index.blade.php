@@ -14,7 +14,7 @@ Punten
 	</div>
 	<div class="col-sm-6">
 		<p class="text-right">
-			@can("create", \App\Actions::class)
+			@can("create", \App\Action::class)
 			<a class="btn btn-primary" type="button" href="{{ url('actions/create') }}" style="margin-top:21px;">
 				Nieuwe actie
 			</a>
