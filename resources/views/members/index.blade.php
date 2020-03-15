@@ -52,12 +52,12 @@ Leden
 			<table class="table table-hover" id="currentMembersTable">
 				<thead>
 					<tr>
-						<th>Voornaam</th>
+						<th data-orderable="true">Voornaam</th>
 						<th></th>
-						<th>Achternaam</th>
-						<th>Woonplaats</th>
+						<th data-orderable="true">Achternaam</th>
+						<th data-orderable="true">Woonplaats</th>
 						@can("showPracticalAny", \App\Member::class)
-						<th>Soort lid</th>
+						<th data-orderable="true">Soort lid</th>
 						@endcan
 						@can("showAdministrativeAny", \App\Member::class)
 						<th>VOG</th>
@@ -111,14 +111,13 @@ Leden
 		@can("listOldMembers", \App\Member::class)
 		<div role="tabpanel" class="tab-pane" id="oud">
 			<!-- Tabel oud-leden -->
-			<table class="table table-hover" id="formerMembersTable" data-page-length="25">
+			<table class="table table-hover" id="oldMembersTable" data-page-length="25">
 				<thead>
 					<tr>
-						<th>Voornaam</th>
+						<th data-orderable="true">Voornaam</th>
 						<th></th>
-						<th>Achternaam</th>
-						<th>Woonplaats</th>
-						<!--<th>Soort lid</th>-->
+						<th data-orderable="true">Achternaam</th>
+						<th data-orderable="true">Woonplaats</th>
 						<th>Telefoon</th>
 						<th>Email</th>
 					</tr>
@@ -131,7 +130,6 @@ Leden
 						<td>{{ $member->tussenvoegsel }}</td>
 						<td>{{ $member->achternaam }}</td>
 						<td>{{ $member->plaats }}</td>
-						<!--<td>{{ $member->soort }}</td>-->
 						<td>{{ $member->telefoon }}</td>
 						<td><a href="mailto:{{ $member->email }}">{{ $member->email }}</a></td>
 					</tr>
@@ -148,34 +146,27 @@ Leden
 @section('footer')
 <!-- These scripts load DataTables -->
 <script type="text/javascript">
+	function getColumnOptions(tableHeaderSelector) {
+		let columnOptions = [];
+		$(tableHeaderSelector).each(function(i) {
+			let option = ($(this).data('orderable')) ? null : {'orderable': false};
+			columnOptions.push(option);
+		})
+		return columnOptions;
+	}
+	
 	$( document ).ready(function() {
 
-	// Create the column options for the members table (number of columns can vary with user capabilities)
-	let memberColumnCount = $('#currentMembersTable').find('tr:first th').length;
-	let orderableColumnIndices = [0, 2, 3];
-	let columnOptions = [];
-	for (let i = 0; i < memberColumnCount; i++) {
-		let option = (orderableColumnIndices.includes(i)) ? null : {'orderable': false};
-		columnOptions.push(option);
-	}
+		$('#currentMembersTable').DataTable({
+			paging: false,
+			order: [[ 0, "asc" ]],
+			columns: getColumnOptions('#currentMembersTable tr:first th')
+		});
 
-    $('#currentMembersTable').DataTable({
-		paging: false,
-		order: [[ 0, "asc" ]],
-		columns: columnOptions
+		$('#oldMembersTable').DataTable({
+			order: [[ 0, "asc" ]],
+			columns: getColumnOptions('#oldMembersTable tr:first th')
+		});
 	});
-
-	$('#formerMembersTable').DataTable({
-		order: [[ 0, "asc" ]],
-		columns: [
-			null,
-			{'orderable':false},
-			null,
-			null,
-			{'orderable':false},
-			{'orderable':false}
-		]
-	});
-});
 </script>
 @endsection
