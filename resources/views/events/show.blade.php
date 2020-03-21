@@ -245,20 +245,20 @@
 			<thead>
 				<tr>
 					@can("viewParticipantsAdvanced", $event)
-					<th>Naam</th>
-					<th>Niveau</th>
+					<th data-orderable>Naam</th>
+					<th data-orderable>Niveau</th>
 					<th></th>
 					<th>Vakken</th>
-					<th>Aanmelding</th>
-					<th>Betaling</th>
-					<th>Inkomensverklaring</th>
-					<th>Geplaatst</th>
+					<th data-orderable>Aanmelding</th>
+					<th data-orderable>Betaling</th>
+					<th data-orderable>Inkomensverklaring</th>
+					<th data-orderable>Geplaatst</th>
 					@else
-					<th>Naam</th>
-					<th>Niveau</th>
+					<th data-orderable>Naam</th>
+					<th data-orderable>Niveau</th>
 					<th>Telefoon ouder(s)</th>
-					<th>Woonplaats</th>
-					<th>Aanmelding</th>
+					<th data-orderable>Woonplaats</th>
+					<th data-orderable>Aanmelding</th>
 					@endcan
 					<th></th>
 					<th></th>
@@ -355,13 +355,13 @@
 			@if ($event->participants()->wherePivot('geplaatst', 1)->count())
 			<thead>
 				<tr>
-					<th>Naam</th>
-					<th>Alleen Email</th>
-					<th>Adres</th>
-					<th>Postcode</th>
-					<th>Woonplaats</th>
-					<th>Email ouders</th>
-					<th>Email deelnemer</th>
+					<th data-orderable>Naam</th>
+					<th data-orderable>Alleen Email</th>
+					<th data-orderable>Adres</th>
+					<th data-orderable>Postcode</th>
+					<th data-orderable>Woonplaats</th>
+					<th data-orderable>Email ouders</th>
+					<th data-orderable>Email deelnemer</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -380,7 +380,7 @@
 					<td>{{ $participant->adres }}</td>
 					<td>{{ $participant->postcode }}</td>
 					<td>{{ $participant->plaats }}</td>
-					<td>{{ $participant->emailemail_ouder }}</td>
+					<td>{{ $participant->email_ouder }}</td>
 					<td>{{ $participant->email_deelnemer }}</td>
 				</tr>
 				@endforeach
@@ -398,34 +398,9 @@
 @section ('footer')
 <script type="text/javascript">
 	($(document).ready(function() {
-		$('#participantsTable').DataTable({
-			paging: false,
-			searching: false,
-			info: false,
-			columns: [
-				null,
-				null,
-				{
-					'orderable': false
-				},
-				{
-					'orderable': false
-				},
-				null,
-				null,
-				null,
-				null,
-				{
-					'orderable': false
-				},
-				{
-					'orderable': false
-				},
-				{
-					'orderable': false
-				}
-			]
-		});
+		makeTableSortable("#participantsTable");
+		makeTableSortable("#addressesTable");
+		
 	}));
 </script>
 @endsection
