@@ -5,6 +5,7 @@ namespace App\Providers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Validator;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -32,6 +33,15 @@ class AppServiceProvider extends ServiceProvider
 
 		Blade::directive('endcanany', function ($b) {
 			return "<?php endif; ?>";
+		});
+
+		Validator::extend('same_when', function ($attribute, $value, $parameters, $validator) {
+			$data = $validator->getData();
+			if ($value !== $parameters[0]) {
+				return true;
+			} else {
+				return isset($data[$parameters[1]]) && isset($data[$parameters[2]]) && $data[$parameters[1]] !== $data[$parameters[2]];
+			}
 		});
 	}
 

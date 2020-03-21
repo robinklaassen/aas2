@@ -90,7 +90,7 @@
 			Informatie ontvangen via 
 			<span class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="tooltip" title="Informatie over deelname aan het kamp kunt u via email en post ontvangen.">
 		</label>
-		{!! Form::select('information_channel', \App\Participant::INFORMATION_CHANNEL_DESCRIPTION_TABLE, 0, ['class' => 'form-control']) !!}
+		{!! Form::select('information_channel', \App\Participant::INFORMATION_CHANNEL_DESCRIPTION_TABLE, null, ['class' => 'form-control']) !!}
 	</div>
 
 </div>
