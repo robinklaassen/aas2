@@ -223,113 +223,169 @@
 </div>
 
 @can('viewParticipants', $event)
-<table class="table table-hover" id="participantsTable">
-	<caption>
-		Deelnemers ({{ $numberOfParticipants }})
-	</caption>
-	@if ($event->participants->count())
-	<thead>
-		<tr>
-			@can("viewParticipantsAdvanced", $event)
-			<th>Naam</th>
-			<th>Niveau</th>
-			<th></th>
-			<th>Vakken</th>
-			<th>Aanmelding</th>
-			<th>Betaling</th>
-			<th>Inkomensverklaring</th>
-			<th>Geplaatst</th>
-			@else
-			<th>Naam</th>
-			<th>Niveau</th>
-			<th>Telefoon ouder(s)</th>
-			<th>Woonplaats</th>
-			<th>Aanmelding</th>
-			@endcan
-			<th></th>
-			<th></th>
-			<th></th>
-		</tr>
-	</thead>
-	@endif
-	@foreach($event->participants()->orderBy('voornaam')->get() as $participant)
-	@if( \Auth::user()->can("viewParticipantsAdvanced", $event)  || $participant->pivot->geplaatst )
-	<tr>
-		<td>
-			@can("showBasic", $participant)
-			<a href="{{ url('/participants', $participant->id) }}">
-				{{ $participant->voornaam }} {{ $participant->tussenvoegsel }} {{ $participant->achternaam }}
-			</a>
-			@else
-				{{ $participant->voornaam }} {{ $participant->tussenvoegsel }} {{ $participant->achternaam }}
-			@endcan
-			
-		</td>
 
-		<td>{{ $participant->klas }} {{ $participant->niveau }}</td>
+<ul class="nav nav-tabs" role="tablist">
+	<li role="presentation" class="active"><a href="#overview" aria-controls="overview" role="tab"
+			data-toggle="tab">Overzicht</a></li>
+	
+	@role("kantoorci")
+	<li role="presentation"><a href="#addresses" aria-controls="addresses" role="tab"
+		data-toggle="tab">Adressen</a></li>
+	@endrole
+</ul>
 
-		@can("viewParticipantsAdvanced", $event)
-		<td>
-			@if ($participantIsNew[$participant->id] == 1)
-			<span class="glyphicon glyphicon-baby-formula" data-toggle="tooltip" title="Nieuw dit kamp"></span>
+<div class="tab-content" style="margin: 0 20px;">
+
+	<div role="tabpanel" class="tab-pane active" id="overview">
+		<table class="table table-hover" id="participantsTable">
+			<caption>
+				Deelnemers ({{ $numberOfParticipants }})
+			</caption>
+			@if ($event->participants->count())
+			<thead>
+				<tr>
+					@can("viewParticipantsAdvanced", $event)
+					<th>Naam</th>
+					<th>Niveau</th>
+					<th></th>
+					<th>Vakken</th>
+					<th>Aanmelding</th>
+					<th>Betaling</th>
+					<th>Inkomensverklaring</th>
+					<th>Geplaatst</th>
+					@else
+					<th>Naam</th>
+					<th>Niveau</th>
+					<th>Telefoon ouder(s)</th>
+					<th>Woonplaats</th>
+					<th>Aanmelding</th>
+					@endcan
+					<th></th>
+					<th></th>
+					<th></th>
+				</tr>
+			</thead>
 			@endif
-		</td>
+			@foreach($event->participants()->orderBy('voornaam')->get() as $participant)
+			@if( \Auth::user()->can("viewParticipantsAdvanced", $event)  || $participant->pivot->geplaatst )
+			<tr>
+				<td>
+					@can("showBasic", $participant)
+					<a href="{{ url('/participants', $participant->id) }}">
+						{{ $participant->voornaam }} {{ $participant->tussenvoegsel }} {{ $participant->achternaam }}
+					</a>
+					@else
+						{{ $participant->voornaam }} {{ $participant->tussenvoegsel }} {{ $participant->achternaam }}
+					@endcan
+					
+				</td>
 
-		<td>{{ $participantCourseString[$participant->id] }}</td>
-		@endcan
+				<td>{{ $participant->klas }} {{ $participant->niveau }}</td>
+
+				@can("viewParticipantsAdvanced", $event)
+				<td>
+					@if ($participantIsNew[$participant->id] == 1)
+					<span class="glyphicon glyphicon-baby-formula" data-toggle="tooltip" title="Nieuw dit kamp"></span>
+					@endif
+				</td>
+
+				<td>{{ $participantCourseString[$participant->id] }}</td>
+				@endcan
 
 
-		@cannot("viewParticipantsAdvanced", $event)
+				@cannot("viewParticipantsAdvanced", $event)
 
-		<td>{{ $participant->telefoon_ouder_vast }}</td>
+				<td>{{ $participant->telefoon_ouder_vast }}</td>
 
-		<td>{{ $participant->plaats }}</td>
+				<td>{{ $participant->plaats }}</td>
 
-		@endcannot
+				@endcannot
 
-		<td>{{ $participant->pivot->created_at->format('Y-m-d') }}</td>
+				<td>{{ $participant->pivot->created_at->format('Y-m-d') }}</td>
 
-		@can("viewParticipantsAdvanced", $event)
-		<td>
-			@unless ($participant->pivot->datum_betaling == '0000-00-00')
-			{{ substr($participant->pivot->datum_betaling,0,4) .'-'.substr($participant->pivot->datum_betaling,5,2).'-'.substr($participant->pivot->datum_betaling,8,2) }}
-			@else
-			<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" data-toggle="tooltip" title="Deze deelnemer heeft nog niet betaald!"></span>
-			@endunless
-		</td>
+				@can("viewParticipantsAdvanced", $event)
+				<td>
+					@unless ($participant->pivot->datum_betaling == '0000-00-00')
+					{{ substr($participant->pivot->datum_betaling,0,4) .'-'.substr($participant->pivot->datum_betaling,5,2).'-'.substr($participant->pivot->datum_betaling,8,2) }}
+					@else
+					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" data-toggle="tooltip" title="Deze deelnemer heeft nog niet betaald!"></span>
+					@endunless
+				</td>
 
-		<td>
-			@unless ($participant->inkomen == 0)
-			@if ($participant->inkomensverklaring != null)
-			{{ $participant->inkomensverklaring->format('Y-m-d') }}
-			@else
-			<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" data-toggle="tooltip" title="Inkomensverklaring nog niet binnen!"></span>
+				<td>
+					@unless ($participant->inkomen == 0)
+					@if ($participant->inkomensverklaring != null)
+					{{ $participant->inkomensverklaring->format('Y-m-d') }}
+					@else
+					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" data-toggle="tooltip" title="Inkomensverklaring nog niet binnen!"></span>
+					@endif
+					@else
+					<span class="glyphicon glyphicon-ok" aria-hidden="true" data-toggle="tooltip" title="Inkomensverklaring niet nodig"></span>
+					@endunless
+				</td>
+				<td>{{ ($participant->pivot->geplaatst) ? 'Ja' : 'Nee' }}</td>
+				@endcan
+				
+				@can("editParticipant", [$event, $participant])
+				<td><a href="{{ url('/events', [$event->id, 'edit-participant', $participant->id]) }}"><span class="glyphicon glyphicon-edit" aria-hidden="true" data-toggle="tooltip" title="Inschrijving bewerken"></span></a></td>
+				<td><a href="{{ url('/events', [$event->id, 'move-participant', $participant->id]) }}"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true" data-toggle="tooltip" title="Verplaatsen naar ander kamp"></span></a></td>
+				@else
+				<td></td>
+				<td></td>
+				@endcan
+				
+				@can("removeParticipant", [$event, $participant])
+				<td><a href="{{ url('/events', [$event->id, 'remove-participant', $participant->id]) }}"><span class="glyphicon glyphicon-remove" aria-hidden="true" data-toggle="tooltip" title="Inschrijving verwijderen"></span></a></td>
+				@else
+				<td></td>
+				@endcan
+				
+			</tr>
 			@endif
-			@else
-			<span class="glyphicon glyphicon-ok" aria-hidden="true" data-toggle="tooltip" title="Inkomensverklaring niet nodig"></span>
-			@endunless
-		</td>
-		<td>{{ ($participant->pivot->geplaatst) ? 'Ja' : 'Nee' }}</td>
-		@endcan
-		
-		@can("editParticipant", [$event, $participant])
-		<td><a href="{{ url('/events', [$event->id, 'edit-participant', $participant->id]) }}"><span class="glyphicon glyphicon-edit" aria-hidden="true" data-toggle="tooltip" title="Inschrijving bewerken"></span></a></td>
-		<td><a href="{{ url('/events', [$event->id, 'move-participant', $participant->id]) }}"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true" data-toggle="tooltip" title="Verplaatsen naar ander kamp"></span></a></td>
-		@else
-		<td></td>
-		<td></td>
-		@endcan
-		
-		@can("removeParticipant", [$event, $participant])
-		<td><a href="{{ url('/events', [$event->id, 'remove-participant', $participant->id]) }}"><span class="glyphicon glyphicon-remove" aria-hidden="true" data-toggle="tooltip" title="Inschrijving verwijderen"></span></a></td>
-		@else
-		<td></td>
-		@endcan
-		
-	</tr>
-	@endif
-	@endforeach
-</table>
+			@endforeach
+		</table>
+	</div>
+
+	@can("showPrivateAny", \App\Participant::class)
+	<div role="tabpanel" class="tab-pane" id="addresses">
+		<table class="table table-hover" id="addressesTable">
+			<caption>
+				Geplaatste deelnemers ({{ $event->participants()->wherePivot('geplaatst', 1)->count() }})
+			</caption>
+			@if ($event->participants()->wherePivot('geplaatst', 1)->count())
+			<thead>
+				<tr>
+					<th>Naam</th>
+					<th>Adres</th>
+					<th>Postcode</th>
+					<th>Woonplaats</th>
+				</tr>
+			</thead>
+			<tbody>
+				@foreach($event->participants()->wherePivot('geplaatst', 1)->orderBy('voornaam')->get() as $participant)
+				<tr>
+					<td>
+						<a href="{{ url('/participants', $participant->id) }}">
+							{{ $participant->voornaam }} {{ $participant->tussenvoegsel }} {{ $participant->achternaam }}
+						</a>
+					</td>
+					<td>
+						{{ $participant->adres }}
+					</td>
+					<td>
+						{{ $participant->postcode }}
+					</td>
+					<td>
+						{{ $participant->plaats }}
+					</td>
+				</tr>
+				@endforeach
+			</tbody>
+			@endif
+		</table>
+	</div>
+	@endcan
+</div>
 @endcan
 @endif
 
