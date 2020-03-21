@@ -356,9 +356,12 @@
 			<thead>
 				<tr>
 					<th>Naam</th>
+					<th>Alleen Email</th>
 					<th>Adres</th>
 					<th>Postcode</th>
 					<th>Woonplaats</th>
+					<th>Email ouders</th>
+					<th>Email deelnemer</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -370,14 +373,15 @@
 						</a>
 					</td>
 					<td>
-						{{ $participant->adres }}
+						@if($participant->information_channel === "only-email")
+							<span class="glyphicon glyphicon-ok" aria-hidden="true" data-toggle="tooltip" title="Inkomensverklaring niet nodig"></span>
+						@endif
 					</td>
-					<td>
-						{{ $participant->postcode }}
-					</td>
-					<td>
-						{{ $participant->plaats }}
-					</td>
+					<td>{{ $participant->adres }}</td>
+					<td>{{ $participant->postcode }}</td>
+					<td>{{ $participant->plaats }}</td>
+					<td>{{ $participant->emailemail_ouder }}</td>
+					<td>{{ $participant->email_deelnemer }}</td>
 				</tr>
 				@endforeach
 			</tbody>
