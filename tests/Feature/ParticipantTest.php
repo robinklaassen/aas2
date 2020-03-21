@@ -29,6 +29,19 @@ class ParticipantTest extends TestCase
     }
 
     /**
+     * Test the show participant page for an unauthorized (normal member)
+     *
+     * @return void
+     */
+    public function testShowUnauthorized()
+    {
+        $response = $this
+            ->actingAs(\App\User::findOrFail(4)) // normal member
+            ->get('/participants/1')
+            ->assertStatus(403);
+    }
+
+    /**
      * Test the show participant page
      *
      * @return void
@@ -36,9 +49,10 @@ class ParticipantTest extends TestCase
     public function testShow()
     {
         $response = $this
-            ->actingAs($this->user)
+            ->actingAs(\App\User::findOrFail(6)) // kampci
             ->get('/participants/1')
             ->assertStatus(200)
-            ->assertSee('Bewerken', 'Elst', 'Meikamp');
+            ->assertSee('Elst', 'Meikamp')
+            ->assertDontSee('Bewerken'); // doesn't have edit right
     }
 }

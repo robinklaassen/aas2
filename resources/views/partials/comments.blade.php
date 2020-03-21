@@ -6,6 +6,7 @@
 </h1>
 
 @foreach($comments as $comment)
+@can("view", $comment)
 <div class="row comment-item" style="margin-bottom: 7px;">
     <div class="col-md-12">{{$comment->text}}</div>
     <div class="col-md-12">
@@ -25,4 +26,5 @@
         </span>
     </div>
 </div>
+@endcan
 @endforeach

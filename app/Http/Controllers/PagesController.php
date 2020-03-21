@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use App\Event;
+use App\Helpers\DateHelper;
 use App\Review;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Arr;
@@ -17,7 +18,8 @@ class PagesController extends Controller
 {
 
 	public function __construct()
-	{ }
+	{
+	}
 
 	# Homepage
 	public function home()
@@ -112,6 +114,11 @@ class PagesController extends Controller
 	# Useful lists
 	public function lists()
 	{
+
+		if (!\Auth::user()->hasRole("member")) {
+			abort(403, 'Onvoldoende rechten om lijsten in te zien');
+		}
+
 		// Stats
 		$stats = [];
 
@@ -231,6 +238,8 @@ class PagesController extends Controller
 			return $member->events->count() == 0;
 		});
 
+		$oldMembers = \App\Member::where('soort', 'oud')->orderBy('created_at')->get();
+
 		$participantsWithoutCamps = \App\Participant::orderBy('created_at')->get()->filter(function ($part) {
 			return $part->events->count() == 0;
 		});
@@ -238,6 +247,36 @@ class PagesController extends Controller
 		// Mailadressen voor een deelnemermailing (bijv. bij kortingsacties)
 		$startDate = Carbon::now()->subYears(19);
 		$participantMailingList = \App\Participant::where('mag_gemaild', 1)->where('geboortedatum', '>', $startDate->toDateString())->get();
+
+		// TODO: this
+		$inschrijvingen = DB::table('event_participant')
+			->join("participants", 'event_participant.participant_id', '=', 'participants.id')
+			->join("events", 'event_participant.event_id', '=', 'events.id')
+			->where("event_participant.created_at", ">", Db::raw("DATE_SUB(NOW(), interval 6 month)"))
+			->select([
+				"event_participant.participant_id",
+				"event_participant.event_id",
+				"event_participant.created_at as kamp_aanmeld_datum",
+				"events.naam as kamp_naam",
+				"participants.voornaam",
+				"participants.achternaam",
+				"participants.tussenvoegsel",
+				"participants.hoebij",
+				DB::raw("
+					case when not exists (
+						select * 
+						  from event_participant _ep 
+						  join events _e on _ep.event_id = _e.id
+						 where 1=1
+						   and _ep.participant_id = participants.id
+						   and _ep.event_id != events.id
+						   and _e.datum_start < events.datum_start
+						) 
+						then true
+						else false 
+					end as is_nieuw")
+			])
+			->orderByDesc("event_participant.created_at")->get();
 
 		return view('pages.lists', compact(
 			'stats',
@@ -252,14 +291,18 @@ class PagesController extends Controller
 			'birthdayList',
 			'monthName',
 			'membersWithoutEvents',
+			'inschrijvingen',
 			'participantsWithoutCamps',
-			'participantMailingList'
+			'participantMailingList',
+			'oldMembers'
 		));
 	}
 
 	# Analytical graphs
 	public function graphs()
 	{
+		$this->authorize("viewAny", \App\Participant::class);
+
 		// Determine end date for graph range; from 1st of August we include the current Anderwijs year
 		$maxYear = Carbon::now()->addMonths(5)->year - 1;
 
@@ -575,14 +618,14 @@ class PagesController extends Controller
 				'naam' => $naam,
 				'code' => $event->code,
 				'voordag_tekst' => ($event->type == 'kamp') ? 'Voordag:<br/>' : null,
-				'datum_voordag' => ($event->type == 'kamp') ? $event->datum_voordag->format('d-m-Y') . '<br/>' : null,
+				'datum_voordag' => ($event->type == 'kamp') ? DateHelper::Format($event->datum_voordag) . '<br/>' : null,
 				'tijd_voordag' => ($event->type == 'kamp') ?
 					'&nbsp;<br/>' : null,
 				'weekdag_start' => $weekdays[$event->datum_start->format('N')],
-				'datum_start' => $event->datum_start->format('d-m-Y'),
+				'datum_start' => DateHelper::Format($event->datum_start),
 				'tijd_start' => substr($event->tijd_start, 0, 5),
 				'weekdag_eind' => $weekdays[$event->datum_eind->format('N')],
-				'datum_eind' => $event->datum_eind->format('d-m-Y'),
+				'datum_eind' => DateHelper::Format($event->datum_eind),
 				'tijd_eind' => substr($event->tijd_eind, 0, 5),
 				'aantal_dagen' => $event->datum_eind->diffInDays($event->datum_start),
 				'kamphuis_naam' => $event->location->naam,

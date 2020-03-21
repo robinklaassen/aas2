@@ -30,7 +30,9 @@
 					<th>Naam</th>
 					<th>Niveau</th>
 					<th>Soort lid</th>
+					@can("showAdministrativeAny", \App\Member::class)
 					<th>VOG</th>
+					@endcan
 				</tr>
 			</thead>
 			<tbody>
@@ -39,7 +41,9 @@
 				<td><a href="{{ url('/members', $member->id) }}">{{ $member->voornaam }} {{ $member->tussenvoegsel }} {{ $member->achternaam }}</a></td>
 				<td>{{ $member->pivot->klas }}</td>
 				<td>{{ $member->soort }}</td>
+				@can("showAdministrativeAny", \App\Member::class)
 				<td>
+					@can("showAdministrative", $member)
 					@if ($member->vog)
 						<span style="display:none;">1</span>
 						<span class="glyphicon glyphicon-ok"></span>
@@ -47,7 +51,9 @@
 						<span style="display:none;">0</span>	
 						<span class="glyphicon glyphicon-remove"></span>
 					@endif
+					@endcan
 				</td>
+				@endcan
 			</tr>
 			@endforeach
 			</tbody>

@@ -36,7 +36,7 @@ class Comment extends Model
     protected static function boot()
     {
         parent::boot();
-        static::addGlobalScope(new CommentScope);
+        // static::addGlobalScope(new CommentScope);
     }
 
     public function entity()

@@ -1,8 +1,11 @@
-<?php namespace App\Http\Middleware;
+<?php
+
+namespace App\Http\Middleware;
 
 use Closure;
 
-class RedirectIfNotAMember {
+class RedirectIfNotAMember
+{
 
 	/**
 	 * Handle an incoming request.
@@ -13,12 +16,10 @@ class RedirectIfNotAMember {
 	 */
 	public function handle($request, Closure $next)
 	{
-		if ( ! \Auth::user()->profile_type == "App\Member" )
-		{
+		if (!\Auth::user()->profile_type == "App\Member") {
 			return redirect('/profile');
 		}
-		
+
 		return $next($request);
 	}
-
 }

@@ -12,6 +12,7 @@ DTEND;TZID=Europe/Amsterdam:{{$event->datum_eind->format("Ymd")}}T{{str_replace(
 LOCATION:{{$event->location->adres}}, {{$event->location->postcode}} {{$event->location->plaats}}
 END:VEVENT
 @endforeach
+@can("viewAny", \App\Member::class)
 @foreach ($members as $member)
 BEGIN:VEVENT
 SUMMARY:Verjaardag {{$member->volnaam}}
@@ -21,4 +22,5 @@ DTSTART;VALUE=DATE:{{$member->geboortedatum->format("Ymd")}}
 RRULE:FREQ=YEARLY
 END:VEVENT
 @endforeach
+@endcan
 END:VCALENDAR

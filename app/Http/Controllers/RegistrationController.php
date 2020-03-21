@@ -16,6 +16,7 @@ use App\Helpers\Payment\EventPayment;
 use App\Facades\Mollie;
 use App\Mail\internal\NewMemberNotification;
 use App\Mail\members\MemberRegistrationConfirmation;
+use App\Role;
 use App\User;
 use Illuminate\Support\Carbon;
 
@@ -23,7 +24,8 @@ class RegistrationController extends Controller
 {
 
 	public function __construct()
-	{ }
+	{
+	}
 
 	# Member registration form
 	public function registerMember()
@@ -125,6 +127,9 @@ class RegistrationController extends Controller
 		$user->privacy = Carbon::now();
 		$member->user()->save($user);
 
+		$roles = Role::whereIn("tag", ["member"])->get();
+		$user->roles()->sync($roles);
+
 		$camp = Event::findOrFail($request->selected_camp);
 
 		// Send confirmation email to newly registered member
@@ -190,9 +195,9 @@ class RegistrationController extends Controller
 	}
 
 	# Participant registration handler
-	public function storeParticipant(Requests\ParticipantRequest $request)
+	public function storeParticipant(Requests\NewParticipantRequest $request)
 	{
-		// Validation done in Request\ParticipantRequest
+		// Validation done in Request\NewParticipantRequest
 		// Additional one-time validation items here
 		$this->validate($request, [
 			'voorwaarden' => 'required',
@@ -251,6 +256,9 @@ class RegistrationController extends Controller
 		$user->password = bcrypt($password);
 		$user->privacy = Carbon::now();
 		$participant->user()->save($user);
+
+		$roles = Role::whereIn("tag", ["participant"])->get();
+		$user->roles()->sync($roles);
 
 		// Income table
 		$incomeTable = Participant::INCOME_DESCRIPTION_TABLE;

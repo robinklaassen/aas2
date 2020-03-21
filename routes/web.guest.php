@@ -24,6 +24,3 @@ Route::post('password/reset', 'Auth\PasswordController@reset');
 // Authentication Routes...
 Route::get('login', 'Auth\LoginController@showLoginForm')->name('login');
 Route::post('login', 'Auth\LoginController@login');
-
-# icalendar routes    
-Route::get('events/icalendar', 'EventsController@iCalendar');

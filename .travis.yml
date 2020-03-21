@@ -7,7 +7,7 @@ services:
 - mysql
 
 addons:
-  ssh_known_hosts: ssh.pcextreme.nl
+  ssh_known_hosts: ftp.anderwijs.nl
 
 before_script:
 - cp .env.travis .env

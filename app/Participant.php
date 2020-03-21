@@ -90,4 +90,9 @@ class Participant extends Model
 	{
 		return $this::INFORMATION_CHANNEL_DESCRIPTION_TABLE[$this->information_channel];
 	}
+
+	public function isUser(User $user)
+	{
+		return $this->user->id === $user->id;
+	}
 }

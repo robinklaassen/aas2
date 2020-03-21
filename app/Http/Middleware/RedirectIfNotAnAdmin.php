@@ -15,7 +15,7 @@ class RedirectIfNotAnAdmin {
 	{
 		if ( ! \Auth::user()->is_admin )
 		{
-			return redirect('/home');
+			return redirect('/home?noadmin');
 		}
 		
 		return $next($request);

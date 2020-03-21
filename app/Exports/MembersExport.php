@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Exports;
 
 use Maatwebsite\Excel\Concerns\Exportable;
@@ -14,7 +15,7 @@ class MembersExport implements FromCollection, WithTitle, WithHeadings
 
     public function collection()
     {
-        return Member::all('id', 'voornaam', 'tussenvoegsel', 'achternaam', 'geslacht', 'geboortedatum', 'adres', 'postcode', 'plaats', 'telefoon', 'email', 'email_anderwijs', 'iban', 'soort', 'eindexamen', 'studie', 'afgestudeerd', 'hoebij', 'kmg', 'ranonkeltje', 'vog', 'ervaren_trainer', 'incasso', 'datum_af', 'opmerkingen', 'opmerkingen_admin', 'created_at', 'updated_at');
+        return Member::all('id', 'voornaam', 'tussenvoegsel', 'achternaam', 'geslacht', 'geboortedatum', 'adres', 'postcode', 'plaats', 'telefoon', 'email', 'email_anderwijs', 'iban', 'soort', 'eindexamen', 'studie', 'afgestudeerd', 'hoebij', 'kmg', 'ranonkeltje', 'vog', 'ervaren_trainer', 'incasso', 'datum_af', 'opmerkingen', 'created_at', 'updated_at');
     }
 
     // public function map($member): array

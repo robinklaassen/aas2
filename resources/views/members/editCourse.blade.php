@@ -12,8 +12,6 @@
 @elseif ($viewType == 'profile')
 	<h1>Bewerken vak {{ $course->naam }}</h1>
 @endif
-
-
 <hr/>
 
 @include ('errors.list')

@@ -1,4 +1,6 @@
-<?php namespace App\Http\Controllers;
+<?php
+
+namespace App\Http\Controllers;
 
 use App\Course;
 use App\Http\Requests;
@@ -6,15 +8,14 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 
-class CoursesController extends Controller {
+class CoursesController extends Controller
+{
 
 	public function __construct()
 	{
-		// You need to be logged in and have admin rights to access
-		$this->middleware('auth');
-		$this->middleware('admin');
+		$this->authorizeResource(Course::class, 'course');
 	}
-	
+
 	/**
 	 * Display a listing of the resource.
 	 *
@@ -23,11 +24,10 @@ class CoursesController extends Controller {
 	public function index()
 	{
 		$courses = Course::orderBy('naam')->get();
-		
+
 		$q = \DB::table('course_event_participant')->select(\DB::raw('course_id, COUNT(participant_id) AS num_participants'))->groupBy('course_id')->get();
-		
-		foreach ($q as $r)
-		{
+
+		foreach ($q as $r) {
 			$num_participants[$r->course_id] = $r->num_participants;
 		}
 
@@ -88,7 +88,7 @@ class CoursesController extends Controller {
 	public function update(Course $course, Requests\CourseRequest $request)
 	{
 		$course->update($request->all());
-		return redirect('courses/'.$course->id)->with([
+		return redirect('courses/' . $course->id)->with([
 			'flash_message' => 'Het vak is bewerkt!'
 		]);
 	}
@@ -101,9 +101,10 @@ class CoursesController extends Controller {
 	 */
 	public function delete(Course $course)
 	{
+		$this->authorize("courses::delete", $course);
 		return view('courses.delete', compact('course'));
 	}
-	
+
 	public function destroy(Course $course)
 	{
 		$course->delete();
@@ -111,5 +112,4 @@ class CoursesController extends Controller {
 			'flash_message' => 'Het vak is verwijderd!'
 		]);
 	}
-
 }

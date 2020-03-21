@@ -8,12 +8,15 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Mail\members\NewUserMember;
 use App\Mail\participants\NewUserParticipant;
+use App\Role;
 
 class UsersController extends Controller
 {
 
 	public function __construct()
-	{ }
+	{
+		$this->authorizeResource(User::class, 'user');
+	}
 
 	/**
 	 * Display a listing of the resource.
@@ -34,6 +37,7 @@ class UsersController extends Controller
 	 */
 	public function createForMember()
 	{
+		$this->authorize("createMember", \App\User::class);
 		$type = 'member';
 		$members = \App\Member::orderBy('voornaam')->whereNotIn('soort', ['oud'])->get();
 		$profile_options = [];
@@ -48,6 +52,8 @@ class UsersController extends Controller
 
 	public function createForParticipant()
 	{
+		$this->authorize("createParticipant", \App\User::class);
+
 		$type = 'participant';
 		$participants = \App\Participant::orderBy('voornaam')->get();
 		$profile_options = [];
@@ -67,6 +73,8 @@ class UsersController extends Controller
 	 */
 	public function storeForMember(Request $request)
 	{
+		$this->authorize("createMember", \App\User::class);
+
 		$this->validate($request, [
 			'profile_id' => 'required',
 			'is_admin' => 'required'
@@ -100,6 +108,9 @@ class UsersController extends Controller
 			$user->is_admin = $request->is_admin;
 			$member->user()->save($user);
 
+			$roles = Role::whereIn("tag", ["member"])->get();
+			$member->roles()->sync($roles);
+
 			// Send email
 			Mail::send(new NewUserMember($member, $username, $password));
 
@@ -111,6 +122,8 @@ class UsersController extends Controller
 
 	public function storeForParticipant(Request $request)
 	{
+		$this->authorize("createParticipant", \App\User::class);
+
 		$this->validate($request, [
 			'profile_id' => 'required'
 		]);
@@ -142,6 +155,9 @@ class UsersController extends Controller
 			$user->password = bcrypt($password);
 			$participant->user()->save($user);
 
+			$roles = Role::whereIn("tag", ["participant"])->get();
+			$participant->roles()->sync($roles);
+
 			// Send email
 			Mail::send(
 				new NewUserParticipant($participant, $username, $password)
@@ -169,6 +185,7 @@ class UsersController extends Controller
 	# Grant or revoke admin access
 	public function admin(User $user)
 	{
+		$this->authorize("changeAdmin", $user);
 		if (\Auth::user()->is_admin < 2) {
 			return redirect('users');
 		}
@@ -178,6 +195,8 @@ class UsersController extends Controller
 
 	public function adminSave(User $user)
 	{
+		$this->authorize("changeAdmin", $user);
+
 		// Check if this user is member! (participants can never be admins)
 		if ($user->profile_type == 'App\Member') {
 			$user->is_admin = \Request::input('is_admin');
@@ -199,6 +218,7 @@ class UsersController extends Controller
 
 	public function passwordSave(User $user, Request $request)
 	{
+		$this->authorize("changePassword", $user);
 		$this->validate($request, [
 			'password' => 'required|confirmed'
 		]);
@@ -219,11 +239,13 @@ class UsersController extends Controller
 	 */
 	public function delete(User $user)
 	{
+		$this->authorize("delete", $user);
 		return view('users.delete', compact('user'));
 	}
 
 	public function destroy(User $user)
 	{
+		$this->authorize("delete", $user);
 		$user->delete();
 		return redirect('users')->with([
 			'flash_message' => 'De gebruiker is verwijderd!'

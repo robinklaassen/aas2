@@ -7,12 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract
 {
 
-	use Authenticatable, CanResetPassword, Notifiable;
+	use Authenticatable, CanResetPassword, Notifiable, Authorizable;
 
 	/**
 	 * Generates a new password for users
@@ -54,6 +55,48 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 	public function profile()
 	{
 		return $this->morphTo();
+	}
+
+	public function roles()
+	{
+		return $this->belongsToMany('App\Role', 'user_role');
+	}
+
+	public function hasRole($tag)
+	{
+		return $this->roles()->where("tag", "=", $tag)->count() > 0;
+	}
+
+	public function hasAnyRole($roles)
+	{
+		return $this->roles()->whereIn("tag", $roles)->count() > 0;
+	}
+
+	public function capabilities()
+	{
+		$roles = $this->roles()->pluck('id');
+
+		return Capability::whereHas("roles", function ($q) use ($roles) {
+			$q->whereIn(
+				"id",
+				$roles
+			);
+		})->get();
+	}
+
+	public function hasCapability($name)
+	{
+		return $this->capabilities()->pluck("name")->contains($name);
+	}
+
+	public function isMember()
+	{
+		return $this->profile_type === "App\Member";
+	}
+
+	public function isParticipant()
+	{
+		return $this->profile_type === "App\Participant";
 	}
 
 	public function getVolnaamAttribute()

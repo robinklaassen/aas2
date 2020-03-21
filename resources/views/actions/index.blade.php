@@ -14,9 +14,11 @@ Punten
 	</div>
 	<div class="col-sm-6">
 		<p class="text-right">
+			@can("create", \App\Action::class)
 			<a class="btn btn-primary" type="button" href="{{ url('actions/create') }}" style="margin-top:21px;">
 				Nieuwe actie
 			</a>
+			@endcan
 		</p>
 	</div>
 </div>
@@ -57,16 +59,20 @@ Punten
 							<td>{{ $action->description }}</td>
 							<td>{{ $action->points }}</td>
 							<td>
+								@can("update", $action)
 								<a href="{{ url('/actions', [$action->id, 'edit']) }}">
 									<span class="glyphicon glyphicon-edit" data-toggle="tooltip"
 										title="Bewerken"></span>
 								</a>
+								@endcan
 							</td>
 							<td>
+								@can("delete", $action)
 								<a href="{{ url('/actions', [$action->id, 'delete']) }}">
 									<span class="glyphicon glyphicon-remove" data-toggle="tooltip"
 										title="Verwijderen"></span>
 								</a>
+								@endcan
 							</td>
 						</tr>
 						@endforeach
