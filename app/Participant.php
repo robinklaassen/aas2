@@ -58,7 +58,7 @@ class Participant extends Model
 	// A participant belongs to many events
 	public function events()
 	{
-		return $this->belongsToMany('App\Event')->withTimestamps()->withPivot('datum_betaling')->withPivot('geplaatst');
+		return $this->belongsToMany('App\Event')->using("App\EventParticipant")->withTimestamps()->withPivot('datum_betaling')->withPivot('geplaatst');
 	}
 
 	// A participant can have one user account

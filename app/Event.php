@@ -32,8 +32,9 @@ class Event extends Model
 	// A camp belongs to many participants
 	public function participants()
 	{
-		return $this->belongsToMany('App\Participant')->withTimestamps()->withPivot('datum_betaling')->withPivot('geplaatst');
+		return $this->belongsToMany('App\Participant')->using("App\EventParticipant")->withPivot('geplaatst')->withPivot('datum_betaling')->withTimestamps();
 	}
+
 
 	// A camp belongs to one location
 	public function location()
@@ -61,7 +62,8 @@ class Event extends Model
 		return round($this->reviews()->pluck("cijfer")->avg(), 1);
 	}
 
-	public function hasUser(User $user) {
+	public function hasUser(User $user)
+	{
 		return $user->profile->events->contains($this);
 	}
 }

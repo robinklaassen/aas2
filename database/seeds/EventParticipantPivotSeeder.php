@@ -27,5 +27,10 @@ class EventParticipantPivotSeeder extends Seeder
 		$participant = Participant::find(3);
 		$participant->events()->attach(1);
 		$participant->events()->updateExistingPivot(1, ['datum_betaling' => '2019-12-01']);
+
+		// online
+		$participant = Participant::find(3);
+		$participant->events()->attach(7);
+		$participant->events()->where("event_id", 7)->update(["package_id" => 1]);
 	}
 }
