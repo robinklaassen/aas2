@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Mockery;
 use Tests\TestCase;
 use App\Event;
+use App\EventPackage;
 use App\Participant;
 use App\Helpers\Payment\PaymentInterface;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -57,6 +58,7 @@ class ParticipantRegistrationTest extends TestCase
         "privacy" => 1
     ];
     private $event;
+    private $package;
     private $participantData;
     private $userData;
 
@@ -156,7 +158,71 @@ class ParticipantRegistrationTest extends TestCase
         $response->assertViewIs('registration.participantStored');
         $response->assertSee("€ " . $this->event->prijs);
         $response->assertSee("NL68 TRIO 0198 4197 83");
+        $response->assertDontSeeText("Kamp pakket");
         $response->assertSee("naam deelnemer + deze kampcode: " . $this->event->code);
         $response->assertSee(Participant::INCOME_DESCRIPTION_TABLE[$this->data["inkomen"]]);
+    }
+
+    public function testParticipantRegistrationWithPackage()
+    {
+        Mail::fake();
+        // Event 7 is an online event with online tutoring packages
+        $this->event = Event::findOrFail(7);
+        $this->package = EventPackage::findOrFail(2);
+
+
+        $this->instance(MolliePaymentProvider::class, Mockery::mock(MolliePaymentProvider::class, function ($mock) {
+            $mock->shouldReceive('process')
+                ->once()
+                ->with(Mockery::on(function (PaymentInterface $arg) {
+
+                    $contains = function ($needle, $haystack) {
+                        return strpos($haystack, $needle) !== false;
+                    };
+
+                    $descr = $arg->getDescription();
+
+
+                    return $arg->getCurrency() == "EUR"
+                        && $arg->getTotalAmount() == $this->package->price
+                        && $contains($this->event->code, $descr)
+                        && $contains($this->package->code, $descr)
+                        && $contains($this->data["voornaam"], $descr)
+                        && $contains($this->data["achternaam"], $descr);
+                }))
+                ->andReturns(redirect("https://mollie-backend"));
+        }));
+
+
+
+        $this->data["iDeal"] = '1';
+        $this->data["selected_camp"] = $this->event->id;
+        $this->data["selected_package"] = $this->package->id;
+
+        $response = $this->post('/register-participant', $this->data);
+
+        $this->assertDatabaseHas('users', $this->userData);
+        $this->assertDatabaseHas('participants', $this->participantData);
+        $this->assertDatabaseHas('event_participant', ["event_id" => $this->event->id, "package_id" => $this->package->id]);
+
+        $response->assertStatus(302);
+        $response->assertRedirect("https://mollie-backend");
+    }
+
+
+    public function testParticipantRegistrationWrongPackage()
+    {
+        // Event 5 is an online event with online tutoring packages
+        $this->event = Event::findOrFail(7);
+
+
+        $this->data["iDeal"] = '1';
+        $this->data["selected_camp"] = $this->event->id;
+        $this->data["selected_package"] = -1;
+
+        $response = $this->from("/register-participant")->post('/register-participant', $this->data);
+
+        $response->assertRedirect('/register-participant')
+            ->withSession(['flash_error' => 'Er dient een pakket geselecteerd te worden bij voor dit kamp']);
     }
 }

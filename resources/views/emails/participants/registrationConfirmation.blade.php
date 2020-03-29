@@ -33,6 +33,15 @@
 	Einddatum: {{ $event->datum_eind->format('d-m-Y') }}
 </p>
 
+@if($package != null) 
+
+<p>
+	KAMP PAKKET<br/>
+	Naam pakket: {{ $package->title }}<br/>
+	Volledige prijs: &euro; {{ $package->price }}  
+</p>
+@endif
+
 <p>
 	KORTINGSREGELING<br/>
 	Bruto maandinkomen: {{ $participant->incomeDescription }}

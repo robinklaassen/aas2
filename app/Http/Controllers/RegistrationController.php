@@ -294,6 +294,7 @@ class RegistrationController extends Controller
 			new ParticipantRegistrationConfirmation(
 				$participant,
 				$camp,
+				$package,
 				$givenCourses,
 				$password,
 				$toPay,
@@ -302,11 +303,11 @@ class RegistrationController extends Controller
 		);
 
 		// If they want to pay with iDeal, set up the payment now
-		if ($iDeal == '1' && $camp->prijs != 0) {
+		if ($iDeal == '1' && $toPay > 0) {
 			return Mollie::process($payment);
 		} else {
 			// Return closing view
-			return view('registration.participantStored', compact('participant', 'camp', 'toPay', 'incomeTable'));
+			return view('registration.participantStored', compact('participant', 'camp', 'toPay', 'incomeTable', 'package'));
 		}
 	}
 }

@@ -457,7 +457,7 @@ class ProfileController extends Controller
 				));
 
 				// If they want to pay with iDeal, set up the payment now
-				if ($iDeal == '1' && $toPay != 0) {
+				if ($iDeal == '1' && $toPay > 0) {
 					return Mollie::process($payment);
 				} else {
 					// Return to profile
