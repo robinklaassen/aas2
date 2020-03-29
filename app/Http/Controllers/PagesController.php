@@ -539,7 +539,7 @@ class PagesController extends Controller
 
 		if ($type == 'part') {
 			// Only coming camps, for participants and their parents
-			$events = \App\Event::where('type', 'kamp')
+			$events = \App\Event::whereIn('type', ['kamp', 'online'])
 				->where('datum_eind', '>=', date('Y-m-d'))
 				->where('openbaar', 1)
 				->orderBy('datum_start', 'asc')
@@ -561,6 +561,9 @@ class PagesController extends Controller
 			switch ($event->type) {
 				case 'kamp':
 					$color = '#50B848';
+					break;
+				case 'online':
+					$color = '#1eaa97';
 					break;
 				case 'training':
 					$color = '#1E5027';

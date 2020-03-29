@@ -19,7 +19,7 @@ class EventPayment implements PaymentInterface
         return $this;
     }
 
-    public function package(EventPackage $package)
+    public function package(?EventPackage $package)
     {
         $this->package = $package;
         return $this;
