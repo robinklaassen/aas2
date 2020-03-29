@@ -33,9 +33,9 @@ class Event extends Model
 	public function participants()
 	{
 		return $this->belongsToMany('App\Participant')
-			->using('App\Pivots\EventParticipant');
-		// ->withTimestamps()
-		// ->withPivot(['package', 'geplaatst', 'datum_betaling']);
+			->using('App\Pivots\EventParticipant')
+			->withTimestamps()
+			->withPivot(['package_id', 'geplaatst', 'datum_betaling']);
 	}
 
 
