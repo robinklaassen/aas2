@@ -12,4 +12,14 @@ class EventPackage extends Model
     ];
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
+
+    public function participants()
+    {
+        return $this->belongsToMany('App\Participant')->using('App\Pivots\EventParticipant');
+    }
+
+    public function events()
+    {
+        return $this->belongsToMany('App\Event')->using('App\Pivots\EventParticipant');
+    }
 }

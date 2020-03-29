@@ -32,7 +32,10 @@ class Event extends Model
 	// A camp belongs to many participants
 	public function participants()
 	{
-		return $this->belongsToMany('App\Participant')->using("App\EventParticipant")->withPivot('geplaatst')->withPivot('datum_betaling')->withTimestamps();
+		return $this->belongsToMany('App\Participant')
+			->using('App\Pivots\EventParticipant');
+		// ->withTimestamps()
+		// ->withPivot(['package', 'geplaatst', 'datum_betaling']);
 	}
 
 

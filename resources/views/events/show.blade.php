@@ -253,6 +253,7 @@
 	</thead>
 	@endif
 	@foreach($event->participants()->orderBy('voornaam')->get() as $participant)
+	{{ dd($participant->pivot) }}
 	@if( \Auth::user()->can("viewParticipantsAdvanced", $event)  || $participant->pivot->geplaatst )
 	<tr>
 		<td>
