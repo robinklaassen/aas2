@@ -409,7 +409,9 @@ class ProfileController extends Controller
 				$package = null;
 			}
 
+
 			$participant = \Auth::user()->profile;
+
 			$status = $participant->events()->sync([
 				$request->selected_camp => ["package_id" => $package !== null ? $package->id : null]
 			], false);
