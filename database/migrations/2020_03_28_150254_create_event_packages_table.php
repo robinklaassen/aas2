@@ -17,6 +17,7 @@ class CreateEventPackagesTable extends Migration
         Schema::create('event_packages', function (Blueprint $table) {
             $table->increments('id');
             $table->enum('type', ['online-tutoring', 'other'])->default('online-tutoring');
+            $table->text('code');
             $table->text('title');
             $table->text('description')->nullable();
             $table->integer('price')->nullable();
@@ -36,7 +37,7 @@ class CreateEventPackagesTable extends Migration
 
         DB::statement("ALTER TABLE events MODIFY COLUMN type enum('kamp','training','overig', 'online') not null");
         Schema::table('events', function (Blueprint $table) {
-            $table->text('package_types', ['online-tutoring', 'other'])->nullable();
+            $table->text('package_type', ['online-tutoring', 'other'])->nullable();
         });
     }
 

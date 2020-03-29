@@ -90,6 +90,7 @@ class EventTableSeeder extends Seeder
 			'naam' => 'Online CaronaKamp',
 			'code' => 'OK0001',
 			'type' => 'online',
+			'package_type' => 'online-tutoring',
 			'datum_start' => '2020-05-01',
 			'datum_eind' => '2020-05-01',
 			'location_id' => 1,

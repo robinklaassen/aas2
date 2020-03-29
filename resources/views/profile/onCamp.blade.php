@@ -26,16 +26,17 @@
 				Zijn alle gegevens in je profiel up-to-date?
 			@endif
 		</div>
+
+		<h3>Kamp</h3>
 		@if (\Auth::user()->profile_type == 'App\Participant')
 			<div class="well well-sm">
 				Gaat uw kind op zomerkamp? Geef dan bij klas het huidige schooljaar op, dus niet de klas waar uw kind naartoe gaat. Let er ook op dat uw kind zelf schoolboeken moet meenemen!
 			</div>
 		@endif
 		<div class="form-group">
-			{!! Form::label('selected_camp', 'Kamp:') !!}
-			<select class="form-control" id="selected_camp" name="selected_camp">
-				<?php foreach ($camp_options as $id => $name) { ?>
-					<option value="{{$id}}" {{ ($camp_full[$id]) ? 'disabled' : '' }} >{{$name}}</option>
+			<select class="form-control" id="selected_camp" name="selected_camp" onchange="checkpackages()">
+				<?php foreach ($camps as $camp) { ?>
+					<option value="{{$camp->id}}" {{ ($camp->vol) ? 'disabled' : '' }} >{{$camp->full_title}}</option>
 				<?php } ?>
 			</select>
 		</div>
@@ -43,6 +44,21 @@
 </div>
 
 @if (\Auth::user()->profile_type == 'App\Participant')
+
+	<div class="row">
+		<div class="col-sm-6" style="display: none" id="selected_package_container">
+			<h3>Pakket</h3>
+			<div class="well">
+				Bij dit kamp is er keuze uit meerdere pakketten. Maak een keuze uit een van de volgende opties:
+			</div>
+			<div class="form-group">
+				<select class="form-control" id="selected_package" name="selected_package">
+					
+				</select>
+			</div>
+		</div>
+	</div>
+
 	<h3>Vakken</h3>
 	<div class="row">
 		<div class="col-sm-9">
@@ -108,5 +124,39 @@
 </div>
 
 {!! Form::close() !!}
+@endsection
 
+@section("script")
+<script>
+
+	var allPackages = {!! $packages->toJSON() !!};
+
+	var campType = {!! $package_type_per_camp->toJSON() !!};
+
+	function checkpackages() {
+		
+		var selectedCamp = $("#selected_camp").val();
+		var packageType = campType[selectedCamp];
+		var packages = allPackages[packageType];
+
+		var jPackage = $("#selected_package"); 
+		var jPackageContainer = $("#selected_package_container"); 
+
+
+		if(!packageType) {
+			jPackage.empty();
+			jPackageContainer.hide();
+		} else {
+			jPackage.empty();
+			jPackage.html(packages.map(function(p) {
+				return "<option value='" + p.id + "'>" + p.title  + ": (&euro; " + p.price + ") " + p.description + "</option>";
+			}).join());
+			jPackageContainer.show();
+		}
+	}
+
+
+	checkpackages();
+	
+</script>
 @endsection

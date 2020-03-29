@@ -1,9 +1,11 @@
 <?php
+
 namespace App\Helpers\Payment;
 
 use \Mockery;
 use App\Helpers\Payment\PaymentProvider;
 use App\Helpers\Payment\PaymentInterface;
+use Illuminate\Support\Facades\App;
 
 class MolliePaymentProvider implements PaymentProvider
 {
@@ -43,7 +45,7 @@ class MolliePaymentProvider implements PaymentProvider
             ],
             "description" => $payment->getDescription(),
             "metadata"    => $payment->getMetadata(),
-            "webhookUrl"  => url('iDeal-webhook'),
+            "webhookUrl"  => App::environment("local") ? null : url('iDeal-webhook'),
             "redirectUrl" => url("iDeal-response/{$keyString}"),
             "method" =>  \Mollie\Api\Types\PaymentMethod::IDEAL
         ));
