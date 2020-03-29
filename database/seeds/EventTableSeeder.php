@@ -87,7 +87,7 @@ class EventTableSeeder extends Seeder
 		]);
 
 		Event::create([
-			'naam' => 'Online CaronaKamp',
+			'naam' => 'Online CoronaKamp',
 			'code' => 'OK0001',
 			'type' => 'online',
 			'datum_start' => '2020-05-01',

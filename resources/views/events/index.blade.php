@@ -26,6 +26,7 @@
 <ul class="nav nav-tabs" role="tablist">
 	<li role="presentation" class="active"><a href="#kampen" aria-controls="kampen" role="tab" data-toggle="tab">Kampen</a></li>
 	<li role="presentation"><a href="#trainingen" aria-controls="trainingen" role="tab" data-toggle="tab">Trainingen</a></li>
+	<li role="presentation"><a href="#online" aria-controls="online" role="tab" data-toggle="tab">Online</a></li>
 	<li role="presentation"><a href="#overig" aria-controls="overig" role="tab" data-toggle="tab">Overig</a></li>
 </ul>
 
@@ -46,15 +47,15 @@
 			</thead>
 
 			<tbody>
-				@foreach ($events as $event)
+				@foreach ($camps as $c)
 					<tr>
-						<td><a href="{{ url('/events', $event->id) }}">{{ $event->naam }}</a></td>
-						<td>{{ $event->code }}</td>
-						<td>{{ $event->datum_start->toDateString() }}</td>
-						<td>{{ $event->datum_eind->toDateString() }}</td>
-						<td>{{ $event->location->plaats }}</td>
-						<td>{{ $event->participants->count() }}</td>
-						<td>{{ $event->members->count() }}</td>
+						<td><a href="{{ url('/events', $c->id) }}">{{ $c->naam }}</a></td>
+						<td>{{ $c->code }}</td>
+						<td>{{ $c->datum_start->toDateString() }}</td>
+						<td>{{ $c->datum_eind->toDateString() }}</td>
+						<td>{{ $c->location->plaats }}</td>
+						<td>{{ $c->participants->count() }}</td>
+						<td>{{ $c->members->count() }}</td>
 					</tr>
 				@endforeach
 			</tbody>
@@ -76,14 +77,45 @@
 			</thead>
 
 			<tbody>
-				@foreach ($trainings as $training)
+				@foreach ($trainings as $t)
 					<tr>
-						<td><a href="{{ url('/events', $training->id) }}">{{ $training->naam }}</a></td>
-						<td>{{ $training->code }}</td>
-						<td>{{ $training->datum_start->toDateString() }}</td>
-						<td>{{ $training->datum_eind->toDateString() }}</td>
-						<td>{{ $training->location->plaats }}</td>
-						<td>{{ $training->members->count() }}</td>
+						<td><a href="{{ url('/events', $t->id) }}">{{ $t->naam }}</a></td>
+						<td>{{ $t->code }}</td>
+						<td>{{ $t->datum_start->toDateString() }}</td>
+						<td>{{ $t->datum_eind->toDateString() }}</td>
+						<td>{{ $t->location->plaats }}</td>
+						<td>{{ $t->members->count() }}</td>
+					</tr>
+				@endforeach
+			</tbody>
+		</table>
+	</div>
+
+	<div role="tabpanel" class="tab-pane" id="online">
+		<!-- Online events tabel -->
+		<table class="table table-hover" id="onlineEventsTable" data-page-length="25">
+			<thead>
+				<tr>
+					<th>Naam</th>
+					<th>Code</th>
+					<th>Start kamp</th>
+					<th>Eind kamp</th>
+					<th>Locatie</th>
+					<th>Deelnemers</th>
+					<th>Leiding</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				@foreach ($onlineEvents as $e)
+					<tr>
+						<td><a href="{{ url('/events', $e->id) }}">{{ $e->naam }}</a></td>
+						<td>{{ $e->code }}</td>
+						<td>{{ $e->datum_start->toDateString() }}</td>
+						<td>{{ $e->datum_eind->toDateString() }}</td>
+						<td>{{ $e->location->plaats }}</td>
+						<td>{{ $e->participants->count() }}</td>
+						<td>{{ $e->members->count() }}</td>
 					</tr>
 				@endforeach
 			</tbody>
@@ -105,14 +137,14 @@
 			</thead>
 
 			<tbody>
-				@foreach ($others as $other)
+				@foreach ($others as $o)
 					<tr>
-						<td><a href="{{ url('/events', $other->id) }}">{{ $other->naam }}</a></td>
-						<td>{{ $other->code }}</td>
-						<td>{{ $other->datum_start->toDateString() }}</td>
-						<td>{{ $other->datum_eind->toDateString() }}</td>
-						<td>{{ $other->location->plaats }}</td>
-						<td>{{ $other->members->count() }}</td>
+						<td><a href="{{ url('/events', $o->id) }}">{{ $o->naam }}</a></td>
+						<td>{{ $o->code }}</td>
+						<td>{{ $o->datum_start->toDateString() }}</td>
+						<td>{{ $o->datum_eind->toDateString() }}</td>
+						<td>{{ $o->location->plaats }}</td>
+						<td>{{ $o->members->count() }}</td>
 					</tr>
 				@endforeach
 			</tbody>
@@ -146,6 +178,19 @@ $( document ).ready(function() {
 			null,
 			{'orderable':false},
 			null,
+			{'orderable':false}
+		]
+	});
+
+	$('#onlineEventsTable').DataTable({
+		order: [[ 2, "desc" ]],
+		columns: [
+			null,
+			null,
+			null,
+			{'orderable':false},
+			null,
+			{'orderable':false},
 			{'orderable':false}
 		]
 	});
