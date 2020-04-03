@@ -586,9 +586,9 @@ class PagesController extends Controller
 			if ($event->prijs == null) {
 				$prijs_html .= "</td><td>Wordt nog vastgesteld</td>";
 			} else {
-				$prijs_html .= "<br/>- 15% korting<br/>- 30% korting<br/>- 50% korting</td><td>";
+				$prijs_html .= "<br/>- 15&percnt; korting<br/>- 30&percnt; korting<br/>- 50&percnt; korting</td><td>";
 				$prijs_html .= implode('', array_map(function (float $disc) use ($event) {
-					return "€ " . EventPayment::calculate_price($event->prijs, $disc) . "<br/>";
+					return "&euro; " . EventPayment::calculate_price($event->prijs, $disc) . "<br/>";
 				}, Participant::INCOME_DISCOUNT_TABLE));
 				$prijs_html .= "</td>";
 			}
