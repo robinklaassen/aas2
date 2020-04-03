@@ -19,19 +19,19 @@ class EventPackageCapabilities extends Migration
         DB::table("capabilities")->insert([
             [
                 "name" => "event-packages::show",
-                "description" => "Event Paketten - Inzien"
+                "description" => "Event Pakketten - Inzien"
             ],
             [
                 "name" => "event-packages::edit",
-                "description" => "Event Paketten - Wijzigen"
+                "description" => "Event Pakketten - Wijzigen"
             ],
             [
                 "name" => "event-packages::create",
-                "description" => "Event Paketten - Aanmaken"
+                "description" => "Event Pakketten - Aanmaken"
             ],
             [
                 "name" => "event-packages::delete",
-                "description" => "Event Paketten - Delete"
+                "description" => "Event Pakketten - Verwijderen"
             ]
         ]);
 
