@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use App\Event;
 use App\Helpers\DateHelper;
+use App\Helpers\Payment\EventPayment;
+use App\Participant;
 use App\Review;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Arr;
@@ -579,18 +581,16 @@ class PagesController extends Controller
 				$naam .= ' (VOL)';
 			}
 
-			// Determine the 'price' table cells
-			$pr = $event->prijs;
-			$pr15 = round((0.85 * $pr) / 5) * 5;
-			$pr30 = round((0.7 * $pr) / 5) * 5;
-			$pr50 = round((0.5 * $pr) / 5) * 5;
-
 			$prijs_html = "<td style='white-space: nowrap;'>Prijs";
 
-			if ($pr == 0) {
+			if ($event->prijs == null) {
 				$prijs_html .= "</td><td>Wordt nog vastgesteld</td>";
 			} else {
-				$prijs_html .= "<br/>- 15% korting<br/>- 30% korting<br/>- 50% korting</td><td>€ " . $pr . "<br/>€ " . $pr15 . "<br/>€ " . $pr30 . "<br/>€ " . $pr50 . "</td>";
+				$prijs_html .= "<br/>- 15% korting<br/>- 30% korting<br/>- 50% korting</td><td>";
+				$prijs_html .= implode('', array_map(function (float $disc) use ($event) {
+					return "€ " . EventPayment::calculate_price($event->prijs, $disc) . "<br/>";
+				}, Participant::INCOME_DISCOUNT_TABLE));
+				$prijs_html .= "</td>";
 			}
 
 			// Create a string with Google Maps hyperlink for the members agenda

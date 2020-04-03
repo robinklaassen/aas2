@@ -8,6 +8,12 @@ use App\Participant;
 
 class EventPayment implements PaymentInterface
 {
+
+    public static function calculate_price(?int $fullprice, float $discount = 1.0)
+    {
+        return round(($discount * $fullprice) / 5) * 5;
+    }
+
     private $event;
     private $package;
     private $participant;
@@ -44,7 +50,7 @@ class EventPayment implements PaymentInterface
 
     public function getTotalAmount(): float
     {
-        return round(($this->participant->incomeBasedDiscount * ($this->event->prijs + $this->getPackagePrice())) / 5) * 5;
+        return EventPayment::calculate_price($this->event->prijs + $this->getPackagePrice(), $this->participant->incomeBasedDiscount);
     }
 
     public function getDescription(): string
