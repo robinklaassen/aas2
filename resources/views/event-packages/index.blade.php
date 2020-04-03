@@ -27,7 +27,8 @@ Pakketten
 
 <ul class="nav nav-tabs" role="tablist">
 	@foreach($eventPackagesGrouped as $key => $value)
-		<li role="presentation"><a href="#{{$key}}" aria-controls="{{$key}}" role="tab" data-toggle="tab">{{(\App\EventPackage::class)::TYPE_DESCRIPTIONS[$key]}}</a></li>
+	<li role="presentation"><a href="#{{$key}}" aria-controls="{{$key}}" role="tab"
+			data-toggle="tab">{{(\App\EventPackage::class)::TYPE_DESCRIPTIONS[$key]}}</a></li>
 	@endforeach
 </ul>
 
@@ -54,20 +55,20 @@ Pakketten
 						<tr>
 							<td><a href="{{ url('/event-packages', $eventPackage->id) }}">{{ $eventPackage->code }}</td>
 							<td>{{ $eventPackage->title }}</td>
-							<td>{{ $eventPackage->price }}</td>
+							<td>&euro; {{ $eventPackage->price }}</td>
 							<td>
 								@can("update", $eventPackage)
 								<a href="{{ url('/event-packages', [$eventPackage->id, 'edit']) }}">
-								<span class="glyphicon glyphicon-edit" data-toggle="tooltip"
-									title="Bewerken"></span>
+									<span class="glyphicon glyphicon-edit" data-toggle="tooltip"
+										title="Bewerken"></span>
 								</a>
 								@endcan
 							</td>
 							<td>
 								@can("delete", $eventPackage)
 								<a href="{{ url('/event-packages', [$eventPackage->id, 'delete']) }}">
-								<span class="glyphicon glyphicon-remove" data-toggle="tooltip"
-									title="Verwijderen"></span>
+									<span class="glyphicon glyphicon-remove" data-toggle="tooltip"
+										title="Verwijderen"></span>
 								</a>
 								@endcan
 							</td>
@@ -81,4 +82,4 @@ Pakketten
 
 	@endforeach
 
-@endsection
+	@endsection
