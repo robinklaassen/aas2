@@ -59,8 +59,14 @@
 			</tr>
 			<tr>
 				<td>Type</td>
-				<td>{{ \Str::studly($event->type) }}</td>
+				<td>{{ (\App\Event::class)::TYPE_DESCRIPTIONS[$event->type] }}</td>
 			</tr>
+			@if($event->package_type != null)
+				<tr>
+					<td>Pakket types</td>
+					<td>{{ (\App\EventPackage::class)::TYPE_DESCRIPTIONS[$event->package_type] }}</td>
+				</tr>
+			@endif
 			@endcan
 
 			@can("showBasic", $event)
@@ -234,7 +240,7 @@
 				<th data-orderable="true">Naam</th>
 				<th data-orderable="true">Niveau</th>
 				<th></th>
-				@if($event->type == 'online')
+				@if($event->package_type != null)
 					<th data-orderable="true">Pakket</th>
 				@endif
 				<th data-orderable="true">Vakken</th>
@@ -278,7 +284,7 @@
 			@endif
 		</td>
 
-		@if($event->type == 'online')
+		@if($event->package_type != null)
 			<td>{{ $participant->pivot->package->title }}</td>
 		@endif
 

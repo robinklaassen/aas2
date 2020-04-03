@@ -19,7 +19,6 @@ class DatabaseSeeder extends Seeder
 			MemberTableSeeder::class,
 			LocationTableSeeder::class,
 			EventTableSeeder::class,
-			EventPackageSeeder::class,
 			CourseTableSeeder::class,
 			EventMemberPivotSeeder::class,
 			CourseMemberPivotSeeder::class,

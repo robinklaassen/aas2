@@ -8,7 +8,7 @@ class EventPackage extends Model
 {
     const TYPE_DESCRIPTIONS = [
         "online-tutoring"   => "Online bijles",
-        "other"             => "Anders"
+        "other"             => "Anders",
     ];
 
     protected $guarded = ['id', 'created_at', 'updated_at'];

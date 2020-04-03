@@ -7,6 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class Event extends Model
 {
 
+	const TYPE_DESCRIPTIONS = [
+		'kamp' => 'Kamp',
+		'training' => 'Training',
+		'overig' => 'Overig',
+		'online' => 'Online'
+	];
+
 	// Descriptions of the camp types (used in reviews)
 	const CAMP_DESCRIPTIONS = [
 		"herfst" 		=> "Herfstkamp (weekend in de herfstvakantie)",

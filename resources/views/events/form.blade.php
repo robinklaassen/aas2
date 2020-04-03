@@ -54,10 +54,15 @@
 		{!! Form::label('tijd_eind', 'Tijd eind:') !!}
 		{!! Form::input('time', 'tijd_eind', null, ['class' => 'form-control']) !!}
 	</div>
-
+</div>
+<div class="row">
 	<div class="col-md-2 form-group">
 		{!! Form::label('type', 'Type evenement:') !!}
-		{!! Form::select('type', ['kamp' => 'Kamp', 'training' => 'Training', 'overig' => 'Overig'], null, ['class' => 'form-control']) !!}
+		{!! Form::select('type', (\App\Event::class)::TYPE_DESCRIPTIONS, null, ['class' => 'form-control']) !!}
+	</div>
+	<div class="col-md-2 form-group">
+		{!! Form::label('package_type', 'Pakket types:') !!}
+		{!! Form::select('package_type', array_merge([null => "Geen"], (\App\EventPackage::class)::TYPE_DESCRIPTIONS), null, ['class' => 'form-control']) !!}
 	</div>
 </div>
 
