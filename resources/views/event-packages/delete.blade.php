@@ -16,7 +16,7 @@
 
 {!! Form::open(['url' => 'event-packages/'.$eventPackage->id, 'method' => 'DELETE']) !!}
 
-	<p>Weet je zeker dat je de actie '{{ $eventPackage->title }}' wil verwijderen? Hiermee worden alle gegevens onherroepelijk gewist!</p>
+	<p>Weet je zeker dat je het pakket '{{ $eventPackage->code }}' wil verwijderen? Hiermee worden alle gegevens onherroepelijk gewist!</p>
 	
 	<div class="row">
 		<div class="col-sm-6 form-group">
