@@ -7,12 +7,14 @@ use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use App\Participant;
 use App\Event;
+use App\EventPackage;
 use Illuminate\Support\Facades\Config;
 
 class ParticipantRegistrationConfirmation extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $package;
     public $participant;
     public $event;
     public $givenCourses;
@@ -20,7 +22,7 @@ class ParticipantRegistrationConfirmation extends Mailable
     public $toPay;
     public $iDeal;
 
-    public function __construct(Participant $participant, Event $event, $givenCourses, $password, $toPay, $iDeal)
+    public function __construct(Participant $participant, Event $event, ?EventPackage $package, $givenCourses, $password, $toPay, $iDeal)
     {
         $this->participant = $participant;
         $this->event = $event;
@@ -28,6 +30,7 @@ class ParticipantRegistrationConfirmation extends Mailable
         $this->password = $password;
         $this->toPay = $toPay;
         $this->iDeal = $iDeal;
+        $this->package = $package;
     }
 
     public function build()

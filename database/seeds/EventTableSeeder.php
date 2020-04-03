@@ -85,5 +85,18 @@ class EventTableSeeder extends Seeder
 			'datum_eind' => '2089-12-18',
 			'location_id' => 1
 		]);
+
+		Event::create([
+			'naam' => 'Online CoronaKamp',
+			'code' => 'OK0001',
+			'type' => 'online',
+			'package_type' => 'online-tutoring',
+			'datum_start' => '2020-05-01',
+			'datum_eind' => '2020-05-01',
+			'location_id' => 1,
+			'streeftal' => 10,
+			'openbaar' => '1',
+			'prijs' => 0,
+		]);
 	}
 }

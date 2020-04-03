@@ -42,6 +42,9 @@
 						@can("viewAny", \App\User::class)
 						<li class="{{ substr(Request::path(),0,5) == 'users' ? 'active' : ''}}"><a href="{{ url('/users') }}">Gebruikers</a></li>
 						@endcan
+						@can("viewAny", \App\User::class)
+						<li class="{{ substr(Request::path(),0,5) == 'users' ? 'active' : ''}}"><a href="{{ url('/event-packages') }}">Pakketten</a></li>
+						@endcan
 
 					</ul>
 					

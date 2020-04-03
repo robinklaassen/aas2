@@ -3,9 +3,12 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class EventTest extends TestCase
 {
+    use DatabaseTransactions;
+
     public $user;
 
     protected function setUp(): void
@@ -50,5 +53,39 @@ class EventTest extends TestCase
             ->get('/events/1/export')
             ->assertStatus(200)
             ->assertHeader("Content-Type", "application/pdf");
+    }
+
+    public function testCreate()
+    {
+        $eventData = [
+            'naam' => 'TestCamp',
+            'code' => 'TST',
+            'location_id' => '2',
+            'openbaar' => '1',
+            'datum_start' => '2022-12-12',
+            'tijd_start' => '12:00',
+            'datum_eind' => '2022-12-16',
+            'tijd_eind' => '12:00',
+            'type' => 'online',
+            'package_type' => 'online-tutoring',
+            'datum_voordag' => '',
+            'prijs' => 0,
+            'vol' => 0,
+            'streeftal' => '5',
+            'beschrijving' => 'Test!'
+        ];
+
+        $this
+            ->actingAs($this->user)
+            ->post('/events', $eventData)
+            ->assertRedirect('/events');
+
+        $databaseData = $eventData;
+        $databaseData['datum_voordag'] = null;
+        // database stores time differently 
+        $databaseData['tijd_start'] = '12:00:00';
+        $databaseData['tijd_eind'] = '12:00:00';
+
+        $this->assertDatabaseHas('events', $databaseData);
     }
 }

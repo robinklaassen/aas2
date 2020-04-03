@@ -61,6 +61,9 @@ Route::post('declarations/create', 'DeclarationsController@create');
 Route::post('declarations', 'DeclarationsController@store');
 Route::get('declarations', 'DeclarationsController@index');
 
+Route::resource('event-packages', 'EventPackagesController');
+Route::get('event-packages/{eventPackage}/delete', 'EventPackagesController@delete');
+
 # Event things
 Route::resource('events', 'EventsController');
 Route::get('events/{event}/delete', 'EventsController@delete');

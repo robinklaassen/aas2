@@ -7,6 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 class Event extends Model
 {
 
+	const TYPE_DESCRIPTIONS = [
+		'kamp' => 'Kamp',
+		'training' => 'Training',
+		'overig' => 'Overig',
+		'online' => 'Online'
+	];
+
 	// Descriptions of the camp types (used in reviews)
 	const CAMP_DESCRIPTIONS = [
 		"herfst" 		=> "Herfstkamp (weekend in de herfstvakantie)",
@@ -32,8 +39,12 @@ class Event extends Model
 	// A camp belongs to many participants
 	public function participants()
 	{
-		return $this->belongsToMany('App\Participant')->withTimestamps()->withPivot('datum_betaling')->withPivot('geplaatst');
+		return $this->belongsToMany('App\Participant')
+			->using('App\Pivots\EventParticipant')
+			->withTimestamps()
+			->withPivot(['package_id', 'geplaatst', 'datum_betaling']);
 	}
+
 
 	// A camp belongs to one location
 	public function location()
@@ -61,7 +72,14 @@ class Event extends Model
 		return round($this->reviews()->pluck("cijfer")->avg(), 1);
 	}
 
-	public function hasUser(User $user) {
+	public function hasUser(User $user)
+	{
 		return $user->profile->events->contains($this);
+	}
+
+	public function getFullTitleAttribute()
+	{
+		return $this->naam . ' ' . substr($this->datum_start, 0, 4) .
+			' te ' . $this->location->plaats . ' (' . $this->datum_start->format('d-m-Y') . ')' . ($this->vol ? ' - VOL' : '');
 	}
 }

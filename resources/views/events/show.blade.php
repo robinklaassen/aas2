@@ -59,8 +59,14 @@
 			</tr>
 			<tr>
 				<td>Type</td>
-				<td>{{ \Str::studly($event->type) }}</td>
+				<td>{{ (\App\Event::class)::TYPE_DESCRIPTIONS[$event->type] }}</td>
 			</tr>
+			@if($event->package_type != null)
+				<tr>
+					<td>Pakket types</td>
+					<td>{{ (\App\EventPackage::class)::TYPE_DESCRIPTIONS[$event->package_type] }}</td>
+				</tr>
+			@endif
 			@endcan
 
 			@can("showBasic", $event)
@@ -193,7 +199,7 @@
 	</div>
 </div>
 
-@if ($event->type == 'kamp')
+@if (in_array($event->type, ['kamp', 'online']))
 <hr />
 <div style="display: flex; flex-wrap: wrap; justify-content: flex-end;">
 	@can("subjectCheck", $event)
@@ -231,20 +237,23 @@
 	<thead>
 		<tr>
 			@can("viewParticipantsAdvanced", $event)
-			<th>Naam</th>
-			<th>Niveau</th>
-			<th></th>
-			<th>Vakken</th>
-			<th>Aanmelding</th>
-			<th>Betaling</th>
-			<th>Inkomensverklaring</th>
-			<th>Geplaatst</th>
+				<th data-orderable="true">Naam</th>
+				<th data-orderable="true">Niveau</th>
+				<th></th>
+				@if($event->package_type != null)
+					<th data-orderable="true">Pakket</th>
+				@endif
+				<th data-orderable="true">Vakken</th>
+				<th data-orderable="true">Aanmelding</th>
+				<th data-orderable="true">Betaling</th>
+				<th data-orderable="true">Inkomensverklaring</th>
+				<th data-orderable="true">Geplaatst</th>
 			@else
-			<th>Naam</th>
-			<th>Niveau</th>
-			<th>Telefoon ouder(s)</th>
-			<th>Woonplaats</th>
-			<th>Aanmelding</th>
+				<th data-orderable="true">Naam</th>
+				<th data-orderable="true">Niveau</th>
+				<th>Telefoon ouder(s)</th>
+				<th data-orderable="true">Woonplaats</th>
+				<th data-orderable="true">Aanmelding</th>
 			@endcan
 			<th></th>
 			<th></th>
@@ -258,10 +267,10 @@
 		<td>
 			@can("showBasic", $participant)
 			<a href="{{ url('/participants', $participant->id) }}">
-				{{ $participant->voornaam }} {{ $participant->tussenvoegsel }} {{ $participant->achternaam }}
+				{{ $participant->volnaam }}
 			</a>
 			@else
-				{{ $participant->voornaam }} {{ $participant->tussenvoegsel }} {{ $participant->achternaam }}
+				{{ $participant->volnaam }}
 			@endcan
 			
 		</td>
@@ -274,6 +283,10 @@
 			<span class="glyphicon glyphicon-baby-formula" data-toggle="tooltip" title="Nieuw dit kamp"></span>
 			@endif
 		</td>
+
+		@if($event->package_type != null)
+			<td>{{ $participant->pivot->package->title }}</td>
+		@endif
 
 		<td>{{ $participantCourseString[$participant->id] }}</td>
 		@endcan
@@ -337,34 +350,20 @@
 
 @section ('footer')
 <script type="text/javascript">
+	function getColumnOptions(tableHeaderSelector) {
+		let columnOptions = [];
+		$(tableHeaderSelector).each(function(i) {
+			let option = ($(this).data('orderable')) ? null : {'orderable': false};
+			columnOptions.push(option);
+		})
+		return columnOptions;
+	}
 	($(document).ready(function() {
 		$('#participantsTable').DataTable({
 			paging: false,
 			searching: false,
 			info: false,
-			columns: [
-				null,
-				null,
-				{
-					'orderable': false
-				},
-				{
-					'orderable': false
-				},
-				null,
-				null,
-				null,
-				null,
-				{
-					'orderable': false
-				},
-				{
-					'orderable': false
-				},
-				{
-					'orderable': false
-				}
-			]
+			columns: getColumnOptions('#participantsTable tr:first th')
 		});
 	}));
 </script>

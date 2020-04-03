@@ -27,6 +27,12 @@
 				<td>Volledige kampprijs</td>
 				<td>€ {{ $camp->prijs }}</td>
 			</tr>
+			@if($package != null)
+			<tr>
+				<td>Kamp pakket</td>
+				<td>{{ $package->title }}: € {{ $package->price }}</td>
+			</tr>
+			@endif
 			<tr>
 				<td>Opgegeven maandinkomen en korting</td>
 				<td>{{ $incomeTable[$participant->inkomen] }}</td>

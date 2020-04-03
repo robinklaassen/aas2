@@ -15,12 +15,14 @@ use App\Mail\internal\CoverageChangedNotification;
 use App\Mail\internal\NewDeclaration;
 use App\Mail\internal\ParticipantOnEventNotification;
 use App\Mail\internal\ParticipantEditedEventCourseInformationNotification;
+use Illuminate\Support\Arr;
 
 class ProfileController extends Controller
 {
 
 	public function __construct()
-	{ }
+	{
+	}
 
 	/**
 	 * Display the specified resource.
@@ -349,27 +351,23 @@ class ProfileController extends Controller
 		$profile = \Auth::user()->profile;
 
 		// List of future camps that are not full
-		$camps = \App\Event::where('type', 'kamp')
+		$camps = \App\Event::whereIn('type', ['kamp', 'online'])
 			->where('openbaar', 1)
 			->where('datum_start', '>', date('Y-m-d'))
 			->orderBy('datum_start', 'asc')
 			->get();
-		$camp_options = []; $camp_full = [];
-		foreach ($camps as $camp) {
-			$camp_options[$camp->id] = $camp->naam . ' ' . substr($camp->datum_start, 0, 4) . ' te ' . $camp->location->plaats . ' (' . $camp->datum_start->format('d-m-Y') . ')';
-			if ($camp->vol) {
-				$camp_options[$camp->id] .= ' - VOL';
-				$camp_full[$camp->id] = 1;
-			} else {
-				$camp_full[$camp->id] = 0;
-			}
-		}
+
+		$package_type_per_camp = $camps->where('package_type', '!=', null)->mapWithKeys(function ($item) {
+			return [$item['id'] => $item['package_type']];
+		});
+
+		$packages =  \App\EventPackage::all()->groupBy('type');
 
 		// List of courses
 		$course_options = \App\Course::orderBy('naam')->pluck('naam', 'id')->toArray();
 		$course_options = [0 => '-geen vak-'] + $course_options;
 
-		return view('profile.onCamp', compact('profile', 'camp_options', 'camp_full', 'course_options'));
+		return view('profile.onCamp', compact('profile', 'camps', 'course_options', 'packages', 'package_type_per_camp'));
 	}
 
 	# Go on camp (update database)
@@ -393,17 +391,30 @@ class ProfileController extends Controller
 				// Send confirmation to member
 				Mail::send(new \App\Mail\members\OnEventConfirmation($member, $camp));
 
-				// Mail::send('emails.memberOnCampConfirmation', ['member' => $member, 'camp' => $camp], function ($message) use ($member) {
-				// 	$message->to($member->email_anderwijs, $member->voornaam . ' ' . $member->tussenvoegsel . ' ' . $member->achternaam)->subject('AAS 2.0 - Aangemeld voor kamp');
-				// });
-
 				return redirect('profile')->with([
 					'flash_message' => 'Je gaat op kamp!'
 				]);
 			}
 		} elseif (\Auth::user()->profile_type == 'App\Participant') {
+
+			$package = \App\EventPackage::find($request->selected_package);
+
+			// Check given package for camp
+			if ($camp['package_type'] !== null && ($package === null || $package['type'] !== $camp['package_type'])) {
+				return back()->with([
+					'flash_error' => 'Er dient een pakket geselecteerd te worden bij voor dit kamp'
+				]);
+			} else if ($camp['package_type'] === null) {
+				// remove any given package if the camp doesnt accept packages
+				$package = null;
+			}
+
+
 			$participant = \Auth::user()->profile;
-			$status = $participant->events()->sync([$request->selected_camp], false);
+
+			$status = $participant->events()->sync([
+				$request->selected_camp => ["package_id" => $package !== null ? $package->id : null]
+			], false);
 			if ($status['attached'] == []) {
 				return redirect('profile')->with([
 					'flash_message' => 'U heeft uw kind al voor dit kamp aangemeld!'
@@ -421,10 +432,10 @@ class ProfileController extends Controller
 				}
 
 				// Income table
-				$incomeTable = Participant::INCOME_DESCRIPTION_TABLE;
 				$payment = (new EventPayment())
 					->event($camp)
 					->participant($participant)
+					->package($package)
 					->existing(true);
 				$toPay = $payment->getTotalAmount();
 
@@ -448,7 +459,7 @@ class ProfileController extends Controller
 				));
 
 				// If they want to pay with iDeal, set up the payment now
-				if ($iDeal == '1' && $camp->prijs != 0) {
+				if ($iDeal == '1' && $toPay > 0) {
 					return Mollie::process($payment);
 				} else {
 					// Return to profile
