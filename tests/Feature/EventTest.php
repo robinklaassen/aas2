@@ -3,9 +3,12 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class EventTest extends TestCase
 {
+    use DatabaseTransactions;
+
     public $user;
 
     protected function setUp(): void
@@ -54,7 +57,7 @@ class EventTest extends TestCase
 
     public function testCreate()
     {
-        $dat = [
+        $eventData = [
             'naam' => 'TestCamp',
             'code' => 'TST',
             'location_id' => '2',
@@ -74,27 +77,15 @@ class EventTest extends TestCase
 
         $this
             ->actingAs($this->user)
-            ->post('/events', $dat)
+            ->post('/events', $eventData)
             ->assertRedirect('/events');
 
-        $this->assertDatabaseHas('events', [
-            'naam' => 'TestCamp',
-            'code' => 'TST',
-            'location_id' => '2',
-            'openbaar' => '1',
-            'type' => 'online',
-            'package_type' => 'online-tutoring',
-            'prijs' => 0,
-            'vol' => 0,
-            'streeftal' => '5',
-            'beschrijving' => 'Test!',
-            'datum_start' => '2022-12-12',
-            'datum_eind' => '2022-12-16',
+        $databaseData = $eventData;
+        $databaseData['datum_voordag'] = null;
+        // database stores time differently 
+        $databaseData['tijd_start'] = '12:00:00';
+        $databaseData['tijd_eind'] = '12:00:00';
 
-            // database stores time differently 
-            'tijd_start' => '12:00:00',
-            'tijd_eind' => '12:00:00'
-
-        ]);
+        $this->assertDatabaseHas('events', $databaseData);
     }
 }
