@@ -206,14 +206,12 @@ class RegistrationController extends Controller
 		// Check given package for camp
 		if ($camp['package_type'] !== null && ($package === null || $package['type'] !== $camp['package_type'])) {
 			return back()->with([
-				'flash_error' => 'Er dient een pakket geselecteerd te worden bij voor dit kamp'
+				'flash_error' => 'Er dient een pakket geselecteerd te worden voor dit kamp'
 			]);
 		} else if ($camp['package_type'] === null) {
-			// remove any given package if the camp doesnt accept packages
+			// remove any given package if the camp doesn't accept packages
 			$package = null;
 		}
-
-
 
 		// Process 'hoebij' options to one string
 		$hb = $request->hoebij;
