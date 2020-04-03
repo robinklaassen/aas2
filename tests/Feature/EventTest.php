@@ -51,4 +51,50 @@ class EventTest extends TestCase
             ->assertStatus(200)
             ->assertHeader("Content-Type", "application/pdf");
     }
+
+    public function testCreate()
+    {
+        $dat = [
+            'naam' => 'TestCamp',
+            'code' => 'TST',
+            'location_id' => '2',
+            'openbaar' => '1',
+            'datum_start' => '2022-12-12',
+            'tijd_start' => '12:00',
+            'datum_eind' => '2022-12-16',
+            'tijd_eind' => '12:00',
+            'type' => 'online',
+            'package_type' => 'online-tutoring',
+            'datum_voordag' => '',
+            'prijs' => 0,
+            'vol' => 0,
+            'streeftal' => '5',
+            'beschrijving' => 'Test!'
+        ];
+
+        $this
+            ->actingAs($this->user)
+            ->post('/events', $dat)
+            ->assertRedirect('/events');
+
+        $this->assertDatabaseHas('events', [
+            'naam' => 'TestCamp',
+            'code' => 'TST',
+            'location_id' => '2',
+            'openbaar' => '1',
+            'type' => 'online',
+            'package_type' => 'online-tutoring',
+            'prijs' => 0,
+            'vol' => 0,
+            'streeftal' => '5',
+            'beschrijving' => 'Test!',
+            'datum_start' => '2022-12-12',
+            'datum_eind' => '2022-12-16',
+
+            // database stores time differently 
+            'tijd_start' => '12:00:00',
+            'tijd_eind' => '12:00:00'
+
+        ]);
+    }
 }
