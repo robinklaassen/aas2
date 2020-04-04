@@ -21,34 +21,42 @@ Mijn profiel
 			@if ($viewType == 'profile')
 
 			@can("update", $member)
-			<a class="btn btn-primary" type="button" href="{{ url('/profile/edit') }}" style="margin-top:21px;">Bewerken</a>
+			<a class="btn btn-primary" type="button" href="{{ url('/profile/edit') }}"
+				style="margin-top:21px;">Bewerken</a>
 			@endcan
 			@can("onEvent", $member)
-			<a class="btn btn-info" type="button" href="{{ url('/profile/on-camp') }}" style="margin-top:21px;">Op kamp</a>
+			<a class="btn btn-info" type="button" href="{{ url('/profile/on-camp') }}" style="margin-top:21px;">Op
+				kamp</a>
 			@endcan
 			@can("editFinance", $member)
-			<a class="btn btn-success" type="button" href="{{ url('/profile/declare') }}" style="margin-top:21px;">Declaratie</a>
+			<a class="btn btn-success" type="button" href="{{ url('/profile/declare') }}"
+				style="margin-top:21px;">Declaratie</a>
 			@endcan
 			@can("editPassword", $member)
-			<a class="btn btn-warning" type="button" href="{{ url('/profile/password') }}" style="margin-top:21px;">Nieuw wachtwoord</a>
+			<a class="btn btn-warning" type="button" href="{{ url('/profile/password') }}"
+				style="margin-top:21px;">Nieuw wachtwoord</a>
 			@endcan
-			
+
 			@elseif ($viewType == 'admin')
 
 
 			@can("update", $member)
-			<a class="btn btn-primary" type="button" href="{{ url('/members', [$member->id, 'edit']) }}" style="margin-top:21px;">Bewerken</a>
+			<a class="btn btn-primary" type="button" href="{{ url('/members', [$member->id, 'edit']) }}"
+				style="margin-top:21px;">Bewerken</a>
 			@endcan
 			@can("onEvent", $member)
-			<a class="btn btn-info" type="button" href="{{ url('/members', [$member->id, 'on-event']) }}" style="margin-top:21px;">Op evenement</a>
+			<a class="btn btn-info" type="button" href="{{ url('/members', [$member->id, 'on-event']) }}"
+				style="margin-top:21px;">Op evenement</a>
 			@endcan
 			@can("editPassword", $member)
-			<a class="btn btn-warning" type="button" href="{{ url('/users', [$member->user->id, 'password']) }}" style="margin-top:21px;">Nieuw wachtwoord</a>
+			<a class="btn btn-warning" type="button" href="{{ url('/users', [$member->user->id, 'password']) }}"
+				style="margin-top:21px;">Nieuw wachtwoord</a>
 			@endcan
 			@can("delete", $member)
-			<a class="btn btn-danger" type="button" href="{{ url('/members', [$member->id, 'delete']) }}" style="margin-top:21px;">Verwijderen</a>
+			<a class="btn btn-danger" type="button" href="{{ url('/members', [$member->id, 'delete']) }}"
+				style="margin-top:21px;">Verwijderen</a>
 			@endcan
-			
+
 			@endif
 		</p>
 	</div>
@@ -251,9 +259,9 @@ Mijn profiel
 				<td>Rollen</td>
 				<td>
 					@if($member->user()->first())
-						@foreach ($member->user()->first()->roles as $role)
-						<span class="label label-info">{{ $role->title }}</span>
-						@endforeach
+					@foreach ($member->user()->first()->roles as $role)
+					<span class="label label-info">{{ $role->title }}</span>
+					@endforeach
 					@endif
 				</td>
 			</tr>
@@ -291,7 +299,8 @@ Mijn profiel
 		</table>
 
 		@can("showPractical", $member)
-		<p><a data-toggle="modal" data-target="#fellows" style="cursor:pointer;">Met wie ben ik allemaal op kamp geweest?</a></p>
+		<p><a data-toggle="modal" data-target="#fellows" style="cursor:pointer;">Met wie ben ik allemaal op kamp
+				geweest?</a></p>
 		@endcan
 
 		@can("showPractical", $member)
@@ -302,8 +311,10 @@ Mijn profiel
 					<div style="float:left;">Vakken</div>
 					@can("editPractical", $member)
 					<div style="float:right;">
-						<a href="{{ $viewType == 'admin' ? url('/members', [$member->id, 'add-course']) : url('/profile', ['add-course'])  }}">
-							<span class="glyphicon glyphicon-plus" aria-hidden="true" data-toggle="tooltip" title="Vak toevoegen"></span>
+						<a
+							href="{{ $viewType == 'admin' ? url('/members', [$member->id, 'add-course']) : url('/profile', ['add-course'])  }}">
+							<span class="glyphicon glyphicon-plus" aria-hidden="true" data-toggle="tooltip"
+								title="Vak toevoegen"></span>
 						</a>
 						@endcan
 					</div>
@@ -312,9 +323,9 @@ Mijn profiel
 			@forelse ($member->courses()->orderBy('naam')->get() as $course)
 			<tr>
 
-				<td> 
+				<td>
 					@can("view", $course)
-					<a href="{{ url('/courses', $course->id) }}">  {{ $course->naam }} </a>
+					<a href="{{ url('/courses', $course->id) }}"> {{ $course->naam }} </a>
 					@else
 					{{ $course->naam }}
 					@endcan
@@ -324,11 +335,13 @@ Mijn profiel
 					@can("editPractical", $member)
 					@if ($viewType == 'admin')
 					<a href="{{ url('/members', [$member->id, 'edit-course', $course->id]) }}">
-						<span class="glyphicon glyphicon-edit" aria-hidden="true" data-toggle="tooltip" title="Vak bewerken"></span>
+						<span class="glyphicon glyphicon-edit" aria-hidden="true" data-toggle="tooltip"
+							title="Vak bewerken"></span>
 					</a>
 					@elseif ($viewType == 'profile')
 					<a href="{{ url('/profile', ['edit-course', $course->id]) }}">
-						<span class="glyphicon glyphicon-edit" aria-hidden="true" data-toggle="tooltip" title="Vak bewerken"></span>
+						<span class="glyphicon glyphicon-edit" aria-hidden="true" data-toggle="tooltip"
+							title="Vak bewerken"></span>
 					</a>
 					@endif
 					@endcan
@@ -337,12 +350,14 @@ Mijn profiel
 					@can("editPractical", $member)
 					@if ($viewType == 'admin')
 					<a href="{{ url('/members', [$member->id, 'remove-course', $course->id]) }}">
-						<span class="glyphicon glyphicon-remove" aria-hidden="true" data-toggle="tooltip" title="Vak verwijderen"></span>
+						<span class="glyphicon glyphicon-remove" aria-hidden="true" data-toggle="tooltip"
+							title="Vak verwijderen"></span>
 					</a>
 					@elseif ($viewType == 'profile')
-						<a href="{{ url('/profile', ['remove-course', $course->id]) }}">
-							<span class="glyphicon glyphicon-remove" aria-hidden="true" data-toggle="tooltip" title="Vak verwijderen"></span>
-						</a>
+					<a href="{{ url('/profile', ['remove-course', $course->id]) }}">
+						<span class="glyphicon glyphicon-remove" aria-hidden="true" data-toggle="tooltip"
+							title="Vak verwijderen"></span>
+					</a>
 					@endif
 					@endcan
 				</td>
@@ -354,13 +369,13 @@ Mijn profiel
 			@endforelse
 		</table>
 		@endcan
-		
+
 	</div>
 
 </div>
 
 @can("viewAny", \App\Comment::class)
-	@include('partials.comments', [ 'comments' => $member->comments, 'type' => 'App\Member', 'key' => $member->id ])
+@include('partials.comments', [ 'comments' => $member->comments, 'type' => 'App\Member', 'key' => $member->id ])
 @endif
 
 <hr />
@@ -371,7 +386,8 @@ Mijn profiel
 		<!-- Kampen van dit lid -->
 		<table class="table table-hover">
 			<caption>Kampen ({{ $member->events()->whereIn('type',['kamp', 'online' ])->count() }})</caption>
-			@forelse ($member->events()->whereIn('type',['kamp', 'online'])->orderBy('datum_start', 'desc')->get() as $event)
+			@forelse ($member->events()->whereIn('type',['kamp', 'online'])->orderBy('datum_start', 'desc')->get() as
+			$event)
 			<tr>
 				<td>
 					@can("view", $event)
@@ -425,7 +441,7 @@ Mijn profiel
 					@endcan
 				</td>
 				<td>
-					@can("showAdvanced", $event)					
+					@can("showAdvanced", $event)
 					{{ $event->code }}
 					@else
 					{{ $event->datum_start->format('d-m-Y') }}
@@ -454,7 +470,7 @@ Mijn profiel
 					@endcan
 				</td>
 				<td>
-					@can("showAdvanced", $event)					
+					@can("showAdvanced", $event)
 					{{ $event->code }}
 					@else
 					{{ $event->datum_start->format('d-m-Y') }}

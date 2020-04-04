@@ -66,6 +66,7 @@ Leden
 						<th>Telefoon</th>
 						@endcan
 						<th>Email</th>
+						<th>Rol(len)</th>
 					</tr>
 				</thead>
 
@@ -102,6 +103,11 @@ Leden
 						<td>{{ $member->telefoon }}</td>
 						@endcan
 						<td><a href="mailto:{{ $member->email_anderwijs }}">{{ $member->email_anderwijs }}</a></td>
+						<td>
+							@foreach ($member->user->roles->where('tag', '<>', 'member') as $role)
+								<span class="label label-info">{{ $role->title }}</span>
+								@endforeach
+						</td>
 					</tr>
 					@endforeach
 				</tbody>
