@@ -370,8 +370,8 @@ Mijn profiel
 	<div class="col-sm-4">
 		<!-- Kampen van dit lid -->
 		<table class="table table-hover">
-			<caption>Kampen ({{ $member->events()->where('type','kamp')->count() }})</caption>
-			@forelse ($member->events()->where('type','kamp')->orderBy('datum_start', 'desc')->get() as $event)
+			<caption>Kampen ({{ $member->events()->whereIn('type',['kamp', 'online' ])->count() }})</caption>
+			@forelse ($member->events()->whereIn('type',['kamp', 'online'])->orderBy('datum_start', 'desc')->get() as $event)
 			<tr>
 				<td>
 					@can("view", $event)

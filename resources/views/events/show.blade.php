@@ -59,8 +59,14 @@
 			</tr>
 			<tr>
 				<td>Type</td>
-				<td>{{ \Str::studly($event->type) }}</td>
+				<td>{{ (\App\Event::class)::TYPE_DESCRIPTIONS[$event->type] }}</td>
 			</tr>
+			@if($event->package_type != null)
+				<tr>
+					<td>Pakket types</td>
+					<td>{{ (\App\EventPackage::class)::TYPE_DESCRIPTIONS[$event->package_type] }}</td>
+				</tr>
+			@endif
 			@endcan
 
 			@can("showBasic", $event)
@@ -193,7 +199,7 @@
 	</div>
 </div>
 
-@if ($event->type == 'kamp')
+@if (in_array($event->type, ['kamp', 'online']))
 <hr />
 <div style="display: flex; flex-wrap: wrap; justify-content: flex-end;">
 	@can("subjectCheck", $event)
@@ -248,6 +254,9 @@
 					<th data-orderable>Naam</th>
 					<th data-orderable>Niveau</th>
 					<th></th>
+					@if($event->package_type != null)
+						<th data-orderable>Pakket</th>
+					@endif
 					<th>Vakken</th>
 					<th data-orderable>Aanmelding</th>
 					<th data-orderable>Betaling</th>
@@ -280,8 +289,11 @@
 					
 				</td>
 
-				<td>{{ $participant->klas }} {{ $participant->niveau }}</td>
+				@if($event->package_type != null)
+					<td>{{ $participant->pivot->package->title }}</td>
+				@endif
 
+				<td>{{ $participantCourseString[$participant->id] }}</td>
 				@can("viewParticipantsAdvanced", $event)
 				<td>
 					@if ($participantIsNew[$participant->id] == 1)
@@ -397,6 +409,14 @@
 
 @section ('footer')
 <script type="text/javascript">
+	function getColumnOptions(tableHeaderSelector) {
+		let columnOptions = [];
+		$(tableHeaderSelector).each(function(i) {
+			let option = ($(this).data('orderable')) ? null : {'orderable': false};
+			columnOptions.push(option);
+		})
+		return columnOptions;
+	}
 	($(document).ready(function() {
 		makeTableSortable("#participantsTable");
 		makeTableSortable("#addressesTable");

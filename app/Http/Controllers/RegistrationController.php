@@ -158,21 +158,17 @@ class RegistrationController extends Controller
 	public function registerParticipant()
 	{
 		// List of future camps that are not full
-		$camps = Event::where('type', 'kamp')->where('datum_start', '>', date('Y-m-d'))->where('openbaar', 1)->orderBy('datum_start', 'asc')->get();
-		$camp_options = array();
-		foreach ($camps as $camp) {
-			$camp_options[$camp->id] = $camp->naam . ' ' . substr($camp->datum_start, 0, 4) . ' te ' . $camp->location->plaats . ' (' . $camp->datum_start->format('d-m-Y') . ')';
-			if ($camp->vol) {
-				$camp_options[$camp->id] .= ' - VOL';
-				$camp_full[$camp->id] = 1;
-			} else {
-				$camp_full[$camp->id] = 0;
-			}
-		}
+		$camps = Event::whereIn('type', ['kamp', 'online'])->where('datum_start', '>', date('Y-m-d'))->where('openbaar', 1)->orderBy('datum_start', 'asc')->get();
 
 		// List of courses
 		$course_options = Course::orderBy('naam')->pluck('naam', 'id')->toArray();
 		$course_options = [0 => '-kies vak-'] + $course_options;
+
+		$package_type_per_camp = $camps->where('package_type', '!=', null)->mapWithKeys(function ($item) {
+			return [$item['id'] => $item['package_type']];
+		});
+
+		$packages =  \App\EventPackage::all()->groupBy('type');
 
 		// List of 'hoe bij Anderwijs' options (without 'anders, namelijk'!)
 		$hoebij_options = [
@@ -191,7 +187,7 @@ class RegistrationController extends Controller
 		// Scramble the options!
 		shuffle($hoebij_options);
 
-		return view('registration.participant', compact('camp_options', 'camp_full', 'course_options', 'hoebij_options'));
+		return view('registration.participant', compact('camps', 'course_options', 'hoebij_options', 'packages', 'package_type_per_camp'));
 	}
 
 	# Participant registration handler
@@ -203,6 +199,19 @@ class RegistrationController extends Controller
 			'voorwaarden' => 'required',
 			'privacy' => 'required'
 		]);
+
+		$package = \App\EventPackage::find($request->selected_package);
+		$camp = Event::findOrFail($request->selected_camp);
+
+		// Check given package for camp
+		if ($camp['package_type'] !== null && ($package === null || $package['type'] !== $camp['package_type'])) {
+			return back()->with([
+				'flash_error' => 'Er dient een pakket geselecteerd te worden voor dit kamp'
+			]);
+		} else if ($camp['package_type'] === null) {
+			// remove any given package if the camp doesn't accept packages
+			$package = null;
+		}
 
 		// Process 'hoebij' options to one string
 		$hb = $request->hoebij;
@@ -217,10 +226,10 @@ class RegistrationController extends Controller
 		$request->merge(array('hoebij' => $hb_string));
 
 		// Store participant in database
-		$participant = Participant::create($request->except('selected_camp', 'vak0', 'vak1', 'vak2', 'vak3', 'vak4', 'vak5', 'vakinfo0', 'vakinfo1', 'vakinfo2', 'vakinfo3', 'vakinfo4', 'vakinfo5', 'iDeal', 'hoebij_anders', 'voorwaarden', 'privacy'));
+		$participant = Participant::create($request->except('selected_package', 'selected_camp', 'vak0', 'vak1', 'vak2', 'vak3', 'vak4', 'vak5', 'vakinfo0', 'vakinfo1', 'vakinfo2', 'vakinfo3', 'vakinfo4', 'vakinfo5', 'iDeal', 'hoebij_anders', 'voorwaarden', 'privacy'));
 
 		// Attach to camp
-		$participant->events()->attach($request->selected_camp);
+		$participant->events()->attach($request->selected_camp, ["package_id" => $package === null ? null : $package->id]);
 
 		// Attach courses (with information)
 		$givenCourses = [];
@@ -263,11 +272,11 @@ class RegistrationController extends Controller
 		// Income table
 		$incomeTable = Participant::INCOME_DESCRIPTION_TABLE;
 
-		// Obtain camp and cost information
-		$camp = Event::findOrFail($request->selected_camp);
+		// Obtain cost information
 		$payment = (new EventPayment())
 			->event($camp)
 			->participant($participant)
+			->package($package)
 			->existing(false);
 		$toPay = $payment->getTotalAmount();
 		$iDeal = $request->iDeal;
@@ -283,6 +292,7 @@ class RegistrationController extends Controller
 			new ParticipantRegistrationConfirmation(
 				$participant,
 				$camp,
+				$package,
 				$givenCourses,
 				$password,
 				$toPay,
@@ -291,11 +301,11 @@ class RegistrationController extends Controller
 		);
 
 		// If they want to pay with iDeal, set up the payment now
-		if ($iDeal == '1' && $camp->prijs != 0) {
+		if ($iDeal == '1' && $toPay > 0) {
 			return Mollie::process($payment);
 		} else {
 			// Return closing view
-			return view('registration.participantStored', compact('participant', 'camp', 'toPay', 'incomeTable'));
+			return view('registration.participantStored', compact('participant', 'camp', 'toPay', 'incomeTable', 'package'));
 		}
 	}
 }

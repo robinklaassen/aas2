@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use App\Event;
 use App\Helpers\DateHelper;
+use App\Helpers\Payment\EventPayment;
+use App\Participant;
 use App\Review;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Arr;
@@ -539,7 +541,7 @@ class PagesController extends Controller
 
 		if ($type == 'part') {
 			// Only coming camps, for participants and their parents
-			$events = \App\Event::where('type', 'kamp')
+			$events = \App\Event::whereIn('type', ['kamp', 'online'])
 				->where('datum_eind', '>=', date('Y-m-d'))
 				->where('openbaar', 1)
 				->orderBy('datum_start', 'asc')
@@ -562,6 +564,9 @@ class PagesController extends Controller
 				case 'kamp':
 					$color = '#50B848';
 					break;
+				case 'online':
+					$color = '#1eaa97';
+					break;
 				case 'training':
 					$color = '#1E5027';
 					break;
@@ -576,18 +581,16 @@ class PagesController extends Controller
 				$naam .= ' (VOL)';
 			}
 
-			// Determine the 'price' table cells
-			$pr = $event->prijs;
-			$pr15 = round((0.85 * $pr) / 5) * 5;
-			$pr30 = round((0.7 * $pr) / 5) * 5;
-			$pr50 = round((0.5 * $pr) / 5) * 5;
-
 			$prijs_html = "<td style='white-space: nowrap;'>Prijs";
 
-			if ($pr == 0) {
+			if ($event->prijs == null) {
 				$prijs_html .= "</td><td>Wordt nog vastgesteld</td>";
 			} else {
-				$prijs_html .= "<br/>- 15% korting<br/>- 30% korting<br/>- 50% korting</td><td>€ " . $pr . "<br/>€ " . $pr15 . "<br/>€ " . $pr30 . "<br/>€ " . $pr50 . "</td>";
+				$prijs_html .= "<br/>- 15&percnt; korting<br/>- 30&percnt; korting<br/>- 50&percnt; korting</td><td>";
+				$prijs_html .= implode('', array_map(function (float $disc) use ($event) {
+					return "&euro; " . EventPayment::calculate_price($event->prijs, $disc) . "<br/>";
+				}, Participant::INCOME_DISCOUNT_TABLE));
+				$prijs_html .= "</td>";
 			}
 
 			// Create a string with Google Maps hyperlink for the members agenda

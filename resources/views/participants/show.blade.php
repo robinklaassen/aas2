@@ -194,7 +194,7 @@ Mijn profiel
 		<!-- Kampen -->
 		<table class="table table-hover">
 			<caption>Kampen</caption>
-			@forelse ($participant->events()->where('type','kamp')->orderBy('datum_start', 'desc')->get() as $event)
+			@forelse ($participant->events()->whereIn('type', ['kamp', 'online'])->orderBy('datum_start', 'desc')->get() as $event)
 			<tr>
 				<td><a href="{{ url('/events', $event->id) }}">{{ $event->naam }}</a></td>
 				<td>

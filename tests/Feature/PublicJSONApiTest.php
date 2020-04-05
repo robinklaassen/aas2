@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Event;
 use Tests\TestCase;
 
 class PublicJSONApiTest extends TestCase
@@ -39,7 +40,7 @@ class PublicJSONApiTest extends TestCase
     {
         $response = $this
             ->get('/cal/part')
-            ->assertJsonCount(1)
+            ->assertJsonCount(Event::where('openbaar', '1')->whereIn('type', ['kamp', 'online'])->where('datum_eind', '>=', date('Y-m-d'))->count())
             ->assertJsonFragment($this->kampDataFragment);
     }
 
@@ -52,7 +53,7 @@ class PublicJSONApiTest extends TestCase
     {
         $response = $this
             ->get('/cal/full')
-            ->assertJsonCount(2)
+            ->assertJsonCount(Event::where("openbaar", '1')->where('datum_eind', '>=', date('Y-m-d'))->count())
             ->assertJsonFragment($this->kampDataFragment)
             ->assertJsonFragment($this->trainingDataFragment);
     }

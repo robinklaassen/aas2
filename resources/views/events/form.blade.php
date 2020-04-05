@@ -16,7 +16,7 @@
 		{!! Form::select('location_id', $locations, null, ['class' => 'form-control']) !!}
 	</div>
 
-	@canany("editAdvanced", \App\Event::class, $event)	
+	@canany("editAdvanced", \App\Event::class, $event)
 	<div class="col-md-2 form-group">
 		{!! Form::label('openbaar', 'Openbaar?') !!}<br />
 		{!! Form::hidden('openbaar', 1) !!}
@@ -29,9 +29,9 @@
 	<div class="col-md-3 form-group">
 		{!! Form::label('datum_start', 'Datum start:') !!}
 		{!! Form::input(
-			'date', 'datum_start',
-			isset($event) ? $event->datum_start->format('Y-m-d') : null,
-			['class' => 'form-control', 'placeholder' => 'Format: jjjj-mm-dd'])
+		'date', 'datum_start',
+		isset($event) ? $event->datum_start->format('Y-m-d') : null,
+		['class' => 'form-control', 'placeholder' => 'Format: jjjj-mm-dd'])
 		!!}
 	</div>
 
@@ -43,10 +43,10 @@
 	<div class="col-md-3 form-group">
 		{!! Form::label('datum_eind', 'Datum eind:') !!}
 		{!! Form::input(
-			'date', 'datum_eind',
-			isset($event) ? $event->datum_eind->format('Y-m-d') : null,
-			['class' => 'form-control', 'placeholder' => 'Format: jjjj-mm-dd']
-			)
+		'date', 'datum_eind',
+		isset($event) ? $event->datum_eind->format('Y-m-d') : null,
+		['class' => 'form-control', 'placeholder' => 'Format: jjjj-mm-dd']
+		)
 		!!}
 	</div>
 
@@ -54,10 +54,16 @@
 		{!! Form::label('tijd_eind', 'Tijd eind:') !!}
 		{!! Form::input('time', 'tijd_eind', null, ['class' => 'form-control']) !!}
 	</div>
-
+</div>
+<div class="row">
 	<div class="col-md-2 form-group">
 		{!! Form::label('type', 'Type evenement:') !!}
-		{!! Form::select('type', ['kamp' => 'Kamp', 'training' => 'Training', 'overig' => 'Overig'], null, ['class' => 'form-control']) !!}
+		{!! Form::select('type', (\App\Event::class)::TYPE_DESCRIPTIONS, null, ['class' => 'form-control']) !!}
+	</div>
+	<div class="col-md-2 form-group">
+		{!! Form::label('package_type', 'Pakket types:') !!}
+		{!! Form::select('package_type', array_merge([null => "Geen"], (\App\EventPackage::class)::TYPE_DESCRIPTIONS),
+		null, ['class' => 'form-control']) !!}
 	</div>
 </div>
 
@@ -67,13 +73,13 @@
 	<div class="col-md-4 form-group">
 		{!! Form::label('datum_voordag', 'Start voordag(en):') !!}
 		{!! Form::input(
-			'date', 'datum_voordag',
-			(isset($event) && $event->datum_voordag !== null) ? $event->datum_voordag->format('Y-m-d') : null,
-			['class' => 'form-control', 'placeholder' => 'Format: jjjj-mm-dd'])
+		'date', 'datum_voordag',
+		(isset($event) && $event->datum_voordag !== null) ? $event->datum_voordag->format('Y-m-d') : null,
+		['class' => 'form-control', 'placeholder' => 'Format: jjjj-mm-dd'])
 		!!}
 	</div>
 
-	@canany("editAdvanced", \App\Event::class, $event)	
+	@canany("editAdvanced", \App\Event::class, $event)
 	<div class="col-md-4 form-group">
 		{!! Form::label('prijs', 'Kampprijs (zonder korting):') !!}
 		<div class="input-group">
@@ -99,13 +105,14 @@
 <div class="row">
 	<div class="col-md-12">
 		<p class="well">
-			Is de kampprijs nog niet vastgesteld? Zet hem dan op het cijfer 0! De automatische mails geven dan door dat de ouder per mail bericht krijgt wanneer de prijs is vastgesteld.
+			Is de kampprijs nog niet vastgesteld? Laat het veld dan leeg! De automatische mails geven dan door dat de
+			ouder per mail bericht krijgt wanneer de prijs is vastgesteld.
 		</p>
 	</div>
 </div>
 @endcanany
 
-@canany("editAdvanced", \App\Event::class, $event)	
+@canany("editAdvanced", \App\Event::class, $event)
 <div class="form-group">
 	{!! Form::label('beschrijving', 'Beschrijving (website):') !!}
 	{!! Form::textarea('beschrijving', null, ['class' => 'form-control', 'rows' => '5']) !!}

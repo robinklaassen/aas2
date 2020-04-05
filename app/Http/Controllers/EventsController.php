@@ -28,10 +28,11 @@ class EventsController extends Controller
 	public function index()
 	{
 
-		$events = Event::where('type', 'kamp')->get();
+		$camps = Event::where('type', 'kamp')->get();
 		$trainings = Event::where('type', 'training')->get();
+		$onlineEvents = Event::where('type', 'online')->get();
 		$others = Event::where('type', 'overig')->get();
-		return view('events.index', compact('events', 'trainings', 'others'));
+		return view('events.index', compact('camps', 'trainings', 'onlineEvents', 'others'));
 	}
 
 	/**

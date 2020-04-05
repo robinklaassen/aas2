@@ -123,6 +123,8 @@
 		});
 	</script>
 
+	@yield('script')
+
 	<!-- Footer content (page-specific scripts etc.) -->
 	@yield('footer')
 

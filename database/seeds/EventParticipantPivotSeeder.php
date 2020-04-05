@@ -20,12 +20,14 @@ class EventParticipantPivotSeeder extends Seeder
 		$participant->events()->attach(1);
 
 		$participant = Participant::find(2);
-		$participant->events()->attach(1);
-		$participant->events()->updateExistingPivot(1, ['datum_betaling' => '2015-05-22']);
+		$participant->events()->attach(1, ['datum_betaling' => '2015-05-22']);
 
 		// This participant is added without courses.
 		$participant = Participant::find(3);
-		$participant->events()->attach(1);
-		$participant->events()->updateExistingPivot(1, ['datum_betaling' => '2019-12-01']);
+		$participant->events()->attach(1, ['datum_betaling' => '2019-12-01']);
+
+		// online
+		$participant = Participant::find(3);
+		$participant->events()->attach(7, ["package_id" => 1]);
 	}
 }
