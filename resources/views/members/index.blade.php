@@ -104,7 +104,7 @@ Leden
 						@endcan
 						<td><a href="mailto:{{ $member->email_anderwijs }}">{{ $member->email_anderwijs }}</a></td>
 						<td>
-							@foreach ($member->user->roles->where('tag', '<>', 'member') as $role)
+							@foreach ($member->user->roles->whereNotIn('tag', (\App\Role::class)::HIDDEN_ROLES) as $role)
 								<span class="label label-info">{{ $role->title }}</span>
 								@endforeach
 						</td>
