@@ -6,10 +6,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserRole extends Model
 {
+
     protected $guarded = ['user_id', 'role_id', 'created_at', 'created_by'];
     const UPDATED_AT = null;
     public $timestamps = true;
-
 
     public function creating($model)
     {

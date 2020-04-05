@@ -67,6 +67,11 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 		return $this->roles()->where("tag", "=", $tag)->count() > 0;
 	}
 
+	public function public_roles()
+	{
+		return $this->roles()->whereNotIn("tag", Role::HIDDEN_ROLES);
+	}
+
 	public function hasAnyRole($roles)
 	{
 		return $this->roles()->whereIn("tag", $roles)->count() > 0;
