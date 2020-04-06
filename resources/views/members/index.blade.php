@@ -104,9 +104,11 @@ Leden
 						@endcan
 						<td><a href="mailto:{{ $member->email_anderwijs }}">{{ $member->email_anderwijs }}</a></td>
 						<td>
+							@if ($member->user !== null)
 							@foreach ($member->user->public_roles as $role)
-								<span class="label label-info">{{ $role->title }}</span>
-								@endforeach
+							<span class="label label-info">{{ $role->title }}</span>
+							@endforeach
+							@endif
 						</td>
 					</tr>
 					@endforeach
