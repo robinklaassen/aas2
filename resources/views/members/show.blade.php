@@ -128,11 +128,13 @@ Mijn profiel
 				<td>Woonplaats</td>
 				<td>{{ $member->plaats }}</td>
 			</tr>
-			@can("showPrivate", $member)
+			@can("showPhone", $member)
 			<tr>
 				<td>Telefoonnummer</td>
 				<td>{{ $member->telefoon }}</td>
 			</tr>
+			@endcan
+			@can("showPrivate", $member)
 			<tr>
 				<td>Emailadres persoonlijk</td>
 				<td><a href="mailto:{{$member->email}}">{{ $member->email }}</a></td>

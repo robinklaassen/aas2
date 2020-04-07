@@ -134,5 +134,16 @@ class UserTableSeeder extends Seeder
 
 		$roles = Role::whereIn("tag", ["member", "ranonkeltje"])->get();
 		$user->roles()->sync($roles);
+
+		$member = Member::find(11);
+		$user = new User;
+		$user->username = 'vertrouwen';
+		$user->password = bcrypt('vertrouwen');
+		$user->is_admin = 0;
+		$user->privacy = '2018-06-01';
+		$member->user()->save($user);
+
+		$roles = Role::whereIn("tag", ["member", "counselor"])->get();
+		$user->roles()->sync($roles);
 	}
 }
