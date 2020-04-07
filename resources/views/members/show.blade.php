@@ -97,7 +97,8 @@ Mijn profiel
 		<!-- Profieltabel -->
 		<table class="table table-hover">
 			<caption>Profiel</caption>
-			@if(\Auth::user()->can("showPrivate", $member) || $member->publish_birthday)
+
+			@can("showBirthday", $member)
 			<tr>
 				<td>Geboortedatum</td>
 				<td>{{ $member->geboortedatum->format('d-m-Y') }}

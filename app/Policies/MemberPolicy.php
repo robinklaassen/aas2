@@ -106,6 +106,10 @@ class MemberPolicy
         return $member->hasRole("counselor");
     }
 
+    public function showBirthday(User $user, Member $member) {
+        return $this->showPrivate($user, $member) || $member->publish_birthday;
+    }
+
     public function showFinanceAny(User $user)
     {
         return $user->hasCapability("members::info::show::finance");
