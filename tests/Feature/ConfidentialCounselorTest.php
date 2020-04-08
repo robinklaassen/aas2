@@ -27,13 +27,17 @@ class EventTest extends TestCase
 
     public function testPhoneIsNotVisibleForParticipants() {
 
-        // annabel a participant
-        $user = User::findOrFail(3);
+        // henk: a participant
+        $user = User::findOrFail(12);
 
         // members should not see the member at all
-        $this->actingAs($user)
+        $resp = $this->actingAs($user)
             ->get("/members/" . EventTest::CONF_USER_ID)
             ->assertStatus(403);
+
+        // dd($resp->getContent());
+
+        
     }
 
 
