@@ -258,5 +258,30 @@ class MemberTableSeeder extends Seeder
 			'ervaren_trainer' => '0',
 			'opmerkingen' => 'ranonkeltje redacteur.'
 		]);
+		
+		Member::create([
+			'voornaam' => 'Jaap',
+			'tussenvoegsel' => '',
+			'achternaam' => 'Jones',
+			'geslacht' => 'M',
+			'geboortedatum' => '1988-05-16',
+			'adres' => 'Ringdijk Zuid 101',
+			'postcode' => '4506 HD',
+			'plaats' => 'Cadzand',
+			'telefoon' => '0611211211',
+			'email' => 'siep@heeljong.nl',
+			'email_anderwijs' => 'siep@anderwijs.nl',
+			'soort' => 'normaal',
+			'eindexamen' => 'VWO',
+			'studie' => 'Communicatie wetenschappen',
+			'afgestudeerd' => '1',
+			'hoebij' => 'Google',
+			'kmg' => '1',
+			'ranonkeltje' => '2',
+			'vog' => '0',
+			'ervaren_trainer' => '0',
+			'opmerkingen' => 'Vertrouwens persson.'
+		]);
+		
 	}
 }

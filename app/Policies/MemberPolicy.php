@@ -32,7 +32,8 @@ class MemberPolicy
     {
         return ($member->soort == "oud" && $user->hasCapability("members::oud::show"))
             || ($member->soort != "oud" && $user->hasCapability("members::info::show::basic"))
-            || ($this->ifSelf("members::info::show::self", $user, $member));
+            || ($this->ifSelf("members::info::show::self", $user, $member))
+            ;
     }
 
     /**
@@ -98,6 +99,14 @@ class MemberPolicy
     public function listOldMembers(User $user)
     {
         return $user->hasCapability("members::old::show");
+    }
+
+    public function showPhone(User $user, Member $member) {
+        return $this->showPrivate($user, $member) || $member->hasRole("counselor");
+    }
+
+    public function showBirthday(User $user, Member $member) {
+        return $this->showPrivate($user, $member) || $member->publish_birthday;
     }
 
     public function showFinanceAny(User $user)

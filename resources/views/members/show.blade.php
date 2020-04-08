@@ -97,7 +97,8 @@ Mijn profiel
 		<!-- Profieltabel -->
 		<table class="table table-hover">
 			<caption>Profiel</caption>
-			@if(\Auth::user()->can("showPrivate", $member) || $member->publish_birthday)
+
+			@can("showBirthday", $member)
 			<tr>
 				<td>Geboortedatum</td>
 				<td>{{ $member->geboortedatum->format('d-m-Y') }}
@@ -128,11 +129,13 @@ Mijn profiel
 				<td>Woonplaats</td>
 				<td>{{ $member->plaats }}</td>
 			</tr>
-			@can("showPrivate", $member)
+			@can("showPhone", $member)
 			<tr>
 				<td>Telefoonnummer</td>
 				<td>{{ $member->telefoon }}</td>
 			</tr>
+			@endcan
+			@can("showPrivate", $member)
 			<tr>
 				<td>Emailadres persoonlijk</td>
 				<td><a href="mailto:{{$member->email}}">{{ $member->email }}</a></td>
