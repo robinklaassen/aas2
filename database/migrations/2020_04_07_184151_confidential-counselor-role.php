@@ -13,7 +13,7 @@ class ConfidentialCounselorRole extends Migration
     public function up()
     {
         DB::table("roles")->insert([
-            "title" => "Vertrouwens Persoon",
+            "title" => "Vertrouwenspersoon",
             "tag" => "counselor"
         ]);
     }

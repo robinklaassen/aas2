@@ -33,7 +33,6 @@ class MemberPolicy
         return ($member->soort == "oud" && $user->hasCapability("members::oud::show"))
             || ($member->soort != "oud" && $user->hasCapability("members::info::show::basic"))
             || ($this->ifSelf("members::info::show::self", $user, $member))
-            ||  $member->hasRole("counselor")
             ;
     }
 
@@ -103,7 +102,7 @@ class MemberPolicy
     }
 
     public function showPhone(User $user, Member $member) {
-        return $member->hasRole("counselor");
+        return $this->showPrivate($user, $member) || $member->hasRole("counselor");
     }
 
     public function showBirthday(User $user, Member $member) {

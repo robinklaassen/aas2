@@ -268,7 +268,7 @@ class MemberTableSeeder extends Seeder
 			'adres' => 'Ringdijk Zuid 101',
 			'postcode' => '4506 HD',
 			'plaats' => 'Cadzand',
-			'telefoon' => '0640932312',
+			'telefoon' => '0611211211',
 			'email' => 'siep@heeljong.nl',
 			'email_anderwijs' => 'siep@anderwijs.nl',
 			'soort' => 'normaal',
