@@ -369,7 +369,7 @@ Inschrijven deelnemer
 		} else {
 			jPackage.empty();
 			jPackage.html(packages.map(function(p) {
-				return "<option value='" + p.id + "'>" + p.description  + " (&euro; " + p.price + ")</option>";
+				return "<option value='" + p.id + "'>" + p.title  + " (&euro; " + p.price + ")</option>";
 			}).join());
 			jPackageContainer.show();
 		}
