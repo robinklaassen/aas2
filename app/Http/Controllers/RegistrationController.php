@@ -157,8 +157,11 @@ class RegistrationController extends Controller
 	# Participant registration form
 	public function registerParticipant()
 	{
-		// List of future camps that are not full
-		$camps = Event::whereIn('type', ['kamp', 'online'])->where('datum_start', '>', date('Y-m-d'))->where('openbaar', 1)->orderBy('datum_start', 'asc')->get();
+		// List of future camps and online events to register for
+		// Note that online events can be registered for after start
+		$camps = Event::where('type', 'kamp')->public()->where('datum_start', '>', date('Y-m-d'))->get();
+		$onlines = Event::where('type', 'online')->public()->where('datum_eind', '>', date('Y-m-d'))->get();
+		$camps = $camps->merge($onlines)->sortBy('datum_start');
 
 		// List of courses
 		$course_options = Course::orderBy('naam')->pluck('naam', 'id')->toArray();

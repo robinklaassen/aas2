@@ -82,4 +82,9 @@ class Event extends Model
 		return $this->naam . ' ' . substr($this->datum_start, 0, 4) .
 			' te ' . $this->location->plaats . ' (' . $this->datum_start->format('d-m-Y') . ')' . ($this->vol ? ' - VOL' : '');
 	}
+
+	public function scopePublic($query)
+	{
+		return $query->where('openbaar', 1);
+	}
 }
