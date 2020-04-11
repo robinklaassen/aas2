@@ -186,6 +186,7 @@
 	<tr>
 		<td colspan="2">CONTACTGEGEVENS OUDER</td>
 	</tr>
+
 	<tr>
 		<td>Adres</td>
 		<td>{{ $participant->adres }}</td>

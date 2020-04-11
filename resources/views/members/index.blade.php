@@ -52,12 +52,12 @@ Leden
 			<table class="table table-hover" id="currentMembersTable">
 				<thead>
 					<tr>
-						<th data-orderable="true">Voornaam</th>
+						<th data-orderable>Voornaam</th>
 						<th></th>
-						<th data-orderable="true">Achternaam</th>
-						<th data-orderable="true">Woonplaats</th>
+						<th data-orderable>Achternaam</th>
+						<th data-orderable>Woonplaats</th>
 						@can("showPracticalAny", \App\Member::class)
-						<th data-orderable="true">Soort lid</th>
+						<th data-orderable>Soort lid</th>
 						@endcan
 						@can("showAdministrativeAny", \App\Member::class)
 						<th>VOG</th>
@@ -122,10 +122,10 @@ Leden
 			<table class="table table-hover" id="oldMembersTable" data-page-length="25">
 				<thead>
 					<tr>
-						<th data-orderable="true">Voornaam</th>
+						<th data-orderable>Voornaam</th>
 						<th></th>
-						<th data-orderable="true">Achternaam</th>
-						<th data-orderable="true">Woonplaats</th>
+						<th data-orderable>Achternaam</th>
+						<th data-orderable>Woonplaats</th>
 						<th>Telefoon</th>
 						<th>Email</th>
 					</tr>
@@ -154,27 +154,10 @@ Leden
 @section('footer')
 <!-- These scripts load DataTables -->
 <script type="text/javascript">
-	function getColumnOptions(tableHeaderSelector) {
-		let columnOptions = [];
-		$(tableHeaderSelector).each(function(i) {
-			let option = ($(this).data('orderable')) ? null : {'orderable': false};
-			columnOptions.push(option);
-		})
-		return columnOptions;
-	}
 	
 	$( document ).ready(function() {
-
-		$('#currentMembersTable').DataTable({
-			paging: false,
-			order: [[ 0, "asc" ]],
-			columns: getColumnOptions('#currentMembersTable tr:first th')
-		});
-
-		$('#oldMembersTable').DataTable({
-			order: [[ 0, "asc" ]],
-			columns: getColumnOptions('#oldMembersTable tr:first th')
-		});
+		makeTableSortable("#currentMembersTable");
+		makeTableSortable("#oldMembersTable");
 	});
 </script>
 @endsection

@@ -449,37 +449,20 @@ class EventsController extends Controller
 	{
 		$this->authorize("mailing", $event);
 
-		$email['members'] = "";
-		$num['members'] = 0;
-		$email['kids'] = "";
-		$num['kids'] = 0;
-		$email['parents'] = "";
-		$num['parents'] = 0;
+		$emails = [
+			"members" => $event->members()->orderBy('voornaam')->pluck('email_anderwijs'),
+			"participants" => [],
+		];
 
-		foreach ($event->members()->orderBy('voornaam')->get() as $member) {
-			if ($member->email_anderwijs) {
-				$email['members'] .= $member->email_anderwijs . ', ';
-				$num['members']++;
-			}
+		foreach ((\App\Participant::class)::INFORMATION_CHANNEL_DESCRIPTION_TABLE as $key => $value) {
+			$part_by_channel = $event->participants()->orderBy('voornaam')->where('information_channel', '=', $key);
+			$emails["participants"][$key] = [
+				"participants" => $part_by_channel->whereNotNull('email_deelnemer')->pluck('email_deelnemer'),
+				"parents" => $part_by_channel->whereNotNull('email_ouder')->pluck('email_ouder')
+			];
 		}
 
-		foreach ($event->participants()->orderBy('voornaam')->get() as $participant) {
-			if ($participant->email_deelnemer) {
-				$email['kids'] .= $participant->email_deelnemer . ', ';
-				$num['kids']++;
-			}
-
-			if ($participant->email_ouder) {
-				$email['parents'] .= $participant->email_ouder . ', ';
-				$num['parents']++;
-			}
-		}
-
-		$email['members'] = rtrim($email['members'], ', ');
-		$email['kids'] = rtrim($email['kids'], ', ');
-		$email['parents'] = rtrim($email['parents'], ', ');
-
-		return view('events.email', compact('event', 'email', 'num'));
+		return view('events.email', compact('event', "emails"));
 	}
 
 	# Send all participants on camp (confirm)

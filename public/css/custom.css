@@ -13,3 +13,23 @@
   font-size: 13px;
   padding-left: 12px;
 }
+
+.copy-btn {
+  float: right;
+  position: relative;
+}
+
+.copy-btn .btn {
+  position: absolute;
+  right: 0;
+  top: 0;
+  background: transparent;
+  color: #818a91;
+  font-size: 12px;
+  padding: 4px 8px;
+}
+
+.copy-btn .btn:hover {
+  background: #027de7;
+  color: white;
+}

@@ -41,9 +41,17 @@ class ParticipantRequest extends Request
 			'niveau' => 'sometimes',
 			'klas' => 'sometimes',
 			'inkomen' => 'sometimes',
-			'hoebij' => 'sometimes'
+			'hoebij' => 'sometimes',
+			'information_channel' => 'when_then_different:only-email,email_deelnemer,email_ouder'
 			//'voorwaarden' => 'required',
 			//'privacy' => 'required'
+		];
+	}
+
+	public function messages()
+	{
+		return [
+			"information_channel.when_then_different" => "Om informatie enkel via email te ontvangen moeten twee verschillende mailadressen opgegeven worden, voor de ouder en de deelnemer."
 		];
 	}
 }

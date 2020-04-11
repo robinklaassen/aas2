@@ -85,10 +85,14 @@
 		{!! Form::email('email_deelnemer', null, ['class' => 'form-control']) !!}
 	</div>
 
-	<div class="col-sm-2 form-group">
-		{!! Form::label('mag_gemaild', 'Mailings ontvangen:') !!}
-		{!! Form::select('mag_gemaild', [1 => 'Ja', 0 => 'Nee'], null, ['class' => 'form-control']) !!}
+	<div class="col-sm-4 form-group">
+		<label for="post">
+			Informatie ontvangen via 
+			<span class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="tooltip" title="Informatie over deelname aan het kamp kunt u via email en post ontvangen.">
+		</label>
+		{!! Form::select('information_channel', \App\Participant::INFORMATION_CHANNEL_DESCRIPTION_TABLE, null, ['class' => 'form-control']) !!}
 	</div>
+
 </div>
 @endcanany
 
@@ -146,6 +150,20 @@
 	</div>
 </div>
 @endcanany
+
+<h3>Promotie</h3>
+<div class="row">
+	<div class="col-sm-2 form-group">
+		<label for="mag_gemaild" title="Dit gaat alleen om nieuwsbrieven en kortingsacties. Bij deelname aan een kamp ontvangt u altijd mail.">
+			{!! Form::hidden('mag_gemaild', 0) !!}
+       		{!! Form::checkbox('mag_gemaild', 1, null, ['style' => 'margin-top:14px;']) !!}
+			Mailing ontvangen
+			<span class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="tooltip" ></span>
+		</label>
+		{{-- {!! Form::select('mag_gemaild', [0 => "Nee", 1=> "Ja"], 0, ['class' => 'form-control']) !!} --}}
+		
+	</div>
+</div>
 
 <div class="form-group">
 	{!! Form::submit('Opslaan', ['class' => 'btn btn-primary form-control']) !!}

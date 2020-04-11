@@ -99,8 +99,11 @@ Mijn profiel
 				<td><a href="mailto:{{$participant->email_deelnemer}}">{{ $participant->email_deelnemer }}</a></td>
 			</tr>
 			<tr>
-				<td>Mailings ontvangen <span class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="tooltip" title="Dit gaat alleen om nieuwsbrieven en kortingsacties. Bij deelname aan een kamp ontvangt u altijd mail."></span></td>
-				<td>{{ $participant->mag_gemaild ? "Ja" : "Nee" }}</a></td>
+				<td>
+					Informatie ontvangen via 
+					<span class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="tooltip" title="Informatie over deelname aan het kamp kunt u via email en post ontvangen.">
+				</td>
+				<td>{{ $participant->information_channel_description }}</td>
 			</tr>
 			@endcan
 			@can("showFinance", $participant)
@@ -177,6 +180,17 @@ Mijn profiel
 			@endcan
 		</table>
 
+		<table class="table table-hover">
+			<caption>Promotie</caption>
+
+			<tr>
+				<td>
+					Mailings ontvangen 
+					<span class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="tooltip" title="Dit gaat alleen om nieuwsbrieven en kortingsacties. Bij deelname aan een kamp ontvangt u altijd mail."></span>
+				</td>
+				<td>{{ $participant->mag_gemaild ? "Ja" : "Nee" }}</td>
+			</tr>
+		</table>
 		<!-- Kampen -->
 		<table class="table table-hover">
 			<caption>Kampen</caption>

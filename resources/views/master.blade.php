@@ -77,6 +77,7 @@
 		src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
 	<script type="text/javascript" charset="utf8"
 		src="//cdnjs.cloudflare.com/ajax/libs/webshim/1.15.7/minified/polyfiller.js"></script>
+	<script type="text/javascript" charset="utf8" src="{{URL::asset('js/custom.js')}}"></script>
 
 	<script type="text/javascript">
 		// Set date functionality to HTML 5 in unsupported browsers
