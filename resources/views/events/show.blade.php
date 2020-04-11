@@ -368,7 +368,7 @@
 			<thead>
 				<tr>
 					<th data-orderable>Naam</th>
-					<th data-orderable>Alleen Email</th>
+					<th data-orderable>Alleen email</th>
 					<th data-orderable>Adres</th>
 					<th data-orderable>Postcode</th>
 					<th data-orderable>Woonplaats</th>
@@ -386,7 +386,7 @@
 					</td>
 					<td>
 						@if($participant->information_channel === "only-email")
-							<span class="glyphicon glyphicon-ok" aria-hidden="true" data-toggle="tooltip" title="Inkomensverklaring niet nodig"></span>
+							<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
 						@endif
 					</td>
 					<td>{{ $participant->adres }}</td>

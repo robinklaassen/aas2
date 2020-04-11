@@ -35,7 +35,12 @@ class AppServiceProvider extends ServiceProvider
 			return "<?php endif; ?>";
 		});
 
-		Validator::extend('same_when', function ($attribute, $value, $parameters, $validator) {
+		/**
+		 * Parameters are: $par_value, $par_fld1, $par_fld2
+		 * When validation value is the same the $par_value
+		 * The the data of the fields referenced in $par_fld1 and $par_fld2 should be different
+		 */
+		Validator::extend('when_then_different', function ($attribute, $value, $parameters, $validator) {
 			$data = $validator->getData();
 			if ($value !== $parameters[0]) {
 				return true;
