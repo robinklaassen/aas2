@@ -51,7 +51,7 @@ class ParticipantRequest extends Request
 	public function messages()
 	{
 		return [
-			"information_channel.same_when" => "Om informatie enkel via email te ontvangen moeten twee verschillende mailadressen opgegeven worden, voor de ouder en de deelnemer."
+			"information_channel.when_then_different" => "Om informatie enkel via email te ontvangen moeten twee verschillende mailadressen opgegeven worden, voor de ouder en de deelnemer."
 		];
 	}
 }
