@@ -42,7 +42,7 @@ class ParticipantRequest extends Request
 			'klas' => 'sometimes',
 			'inkomen' => 'sometimes',
 			'hoebij' => 'sometimes',
-			'information_channel' => 'sameWhen:only-email,email_deelnemer,email_ouder'
+			'information_channel' => 'when_then_different:only-email,email_deelnemer,email_ouder'
 			//'voorwaarden' => 'required',
 			//'privacy' => 'required'
 		];
