@@ -506,7 +506,7 @@ class EventsController extends Controller
 	public function iCalendar()
 	{
 
-		$events = Event::pulic()->orderBy('datum_start', 'asc')->get();
+		$events = Event::public()->orderBy('datum_start', 'asc')->get();
 		$members = Member::whereIn('soort', ['normaal', 'aspirant'])->where('publish_birthday', 1)->get();
 
 		$response = response()->view('events.ical', compact('events', 'members'));
