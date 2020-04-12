@@ -51,7 +51,7 @@ class PagesController extends Controller
 			// Camp thermometer
 			$camps = \App\Event::where('type', 'kamp')
 				->where('datum_eind', '>=', date('Y-m-d'))
-				->where('openbaar', 1)
+				->public()
 				->orderBy('datum_start')
 				->take(2)
 				->get();
@@ -543,14 +543,14 @@ class PagesController extends Controller
 			// Only coming camps, for participants and their parents
 			$events = \App\Event::whereIn('type', ['kamp', 'online'])
 				->where('datum_eind', '>=', date('Y-m-d'))
-				->where('openbaar', 1)
+				->public()
 				->orderBy('datum_start', 'asc')
 				->get();
 		} elseif ($type == 'full') {
 			// All coming events, for members
 			$events = \App\Event::where('datum_eind', '>=', date('Y-m-d'))
 				->orderBy('datum_start', 'asc')
-				->where('openbaar', 1)
+				->public()
 				->get();
 		} else {
 			return null;
@@ -673,7 +673,7 @@ class PagesController extends Controller
 
 		$camps = Event::where('type', 'kamp')
 			->where('datum_eind', '<', date('Y-m-d'))
-			->where('openbaar', 1)
+			->public()
 			->orderBy('datum_start', 'desc')
 			->get();
 

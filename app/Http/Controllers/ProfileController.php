@@ -351,9 +351,9 @@ class ProfileController extends Controller
 		$profile = \Auth::user()->profile;
 
 		// List of future camps that are not full
-		$camps = \App\Event::whereIn('type', ['kamp', 'online'])
-			->where('openbaar', 1)
-			->where('datum_start', '>', date('Y-m-d'))
+		$camps = \App\Event::participantEvent()
+			->public()
+			->open()
 			->orderBy('datum_start', 'asc')
 			->get();
 
