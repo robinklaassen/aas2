@@ -83,8 +83,34 @@ class Event extends Model
 			' te ' . $this->location->plaats . ' (' . $this->datum_start->format('d-m-Y') . ')' . ($this->vol ? ' - VOL' : '');
 	}
 
+	/**
+	 * Event is publicly visible
+	 */
 	public function scopePublic($query)
 	{
 		return $query->where('openbaar', 1);
+	}
+
+	/**
+	 * Event is open for registrations
+	 */
+	public function scopeOpen($query)
+	{
+
+		// List of future camps and online events to register for
+		// Note that online events can be registered for after start (until the end)
+		return $query->where(function ($query) {
+			return $query->where('type', '!=', 'online')->where('datum_start', '>', date('Y-m-d'));
+		})->orWhere(function ($query) {
+			return $query->where('type', '=', 'online')->where('datum_eind', '>', date('Y-m-d'));
+		});
+	}
+
+	/**
+	 * Event is visible for participants
+	 */
+	public function scopeParticipantEvent($query)
+	{
+		return $query->whereIn('type', ['kamp', 'online']);
 	}
 }
