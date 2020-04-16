@@ -92,7 +92,7 @@ class Event extends Model
 	}
 
 	/**
-	 * Event is open for registrations
+	 * Events which are open for registrations
 	 */
 	public function scopeOpen($query)
 	{
@@ -107,10 +107,18 @@ class Event extends Model
 	}
 
 	/**
-	 * Event is visible for participants
+	 * Events which are visible for participants
 	 */
 	public function scopeParticipantEvent($query)
 	{
 		return $query->whereIn('type', ['kamp', 'online']);
+	}
+
+	/**
+	 * Events which are not ended
+	 */
+	public function scopeOngoing($query)
+	{
+		return $query->where('datum_eind', '>', date('Y-m-d'));
 	}
 }
