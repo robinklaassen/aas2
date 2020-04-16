@@ -10,7 +10,7 @@
 
 <hr/>
 
-@if ($camp->prijs == 0)
+@if ($toPay == 0)
 	<p>
 		U heeft uw kind succesvol ingeschreven voor een Anderwijskamp. Binnen enkele momenten ontvangt u een automatische bevestigingsmail op het door u opgegeven emailadres. Om de inschrijving definitief te maken, dient u het kampgeld over te maken op onze rekening. <strong>Voor dit kamp is het kampgeld echter nog niet definitief vastgesteld.</strong> Zodra dat is gebeurd, ontvangt u daarover per e-mail bericht.
 	</p>
