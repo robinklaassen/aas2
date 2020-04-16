@@ -49,8 +49,8 @@ class PagesController extends Controller
 			}
 
 			// Camp thermometer
-			$camps = \App\Event::where('type', 'kamp')
-				->where('datum_eind', '>=', date('Y-m-d'))
+			$camps = \App\Event::ParticipantEvent()
+				->ongoing()
 				->public()
 				->orderBy('datum_start')
 				->take(2)
