@@ -149,10 +149,10 @@
 				<td>
 					@can("showBasic", $member)
 					<a href="{{ url('/members', $member->id) }}">
-						{{ $member->voornaam }} {{ $member->tussenvoegsel }} {{ $member->achternaam }}
+						{{ $member->volnaam }}
 					</a>
 					@else
-					{{ $member->voornaam }} {{ $member->tussenvoegsel }} {{ $member->achternaam }}
+					{{ $member->volnaam }}
 					@endcan
 				</td>
 
@@ -412,8 +412,7 @@
 				<tr>
 					<td>
 						<a href="{{ url('/participants', $participant->id) }}">
-							{{ $participant->voornaam }} {{ $participant->tussenvoegsel }}
-							{{ $participant->achternaam }}
+							{{ $participant->volnaam }}
 						</a>
 					</td>
 					<td>
