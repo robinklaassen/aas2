@@ -35,6 +35,12 @@ class Participant extends Model
 		return str_replace('  ', ' ', $this->voornaam . ' ' . $this->tussenvoegsel . ' ' . $this->achternaam);
 	}
 
+	// Full level (e.g. '4 HAVO')
+	public function getVolNiveauAttribute()
+	{
+		return $this->klas . ' ' . $this->niveau;
+	}
+
 	// Postcode mutator
 	public function setPostcodeAttribute($value)
 	{

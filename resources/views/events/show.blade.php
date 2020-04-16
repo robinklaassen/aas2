@@ -23,18 +23,23 @@
 	<div class="col-sm-6">
 		<p class="text-right">
 			@can("update", $event)
-			<a class="btn btn-primary" type="button" href="{{ url('/events', [$event->id, 'edit']) }}" style="margin-top:21px;">Bewerken</a>
+			<a class="btn btn-primary" type="button" href="{{ url('/events', [$event->id, 'edit']) }}"
+				style="margin-top:21px;">Bewerken</a>
 			@endcan
 			@can("editAdvanced", $event)
-			<a class="btn btn-info" type="button" href="{{ url('/events', [$event->id, 'join-members']) }}" style="margin-top:21px;">Leden koppelen</a>
+			<a class="btn btn-info" type="button" href="{{ url('/events', [$event->id, 'join-members']) }}"
+				style="margin-top:21px;">Leden koppelen</a>
 			@endcan
 			@can("viewReviewResults", $event)
 			@if ($event->reviews->count() > 0)
-			<a class="btn btn-success" type="button" href="{{ url('/events', [$event->id, 'reviews']) }}" style="margin-top:21px;">Resultaten enquêtes <span class="badge">{{ $event->reviews->count() }}</span></a>
+			<a class="btn btn-success" type="button" href="{{ url('/events', [$event->id, 'reviews']) }}"
+				style="margin-top:21px;">Resultaten enquêtes <span
+					class="badge">{{ $event->reviews->count() }}</span></a>
 			@endif
 			@endcan
 			@can("delete")
-			<a class="btn btn-danger" type="button" href="{{ url('/events', [$event->id, 'delete']) }}" style="margin-top:21px;">Verwijderen</a>
+			<a class="btn btn-danger" type="button" href="{{ url('/events', [$event->id, 'delete']) }}"
+				style="margin-top:21px;">Verwijderen</a>
 			@endcan
 		</p>
 	</div>
@@ -62,10 +67,10 @@
 				<td>{{ (\App\Event::class)::TYPE_DESCRIPTIONS[$event->type] }}</td>
 			</tr>
 			@if($event->package_type != null)
-				<tr>
-					<td>Pakket types</td>
-					<td>{{ (\App\EventPackage::class)::TYPE_DESCRIPTIONS[$event->package_type] }}</td>
-				</tr>
+			<tr>
+				<td>Pakket types</td>
+				<td>{{ (\App\EventPackage::class)::TYPE_DESCRIPTIONS[$event->package_type] }}</td>
+			</tr>
 			@endif
 			@endcan
 
@@ -147,27 +152,30 @@
 						{{ $member->voornaam }} {{ $member->tussenvoegsel }} {{ $member->achternaam }}
 					</a>
 					@else
-						{{ $member->voornaam }} {{ $member->tussenvoegsel }} {{ $member->achternaam }}
+					{{ $member->voornaam }} {{ $member->tussenvoegsel }} {{ $member->achternaam }}
 					@endcan
 				</td>
 
 				@if ($event->type == 'kamp')
 				<td>
 					@if ($member->pivot->wissel)
-					<span class="glyphicon glyphicon-hourglass" aria-hidden="true" data-toggle="tooltip" title="Wisselleiding van {{DateTime::createFromFormat('Y-m-d',$member->pivot->wissel_datum_start)->format('d-m-Y')}} t/m {{DateTime::createFromFormat('Y-m-d',$member->pivot->wissel_datum_eind)->format('d-m-Y')}}"></span>
+					<span class="glyphicon glyphicon-hourglass" aria-hidden="true" data-toggle="tooltip"
+						title="Wisselleiding van {{DateTime::createFromFormat('Y-m-d',$member->pivot->wissel_datum_start)->format('d-m-Y')}} t/m {{DateTime::createFromFormat('Y-m-d',$member->pivot->wissel_datum_eind)->format('d-m-Y')}}"></span>
 					@endif
 				</td>
 				@endif
 
 				<td>{{ $member->pivot->created_at->format('d-m-Y') }}</td>
-				
+
 				@can("showAdministrative", $member)
 				@if ($event->type=='kamp')
 				<td>
 					@if ($member->vog)
-					<span class="glyphicon glyphicon-ok" aria-hidden="true" data-toggle="tooltip" title="VOG ingeleverd!"></span>
+					<span class="glyphicon glyphicon-ok" aria-hidden="true" data-toggle="tooltip"
+						title="VOG ingeleverd!"></span>
 					@else
-					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" data-toggle="tooltip" title="VOG nog niet ingeleverd!"></span>
+					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" data-toggle="tooltip"
+						title="VOG nog niet ingeleverd!"></span>
 					@endif
 				</td>
 				@endif
@@ -175,26 +183,30 @@
 
 				@if ($event->type == 'kamp')
 				@can("editMember", [$event, $member])
-				<td><a href="{{ url('/events', [$event->id, 'edit-member', $member->id]) }}"><span class="glyphicon glyphicon-edit" aria-hidden="true" data-toggle="tooltip" title="Koppeling bewerken"></span></a></td>
-				@else
-				<td></td>
-				@endcan		
-				
-				@endif
-
-				@can("removeMember", [$event, $member])
-				<td><a href="{{ url('/events', [$event->id, 'remove-member', $member->id]) }}"><span class="glyphicon glyphicon-remove" aria-hidden="true" data-toggle="tooltip" title="Koppeling verwijderen"></a></td>
+				<td><a href="{{ url('/events', [$event->id, 'edit-member', $member->id]) }}"><span
+							class="glyphicon glyphicon-edit" aria-hidden="true" data-toggle="tooltip"
+							title="Koppeling bewerken"></span></a></td>
 				@else
 				<td></td>
 				@endcan
-			
+
+				@endif
+
+				@can("removeMember", [$event, $member])
+				<td><a href="{{ url('/events', [$event->id, 'remove-member', $member->id]) }}"><span
+							class="glyphicon glyphicon-remove" aria-hidden="true" data-toggle="tooltip"
+							title="Koppeling verwijderen"></a></td>
+				@else
+				<td></td>
+				@endcan
+
 			</tr>
 			@endforeach
 		</table>
 
-		
+
 		@can("showAdvanced", $event)
-			@include('partials.comments', [ 'comments' => $event->comments, 'type' => 'App\Event', 'key' => $event->id ])
+		@include('partials.comments', [ 'comments' => $event->comments, 'type' => 'App\Event', 'key' => $event->id ])
 		@endcan
 	</div>
 </div>
@@ -203,28 +215,36 @@
 <hr />
 <div style="display: flex; flex-wrap: wrap; justify-content: flex-end;">
 	@can("subjectCheck", $event)
-	<a role="button" class="btn btn-info btn-sm" href="{{ url('/events', [$event->id, 'check', 'all']) }}"><span class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span> Vakdekking</a>
+	<a role="button" class="btn btn-info btn-sm" href="{{ url('/events', [$event->id, 'check', 'all']) }}"><span
+			class="glyphicon glyphicon-ok-circle" aria-hidden="true"></span> Vakdekking</a>
 	@endcan
 	@can("mailing", $event)
-	<a role="button" class="btn btn-info btn-sm" href="{{ url('/events', [$event->id, 'email']) }}"><span class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Emailadressen</a>
+	<a role="button" class="btn btn-info btn-sm" href="{{ url('/events', [$event->id, 'email']) }}"><span
+			class="glyphicon glyphicon-envelope" aria-hidden="true"></span> Emailadressen</a>
 	@endcan
 	@can('nightRegister', $event)
-	<a role="button" class="btn btn-info btn-sm" href="{{ url('/events', [$event->id, 'night-register']) }}"><span class="glyphicon glyphicon-tent" aria-hidden="true"></span> Nachtregister</a>
+	<a role="button" class="btn btn-info btn-sm" href="{{ url('/events', [$event->id, 'night-register']) }}"><span
+			class="glyphicon glyphicon-tent" aria-hidden="true"></span> Nachtregister</a>
 	@endcan
 	@can("budget", $event)
-	<a role="button" class="btn btn-success btn-sm" href="{{ url('/events', [$event->id, 'budget']) }}"><span class="glyphicon glyphicon-euro" aria-hidden="true"></span> Kampbudget</a>
+	<a role="button" class="btn btn-success btn-sm" href="{{ url('/events', [$event->id, 'budget']) }}"><span
+			class="glyphicon glyphicon-euro" aria-hidden="true"></span> Kampbudget</a>
 	@endcan
 	@can("paymentoverview", $event)
-	<a role="button" class="btn btn-success btn-sm" href="{{ url('/events', [$event->id, 'payments']) }}"><span class="glyphicon glyphicon-usd" aria-hidden="true"></span> Betalingsoverzicht</a>
+	<a role="button" class="btn btn-success btn-sm" href="{{ url('/events', [$event->id, 'payments']) }}"><span
+			class="glyphicon glyphicon-usd" aria-hidden="true"></span> Betalingsoverzicht</a>
 	@endcan
 	@can("questionair")
-	<a role="button" class="btn btn-primary btn-sm" href="{{ url('/enquete',[$event->id]) }}"><span class="glyphicon glyphicon-comment" aria-hidden="true"></span> Enqu&ecirc;te</a>
+	<a role="button" class="btn btn-primary btn-sm" href="{{ url('/enquete',[$event->id]) }}"><span
+			class="glyphicon glyphicon-comment" aria-hidden="true"></span> Enqu&ecirc;te</a>
 	@endcan
 	@can("placement")
-	<a role="button" class="btn btn-primary btn-sm" href="{{ url('/events', [$event->id, 'send']) }}"><span class="glyphicon glyphicon-send" aria-hidden="true"></span> Plaatsen</a>
+	<a role="button" class="btn btn-primary btn-sm" href="{{ url('/events', [$event->id, 'send']) }}"><span
+			class="glyphicon glyphicon-send" aria-hidden="true"></span> Plaatsen</a>
 	@endcan
 	@can('exportParticipants', $event)
-	<a role="button" class="btn btn-primary btn-sm" href="{{ url('/events', [$event->id, 'export']) }}"><span class="glyphicon glyphicon-file" aria-hidden="true"></span> Export</a>
+	<a role="button" class="btn btn-primary btn-sm" href="{{ url('/events', [$event->id, 'export']) }}"><span
+			class="glyphicon glyphicon-file" aria-hidden="true"></span> Export</a>
 	@endcan
 </div>
 
@@ -233,10 +253,10 @@
 <ul class="nav nav-tabs" role="tablist">
 	<li role="presentation" class="active"><a href="#overview" aria-controls="overview" role="tab"
 			data-toggle="tab">Overzicht</a></li>
-	
+
 	@role("kantoorci")
-	<li role="presentation"><a href="#addresses" aria-controls="addresses" role="tab"
-		data-toggle="tab">Adressen</a></li>
+	<li role="presentation"><a href="#addresses" aria-controls="addresses" role="tab" data-toggle="tab">Adressen</a>
+	</li>
 	@endrole
 </ul>
 
@@ -255,7 +275,7 @@
 					<th data-orderable>Niveau</th>
 					<th></th>
 					@if($event->package_type != null)
-						<th data-orderable>Pakket</th>
+					<th data-orderable>Pakket</th>
 					@endif
 					<th>Vakken</th>
 					<th data-orderable>Aanmelding</th>
@@ -276,34 +296,36 @@
 			</thead>
 			@endif
 			@foreach($event->participants()->orderBy('voornaam')->get() as $participant)
-			@if( \Auth::user()->can("viewParticipantsAdvanced", $event)  || $participant->pivot->geplaatst )
+			@if( \Auth::user()->can("viewParticipantsAdvanced", $event) || $participant->pivot->geplaatst )
 			<tr>
 				<td>
 					@can("showBasic", $participant)
 					<a href="{{ url('/participants', $participant->id) }}">
-						{{ $participant->voornaam }} {{ $participant->tussenvoegsel }} {{ $participant->achternaam }}
+						{{ $participant->volnaam }}
 					</a>
 					@else
-						{{ $participant->voornaam }} {{ $participant->tussenvoegsel }} {{ $participant->achternaam }}
+					{{ $participant->volnaam }}
 					@endcan
-					
+
+				</td>
+
+				<td>
+					{{ $participant->vol_niveau }}
 				</td>
 
 				@if($event->package_type != null)
-					<td>{{ $participant->pivot->package->title }}</td>
+				<td>{{ $participant->pivot->package->title }}</td>
 				@endif
 
-				<td>{{ $participantCourseString[$participant->id] }}</td>
 				@can("viewParticipantsAdvanced", $event)
 				<td>
 					@if ($participantIsNew[$participant->id] == 1)
 					<span class="glyphicon glyphicon-baby-formula" data-toggle="tooltip" title="Nieuw dit kamp"></span>
 					@endif
 				</td>
-
-				<td>{{ $participantCourseString[$participant->id] }}</td>
 				@endcan
 
+				<td>{{ $participantCourseString[$participant->id] }}</td>
 
 				@cannot("viewParticipantsAdvanced", $event)
 
@@ -320,7 +342,8 @@
 					@unless ($participant->pivot->datum_betaling == '0000-00-00')
 					{{ substr($participant->pivot->datum_betaling,0,4) .'-'.substr($participant->pivot->datum_betaling,5,2).'-'.substr($participant->pivot->datum_betaling,8,2) }}
 					@else
-					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" data-toggle="tooltip" title="Deze deelnemer heeft nog niet betaald!"></span>
+					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" data-toggle="tooltip"
+						title="Deze deelnemer heeft nog niet betaald!"></span>
 					@endunless
 				</td>
 
@@ -329,29 +352,37 @@
 					@if ($participant->inkomensverklaring != null)
 					{{ $participant->inkomensverklaring->format('Y-m-d') }}
 					@else
-					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" data-toggle="tooltip" title="Inkomensverklaring nog niet binnen!"></span>
+					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" data-toggle="tooltip"
+						title="Inkomensverklaring nog niet binnen!"></span>
 					@endif
 					@else
-					<span class="glyphicon glyphicon-ok" aria-hidden="true" data-toggle="tooltip" title="Inkomensverklaring niet nodig"></span>
+					<span class="glyphicon glyphicon-ok" aria-hidden="true" data-toggle="tooltip"
+						title="Inkomensverklaring niet nodig"></span>
 					@endunless
 				</td>
 				<td>{{ ($participant->pivot->geplaatst) ? 'Ja' : 'Nee' }}</td>
 				@endcan
-				
+
 				@can("editParticipant", [$event, $participant])
-				<td><a href="{{ url('/events', [$event->id, 'edit-participant', $participant->id]) }}"><span class="glyphicon glyphicon-edit" aria-hidden="true" data-toggle="tooltip" title="Inschrijving bewerken"></span></a></td>
-				<td><a href="{{ url('/events', [$event->id, 'move-participant', $participant->id]) }}"><span class="glyphicon glyphicon-arrow-right" aria-hidden="true" data-toggle="tooltip" title="Verplaatsen naar ander kamp"></span></a></td>
+				<td><a href="{{ url('/events', [$event->id, 'edit-participant', $participant->id]) }}"><span
+							class="glyphicon glyphicon-edit" aria-hidden="true" data-toggle="tooltip"
+							title="Inschrijving bewerken"></span></a></td>
+				<td><a href="{{ url('/events', [$event->id, 'move-participant', $participant->id]) }}"><span
+							class="glyphicon glyphicon-arrow-right" aria-hidden="true" data-toggle="tooltip"
+							title="Verplaatsen naar ander kamp"></span></a></td>
 				@else
 				<td></td>
 				<td></td>
 				@endcan
-				
+
 				@can("removeParticipant", [$event, $participant])
-				<td><a href="{{ url('/events', [$event->id, 'remove-participant', $participant->id]) }}"><span class="glyphicon glyphicon-remove" aria-hidden="true" data-toggle="tooltip" title="Inschrijving verwijderen"></span></a></td>
+				<td><a href="{{ url('/events', [$event->id, 'remove-participant', $participant->id]) }}"><span
+							class="glyphicon glyphicon-remove" aria-hidden="true" data-toggle="tooltip"
+							title="Inschrijving verwijderen"></span></a></td>
 				@else
 				<td></td>
 				@endcan
-				
+
 			</tr>
 			@endif
 			@endforeach
@@ -381,12 +412,13 @@
 				<tr>
 					<td>
 						<a href="{{ url('/participants', $participant->id) }}">
-							{{ $participant->voornaam }} {{ $participant->tussenvoegsel }} {{ $participant->achternaam }}
+							{{ $participant->voornaam }} {{ $participant->tussenvoegsel }}
+							{{ $participant->achternaam }}
 						</a>
 					</td>
 					<td>
 						@if($participant->information_channel === "only-email")
-							<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+						<span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
 						@endif
 					</td>
 					<td>{{ $participant->adres }}</td>
