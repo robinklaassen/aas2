@@ -31,7 +31,7 @@
 	U bevindt zich nu in de eerste stap van het plaatsingsproces van uw kind voor een Anderwijskamp. Voor meer informatie over het proces, dat bestaat uit vier stappen, klikt u <a href="http://www.anderwijs.nl/inschrijven/stappenplan">hier</a>.
 </p>
 
-@if ($event->prijs == 0)
+@if ($toPay == 0)
 	<p>
 		Uw kind staat op dit moment voorlopig ingeschreven voor het kamp. Om de inschrijving definitief te maken, dient u het kampgeld over te maken op onze rekening. <strong>Voor dit kamp is het kampgeld echter nog niet definitief vastgesteld.</strong> Zodra dat is gebeurd, ontvangt u daarover per e-mail bericht.
 	</p>
