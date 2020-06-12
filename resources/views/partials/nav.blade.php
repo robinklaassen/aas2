@@ -36,9 +36,7 @@
 						@role(["member"])
 						<li class="{{ substr(Request::path(),0,5) == 'lists' ? 'active' : ''}}"><a href="{{ url('/lists') }}">Lijsten</a></li>
 						@endrole
-						@can("viewAny", \App\Participant::class)
 						<li class="{{ substr(Request::path(),0,6) == 'graphs' ? 'active' : ''}}"><a href="{{ url('/graphs') }}">Grafieken</a></li>
-						@endcan
 						@can("viewAny", \App\User::class)
 						<li class="{{ substr(Request::path(),0,5) == 'users' ? 'active' : ''}}"><a href="{{ url('/users') }}">Gebruikers</a></li>
 						@endcan
