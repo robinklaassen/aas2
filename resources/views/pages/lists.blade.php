@@ -47,8 +47,13 @@ Lijsten
 	@endrole
 
 	@role(["promoci","kampci","kantoorci","board"])
-	<li role="presentation"><a href="#inschrijvingen" aria-controls="inschrijvingen" role="tab"
+	<li role="presentation"><a href="#deelnemers-inschrijvingen" aria-controls="deelnemers-inschrijvingen" role="tab"
 			data-toggle="tab">Inschrijvingen</a></li>
+	@endrole
+
+	@role(["promoci","kampci","board"])
+	<li role="presentation"><a href="#nieuwe-leidingen" aria-controls="nieuwe-leidingen" role="tab"
+			data-toggle="tab">Nieuwe leidingen</a></li>
 	@endrole
 
 	@can("showSpecialAny", \App\Member::class)
@@ -371,7 +376,7 @@ Lijsten
 	@endrole
 
 	@role(["promoci","kantoorci","kampci","board"])
-	<div role="tabpanel" class="tab-pane" id="inschrijvingen">
+	<div role="tabpanel" class="tab-pane" id="deelnemers-inschrijvingen">
 		<h3>Deelnemer inschrijvingen in het laatste half jaar</h3>
 		<table class="table table-hover">
 			<thead>
@@ -383,7 +388,7 @@ Lijsten
 			</thead>
 			<tbody>
 
-				@foreach($inschrijvingen as $part)
+				@foreach($inschrijvingen_deelnemers as $part)
 				<tr>
 					<td><a
 							href="{{ url('/participants', $part->participant_id) }}">{{ str_replace('  ', ' ', $part->voornaam . ' ' . $part->tussenvoegsel . ' ' . $part->achternaam) }}</a>
@@ -398,6 +403,37 @@ Lijsten
 					<td>{{ $part->kamp_aanmeld_datum }}</td>
 					<td>{{ $part->hoebij }}</td>
 
+				</tr>
+				@endforeach
+			</tbody>
+		</table>
+
+	</div>
+	@endrole
+
+	@role(["promoci", "kampci", "board"])
+	<div role="tabpanel" class="tab-pane" id="nieuwe-leidingen">
+
+		<h3>Nieuwe leiding in het laatste half jaar</h3>
+		<table class="table table-hover">
+			<thead>
+				<th>Naam</th>
+				<th>Inschrijving</th>
+				<th>Hoe bij</th>
+			</thead>
+			<tbody>
+				@foreach($nieuwe_leiding as $memb)
+				<tr>
+					<td>
+						<a href="{{ url('/members', $memb->id) }}">{{$memb->volnaam}}</a>
+					</td>
+
+					<td>
+						{{$memb->created_at}}
+					</td>
+					<td>
+						{{$memb->hoebij}}
+					</td>
 				</tr>
 				@endforeach
 			</tbody>
