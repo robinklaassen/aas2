@@ -134,6 +134,10 @@
 	{!! Form::label('opmerkingen', 'Overige informatie:') !!}
 	{!! Form::textarea('opmerkingen', null, ['class' => 'form-control']) !!}
 </div>
+<div class="form-group">
+	{!! Form::label('interests_skills', 'Interresses / Vaardigheden:') !!}
+	{!! Form::textarea('interests_skills', null, ['class' => 'form-control']) !!}
+</div>
 @endcanany
 
 

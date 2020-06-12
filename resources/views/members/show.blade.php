@@ -181,6 +181,10 @@ Mijn profiel
 				<td style="white-space:pre-wrap;">{{ $member->opmerkingen }}</td>
 			</tr>
 			@endcan
+			<tr>
+				<td>Interresses / Vaardigheden</td>
+				<td style="white-space:pre-wrap;">{{ $member->interests_skills }}</td>
+			</tr>
 		</table>
 
 
