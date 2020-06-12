@@ -26,7 +26,8 @@
     "phpunit/phpunit": "^7.0",
     "phpspec/phpspec": "^6.1",
     "filp/whoops": "~2.0",
-    "mockery/mockery": "^1.2"
+    "mockery/mockery": "^1.2",
+    "laravel/homestead": "^10.8"
   },
   "autoload": {
     "classmap": [
