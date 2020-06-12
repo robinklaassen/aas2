@@ -298,7 +298,7 @@ class PagesController extends Controller
 			'monthName',
 			'membersWithoutEvents',
 			'inschrijvingen_deelnemers',
-			'nieuwe_leidingen',
+			'nieuwe_leiding',
 			'participantsWithoutCamps',
 			'participantMailingList',
 			'oldMembers'
