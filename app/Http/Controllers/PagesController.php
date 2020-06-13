@@ -313,25 +313,19 @@ class PagesController extends Controller
 
 		$avg_days_before_event = DB::select(
 			DB::raw("
-				SELECT s.* , e.naam, e.datum_start
+				SELECT s.* 
+					 , e.code as code
 				  FROM (
 					SELECT e.id
 					, AVG(DATEDIFF(e.datum_start, CAST(ep.created_at as date))) AS avg_participants_days
 					, AVG(DATEDIFF(e.datum_start, CAST(em.created_at as date))) AS avg_members_days
-					
-					, MIN(DATEDIFF(e.datum_start, CAST(ep.created_at as date))) AS min_participants_days
-					, MIN(DATEDIFF(e.datum_start, CAST(em.created_at as date))) AS min_members_days
-					
-					, MAX(DATEDIFF(e.datum_start, CAST(ep.created_at as date))) AS max_participants_days
-					, MAX(DATEDIFF(e.datum_start, CAST(em.created_at as date))) AS max_members_days
 					FROM events e 
 					LEFT JOIN event_participant ep on ep.event_id = e.id
 					LEFT JOIN event_member em on em.event_id = e.id
-					-- WHERE e.datum_start > DATE_SUB(NOW(), interval 3 year)
 					GROUP BY e.id
 				) s
 				join events e on s.id = e.id
-			
+				ORDER BY e.datum_start ASC
 			"
 			)
 		);
