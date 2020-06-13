@@ -49,7 +49,7 @@
 	<p>
 		BETALINGSINFORMATIE<br/>
 		Te betalen bedrag: € {{ $toPay }}<br/>
-		Rekeningnummer: NL68 TRIO 0198 4197 83 t.n.v. Vereniging Anderwijs te Utrecht<br/>
+		Rekeningnummer: {{env('BANKING_INFORMATION')}}<br/>
 		Onder vermelding van: naam deelnemer + deze kampcode: {{ $event->code }}
 	</p>
 @endif
@@ -59,10 +59,7 @@
 		U heeft een korting op de kampprijs aangevraagd. Daarvoor dient u ons een bewijs van inkomen te sturen. Een kopie van bijvoorbeeld uw loonstrook en die van uw eventuele partner is voldoende. Vermeld daarbij de samenstelling van uw gezin en eventuele andere zaken die van belang kunnen zijn voor de toekenning van de korting. U kunt dit sturen naar onderstaand adres. Let op: het draait om het <strong>bruto gezinsinkomen</strong> en niet om het netto gezinsinkomen! Na beoordeling van de kortingsaanvraag nemen wij zonodig contact met u op.
 	</p>
 	<p>
-		Vereniging Anderwijs<br/>
-		T.a.v. de penningmeester<br/>
-		Postbus 13228<br/>
-		3507 LE Utrecht
+		{!! nl2br(env('ADDRESS_INFORMATION')) !!}
 	</p>
 @endif
 
