@@ -15,6 +15,7 @@
 	<li role="presentation" class="active"><a href="#stats" role="tab" data-toggle="tab">Statistieken</a></li>
 	<li role="presentation"><a href="#registrations" role="tab" data-toggle="tab">Inschrijvingen</a></li>
 	<li role="presentation"><a href="#camp-prefs" role="tab" data-toggle="tab">Kampvoorkeur deelnemers</a></li>
+	<li role="presentation"><a href="#registration-days" role="tab" data-toggle="tab">Inschrijvingen dagen voor kamp</a></li>
 </ul>
 
 <div class="tab-content">
@@ -103,6 +104,16 @@
 
 		
 	</div>
+
+	<div role="tabpanel" class="tab-pane" id="registration-days">
+
+		<div class="row">
+			<div class="col-sm-12">
+				<div id="avg-days-before-event" style="height:400px;"></div>
+			</div>
+		</div>
+
+	</div>
 </div>
 
 @endsection
@@ -115,9 +126,9 @@
 
   // Load the Visualization API and the piechart package.
   google.load('visualization', '1.0', {'packages':['corechart']});
-  google.setOnLoadCallback(drawChart);
+  google.setOnLoadCallback(drawCharts);
 
-  function drawChart() {
+  function drawCharts() {
 
 	// Set point size for all graphs
 	var pointSize = 8;
@@ -228,16 +239,27 @@
 
 	var chart = new google.visualization.LineChart(document.getElementById('ave_num_trainings_chart'));
 	chart.draw(data, options);
+
+	drawGoogleChart("avg-days-before-event", {!! json_encode($avg_days_before_event) !!}, {
+		title: "Registratie in dagen voor kamp"
+	});
   }
   
+  function drawGoogleChart(id, rawData, opt) {
+	  console.log(rawData);
+	var data = google.visualization.arrayToDataTable(rawData);
+	var chart = new google.visualization.LineChart(document.getElementById(id));
+	chart.draw(data, options);
+  }
+
   // Rerun the drawing of charts when window size changes
   $(window).resize(function(){
-	  drawChart();
+	  drawCharts();
   });
   
   // Rerun the drawing of charts when an anchor is clicked
   $("a").click(function(e) {
-	 setTimeout(function(x) {drawChart()}, 25); 
+	 setTimeout(function(x) {drawCharts()}, 25); 
   });
   
   // The registration analysis is done with HighCharts (allows enabling and disabling of series)
