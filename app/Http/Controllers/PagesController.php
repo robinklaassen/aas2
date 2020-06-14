@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use App\Event;
 use App\Helpers\DateHelper;
 use App\Helpers\Payment\EventPayment;
+use App\Member;
 use App\Participant;
 use App\Review;
 use Illuminate\Support\Facades\Auth;
@@ -250,8 +251,7 @@ class PagesController extends Controller
 		$startDate = Carbon::now()->subYears(19);
 		$participantMailingList = \App\Participant::where('mag_gemaild', 1)->where('geboortedatum', '>', $startDate->toDateString())->get();
 
-		// TODO: this
-		$inschrijvingen = DB::table('event_participant')
+		$inschrijvingen_deelnemers = DB::table('event_participant')
 			->join("participants", 'event_participant.participant_id', '=', 'participants.id')
 			->join("events", 'event_participant.event_id', '=', 'events.id')
 			->where("event_participant.created_at", ">", Db::raw("DATE_SUB(NOW(), interval 6 month)"))
@@ -280,6 +280,10 @@ class PagesController extends Controller
 			])
 			->orderByDesc("event_participant.created_at")->get();
 
+		$nieuwe_leiding = Member::where("members.created_at", ">", Carbon::now()->subMonths(6))
+			->orderByDesc("members.created_at")->get();
+						
+
 		return view('pages.lists', compact(
 			'stats',
 			'types',
@@ -293,7 +297,8 @@ class PagesController extends Controller
 			'birthdayList',
 			'monthName',
 			'membersWithoutEvents',
-			'inschrijvingen',
+			'inschrijvingen_deelnemers',
+			'nieuwe_leiding',
 			'participantsWithoutCamps',
 			'participantMailingList',
 			'oldMembers'
