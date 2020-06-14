@@ -280,7 +280,7 @@ class PagesController extends Controller
 			])
 			->orderByDesc("event_participant.created_at")->get();
 
-		$nieuwe_leiding = Member::where("members.created_at", ">", Db::raw("DATE_SUB(NOW(), interval 6 month)"))
+		$nieuwe_leiding = Member::where("members.created_at", ">", Carbon::now()->subMonths(6))
 			->orderByDesc("members.created_at")->get();
 						
 
