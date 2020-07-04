@@ -314,6 +314,26 @@ class PagesController extends Controller
 		$minDate = "2009-09-01";
 		$maxDate = $maxYear . "-08-31";
 
+		$avg_days_before_event = DB::select(
+			DB::raw("
+				SELECT s.* 
+					 , e.code as code
+				  FROM (
+					SELECT e.id
+					, AVG(DATEDIFF(e.datum_start, CAST(ep.created_at as date))) AS avg_participants_days
+					, AVG(DATEDIFF(e.datum_start, CAST(em.created_at as date))) AS avg_members_days
+					FROM events e 
+					LEFT JOIN event_participant ep on ep.event_id = e.id
+					LEFT JOIN event_member em on em.event_id = e.id
+					GROUP BY e.id
+					LIMIT 10
+				) s
+				join events e on s.id = e.id
+				ORDER BY e.datum_start ASC
+			"
+			)
+		);
+
 		$camps = \App\Event::where('type', 'kamp')
 			->where('datum_start', '<=', $maxDate)
 			->where('datum_start', '>=', $minDate)
@@ -534,7 +554,7 @@ class PagesController extends Controller
 			]
 		]);
 
-		return view('pages.graphs', compact('data', 'registration_series', 'camp_prefs', 'prefs_rev_count'));
+		return view('pages.graphs', compact('data', 'registration_series', 'camp_prefs', 'prefs_rev_count', 'avg_days_before_event' ));
 	}
 
 	# Exposes upcoming events as JSON for website integration
