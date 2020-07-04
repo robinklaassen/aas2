@@ -282,7 +282,7 @@ class PagesController extends Controller
 
 		$nieuwe_leiding = Member::where("members.created_at", ">", Carbon::now()->subMonths(6))
 			->orderByDesc("members.created_at")->get();
-						
+
 
 		return view('pages.lists', compact(
 			'stats',
@@ -492,49 +492,21 @@ class PagesController extends Controller
 		}
 
 		// Analysis of participants' preference for camp type (from reviews)
-		$camp_prefs = [];
-		$revs = \App\Review::whereNotNull('kampkeuze')->pluck('kampkeuze')->toArray();
-		$prefs_rev_count = count($revs);
-		foreach ($revs as $opts) {
-			foreach ($opts as $opt) {
-				if (array_key_exists($opt, $camp_prefs)) {
-					$camp_prefs[$opt]++;
-				} else {
-					$camp_prefs[$opt] = 1;
-				}
-			}
+		$reviews = \App\Review::whereNotNull('kampkeuze')->pluck('kampkeuze')->toArray(); // note: 2D array
+
+		$reviews_flat = [];
+		foreach ($reviews as $r) {
+			$reviews_flat = array_merge($reviews_flat, $r);
 		}
 
-		$dt = \Lava::DataTable();
-		$dt->addStringColumn('Optie');
-		$dt->addNumberColumn('Aantal');
+		$prefs_review_count = count($reviews);
 
-		foreach ($camp_prefs as $type => $count) {
-			$dt->addRow([$type, $count]);
+		$camp_prefs = [['Optie', 'Aantal']];
+		foreach (array_count_values($reviews_flat) as $option => $count) {
+			$camp_prefs[] = [$option, $count];
 		}
 
-		\Lava::BarChart("kampkeuze", $dt, [
-			'width' => '100%',
-			'height' => '450',
-			'chartArea' => [
-				'top' => 25,
-				'left' => '25%',
-				//	'height' => 180,
-				'width' => '70%'
-			],
-			'fontSize' => 14,
-			'hAxis' => [
-				'minValue' => 0,
-				'gridlines' => [
-					'count' => -1
-				]
-			],
-			'legend' => [
-				'position' => 'none'
-			]
-		]);
-
-		return view('pages.graphs', compact('data', 'registration_series', 'camp_prefs', 'prefs_rev_count'));
+		return view('pages.graphs', compact('data', 'registration_series', 'camp_prefs', 'prefs_review_count'));
 	}
 
 	# Exposes upcoming events as JSON for website integration
