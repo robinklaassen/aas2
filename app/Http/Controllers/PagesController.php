@@ -323,6 +323,7 @@ class PagesController extends Controller
 					LEFT JOIN event_participant ep on ep.event_id = e.id
 					LEFT JOIN event_member em on em.event_id = e.id
 					GROUP BY e.id
+					LIMIT 10
 				) s
 				join events e on s.id = e.id
 				ORDER BY e.datum_start ASC
