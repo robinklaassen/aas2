@@ -103,9 +103,7 @@ Grafieken
 
         <p><b>Aantal deelnemers dat deze vraag heeft beantwoord: {{ $prefs_review_count }}</b></p>
 
-        <div id="kampkeuze-div"></div>
-        @barchart('kampkeuze', 'kampkeuze-div')
-
+        <div id="camp_preference_chart"></div>
 
     </div>
 
@@ -273,7 +271,7 @@ Grafieken
         ],
         chartType: "ColumnChart",
         chartOptions: {
-            title: "Registratie in dagen voor kamp",
+            title: "Gemiddeld aantal dagen tussen registratie en kamp",
             hAxis: {
                 title: 'Kamp',
                 minValue: 0,

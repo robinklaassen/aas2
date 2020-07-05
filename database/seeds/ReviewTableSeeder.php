@@ -77,5 +77,37 @@ class ReviewTableSeeder extends Seeder
             'tip' => 'Meer belangrijke dingen doen',
             'verder' => 'Doei'
         ]);
+
+        Review::create([
+            'event_id' => 2,
+            'bs-uren' => 6,
+            'bs-mening' => 2,
+            'bs-tevreden' => 4,
+            'bs-manier' => 1,
+            'bs-manier-mening' => 'Mwah',
+            'bs-thema' => 0,
+            'bs-thema-wat' => null,
+            'kh-slaap' => 3,
+            'kh-slaap-wrm' => 'Beestjes',
+            'kh-bijspijker' => 4,
+            'kh-bijspijker-wrm' => 'Ging superlekker',
+            'kh-geheel' => 3,
+            'kh-geheel-wrm' => 'Vijgen',
+            'leidingploeg' => 'Bijna iedereen was leuk behalve die ene',
+            'slaaptijd' => 3,
+            'slaaptijd-hoe' => 'Ja',
+            'kamplengte' => 1,
+            'kamplengte-wrm' => 'Veel te kort',
+            'eten' => 'Zuurkool',
+            'avond-leukst' => 'Op je slaapkamer zitten',
+            'avond-minst' => 'Buiten spelen',
+            'allerleukst' => 'Iemand gleed uit over een bananenschil',
+            'allervervelendst' => 'Je moeder',
+            'cijfer' => 6,
+            'nogeens' => 'Nope',
+            'kampkeuze' => 'zomer, winter',
+            'tip' => 'Minder bijles, meer eten',
+            'verder' => null
+        ]);
     }
 }

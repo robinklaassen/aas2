@@ -512,14 +512,9 @@ class PagesController extends Controller
 		}
 
 		// Analysis of participants' preference for camp type (from reviews)
-		$reviews = \App\Review::whereNotNull('kampkeuze')->pluck('kampkeuze')->toArray(); // note: 2D array
-
-		$reviews_flat = [];
-		foreach ($reviews as $r) {
-			$reviews_flat = array_merge($reviews_flat, $r);
-		}
-
-		$prefs_review_count = count($reviews);
+		$reviews = \App\Review::whereNotNull('kampkeuze')->pluck('kampkeuze');
+		$prefs_review_count = $reviews->count();
+		$reviews_flat = $reviews->flatten()->toArray();
 
 		$camp_prefs = [['Optie', 'Aantal']];
 		foreach (array_count_values($reviews_flat) as $option => $count) {

@@ -139,6 +139,7 @@ return [
 		'Collective\Html\HtmlServiceProvider',
 		'Barryvdh\DomPDF\ServiceProvider',
 		'Maatwebsite\Excel\ExcelServiceProvider',
+		'Khill\Lavacharts\Laravel\LavachartsServiceProvider',
 		'Illuminate\Notifications\NotificationServiceProvider',
 		'GrahamCampbell\Markdown\MarkdownServiceProvider',
 
@@ -203,6 +204,7 @@ return [
 		'Html'		=> 'Collective\Html\HtmlFacade',
 		'PDF' 		=> 'Barryvdh\DomPDF\Facade',
 		'Excel' 	=> 'Maatwebsite\Excel\Facades\Excel',
+		'Lava' 		=> 'Khill\Lavacharts\Laravel\LavachartsFacade',
 		'Arr'		=> 'Illuminate\Support\Arr',
 		'Str'		=> 'Illuminate\Support\Str',
 		'Date'		=> App\Helpers\DateHelper::class
