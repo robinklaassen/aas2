@@ -516,9 +516,13 @@ class PagesController extends Controller
 		$prefs_review_count = $reviews->count();
 		$reviews_flat = $reviews->flatten()->toArray();
 
-		$camp_prefs = [['Optie', 'Aantal']];
+		$camp_prefs = [];
+		# $camp_prefs = [['Optie', 'Aantal']];
 		foreach (array_count_values($reviews_flat) as $option => $count) {
-			$camp_prefs[] = [$option, $count];
+			$camp_prefs[] = [
+				'option' => $option,
+				'votes' => $count
+			];
 		}
 
 		return view('pages.graphs', compact('data', 'registration_series', 'camp_prefs', 'prefs_review_count', 'avg_days_before_event'));

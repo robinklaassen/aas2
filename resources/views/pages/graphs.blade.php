@@ -241,23 +241,31 @@ Grafieken
 	var chart = new google.visualization.LineChart(document.getElementById('ave_num_trainings_chart'));
 	chart.draw(data, options);
 
-	// Participants' preference for camp type (based on reviews)
-	var data = google.visualization.arrayToDataTable(<?php echo json_encode($camp_prefs); ?>);
+    // Participants' preference for camp type (based on reviews)
+    drawGoogleChart({
+        element: "camp_preference_chart", 
+        rawData: {!! json_encode($camp_prefs) !!}, 
+        columns: [
+            { id: "option", label: "Optie", type: "string" },
+            { id: "votes", label: "Aantal", type: "number" },
+        ],
+        chartType: "BarChart",
+        chartOptions: {
+            title: "Kampvoorkeur uit deelnemerenquêtes",
+            hAxis: {
+                title: 'Aantal stemmen',
+                minValue: 0,
+            },
+            vAxis: {
+                title: 'Soort kamp',
+            },
+            legend: {
+                position: 'none'
+            }
+        }
+    });
 
-	var options = {
-		  fontSize: 14,
-		  hAxis: {
-			  minValue: 0,
-			  gridlines: {
-				  count: -1
-			  }
-		  },
-          legend: { position: 'none' }
-        };
-
-	var chart = new google.visualization.BarChart(document.getElementById('camp_preference_chart'));
-	chart.draw(data, options);
-
+    // Average number of days between registering and camp (both members and participants)
     drawGoogleChart({
         element: "avg-days-before-event", 
         rawData: {!! json_encode($avg_days_before_event) !!}, 
@@ -300,6 +308,7 @@ Grafieken
 
     function drawGoogleChart(options) {
         var data = transformDataset(options.rawData, options.columns);
+        console.log(data);
         var dt = google.visualization.arrayToDataTable(data);
         var chart = new google.visualization[options.chartType || "LineChart"](document.getElementById(options.element));
         chart.draw(dt, options.chartOptions);
