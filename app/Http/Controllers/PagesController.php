@@ -517,7 +517,6 @@ class PagesController extends Controller
 		$reviews_flat = $reviews->flatten()->toArray();
 
 		$camp_prefs = [];
-		# $camp_prefs = [['Optie', 'Aantal']];
 		foreach (array_count_values($reviews_flat) as $option => $count) {
 			$camp_prefs[] = [
 				'option' => $option,
