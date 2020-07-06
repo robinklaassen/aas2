@@ -308,7 +308,6 @@ Grafieken
 
     function drawGoogleChart(options) {
         var data = transformDataset(options.rawData, options.columns);
-        console.log(data);
         var dt = google.visualization.arrayToDataTable(data);
         var chart = new google.visualization[options.chartType || "LineChart"](document.getElementById(options.element));
         chart.draw(dt, options.chartOptions);
