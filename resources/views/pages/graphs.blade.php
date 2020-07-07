@@ -1,7 +1,7 @@
 @extends('master')
 
 @section('title')
-    Grafieken
+Grafieken
 @endsection
 
 
@@ -9,25 +9,28 @@
 
 <h1>Grafieken</h1>
 
-<hr/>
+<hr />
 
 <ul class="nav nav-tabs">
     <li role="presentation" class="active"><a href="#stats" role="tab" data-toggle="tab">Statistieken</a></li>
     <li role="presentation"><a href="#registrations" role="tab" data-toggle="tab">Inschrijvingen</a></li>
     <li role="presentation"><a href="#camp-prefs" role="tab" data-toggle="tab">Kampvoorkeur deelnemers</a></li>
-    <li role="presentation"><a href="#registration-days" role="tab" data-toggle="tab">Inschrijvingen dagen voor kamp</a></li>
+    <li role="presentation"><a href="#registration-days" role="tab" data-toggle="tab">Inschrijvingen dagen voor
+            kamp</a></li>
 </ul>
 
 <div class="tab-content">
     <div role="tabpanel" class="tab-pane active" id="stats">
 
         <p>
-            <br/>
-            NB: pas vanaf 1 augustus wordt het huidige Anderwijsjaar meegenomen in de onderstaande grafieken. Eerder geeft de grafiek dan geen goed beeld.
+            <br />
+            NB: pas vanaf 1 augustus wordt het huidige Anderwijsjaar meegenomen in de onderstaande grafieken. Eerder
+            geeft de grafiek dan geen goed beeld.
         </p>
 
         <p>
-            Wil je een nieuwe grafiek in dit rijtje? Vraag het even lief aan een AAS-baas. En: hoe specifieker je verzoek, hoe beter.
+            Wil je een nieuwe grafiek in dit rijtje? Vraag het even lief aan een AAS-baas. En: hoe specifieker je
+            verzoek, hoe beter.
         </p>
 
         <div class="row">
@@ -35,13 +38,13 @@
                 <div id="memb_growth_chart" style="height:400px;"></div>
             </div>
         </div>
-        
+
         <div class="row">
             <div class="col-sm-12">
                 <div id="part_growth_chart" style="height:400px;"></div>
             </div>
         </div>
-        
+
         <div class="row">
             <div class="col-sm-12">
                 <div id="perc_new_chart" style="height:400px;"></div>
@@ -53,7 +56,7 @@
                 <div id="ave_num_camps_chart" style="height:400px;"></div>
             </div>
         </div>
-        
+
         <div class="row">
             <div class="col-sm-12">
                 <div id="memb_part_ratio_chart" style="height:400px;"></div>
@@ -78,8 +81,8 @@
             </div>
         </div>
     </div>
-    
-    <div role="tabpanel" class="tab-pane" id="registrations">	
+
+    <div role="tabpanel" class="tab-pane" id="registrations">
         <div class="row">
             <div class="col-sm-12">
                 <div id="registrations_chart" style="width:100%; height:600px; margin-top:20px;"></div>
@@ -93,16 +96,15 @@
             </div>
         </div>
     </div>
-    
-    <div role="tabpanel" class="tab-pane" id="camp-prefs">
-        <p><br/>Sinds begin 2018 wordt in de deelnemerenquête gevraagd in welke periode ze het liefst op kamp gaan. Dit wordt in onderstaande grafiek weergegeven.</p>
-        
-        <p><b>Aantal deelnemers dat deze vraag heeft beantwoord: {{ $prefs_rev_count }}</b></p>
-        
-        <div id="kampkeuze-div"></div>
-        @barchart('kampkeuze', 'kampkeuze-div')
 
-        
+    <div role="tabpanel" class="tab-pane" id="camp-prefs">
+        <p><br />Sinds begin 2018 wordt in de deelnemerenquête gevraagd in welke periode ze het liefst op kamp gaan.
+            Dit wordt in onderstaande grafiek weergegeven.</p>
+
+        <p><b>Aantal deelnemers dat deze vraag heeft beantwoord: {{ $prefs_review_count }}</b></p>
+
+        <div id="camp_preference_chart"></div>
+
     </div>
 
     <div role="tabpanel" class="tab-pane" id="registration-days">
@@ -123,8 +125,7 @@
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript" src="https://code.highcharts.com/highcharts.js"></script>
 <script type="text/javascript">
-
-  // Load the Visualization API and the piechart package.
+    // Load the Visualization API and the piechart package.
   google.load('visualization', '1.0', {'packages':['corechart']});
   google.setOnLoadCallback(drawCharts);
 
@@ -237,9 +238,34 @@
           pointSize: pointSize
         };
 
-    var chart = new google.visualization.LineChart(document.getElementById('ave_num_trainings_chart'));
-    chart.draw(data, options);
+	var chart = new google.visualization.LineChart(document.getElementById('ave_num_trainings_chart'));
+	chart.draw(data, options);
 
+    // Participants' preference for camp type (based on reviews)
+    drawGoogleChart({
+        element: "camp_preference_chart", 
+        rawData: {!! json_encode($camp_prefs) !!}, 
+        columns: [
+            { id: "option", label: "Optie", type: "string" },
+            { id: "votes", label: "Aantal", type: "number" },
+        ],
+        chartType: "BarChart",
+        chartOptions: {
+            title: "Kampvoorkeur uit deelnemerenquêtes",
+            hAxis: {
+                title: 'Aantal stemmen',
+                minValue: 0,
+            },
+            vAxis: {
+                title: 'Soort kamp',
+            },
+            legend: {
+                position: 'none'
+            }
+        }
+    });
+
+    // Average number of days between registering and camp (both members and participants)
     drawGoogleChart({
         element: "avg-days-before-event", 
         rawData: {!! json_encode($avg_days_before_event) !!}, 
@@ -253,7 +279,7 @@
         ],
         chartType: "ColumnChart",
         chartOptions: {
-            title: "Registratie in dagen voor kamp",
+            title: "Gemiddeld aantal dagen tussen registratie en kamp",
             hAxis: {
                 title: 'Kamp',
                 minValue: 0,
