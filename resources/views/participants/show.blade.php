@@ -37,6 +37,10 @@ Mijn profiel
 			<a class="btn btn-info" type="button" href="{{ url('/participants', [$participant->id, 'on-event']) }}" style="margin-top:21px;">Op kamp</a>
 			@endcan
 
+			@can("changePassword", $participant)
+			<a class="btn btn-warning" type="button" href="{{ url('/users', [$participant->user->id, 'password']) }}" style="margin-top:21px;">Nieuw wachtwoord</a>
+			@endcan
+
 			@can("delete", $participant)
 			<a class="btn btn-danger" type="button" href="{{ url('/participants', [$participant->id, 'delete']) }}" style="margin-top:21px;">Verwijderen</a>
 			@endcan
