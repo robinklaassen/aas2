@@ -18,7 +18,7 @@
 				<a class="btn btn-success" type="button" href="{{ url('declarations/admin') }}" style="margin-top:21px;">Admin dashboard</a>
 			@endif
 			<a class="btn btn-info" type="button" href="{{ url('declarations/files') }}" style="margin-top:21px;">Bestanden beheren</a>
-			<a class="btn btn-primary" type="button" href="{{ url('declarations/upload') }}" style="margin-top:21px;">Nieuwe declaratie</a>
+			<a class="btn btn-primary" type="button" href="{{ url('declarations/create') }}" style="margin-top:21px;">Nieuwe declaratie</a>
 		</p>
 	</div>
 </div>
@@ -66,13 +66,13 @@
 						<td>{{ $declaration->date->format('Y-m-d') }}</td>
 						<td>
 							@unless ($declaration->filename === null || $declaration->filename == '')
-								<a href="{{ asset('uploads/declarations/' . $member->id . '/' . $declaration->filename) }}" target="_blank">{{$declaration->filename}}</a>
+								<a href="{{ url('/declarations', [$declaration->id, 'file']) }}" target="_blank">{{$declaration->original_filename}}</a>
 							@else
 								-
 							@endunless
 						</td>
 						<td>{{ $declaration->description }}</td>
-						<td>{{ formatPrice($declaration->amount) }}</td>
+						<td>{!! formatPrice($declaration->amount) !!}</td>
 						<td>{{ ($declaration->gift ? 'Ja' : 'Nee') }}</td>
 						<td><a href="{{ url('/declarations', [$declaration->id, 'edit']) }}"><span class="glyphicon glyphicon-edit" data-toggle="tooltip" title="Bewerken"></span></a></td>
 						<td><a href="{{ url('/declarations', [$declaration->id, 'delete']) }}"><span class="glyphicon glyphicon-remove" data-toggle="tooltip" title="Verwijderen"></span></a></td>

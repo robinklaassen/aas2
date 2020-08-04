@@ -55,9 +55,9 @@ Route::get('declarations/files', 'DeclarationsController@showFiles');
 Route::get('declarations/{declaration}/delete', 'DeclarationsController@delete');
 Route::delete('declarations/{declaration}', 'DeclarationsController@destroy');
 Route::get('declarations/{declaration}/edit', 'DeclarationsController@edit');
+Route::get('declarations/{declaration}/file', 'DeclarationsController@file');
 Route::patch('declarations/{declaration}', 'DeclarationsController@update');
-Route::get('declarations/upload', 'DeclarationsController@upload');
-Route::post('declarations/create', 'DeclarationsController@create');
+Route::get('declarations/create', 'DeclarationsController@create');
 Route::post('declarations', 'DeclarationsController@store');
 Route::get('declarations', 'DeclarationsController@index');
 

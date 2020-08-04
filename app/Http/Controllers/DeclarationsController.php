@@ -2,17 +2,22 @@
 
 use App\Declaration;
 use App\Member;
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
-
-
+use Exception;
+use Illuminate\Filesystem\Filesystem;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 
 class DeclarationsController extends Controller {
+	const BASE_DIR = "uploads/declarations/";
+
+	/** @var Filesystem */
+	private $storage;
 
 	public function __construct()
 	{
+		$this->storage = Storage::disk("local");
 		// You need to be logged in and be a member to access
 		$this->middleware('auth');
 		$this->middleware('member');
@@ -49,35 +54,7 @@ class DeclarationsController extends Controller {
 	public function create(Request $request)
 	{
 		$member = \Auth::user()->profile;
-		
-		$uploaded_files = [];
-		if ($request->hasFile('files')) {
-			$files = $request->file('files');
-			foreach ($files as $file) {
-				if ($file->isValid()) {
-					// Upload to user folder
-					$dest = 'uploads/declarations/' . $member->id;
-					$fname = $file->getClientOriginalName();
-					
-					if (file_exists($dest . '/' . $fname)) {
-						return redirect()->back()->with(['flash_error' => 'Fout: één van de geüploade bestanden bestaat reeds!']);
-					} else {
-						$file->move($dest, $fname);
-					}
-
-					// Add to array
-					$uploaded_files[] = $fname;
-				}
-			}
-		} else {
-			$uploaded_files[] = "";
-		}
-
-		// Get current list of files for user
-		$all_files = array_diff(scandir('uploads/declarations/' . $member->id), ['..', '.']);
-		$all_files = array_combine($all_files, $all_files);
-		
-		return view('declarations.create', compact('uploaded_files', 'all_files', 'member'));
+		return view('declarations.create', compact('member'));
 	}
 
 	/**
@@ -86,30 +63,42 @@ class DeclarationsController extends Controller {
 	 * @return Response
 	 */
 	public function store(Request $request)
-	{		
+	{	
+		/** @var UploadedFile */
+		$image = $request->file("image");	
+		/** @var Member */
 		$member = \Auth::user()->profile;
+		$data = $request->except("image");
 		
-		// Loop through rows
-		foreach ($request->get('filename') as $key => $filename) {
-			
-			
-			# VALIDATION STILL REQUIRED!
-			if ($filename == "") {$filename = null;}
-			$record = [
-				'filename' => $filename,
-				'date' => $request->get('date')[$key],
-				'member_id' => $member->id,
-				'description' => $request->get('description')[$key],
-				'amount' => $request->get('amount')[$key],
-				'gift' => $request->get('gift')[$key]
-			];
-			
-			Declaration::create($record);
-		}
+		$data["member_id"] = $member->id;
+		$data["filename"] = $this->getNewFilePath($member, $image);
+		$data["original_filename"] = $image->getClientOriginalName();
+		$this->storage->putFileAs(
+			dirname($data["filename"]),
+			$image,
+			basename($data["filename"])
+		);
+		
+		Declaration::create($data);
 
 		return redirect('declarations')->with([
-			'flash_message' => 'De declaratie(s) is/zijn opgeslagen!'
+			'flash_message' => 'De declaratie is opgeslagen!'
 		]);
+	}
+
+	public function file(Declaration $declaration)
+	{
+		$file = $this->storage->get($declaration->filename);
+		$type = $this->storage->mimeType($declaration->filename);
+		
+		return response(
+			$file,
+			200,
+			[
+				"Content-Type" => $type
+			]
+		);
+	
 	}
 
 	/**
@@ -120,16 +109,8 @@ class DeclarationsController extends Controller {
 	 */
 	public function edit(Declaration $declaration)
 	{
-		## YOU ARE ONLY ALLOWED TO EDIT YOUR OWN DECLARATIONS
 		$member = \Auth::user()->profile;
-		if ($member != $declaration->member) {
-			return redirect()->back();
-		}
-
-		$all_files = array_diff(scandir('uploads/declarations/' . $member->id), ['..', '.']);
-		$all_files = array_combine($all_files, $all_files);
-		$all_files[""] = "-";
-		return view('declarations.edit', compact('declaration', 'all_files'));
+		return view('declarations.edit', compact('declaration'));
 	}
 
 	/**
@@ -140,7 +121,26 @@ class DeclarationsController extends Controller {
 	 */
 	public function update(Declaration $declaration, Request $request)
 	{
-		$declaration->update($request->all());
+		$data = $request->except("image");
+		if ($request->hasFile("image")) {
+			/** @var UploadedFile */
+			$image = $request->file("image");
+			$data["filename"] = $this->getNewFilePath(
+				$declaration->member, 
+				$image
+			);
+			$data["original_filename"] = $image->getClientOriginalName();
+			$this->storage->putFileAs(
+				dirname($data["filename"]),
+				$image,
+				basename($data["filename"])
+			);
+
+			$this->storage->delete($declaration->filename);
+		}
+
+
+		$declaration->update($data);
 		return redirect('declarations')->with([
 			'flash_message' => 'De declaratie is bewerkt!'
 		]);
@@ -175,7 +175,7 @@ class DeclarationsController extends Controller {
 	public function showFiles()
 	{
 		$member = \Auth::user()->profile;
-		$all_files = array_diff(scandir('uploads/declarations/' . $member->id), ['..', '.']);
+		$all_files = Storage::files('uploads/declarations/' . $member->id, true);
 		
 		$items = [];
 		foreach ($all_files as $filename) {
@@ -286,6 +286,17 @@ class DeclarationsController extends Controller {
 		return redirect('declarations/admin')->with([
 			'flash_message' => 'De declaraties zijn verwerkt!'
 		]);
+	}
+
+	private function getFilePath(Member $member, string $fileName) {
+		return DeclarationsController::BASE_DIR . $member->id . '/' . $fileName;
+	}
+
+	private function getNewFilePath(Member $member, UploadedFile $file) {
+		return $this->getFilePath(
+			$member,  
+			date('YmdHis') . '_' . random_int(0, 9999) . '.' . $file->extension()
+		);
 	}
 	
 }
