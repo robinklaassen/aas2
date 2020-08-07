@@ -14,6 +14,11 @@ class Declaration extends Model {
 	{
 		return $this->belongsTo('App\Member');
 	}
+
+	public function getIsClosedAttribute(): bool
+	{
+		return $this->closed_at === null;
+	}
 	
 	// Query scope for open declarations
 	public function scopeOpen($query)
