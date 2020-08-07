@@ -17,7 +17,6 @@
 			@if (\Auth::user()->is_admin)
 				<a class="btn btn-success" type="button" href="{{ url('declarations/admin') }}" style="margin-top:21px;">Admin dashboard</a>
 			@endif
-			<a class="btn btn-info" type="button" href="{{ url('declarations/files') }}" style="margin-top:21px;">Bestanden beheren</a>
 			<a class="btn btn-primary" type="button" href="{{ url('declarations/create') }}" style="margin-top:21px;">Nieuwe declaratie</a>
 		</p>
 	</div>

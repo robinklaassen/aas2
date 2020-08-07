@@ -47,6 +47,7 @@
 					<th>Gift</th>
 					<th></th>
 					<th></th>
+					<th></th>
 				</tr>
 			</thead>
 			
@@ -58,14 +59,14 @@
 							<a href="{{ url('/members', $declaration->member->id) }}">{{ $declaration->member->voornaam }} {{ $declaration->member->tussenvoegsel }} {{ $declaration->member->achternaam }}</a>
 						</td>
 						<td>
-							@unless ($declaration->filename === null)
-								<a href="{{ asset('uploads/declarations/' . $declaration->member->id . '/' . $declaration->filename) }}" target="_blank">{{$declaration->filename}}</a>
+							@if ($declaration->filename)
+								<a href="{{ url('declarations/' . $declaration->id, 'file') }}" target="_blank">{{$declaration->original_filename}}</a>
 							@else
 								-
-							@endunless
+							@endif
 						</td>
 						<td>{{ $declaration->description }}</td>
-						<td>{{ formatPrice($declaration->amount) }}</td>
+						<td>@money($declaration->amount)</td>
 						<td>{{ ($declaration->gift ? 'Ja' : 'Nee') }}</td>
 						<td><a href="{{ url('/declarations', [$declaration->id, 'edit']) }}"><span class="glyphicon glyphicon-edit" data-toggle="tooltip" title="Bewerken"></span></a></td>
 						<td><a href="{{ url('/declarations', [$declaration->id, 'delete']) }}"><span class="glyphicon glyphicon-remove" data-toggle="tooltip" title="Verwijderen"></span></a></td>
@@ -91,7 +92,7 @@
 					<tbody>
 						@foreach ($members as $member)
 							<tr>
-								<td>{{ formatPrice($member->declarations()->open()->where('gift', 0)->sum('amount')) }}</td>
+								<td>@money($member->declarations()->open()->where('gift', 0)->sum('amount'))</td>
 								<td>{{ $member->iban }}</td>
 								<td><a href="{{ url('/members', $member->id) }}">{{ $member->voornaam }} {{ $member->tussenvoegsel }} {{ $member->achternaam }}</a></td>
 								<td><a href="{{ url('/declarations', ['process', $member->id]) }}"><span class="glyphicon glyphicon-check"></a></span></td>
@@ -135,7 +136,7 @@
 							@endunless
 						</td>
 						<td>{{ $declaration->description }}</td>
-						<td>{{ formatPrice($declaration->amount) }}</td>
+						<td>@money($declaration->amount)</td>
 						<td>{{ ($declaration->gift ? 'Ja' : 'Nee') }}</td>
 						<td>{{ $declaration->closed_at->format('Y-m-d') }}</td>
 						<td><a href="{{ url('/declarations', [$declaration->id, 'edit']) }}"><span class="glyphicon glyphicon-edit" data-toggle="tooltip" title="Bewerken"></span></a></td>

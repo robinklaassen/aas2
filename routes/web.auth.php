@@ -156,7 +156,7 @@ Route::get(
     'declarations/process/{member}',
     'DeclarationsController@confirmProcess'
 );
-Route::post('declarations/process/{member}', 'DeclarationsController@process');
+Route::post('declarations/process', 'DeclarationsController@process');
 Route::get('declarations/admin', 'DeclarationsController@admin');
 
 # Location things
