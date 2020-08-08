@@ -14,10 +14,12 @@
 	</div>
 	<div class="col-sm-6">
 		<p class="text-right">
-			@if (\Auth::user()->is_admin)
+			@can('viewAll', \App\Declaration::class)
 				<a class="btn btn-success" type="button" href="{{ url('declarations/admin') }}" style="margin-top:21px;">Admin dashboard</a>
-			@endif
-			<a class="btn btn-primary" type="button" href="{{ url('declarations/create') }}" style="margin-top:21px;">Nieuwe declaratie</a>
+			@endcan
+			@can('create', \App\Declaration::class)
+				<a class="btn btn-primary" type="button" href="{{ url('declarations/create') }}" style="margin-top:21px;">Nieuwe declaratie</a>
+			@endcan
 		</p>
 	</div>
 </div>
@@ -35,7 +37,7 @@
 <hr/>
 
 <p class="text-right">
-	Totaal openstaand bedrag: <strong>{{ formatPrice($total_open) }}</strong>
+	Totaal openstaand bedrag: <strong>@money($total_open)</strong>
 </p>
 
 <ul class="nav nav-tabs" role="tablist">
@@ -107,7 +109,7 @@
 							@endunless
 						</td>
 						<td>{{ $declaration->description }}</td>
-						<td>{{ formatPrice($declaration->amount) }}</td>
+						<td>@money($declaration->amount)</td>
 						<td>{{ ($declaration->gift ? 'Ja' : 'Nee') }}</td>
 						<td>{{ $declaration->closed_at->format('Y-m-d') }}</td>
 					</tr>

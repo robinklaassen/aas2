@@ -18,7 +18,7 @@
 			<td align="center">{{ ($d->filename == null) ? '-' : $d->filename }}</td>
 			<td align="center" style="white-space:nowrap;">{{ $d->date->format('d-m-Y') }}</td>
 			<td align="center">{{ $d->description }}</td>
-			<td align="center">{{ formatPrice($d->amount) }}</td>
+			<td align="center">@money($d->amount)</td>
 			<td align="center">{{ ($d->gift == 1) ? 'Ja' : 'Nee' }}</td>
 		</tr>
 		@endforeach
@@ -29,7 +29,7 @@
 
 <p>
 	<br/><br/>
-	Totaalbedrag (ex. giften): <b>{{ formatPrice($total) }}</b>
+	Totaalbedrag (ex. giften): <b>@money($total)</b>
 </p>
 
 <p style="font-size:70%;">

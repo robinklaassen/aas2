@@ -6,8 +6,6 @@
 
 @section('content')
 <!-- Dit is het formulier voor het verwerken van declaraties -->
-
-
 <h1>Declaraties verwerken</h1>
 
 <hr/>
@@ -42,7 +40,7 @@
             {!! Form::hidden('selected[]', $declaration->id) !!}
             <tr>
                 <td>{{ $declaration->date->format('Y-m-d') }}</td>
-                <td>{{ formatPrice($declaration->amount) }}</td>
+                <td>@money($declaration->amount)</td>
                 <td>{{ $declaration->description }}</td>
                 <td> 
                     @if($declaration->gift)
@@ -63,11 +61,17 @@
     </table>
     
     <p>
-        Totaal gedeclareerde bedrag zonder giften betreft {{ formatPrice($total) }}
+        Totaal gedeclareerde bedrag zonder giften betreft @money($total)
     </p>
+    @if ($member->iban)
     <p>
-        Bankrekening nummer <b>{{ $member->iban }}</b> ten name van <b>{{$member->volnaam}}</b>
+        Bankrekening nummer <b>{{ $member->iban }}</b> ten name van <b>{{ $member->volnaam }}</b>
     </p>
+    @else
+        <p class="alert alert-warning">
+            Geen bankrekening nummer voor {{ $member->volnaam }}
+        </p>
+    @endif
 
 	<div class="row">
 		<div class="col-sm-6 form-group">

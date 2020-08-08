@@ -10,16 +10,39 @@ class DeclarationPolicy
 {
     use HandlesAuthorization;
 
+    public function viewAny(User $user)
+    {
+        return $this->viewAll($user) || $this->viewOwn($user);
+    }
+
     /**
-     * Determine whether the user can view any declarations.
+     * Determine whether the user can view all declarations.
      *
      * @param  \App\User  $user
      * @return mixed
      */
-    public function viewAny(User $user)
+    public function viewAll(User $user)
     {
         return $user->hasCapability('declarations::show');
     }
+
+    public function process(User $user)
+    {
+        return $user->hasCapability('declarations::show');
+    }
+
+
+    /**
+     * Determine whether the user can view all declarations.
+     *
+     * @param  \App\User  $user
+     * @return mixed
+     */
+    public function viewOwn(User $user)
+    {
+        return $user->hasCapability('declarations::self');
+    }
+
 
     /**
      * Determine whether the user can view the declaration.

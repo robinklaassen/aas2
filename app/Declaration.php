@@ -25,6 +25,11 @@ class Declaration extends Model {
 	{
 		return $query->whereNull('closed_at');
 	}
+
+	public function scopeBillable($query)
+	{
+		return $query->where('gift', '=', '0');
+	}
 	
 	// Query scope for closed declarations
 	public function scopeClosed($query)

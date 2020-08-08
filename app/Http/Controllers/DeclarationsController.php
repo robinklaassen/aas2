@@ -21,10 +21,8 @@ class DeclarationsController extends Controller {
 	private $declarationService;
 	public function __construct(DeclarationsService $declarationService)	{
 		$this->declarationService = $declarationService;
-		// You need to be logged in and be a member to access
-		$this->middleware('auth');
-		$this->middleware('member');
-		$this->middleware('admin', ['only' => ['admin', 'processConfirm', 'process']]);
+		
+        $this->authorizeResource(Declaration::class, 'declaration');
 	}
 	
 	/**
@@ -34,19 +32,12 @@ class DeclarationsController extends Controller {
 	 */
 	public function index()
 	{	
+		$this->authorize('viewOwn', Declaration::class);
 		$member = \Auth::user()->profile;
 		
 		$total_open = $member->declarations()->open()->where('gift',0)->sum('amount');
 		
 		return view('declarations.index', compact('member', 'total_open'));
-	}
-	
-	/**
-	 *	Show the preparation form for a new declaration (file upload etc)
-	*/
-	public function upload()
-	{
-		return view('declarations.upload');
 	}
 	
 	/**
@@ -74,9 +65,12 @@ class DeclarationsController extends Controller {
 		$data = $request->except("image");
 		
 		$data["member_id"] = $member->id;
-		$data["original_filename"] = $image->getClientOriginalName();
-		$this->declarationService->store($member, $image);
 		
+		if ($image) {
+			$data["original_filename"] = $image->getClientOriginalName();
+			$this->declarationService->store($member, $image);
+		}
+
 		Declaration::create($data);
 
 		return redirect('declarations')->with([
@@ -159,6 +153,7 @@ class DeclarationsController extends Controller {
 	
 	public function admin()
 	{
+		$this->authorize('viewAll', Declaration::class);
 		$members = Member::whereHas("declarations", function($q) {
 			$q->whereNull('closed_at');
 		})->get();
@@ -170,10 +165,13 @@ class DeclarationsController extends Controller {
 	# Confirmation of processing a members declarations
 	public function confirmProcess(Member $member)
 	{
-		$declarations = $member->declarations()
-						->open()
-						->get();
-		$total = $declarations->sum('amount');
+		$this->authorize('process', Declaration::class);
+
+		$declarationsQuery = $member->declarations()
+						->open();
+
+		$total = (clone $declarationsQuery)->billable()->sum('amount');
+		$declarations = $declarationsQuery->get();
 		
 		return view('declarations.process', compact('member', 'declarations', 'total'));
 	}
@@ -181,6 +179,8 @@ class DeclarationsController extends Controller {
 	# Process all declarations of a given member
 	public function process(Request $request)
 	{
+		$this->authorize('process', Declaration::class);
+
 		Declaration::whereIn('id', $request->get('selected'))
 			->update(['closed_at' => Carbon::now()]);
 		

@@ -12,29 +12,55 @@
 	<div class="col-sm-6">
 		<h1>Dashboard declaraties</h1>
 	</div>
-	<!--
-	<div class="col-sm-6">
-		<p class="text-right">
-			<a class="btn btn-info" type="button" href="{{ url('declarations/export') }}" style="margin-top:21px;">Exporteren</a>
-		</p>
-	</div>
-	-->
 </div>
 
 <hr/>
 
 <p class="text-right">
-	Totaal openstaand bedrag: <strong>{{ formatPrice($total_open) }}</strong>
+	Totaal openstaand bedrag: <strong>@money($total_open)</strong>
 </p>
 
 <ul class="nav nav-tabs" role="tablist">
-	<li role="presentation" class="active"><a href="#declarations_open" aria-controls="declarations_open" role="tab" data-toggle="tab">Openstaand</a></li>
-	<li role="presentation"><a href="#declarations_to_process" aria-controls="declarations_to_process" role="tab" data-toggle="tab">Verwerken</a></li>
-	<li role="presentation"><a href="#declarations_closed" aria-controls="declarations_closed" role="tab" data-toggle="tab">Afgesloten</a></li>
+	<li role="presentation" class="active"><a href="#declarations_to_process" aria-controls="declarations_to_process" role="tab" data-toggle="tab">Overzicht</a></li>
+	<li role="presentation"><a href="#declarations_open" aria-controls="declarations_open" role="tab" data-toggle="tab">Alle Openstaand</a></li>
+	<li role="presentation"><a href="#declarations_closed" aria-controls="declarations_closed" role="tab" data-toggle="tab">Alle Afgesloten</a></li>
 </ul>
 
 <div class="tab-content" style="margin-top:20px;">
-	<div role="tabpanel" class="tab-pane active" id="declarations_open">
+	
+	<div role="tabpanel" class="tab-pane active" id="declarations_to_process">
+		<div class="row">
+			<div class="col-md-8">
+				<!-- Verwerkingstabel -->
+				<table class="table table-hover" id="declarationsToProcessTable" data-page-length="25">
+					<thead>
+						<tr>
+							<th>Bedrag</th>
+							<th>Rekeningnummer</th>
+							<th>Ten name van</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						@foreach ($members as $member)
+							<tr>
+								<td>@money($member->declarations()->open()->where('gift', 0)->sum('amount'))</td>
+								<td>{{ $member->iban }}</td>
+								<td><a href="{{ url('/members', $member->id) }}">{{ $member->voornaam }} {{ $member->tussenvoegsel }} {{ $member->achternaam }}</a></td>
+								<td>
+									@can('process', \App\Declaration::class)
+									<a href="{{ url('/declarations', ['process', $member->id]) }}"><span class="glyphicon glyphicon-check"></a></span>
+									@endcan
+								</td>
+							</tr>
+						@endforeach
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+	<div role="tabpanel" class="tab-pane" id="declarations_open">
 		<!-- Openstaande declaraties -->
 		<table class="table table-hover" id="declarationsOpenTable" data-page-length="25">
 			<thead>
@@ -74,34 +100,6 @@
 				@endforeach
 			</tbody>
 		</table>
-	</div>
-	
-	<div role="tabpanel" class="tab-pane" id="declarations_to_process">
-		<div class="row">
-			<div class="col-md-8">
-				<!-- Verwerkingstabel -->
-				<table class="table table-hover" id="declarationsToProcessTable" data-page-length="25">
-					<thead>
-						<tr>
-							<th>Bedrag</th>
-							<th>Rekeningnummer</th>
-							<th>Ten name van</th>
-							<th></th>
-						</tr>
-					</thead>
-					<tbody>
-						@foreach ($members as $member)
-							<tr>
-								<td>@money($member->declarations()->open()->where('gift', 0)->sum('amount'))</td>
-								<td>{{ $member->iban }}</td>
-								<td><a href="{{ url('/members', $member->id) }}">{{ $member->voornaam }} {{ $member->tussenvoegsel }} {{ $member->achternaam }}</a></td>
-								<td><a href="{{ url('/declarations', ['process', $member->id]) }}"><span class="glyphicon glyphicon-check"></a></span></td>
-							</tr>
-						@endforeach
-					</tbody>
-				</table>
-			</div>
-		</div>
 	</div>
 	
 	<div role="tabpanel" class="tab-pane" id="declarations_closed">
