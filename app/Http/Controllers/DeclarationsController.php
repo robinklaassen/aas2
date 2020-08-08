@@ -150,6 +150,14 @@ class DeclarationsController extends Controller {
 			'flash_message' => 'De declaratie is verwijderd!'
 		]);
 	}
+
+	public function bulk()
+	{
+		$this->authorize('create', Declaration::class);
+		
+		return view('declarations.bulk');
+	}
+	
 	
 	public function admin()
 	{

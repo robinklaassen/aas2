@@ -22,13 +22,24 @@ input, select, #row-add {
 
 @include ('errors.list')
 
-{!! Form::open(['url' => 'declarations', 'files' => true ]) !!}
+{!! Form::open(['url' => 'declarations/bulk', 'files' => true ]) !!}
 
-@include ('declarations.form')
+<div class="form-group">
+    {!! Form::label('images', 'Bestanden:') !!}
+    {!! Form::file('images', [ "multiple" => true]) !!}
+</div>
+
 
 {!! Form::close() !!}
 
 @endsection
 
 @section('footer')
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $("input[name='images']").change(function() {
+
+    });
+});
 @endsection

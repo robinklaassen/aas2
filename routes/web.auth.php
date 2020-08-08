@@ -58,6 +58,7 @@ Route::get('declarations/{declaration}/edit', 'DeclarationsController@edit');
 Route::get('declarations/{declaration}/file', 'DeclarationsController@file');
 Route::patch('declarations/{declaration}', 'DeclarationsController@update');
 Route::get('declarations/create', 'DeclarationsController@create');
+Route::get('declarations/create-bulk', 'DeclarationsController@bulk');
 Route::post('declarations', 'DeclarationsController@store');
 Route::get('declarations', 'DeclarationsController@index');
 
