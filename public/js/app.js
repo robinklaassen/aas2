@@ -49857,7 +49857,7 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-throw new Error("Module build failed (from ./node_modules/css-loader/index.js):\nModuleNotFoundError: Module not found: Error: Can't resolve './fonts/glyphicons-halflings-regular.eot' in '/home/vincent/Git/aas2/resources/less'\n    at /home/vincent/Git/aas2/node_modules/webpack/lib/Compilation.js:925:10\n    at /home/vincent/Git/aas2/node_modules/webpack/lib/NormalModuleFactory.js:401:22\n    at /home/vincent/Git/aas2/node_modules/webpack/lib/NormalModuleFactory.js:130:21\n    at /home/vincent/Git/aas2/node_modules/webpack/lib/NormalModuleFactory.js:224:22\n    at /home/vincent/Git/aas2/node_modules/neo-async/async.js:2830:7\n    at /home/vincent/Git/aas2/node_modules/neo-async/async.js:6877:13\n    at /home/vincent/Git/aas2/node_modules/webpack/lib/NormalModuleFactory.js:214:25\n    at /home/vincent/Git/aas2/node_modules/enhanced-resolve/lib/Resolver.js:213:14\n    at /home/vincent/Git/aas2/node_modules/enhanced-resolve/lib/Resolver.js:285:5\n    at eval (eval at create (/home/vincent/Git/aas2/node_modules/tapable/lib/HookCodeFactory.js:33:10), <anonymous>:15:1)\n    at /home/vincent/Git/aas2/node_modules/enhanced-resolve/lib/UnsafeCachePlugin.js:44:7\n    at /home/vincent/Git/aas2/node_modules/enhanced-resolve/lib/Resolver.js:285:5\n    at eval (eval at create (/home/vincent/Git/aas2/node_modules/tapable/lib/HookCodeFactory.js:33:10), <anonymous>:15:1)\n    at /home/vincent/Git/aas2/node_modules/enhanced-resolve/lib/Resolver.js:285:5\n    at eval (eval at create (/home/vincent/Git/aas2/node_modules/tapable/lib/HookCodeFactory.js:33:10), <anonymous>:27:1)\n    at /home/vincent/Git/aas2/node_modules/enhanced-resolve/lib/DescriptionFilePlugin.js:67:43\n    at /home/vincent/Git/aas2/node_modules/enhanced-resolve/lib/Resolver.js:285:5\n    at eval (eval at create (/home/vincent/Git/aas2/node_modules/tapable/lib/HookCodeFactory.js:33:10), <anonymous>:16:1)\n    at /home/vincent/Git/aas2/node_modules/enhanced-resolve/lib/Resolver.js:285:5\n    at eval (eval at create (/home/vincent/Git/aas2/node_modules/tapable/lib/HookCodeFactory.js:33:10), <anonymous>:27:1)\n    at /home/vincent/Git/aas2/node_modules/enhanced-resolve/lib/DescriptionFilePlugin.js:67:43\n    at /home/vincent/Git/aas2/node_modules/enhanced-resolve/lib/Resolver.js:285:5\n    at eval (eval at create (/home/vincent/Git/aas2/node_modules/tapable/lib/HookCodeFactory.js:33:10), <anonymous>:16:1)\n    at /home/vincent/Git/aas2/node_modules/enhanced-resolve/lib/Resolver.js:285:5\n    at eval (eval at create (/home/vincent/Git/aas2/node_modules/tapable/lib/HookCodeFactory.js:33:10), <anonymous>:15:1)\n    at /home/vincent/Git/aas2/node_modules/enhanced-resolve/lib/DirectoryExistsPlugin.js:27:15\n    at /home/vincent/Git/aas2/node_modules/enhanced-resolve/lib/CachedInputFileSystem.js:85:15\n    at processTicksAndRejections (internal/process/task_queues.js:79:11)");
+// removed by extract-text-webpack-plugin
 
 /***/ }),
 
@@ -49879,9 +49879,9 @@ throw new Error("Module build failed (from ./node_modules/css-loader/index.js):\
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! /home/vincent/Git/aas2/resources/js/app.js */"./resources/js/app.js");
-__webpack_require__(/*! /home/vincent/Git/aas2/resources/less/app.less */"./resources/less/app.less");
-module.exports = __webpack_require__(/*! /home/vincent/Git/aas2/resources/sass/app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\Vincent\Documents\git\aas2\resources\js\app.js */"./resources/js/app.js");
+__webpack_require__(/*! C:\Users\Vincent\Documents\git\aas2\resources\less\app.less */"./resources/less/app.less");
+module.exports = __webpack_require__(/*! C:\Users\Vincent\Documents\git\aas2\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
