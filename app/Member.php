@@ -42,6 +42,12 @@ class Member extends Model
 		return $this->belongsToMany('App\Course')->withPivot('klas');
 	}
 
+	// A member belongs to many skills
+	public function skills()
+	{
+		return $this->belongsToMany('App\Skill')->withTimestamps();
+	}
+
 	// A member can have one user account
 	public function user()
 	{
