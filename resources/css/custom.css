@@ -33,3 +33,7 @@
   background: #027de7;
   color: white;
 }
+
+.tooltip-inner {
+  text-align: left;
+}

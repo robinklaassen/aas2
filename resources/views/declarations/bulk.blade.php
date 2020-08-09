@@ -29,6 +29,7 @@ input, select, #row-add {
     {!! Form::file('images', [ "multiple" => true]) !!}
 </div>
 
+<declaration-input-row></declaration-input-row>
 
 {!! Form::close() !!}
 

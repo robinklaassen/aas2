@@ -1,4 +1,5 @@
 const mix = require('laravel-mix');
+require('laravel-mix-modernizr');
 
 /*
  |--------------------------------------------------------------------------
@@ -12,6 +13,21 @@ const mix = require('laravel-mix');
  */
 
 mix.js('resources/js/app.js', 'public/js')
-   .sass('resources/sass/app.scss', 'public/css/')
-   .less('resources/less/app.less', 'public/css/')
-   // .styles(["public/css/less.css", "public/css/sass.css"], "public/css/app.css");
+   .sass('resources/sass/app.scss', 'public/css/_app.scss.css')
+   .less('resources/less/app.less', 'public/css/_app.less.css')
+   .styles([
+      "public/css/_app.less.css",
+      "public/css/_app.scss.css",
+      "resources/css/*.css",
+   ], "public/css/app.css")
+   .extract([
+      "vue",
+      "jquery",
+      "bootstrap",
+      "Modernizr",
+      "webshim",
+      "datatables.net-responsive-bs",
+      "datatables.net-bs"
+   ])
+   .modernizr()
+   .sourceMaps();

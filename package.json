@@ -11,10 +11,13 @@
     },
     "devDependencies": {
         "axios": "^0.19.2",
-        "bootstrap": "^4.0.0",
+        "bootstrap": "^3.4.1",
         "cross-env": "^7.0.2",
+        "datatables.net-bs": "^1.10.21",
+        "datatables.net-responsive-bs": "^2.2.5",
         "jquery": "^3.2",
         "laravel-mix": "^5.0.4",
+        "laravel-mix-modernizr": "^1.0.1",
         "less": "^3.12.2",
         "less-loader": "^6.2.0",
         "node-sass": "^4.14.1",
@@ -23,6 +26,7 @@
         "sass": "^1.20.1",
         "sass-loader": "^8.0.0",
         "vue": "^2.5.17",
-        "vue-template-compiler": "^2.6.10"
+        "vue-template-compiler": "^2.6.10",
+        "webshim": "^1.16.0"
     }
 }
