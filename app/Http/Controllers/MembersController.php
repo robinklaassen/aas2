@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Member;
+use App\Skill;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
@@ -71,8 +72,25 @@ class MembersController extends Controller
 	{
 		$member->update($request->except(["skills", "roles"]));
 
-		$member->skills()->sync($request->input("skills"));
+		// Update skills
+		$skills = $request->input('skills'); // this is an array with ids of existing skills (as strings!) and string tags of new skills
 
+
+		// $skills = collect($request->input('skills'));  // note this has the ids of existing skills as strings
+		// dd($skills);
+		// $all_skill_ids = Skill::all()->pluck('id');
+
+		// list($skill_ids, $new_skills) = $skills->partition(function ($i) use ($all_skill_ids) {
+		// 	$all_skill_ids->contains($i);  // probably fails on str - int comparison
+		// });
+
+		// foreach ($new_skills as $skill) {
+		// 	$skill_ids[] = Skill::create(['tag' => $skill])->id;
+		// }
+
+		// $member->skills()->sync($skill_ids);
+
+		// Update roles
 		$user = $member->user()->first();
 		if ($user) {
 			$user->roles()->sync($request->input("roles"));
