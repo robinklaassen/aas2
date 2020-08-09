@@ -75,8 +75,20 @@
 						<td>{{ $declaration->description }}</td>
 						<td>{!! formatPrice($declaration->amount) !!}</td>
 						<td>{{ ($declaration->gift ? 'Ja' : 'Nee') }}</td>
-						<td><a href="{{ url('/declarations', [$declaration->id, 'edit']) }}"><span class="glyphicon glyphicon-edit" data-toggle="tooltip" title="Bewerken"></span></a></td>
-						<td><a href="{{ url('/declarations', [$declaration->id, 'delete']) }}"><span class="glyphicon glyphicon-remove" data-toggle="tooltip" title="Verwijderen"></span></a></td>
+						<td>
+							@can('update', $declaration)
+							<a href="{{ url('/declarations', [$declaration->id, 'edit']) }}">
+								<span class="glyphicon glyphicon-edit" data-toggle="tooltip" title="Bewerken"></span>
+							</a>
+							@endcan
+						</td>
+						<td>
+							@can('delete', $declaration)
+							<a href="{{ url('/declarations', [$declaration->id, 'delete']) }}">
+								<span class="glyphicon glyphicon-remove" data-toggle="tooltip" title="Verwijderen"></span>
+							</a>
+							@endcan
+						</td>
 					</tr>
 				@endforeach
 			</tbody>

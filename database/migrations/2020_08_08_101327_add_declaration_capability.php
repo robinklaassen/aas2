@@ -30,6 +30,16 @@ class AddDeclarationCapability extends Migration
             'Declaraties - Inzien',
             'treasurer'
         );
+        CapabilityHelper::new(
+            'declarations::delete',
+            'Declaraties - Verwijderen',
+            'treasurer'
+        );
+        CapabilityHelper::new(
+            'declarations::edit',
+            'Declaraties - Bewerken',
+            'treasurer'
+        );
 
         CapabilityHelper::new(
             'declarations::process',
