@@ -12,7 +12,7 @@ require('laravel-mix-modernizr');
  |
  */
 
-mix.js('resources/js/app.js', 'public/js')
+mix.ts('resources/js/app.ts', 'public/js')
    .sass('resources/sass/app.scss', 'public/css/_app.scss.css')
    .less('resources/less/app.less', 'public/css/_app.less.css')
    .styles([

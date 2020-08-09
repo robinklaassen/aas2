@@ -24,23 +24,10 @@ input, select, #row-add {
 
 {!! Form::open(['url' => 'declarations/bulk', 'files' => true ]) !!}
 
-<div class="form-group">
-    {!! Form::label('images', 'Bestanden:') !!}
-    {!! Form::file('images', [ "multiple" => true]) !!}
-</div>
-
-<declaration-input-row></declaration-input-row>
+<file-dropzone 
+    multiple="true"
+></file-dropzone>
 
 {!! Form::close() !!}
 
-@endsection
-
-@section('footer')
-
-<script type="text/javascript">
-$(document).ready(function() {
-    $("input[name='images']").change(function() {
-
-    });
-});
 @endsection

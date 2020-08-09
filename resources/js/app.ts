@@ -5,8 +5,9 @@
  */
 
 require('./bootstrap');
+import Vue from "vue";
 
-window.Vue = require('vue');
+(window as any).Vue = Vue;
 
 /**
  * The following block of code may be used to automatically register your
@@ -20,6 +21,7 @@ window.Vue = require('vue');
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
 Vue.component('declaration-input-row', require('./components/declarations/DeclarationInputRow.vue').default);
+Vue.component('file-dropzone', require('./components/FileDropzone.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

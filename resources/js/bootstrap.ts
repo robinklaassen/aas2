@@ -1,4 +1,8 @@
-window._ = require('lodash');
+import lodash from "lodash";
+import $ from "jquery";
+import axios from "axios";
+
+(window as any)._ = lodash;
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
@@ -9,16 +13,17 @@ window._ = require('lodash');
 try {
     // popper.js required for bootstrap 4
     // window.Popper = require('popper.js').default;
-    window.$ = window.jQuery = require('jquery');
+
+    (window as any).$ = (window as any).jQuery = $;
 
     require('bootstrap');
+    require('datatables.net-bs');
+    require('datatables.net-responsive-bs');
 } catch (e) {}
 
-window.Modernizr = require('Modernizr');
-window.webshim = require('webshim');
+const Modernizr = (window as any).Modernizr = require('Modernizr');
+const webshim = (window as any).webshim = require('webshim');
 
-require( 'datatables.net-bs' );
-require( 'datatables.net-responsive-bs' );
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
@@ -26,9 +31,9 @@ require( 'datatables.net-responsive-bs' );
  * CSRF token as a header based on the value of the "XSRF" token cookie.
  */
 
-window.axios = require('axios');
+(window as any).axios = axios;
 
-window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+(window as any).axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 if (!Modernizr.inputtypes.date) {
     webshim.polyfill('forms-ext');
