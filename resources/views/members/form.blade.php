@@ -129,6 +129,12 @@
 	</div>
 </div>
 
+<div class="form-group">
+	{!! Form::label('skills', 'Vaardigheden & interesses') !!}
+	{!! Form::select('skills', \App\Skill::formArray(), null, ['class' => 'form-control', 'multiple' => 'multiple'])
+	!!}
+</div>
+
 @canany("editPractical", \App\Member::class, $member)
 <div class="form-group">
 	{!! Form::label('opmerkingen', 'Overige informatie:') !!}
@@ -191,15 +197,16 @@
 			{!! Form::label('roles', 'Rollen:') !!}
 		</div>
 		<div class="col-sm-9">
-		@foreach (App\Role::all() as $role)
+			@foreach (App\Role::all() as $role)
 			<div class="form-check">
 				<label class="form-check-label">
-				{!! Form::checkbox('roles[]', $role->id, isset($member) ? $member->hasRole($role->tag) : false, ['class' => 'form-check-input']) !!}
-				{{ $role->title }}
-				@if (\Auth::user()->hasRole("admin+"))  ({{ $role->tag }}) @endif
+					{!! Form::checkbox('roles[]', $role->id, isset($member) ? $member->hasRole($role->tag) : false,
+					['class' => 'form-check-input']) !!}
+					{{ $role->title }}
+					@if (\Auth::user()->hasRole("admin+")) ({{ $role->tag }}) @endif
 				</label>
 			</div>
-		@endforeach
+			@endforeach
 		</div>
 	</div>
 </div>
