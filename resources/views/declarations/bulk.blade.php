@@ -15,8 +15,7 @@ input, select, #row-add {
 @section('content')
 <!-- Dit is het formulier voor het afmaken van een nieuwe declaratie -->
 
-
-<h1>Nieuwe declaratie - stap 2</h1>
+<h1>Nieuwe declaraties</h1>
 
 <hr/>
 
@@ -24,9 +23,11 @@ input, select, #row-add {
 
 {!! Form::open(['url' => 'declarations/bulk', 'files' => true ]) !!}
 
-<file-dropzone 
-    multiple="true"
-></file-dropzone>
+<declarations-form 
+	target="{{ url("declarations/create-bulk") }}"
+	redirect-target="{{ url("declarations") }}"
+	csrf="{{ csrf_token() }}"
+></declarations-form>
 
 {!! Form::close() !!}
 

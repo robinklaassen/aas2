@@ -22,6 +22,7 @@
         "laravel-mix-modernizr": "^1.0.1",
         "less": "^3.12.2",
         "less-loader": "^6.2.0",
+        "moment": "^2.27.0",
         "node-sass": "^4.14.1",
         "popper.js": "^1.12",
         "resolve-url-loader": "^2.3.1",

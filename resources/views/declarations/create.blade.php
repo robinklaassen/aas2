@@ -16,7 +16,7 @@ input, select, #row-add {
 <!-- Dit is het formulier voor het afmaken van een nieuwe declaratie -->
 
 
-<h1>Nieuwe declaratie - stap 2</h1>
+<h1>Nieuwe declaratie</h1>
 
 <hr/>
 

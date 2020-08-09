@@ -18,7 +18,7 @@
 				<a class="btn btn-success" type="button" href="{{ url('declarations/admin') }}" style="margin-top:21px;">Admin dashboard</a>
 			@endcan
 			@can('create', \App\Declaration::class)
-				<a class="btn btn-primary" type="button" href="{{ url('declarations/create') }}" style="margin-top:21px;">Nieuwe declaratie</a>
+				<a class="btn btn-primary" type="button" href="{{ url('declarations/create-bulk') }}" style="margin-top:21px;">Nieuwe declaratie</a>
 			@endcan
 		</p>
 	</div>

@@ -20,8 +20,10 @@ import Vue from "vue";
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
+Vue.component('declarations-form', require('./components/declarations/DeclarationsForm.vue').default);
 Vue.component('declaration-input-row', require('./components/declarations/DeclarationInputRow.vue').default);
 Vue.component('file-dropzone', require('./components/FileDropzone.vue').default);
+Vue.component('errors', require('./components/Errors.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

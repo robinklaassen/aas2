@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BulkDeclarationsRequest;
 use App\Declaration;
 use App\Member;
 use App\Http\Controllers\Controller;
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 
 class DeclarationsController extends Controller {
 	const BASE_DIR = "uploads/declarations/";
@@ -80,10 +82,9 @@ class DeclarationsController extends Controller {
 
 	public function file(Declaration $declaration)
 	{
-		$file = $this->storage->get($declaration->filename);
-		$type = $this->storage->mimeType($declaration->filename);
+		$data = $this->declarationService->getFileFor($declaration);
 		
-		return response($file, 200, [ "Content-Type" => $type ]);
+		return response($data['file'], 200, [ 'Content-Type' => $data['type'] ]);
 	}
 
 	/**
@@ -156,6 +157,28 @@ class DeclarationsController extends Controller {
 		$this->authorize('create', Declaration::class);
 		
 		return view('declarations.bulk');
+	}
+
+	public function bulkStore(BulkDeclarationsRequest $request)
+	{
+		$this->authorize('create', Declaration::class);
+		/** @var Member */
+		$member = \Auth::user()->profile;
+
+		$dataRows = $request->input('data.*');
+		foreach ($dataRows as $key => $data) {
+			$image = $request->file('data.' . $key . '.file');
+			$data["original_filename"] = $image->getClientOriginalName();
+			$data["member_id"] = $member->id;
+			$data["filename"] = $this->declarationService->store($member, $image);
+			Declaration::create($data);
+		}
+		
+		$request->session()->flash(
+			'flash_message', 'De declaraties zijn opgeslagen!'
+		);
+
+		return response()->json(["status" => "success"]);
 	}
 	
 	

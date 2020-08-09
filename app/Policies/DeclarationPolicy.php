@@ -85,7 +85,7 @@ class DeclarationPolicy
             || (
                 $user->hasCapability('declarations::self') 
                 && $user->isMember() 
-                && $user->member->id === $declaration->member_id
+                && $user->profile === $declaration->member
                 && !$declaration->isClosed
             );
     }
@@ -103,7 +103,7 @@ class DeclarationPolicy
             || (
                 $user->hasCapability('declarations::self') 
                 && $user->isMember() 
-                && $user->member->id === $declaration->member_id
+                && $user->profile->id === $declaration->member->id
                 && !$declaration->isClosed
             );
     }

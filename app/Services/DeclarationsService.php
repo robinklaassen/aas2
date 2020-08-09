@@ -36,6 +36,14 @@ class DeclarationsService
         return $filepath;
     }
 
+    public function getFileFor(Declaration $declaration): Array
+    {
+        $file = $this->storage->get($declaration->filename);
+        $type = $this->storage->mimeType($declaration->filename);
+        
+        return [ "file" => $file, "type" => $type ];
+    }
+
     public function deleteFileFor(Declaration $declaration) 
     {
         $this->storage->delete($declaration->filename);
