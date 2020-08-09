@@ -69,7 +69,10 @@ class MembersController extends Controller
 	# Update member in DB
 	public function update(Member $member, Requests\MemberRequest $request)
 	{
-		$member->update($request->except("roles"));
+		$member->update($request->except(["skills", "roles"]));
+
+		$member->skills()->sync($request->input("skills"));
+
 		$user = $member->user()->first();
 		if ($user) {
 			$user->roles()->sync($request->input("roles"));

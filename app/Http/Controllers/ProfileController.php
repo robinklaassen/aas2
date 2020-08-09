@@ -127,7 +127,14 @@ class ProfileController extends Controller
 		}
 
 		$profile = \Auth::user()->profile;
-		$profile->update($request->all());
+
+		if (\Auth::user()->profile_type == 'App\Participant') {
+			$profile->update($request->all());
+		} else {
+			$profile->update($request->except('skills'));
+			$profile->skills()->sync($request->input('skills'));
+		}
+
 
 		return redirect('profile')->with([
 			'flash_message' => 'Je profiel is bewerkt!'
