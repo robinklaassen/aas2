@@ -141,7 +141,7 @@ Mijn profiel
 				<td><a href="mailto:{{$member->email}}">{{ $member->email }}</a></td>
 			</tr>
 			@endcan
-			@can("showFinancial", $member)
+			@can("showFinance", $member)
 			<tr>
 				<td>Rekeningnummer</td>
 				<td>{{ $member->iban }}</td>
