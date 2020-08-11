@@ -9,6 +9,7 @@ use App\Facades\Mollie;
 use Illuminate\Http\Request;
 use App\Participant;
 use App\Event;
+use App\Skill;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\internal\MemberOnEventNotification;
 use App\Mail\internal\CoverageChangedNotification;
@@ -132,7 +133,24 @@ class ProfileController extends Controller
 			$profile->update($request->all());
 		} else {
 			$profile->update($request->except('skills'));
-			$profile->skills()->sync($request->input('skills'));
+
+			// Update skills
+			$skills = $request->input('skills'); // this is an array with ids of existing skills (as strings!) and string tags of new skills
+
+			$skill_ids = [];
+			foreach ($skills as $skill_id) {
+				if (is_numeric($skill_id)) {
+					$skill = Skill::find((int) $skill_id);
+				} else {
+					$skill = Skill::findOrCreateByTag($skill_id);
+				}
+
+				if ($skill !== null) {
+					$skill_ids[] = (string) $skill->id;
+				}
+			}
+
+			$profile->skills()->sync($skill_ids);
 		}
 
 

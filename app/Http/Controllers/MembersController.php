@@ -75,20 +75,20 @@ class MembersController extends Controller
 		// Update skills
 		$skills = $request->input('skills'); // this is an array with ids of existing skills (as strings!) and string tags of new skills
 
+		$skill_ids = [];
+		foreach ($skills as $skill_id) {
+			if (is_numeric($skill_id)) {
+				$skill = Skill::find((int) $skill_id);
+			} else {
+				$skill = Skill::findOrCreateByTag($skill_id);
+			}
 
-		// $skills = collect($request->input('skills'));  // note this has the ids of existing skills as strings
-		// dd($skills);
-		// $all_skill_ids = Skill::all()->pluck('id');
+			if ($skill !== null) {
+				$skill_ids[] = (string) $skill->id;
+			}
+		}
 
-		// list($skill_ids, $new_skills) = $skills->partition(function ($i) use ($all_skill_ids) {
-		// 	$all_skill_ids->contains($i);  // probably fails on str - int comparison
-		// });
-
-		// foreach ($new_skills as $skill) {
-		// 	$skill_ids[] = Skill::create(['tag' => $skill])->id;
-		// }
-
-		// $member->skills()->sync($skill_ids);
+		$member->skills()->sync($skill_ids);
 
 		// Update roles
 		$user = $member->user()->first();
