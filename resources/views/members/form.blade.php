@@ -83,7 +83,7 @@
 </div>
 
 <div class="row">
-	@canany("editFinancial", \App\Member::class, $member)
+	@canany("editFinance", \App\Member::class, $member)
 	<div class="col-sm-5 form-group">
 		{!! Form::label('iban', 'Rekeningnummer (IBAN):') !!}
 		{!! Form::text('iban', null, ['class' => 'form-control']) !!}
