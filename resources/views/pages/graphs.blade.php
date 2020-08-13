@@ -59,6 +59,12 @@ Grafieken
 
         <div class="row">
             <div class="col-sm-12">
+                <div id="ave_num_per_camp_chart" style="height:400px;"></div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
                 <div id="memb_part_ratio_chart" style="height:400px;"></div>
             </div>
         </div>
@@ -187,7 +193,7 @@ Grafieken
     var chart = new google.visualization.LineChart(document.getElementById('memb_part_ratio_chart'));
     chart.draw(data, options);
     
-    // Average number of camps per member per year
+    // Average number of camps per member/participant per year
     var data = google.visualization.arrayToDataTable(<?php echo json_encode($data['aveNumCamps']); ?>);
 
     var options = {
@@ -199,6 +205,20 @@ Grafieken
         };
 
     var chart = new google.visualization.LineChart(document.getElementById('ave_num_camps_chart'));
+    chart.draw(data, options);
+
+    // Average number of members and participants per camp
+    var data = google.visualization.arrayToDataTable(<?php echo json_encode($data['aveNumPerCamp']); ?>);
+
+    var options = {
+          title: 'Gemiddeld aantal leiding en deelnemers per kamp',
+          colors: ['purple', 'cyan'],
+          vAxis: {minValue : 1},
+          legend: { position: 'bottom' },
+          pointSize: pointSize
+        };
+
+    var chart = new google.visualization.LineChart(document.getElementById('ave_num_per_camp_chart'));
     chart.draw(data, options);
     
     // Male to female members and participants on camp ratio

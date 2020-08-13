@@ -334,6 +334,7 @@ class PagesController extends Controller
 			")
 		);
 
+		// Construct arrays with statistics per year (e.g. '1415')
 		$camps = \App\Event::where('type', 'kamp')
 			->where('datum_start', '<=', $maxDate)
 			->where('datum_start', '>=', $minDate)
@@ -380,6 +381,7 @@ class PagesController extends Controller
 				$num_participants_female[$year] += $p_f;
 				$member_ids[$year] = array_merge($member_ids[$year], $mids);
 				$participant_ids[$year] = array_merge($participant_ids[$year], $pids);
+				$num_camps[$year] += 1;
 			} else {
 				$num_members[$year] = $m;
 				$num_members_new[$year] = $m_n;
@@ -391,14 +393,17 @@ class PagesController extends Controller
 				$num_participants_female[$year] = $p_f;
 				$member_ids[$year] = $mids;
 				$participant_ids[$year] = $pids;
+				$num_camps[$year] = 1;
 			}
 		}
 
+		// Construct graph data
 		$data['membGrowth'][] = ['Jaar', 'Totaal', 'Uniek', 'Nieuw'];
 		$data['partGrowth'][] = ['Jaar', 'Totaal', 'Uniek', 'Nieuw'];
 		$data['percNew'][] = ['Jaar', 'Leiding', 'Deelnemers'];
 		$data['membPartRatio'][] = ['Jaar', 'Ratio'];
 		$data['aveNumCamps'][] = ['Jaar', 'Leiding', 'Deelnemers'];
+		$data['aveNumPerCamp'][] = ['Jaar', 'Leiding', 'Deelnemers'];
 		$data['maleFemaleRatio'][] = ['Jaar', 'Leiding', 'Deelnemers'];
 		foreach ($num_members as $k => $v) {
 			if ($num_members[$k] != 0 && $num_participants[$k] != 0) {
@@ -408,6 +413,7 @@ class PagesController extends Controller
 				$data['percNew'][] = [$year, round(($num_members_new[$k] / $num_members[$k]) * 100, 1), round(($num_participants_new[$k] / $num_participants[$k]) * 100, 1)];
 				$data['membPartRatio'][] = [$year, round($num_members[$k] / $num_participants[$k], 2)];
 				$data['aveNumCamps'][] = [$year, round(count($member_ids[$k]) / count(array_unique($member_ids[$k])), 2), round(count($participant_ids[$k]) / count(array_unique($participant_ids[$k])), 2)];
+				$data['aveNumPerCamp'][] = [$year, count($member_ids[$k]) / $num_camps[$k], count($participant_ids[$k]) / $num_camps[$k]];
 				if ($num_members_female[$k] > 0 && $num_participants_female[$k] > 0) {
 					$data['maleFemaleRatio'][] = [$year, round($num_members_male[$k] / $num_members_female[$k], 2), round($num_participants_male[$k] / $num_participants_female[$k], 2)];
 				}
