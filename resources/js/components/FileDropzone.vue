@@ -6,30 +6,19 @@
         @dragenter="dragEnter"
         @dragleave="dragLeave"
     >
-        <label>
-            <div v-if="!hasFiles">{{ labelText }}</div>
-            <div v-if="hasFiles">
-                {{ fileCount }} bestanden geselecteerd.
-            </div>
-            <span class="btn btn-primary">Selecteer</span>
-            <input 
-                ref="input"
-                type="file"
-                :multiple="multiple"
-                @change="filesChanged"
-            />
-        </label>
-        <div class="selected-files" v-if="hasFiles && listing">
-            <ul class="list-group">
-                <li class="list-group-item" v-for="(file, index) in files" :key="index">
-                    <span>{{ file.name }}</span>
-                    <a @click="removeItem(index)">
-                        <i class="glyphicon glyphicon-remove"></i>
-                    </a>
-                </li>
-            </ul>
-        </div>  
-    </div>
+            <label>
+                <slot name="label"></slot>
+                <span class="btn btn-primary">Selecteer</span>
+                <input 
+                    ref="input"
+                    type="file"
+                    :multiple="multiple"
+                    @change="filesChanged"
+                />
+            </label>
+            <slot name="more"></slot>     
+        </div>
+    
 </template>
 <style lang="sass" scoped>
     .file-drop
@@ -63,14 +52,11 @@ export default Vue.extend({
             default: true,
         },
         mimetypes: Array,
-        files: {
-            type: Array,
-            default: [] as File[],
-        },
     },
     data() {
         return {
             isHovering: false,
+            files: [] as File[],
         };
     },
     computed: {
@@ -80,16 +66,14 @@ export default Vue.extend({
         fileCount(): number {
             return this.files.length;
         },
-        labelText(): string {
-            return `Selecteer één ${this.multiple ? 'of meerdere bestanden' : 'bestand'}`;
-        }
     },
     methods: {
         filesChanged() {
             const input = this.$refs.input as HTMLInputElement
             if (input.files) {
-                this.files.push(...this.filterFileList(input.files));
+                this.addFiles(this.filterFileList(input.files));
             }
+            input.value = "";
         },
         dragEnter(evt: DragEvent) {
             this.isHovering = true;
@@ -99,7 +83,7 @@ export default Vue.extend({
                 return;
             }
             
-            this.files.push(...this.filterFileList(evt.dataTransfer.files))
+            this.addFiles(this.filterFileList(evt.dataTransfer.files));
             this.isHovering = false;
         },
         dragLeave() {
@@ -111,8 +95,9 @@ export default Vue.extend({
                 return mimeTypes.includes(f.type);
             })
         },
-        removeItem(idx: number) {
-            this.files.splice(idx, 1);
+        addFiles(files: File[]) {
+            this.files.push(...files);
+            this.$emit('files-uploaded', files);
         }
     },
 });

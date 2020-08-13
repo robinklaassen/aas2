@@ -44,9 +44,14 @@ class DeclarationsService
         return [ "file" => $file, "type" => $type ];
     }
 
+    public function deleteFile(string $path)
+    {
+        $this->storage->delete($path);
+    }
+
     public function deleteFileFor(Declaration $declaration) 
     {
-        $this->storage->delete($declaration->filename);
+        $this->deleteFile($declaration->filename);
     }
 
     private function getFilePath(Member $member, string $fileName)

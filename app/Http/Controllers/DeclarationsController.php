@@ -120,7 +120,8 @@ class DeclarationsController extends Controller {
 		}
 
 		$declaration->update($data);
-		$this->declarationService->deleteFileFor($oldFilePath);
+		// delete file after update, to ensure the new file is stored and visible first
+		$this->declarationService->deleteFile($oldFilePath);
 
 		return redirect('declarations')->with([
 			'flash_message' => 'De declaratie is bewerkt!'
@@ -167,10 +168,14 @@ class DeclarationsController extends Controller {
 
 		$dataRows = $request->input('data.*');
 		foreach ($dataRows as $key => $data) {
-			$image = $request->file('data.' . $key . '.file');
-			$data["original_filename"] = $image->getClientOriginalName();
 			$data["member_id"] = $member->id;
-			$data["filename"] = $this->declarationService->store($member, $image);
+			$image = $request->file('data.' . $key . '.file');
+
+			if ($image) {
+				$data["original_filename"] = $image->getClientOriginalName();
+				$data["filename"] = $this->declarationService->store($member, $image);
+			}
+
 			Declaration::create($data);
 		}
 		

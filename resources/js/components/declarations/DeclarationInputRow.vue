@@ -6,93 +6,93 @@
 import Vue from 'vue'
 import moment from 'moment';
 import { Errors } from '../../form/errors';
+import { DeclarationRow } from './data/DeclarationRow';
 
 export default Vue.extend({
     props: {
-        file: File,
+        row: DeclarationRow,
         errors: Errors,
         index: Number,
     },
     data() {
-        return {
-            amount: '0.00',
-            description: '',
-            date: moment().format("YYYY-MM-DD"),
-            gift: false,
-        };
+        return {};
     },
     methods: {
-        removeRow() {
-            this.$emit('declaration-remove');
-        }
     }
 })
 </script>
 <template>
 <div class="row">
     <div class="col-md-2">
-        {{ file.name }}
+        {{ row.fileName }}
     </div>
 
     <div class="col-md-2">
-        <div :class="{ 'form-group': true, 'has-error': this.errors.has('data.' + index + '.date') } ">
+        <div :class="{ 'form-group': true, 'has-error': errors.has('data.' + index + '.date') } ">
             <input
                 class="form-control"
-                v-model="date"
+                v-model="row.date"
                 type="date"
-                @input="this.errors.clear('data.' + index + '.date')"
+                @input="errors.clear('data.' + index + '.date')"
             />
             <span class="help-block">
-                <errors :errors="this.errors.get('data.' + index + '.date') "></errors>
+                <errors :errors="errors.get('data.' + index + '.date') "></errors>
             </span>
         </div>
 
     </div>
 
     <div class="col-md-2">
-        <div :class="{ 'form-group': true, 'has-error': this.errors.has('data.' + index + '.amount') } ">
+        <div :class="{ 'form-group': true, 'has-error': errors.has('data.' + index + '.amount') } ">
             <div class="input-group">
                 <span class="input-group-addon">&euro;</span>
                 <input 
                     class="form-control"
-                    v-model="amount"
+                    v-model="row.amount"
                     type="number"
-                    @input="this.errors.clear('data.' + index + '.amount')"
+                    @input="errors.clear('data.' + index + '.amount')"
                 />
             </div>
             <span class="help-block">
-                <errors :errors="this.errors.get('data.' + index + '.amount') "></errors>
+                <errors :errors="errors.get('data.' + index + '.amount') "></errors>
             </span>
         </div>
     </div>
 
     <div class="col-md-4">
-        <div :class="{ 'form-group': true, 'has-error': this.errors.has('data.' + index + '.description') } ">
+        <div :class="{ 'form-group': true, 'has-error': errors.has('data.' + index + '.description') } ">
             <input 
                 class="form-control"
-                v-model="description"
+                v-model="row.description"
                 @input="this.errors.clear('data.' + index + '.description')"
             />
         </div>
         <span class="help-block">
-            <errors :errors="this.errors.get('data.' + index + '.description') "></errors>
+            <errors :errors="errors.get('data.' + index + '.description') "></errors>
         </span>
     </div>
 
     <div class="col-md-1">
-        <div :class="{ 'form-group': true, 'has-error': this.errors.has('data.' + index + '.gift') } ">
+        <div :class="{ 'form-group': true, 'has-error': errors.has('data.' + index + '.gift') } ">
             <input
                 type="checkbox"
-                v-model="gift"
-                @input="this.errors.clear('data.' + index + '.gift')"
+                v-model="row.gift"
+                @input="errors.clear('data.' + index + '.gift')"
             />
         </div>
         <span class="help-block">
-            <errors :errors="this.errors.get('data.' + index + '.gift') "></errors>
+            <errors :errors="errors.get('data.' + index + '.gift') "></errors>
         </span>
     </div>
     <div class="col-md-1">
-        <a @click.prevent="removeRow">
+        <a @click.prevent="$emit('declaration-copy', row)"
+            title="Regel dupliceren"
+        >
+            <i class="glyphicon glyphicon-copy"></i>
+        </a>
+        <a @click.prevent="$emit('declaration-remove', row)" 
+            title="Regel verwijderen"
+        >
             <i class="glyphicon glyphicon-remove"></i>
         </a>
     </div>

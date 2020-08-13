@@ -1,11 +1,29 @@
 <template>
 <div>
     <file-dropzone
-        :files="files"
         :multiple="true"
         :mimetypes="['image/jpeg', 'image/png']"
         :listing="false"
-    ></file-dropzone>
+        v-on:files-uploaded="newRows"
+    >
+        <template v-slot:label>
+            <p>
+                <template v-if="rows.length">
+                    {{rows.length}} declaratie{{ rows.length > 1 ? "s" : "" }}. <br/>
+                    Selecteer meer bestanden om meer declaraties aan te maken.
+                </template>
+                <template v-else>
+                    Selecteer een bestand om een declaratie aan te maken
+                </template>
+            </p>
+        </template>
+        <template v-slot:more>
+            <br />of<br />
+            <button class="btn btn-secondary" @click.prevent="newRow()" :disabled="isLoading">
+                Nieuwe declaratie zonder bestand
+            </button>
+        </template>
+    </file-dropzone>
 
     <div class="declarations-form">
         <div class="row header">
@@ -32,19 +50,20 @@
         </div>
 
         <declaration-input-row 
-            v-for="(file, index) in files"
+            v-for="(row, index) in rows"
             :key="index"
-            :file="file"
+            :row="row"
             :index="index"
             :errors="errors"
             ref="datarows"
             v-on:declaration-remove="removeRow(index)"
+            v-on:declaration-copy="copyRow(row)"
         ></declaration-input-row>
     </div>
 
     <p class="declarations-error">{{errorMessage}}</p>
-
-    <button class="btn btn-primary" @click.prevent="submit" :disabled="isLoading">
+    
+    <button class="btn btn-primary" @click.prevent="submit()" :disabled="isLoading">
         Versturen
     </button>
 </div>
@@ -63,6 +82,7 @@
 import Vue from 'vue'
 import Axios from 'axios';
 import { Errors } from "../../form/errors"
+import { DeclarationRow } from "./data/DeclarationRow";
 
 export default Vue.extend({
     props: {
@@ -72,15 +92,29 @@ export default Vue.extend({
     },
     data() {
         return {
-            files: [] as File[],
+            rows: [] as DeclarationRow[],
             isLoading: false,
             errorMessage: "",
             errors: new Errors()
         };
     },
     methods: {
+        copyRow(row: DeclarationRow) {
+            const newRow = DeclarationRow.FromDeclaration(row);
+            this.rows.push(newRow);
+            return newRow;
+        },
+        newRows(files: File[]) {
+            files.forEach( f => this.newRow(f));
+        },
+        newRow(file?: File) {
+            const d = new DeclarationRow();
+            d.file = file;
+            this.rows.push(d);
+            return d;
+        },
         removeRow(idx: number) {
-            this.files.splice(idx, 1);
+            this.rows.splice(idx, 1);
         },
         async submit() {
             this.isLoading = true;
@@ -116,13 +150,15 @@ export default Vue.extend({
         },
         getFormData(): FormData {
 
-            const rows = this.$refs.datarows as any[];
+            const rows = this.rows as DeclarationRow[];
 
             const formData = new FormData;
             for (let index = 0; index < rows.length; index++) {
                 const row = rows[index];
                 const prefix = `data[${index}]`;
-                formData.append(`${prefix}[file]`, row.file);
+                if(row.file) {
+                    formData.append(`${prefix}[file]`, row.file);
+                }
                 formData.append(`${prefix}[date]`, row.date);
                 formData.append(`${prefix}[amount]`, row.amount);
                 formData.append(`${prefix}[description]`, row.description);
