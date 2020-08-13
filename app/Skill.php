@@ -8,8 +8,8 @@ class Skill extends Model
 {
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
-    // List all skills from the database keyed by id, so it can be used in HTML select
-    public static function formArray()  // TODO better method name?
+    // List all skills from the database keyed by id, so it can be used as HTML select form options
+    public static function options()
     {
         return Skill::all()->pluck('tag', 'id');
     }

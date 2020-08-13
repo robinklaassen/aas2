@@ -131,7 +131,7 @@
 
 <div class="form-group">
 	{!! Form::label('skills', 'Vaardigheden & interesses') !!}
-	{!! Form::select('skills[]', \App\Skill::formArray(), null, ['class' => 'form-control', 'multiple' => 'multiple',
+	{!! Form::select('skills[]', \App\Skill::options(), null, ['class' => 'form-control', 'multiple' => 'multiple',
 	'id' => 'skills'])
 	!!}
 </div>
