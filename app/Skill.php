@@ -14,9 +14,18 @@ class Skill extends Model
         return Skill::all()->pluck('tag', 'id');
     }
 
+    public static function findOrCreateFromString(string $skill_id)
+    {
+        if (is_numeric($skill_id)) {
+            $skill = Skill::find((int) $skill_id);
+        } else {
+            $skill = Skill::findOrCreateByTag($skill_id);
+        }
+        return $skill;
+    }
+
     public static function findOrCreateByTag(string $tag)
     {
-        // find the skill if it exists, else create it, and return the skill (or just the skill id?)
         $skill = Skill::firstWhere('tag', $tag);
         if ($skill === null) {
             $skill = Skill::create(['tag' => $tag]);
