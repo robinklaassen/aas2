@@ -24,10 +24,6 @@
 	</div>
 </div>
 
-<div class="alert alert-danger alert-important">
-	Let op: in ontwikkeling! Declaraties die je hier doet, worden niet serieus door de penningmeester verwerkt.
-</div>
-
 @if (\Auth::user()->profile->iban == null)
 	<div class="alert alert-danger alert-important">
 		Als je daadwerkelijk geld terug wil krijgen van onze penningmeester, moet je eerst een rekeningnummer invullen op je profiel!

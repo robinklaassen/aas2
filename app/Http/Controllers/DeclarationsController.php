@@ -82,6 +82,8 @@ class DeclarationsController extends Controller {
 
 	public function file(Declaration $declaration)
 	{
+		$this->authorize('view', $declaration);
+		
 		$data = $this->declarationService->getFileFor($declaration);
 		
 		return response($data['file'], 200, [ 'Content-Type' => $data['type'] ]);
