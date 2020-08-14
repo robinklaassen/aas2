@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\MembersController;
+use App\Http\Controllers\ParticipantsController;
 use App\Helpers\Payment\EventPayment;
 use App\Facades\Mollie;
 use Illuminate\Http\Request;
 use App\Participant;
 use App\Event;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\internal\MemberOnEventNotification;
 use App\Mail\internal\CoverageChangedNotification;
@@ -19,9 +22,16 @@ use Illuminate\Support\Arr;
 
 class ProfileController extends Controller
 {
+	/** @var MembersController */
+	private $membersController;
 
-	public function __construct()
+	/** @var ParticipantsController */
+	private $participantsController;
+
+	public function __construct(MembersController $membersController, ParticipantsController $participantsController)
 	{
+		$this->membersController = $membersController;
+		$this->participantsController = $participantsController;
 	}
 
 	/**
@@ -34,25 +44,11 @@ class ProfileController extends Controller
 	{
 		$viewType = 'profile';
 
-		if (\Auth::user()->profile_type == "App\Member") {
-			$member = \Auth::user()->profile;
-
-			// Who has this member been on camp with?
-			$events = $member->events()->where('type', 'kamp')->where('datum_eind', '<', date('Y-m-d'))->get();
-			$fellow_ids = [];
-			foreach ($events as $event) {
-				$fellow_ids = array_merge($fellow_ids, $event->members()->pluck('id')->toArray());
-			}
-			$fellow_ids = array_unique($fellow_ids);
-			if (($key = array_search($member->id, $fellow_ids)) !== false) {
-				unset($fellow_ids[$key]);
-			}
-			$fellows = \App\Member::whereIn('id', $fellow_ids)->orderBy('voornaam')->get();
-
-			return view('members.show', compact('member', 'viewType', 'fellows'));
+		if (Auth::user()->isMember()) {
+			return $this->membersController->show(Auth::user()->profile);
 		}
 
-		if (\Auth::user()->profile_type == "App\Participant") {
+		if (\Auth::user()->isParticipant()) {
 			$participant = \Auth::user()->profile;
 			// Make a 'courses on camp' array
 			$courseOnCamp = [];

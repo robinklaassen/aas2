@@ -244,7 +244,7 @@ class Member extends Model
 		return $data;
 	}
 
-	// Get list of unique other members that this person has been on camp withPivot
+	// Get list of unique other members that this person has been on camp with
 	public function getFellowsAttribute()
 	{
 		$events = $this->events()->where('type', 'kamp')->where('datum_eind', '<', date('Y-m-d'))->get();
