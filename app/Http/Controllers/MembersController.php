@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Member;
 use App\Http\Requests;
+use App\Http\Requests\MemberRequest;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\MembersExport;
+use Illuminate\Support\Facades\URL;
 
 class MembersController extends Controller
 {
@@ -22,23 +24,11 @@ class MembersController extends Controller
 		$current_members = Member::orderBy('voornaam', 'asc')->whereIn('soort', ['normaal', 'aspirant', 'info'])->get();
 		$former_members = Member::orderBy('voornaam', 'asc')->where('soort', 'oud')->get();
 		return view('members.index', compact('current_members', 'former_members'));
-		if (\Auth::user()->can("listOldMembers", Member::class)) {
-			// Show standard index
-			$current_members = Member::orderBy('voornaam', 'asc')->whereIn('soort', ['normaal', 'aspirant', 'info'])->get();
-			$former_members = Member::orderBy('voornaam', 'asc')->where('soort', 'oud')->get();
-			return view('members.index', compact('current_members', 'former_members'));
-		} else {
-			// Something
-			$members = Member::orderBy('voornaam', 'asc')->whereIn('soort', ['normaal', 'aspirant', 'info'])->get();
-			return view('members.list', compact('members'));
-		}
 	}
 
 	# Member details page
-	public function show(Member $member)
+	public function show(Member $member, string $viewType = 'admin')
 	{
-		$viewType = 'admin';
-
 		return view('members.show', compact('member', 'viewType'));
 	}
 
@@ -60,23 +50,26 @@ class MembersController extends Controller
 	}
 
 	# Edit member form
-	public function edit(Member $member)
+	public function edit(Member $member, string $viewType = 'admin')
 	{
-		$viewType = 'admin';
 		return view('members.edit', compact('member', 'viewType'));
 	}
 
 	# Update member in DB
-	public function update(Member $member, Requests\MemberRequest $request)
+	public function update(Member $member, MemberRequest $request)
 	{
 		$member->update($request->except("roles"));
 		$user = $member->user()->first();
-		if ($user) {
+		if ($user && $request->input('roles')) {
 			$user->roles()->sync($request->input("roles"));
 		}
 
-		return redirect('members/' . $member->id)->with([
-			'flash_message' => 'Het lid is bewerkt!'
+		// FIXME changes aren't synced! Guessing MemberRequest does not get constructed properly
+
+		$redirect_to = (strpos(URL::current(), 'profile') !== false) ? 'profile' : 'members/' . $member->id;
+
+		return redirect($redirect_to)->with([
+			'flash_message' => 'De wijzigingen zijn opgeslagen!'
 		]);
 	}
 

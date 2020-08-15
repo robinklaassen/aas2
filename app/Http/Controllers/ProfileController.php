@@ -11,6 +11,7 @@ use App\Facades\Mollie;
 use Illuminate\Http\Request;
 use App\Participant;
 use App\Event;
+use App\Http\Requests\MemberRequest;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\internal\MemberOnEventNotification;
@@ -45,7 +46,7 @@ class ProfileController extends Controller
 		$viewType = 'profile';
 
 		if (Auth::user()->isMember()) {
-			return $this->membersController->show(Auth::user()->profile);
+			return $this->membersController->show(Auth::user()->profile, $viewType);
 		}
 
 		if (\Auth::user()->isParticipant()) {
@@ -75,11 +76,11 @@ class ProfileController extends Controller
 	 */
 	public function edit()
 	{
+
 		$viewType = 'profile';
 
-		if (\Auth::user()->profile_type == "App\Member") {
-			$member = \Auth::user()->profile;
-			return view('members.edit', compact('member', 'viewType'));
+		if (Auth::user()->isMember()) {
+			return $this->membersController->edit(Auth::user()->profile, $viewType);
 		}
 
 		if (\Auth::user()->profile_type == "App\Participant") {
@@ -96,38 +97,55 @@ class ProfileController extends Controller
 	 */
 	public function update(Request $request)
 	{
-		// Validate. First fields that are equal for both members and participants
-		$v = \Validator::make($request->all(), [
-			'voornaam' => 'required',
-			'achternaam' => 'required',
-			'geboortedatum' => 'required|regex:/\d{4}-\d{2}-\d{2}/',
-			'geslacht' => 'required',
-			'adres' => 'required',
-			'postcode' => ['required', 'regex:/\d{4}\s?[A-z]{2}/'],
-			'plaats' => 'required',
-			'hoebij' => 'required'
-		]);
+		//dd(get_object_vars($request));
 
-		// Required fields for members
-		$v->sometimes(['telefoon', 'email', 'studie', 'afgestudeerd'], 'required', function ($input) {
-			return (\Auth::user()->profile_type == 'App\Member');
-		});
-
-		// Required fields for participants
-		$v->sometimes(['email_ouder', 'school', 'niveau', 'klas'], 'required', function ($input) {
-			return (\Auth::user()->profile_type == 'App\Participant');
-		});
-
-		if ($v->fails()) {
-			return redirect()->back()->withErrors($v->errors());
+		if (Auth::user()->isMember()) {
+			return $this->membersController->update(
+				Auth::user()->profile,
+				new MemberRequest(
+					$request->query,
+					$request->request,
+					$request->attributes,
+					$request->cookies,
+					$request->files,
+					$request->server,
+					$request->content
+				)
+			);
 		}
 
-		$profile = \Auth::user()->profile;
-		$profile->update($request->all());
+		// // Validate. First fields that are equal for both members and participants
+		// $v = \Validator::make($request->all(), [
+		// 	'voornaam' => 'required',
+		// 	'achternaam' => 'required',
+		// 	'geboortedatum' => 'required|regex:/\d{4}-\d{2}-\d{2}/',
+		// 	'geslacht' => 'required',
+		// 	'adres' => 'required',
+		// 	'postcode' => ['required', 'regex:/\d{4}\s?[A-z]{2}/'],
+		// 	'plaats' => 'required',
+		// 	'hoebij' => 'required'
+		// ]);
 
-		return redirect('profile')->with([
-			'flash_message' => 'Je profiel is bewerkt!'
-		]);
+		// // Required fields for members
+		// $v->sometimes(['telefoon', 'email', 'studie', 'afgestudeerd'], 'required', function ($input) {
+		// 	return (\Auth::user()->profile_type == 'App\Member');
+		// });
+
+		// // Required fields for participants
+		// $v->sometimes(['email_ouder', 'school', 'niveau', 'klas'], 'required', function ($input) {
+		// 	return (\Auth::user()->profile_type == 'App\Participant');
+		// });
+
+		// if ($v->fails()) {
+		// 	return redirect()->back()->withErrors($v->errors());
+		// }
+
+		// $profile = \Auth::user()->profile;
+		// $profile->update($request->all());
+
+		// return redirect('profile')->with([
+		// 	'flash_message' => 'Je profiel is bewerkt!'
+		// ]);
 	}
 
 	# Upload photo
