@@ -1,8 +1,24 @@
-<?php namespace App\Http\Requests;
+<?php
+
+namespace App\Http\Requests;
 
 use App\Http\Requests\Request;
 
-class MemberRequest extends Request {
+class MemberRequest extends Request
+{
+	// TODO double with ParticipantRequest, how to refactor?
+	public static function fromRequest(Request $request): MemberRequest
+	{
+		return new MemberRequest(
+			$request->query->all(),
+			$request->request->all(),
+			$request->attributes->all(),
+			$request->cookies->all(),
+			$request->files->all(),
+			$request->server->all(),
+			$request->content
+		);
+	}
 
 	/**
 	 * Determine if the user is authorized to make this request.
@@ -37,5 +53,4 @@ class MemberRequest extends Request {
 			'hoebij' => 'required'
 		];
 	}
-
 }

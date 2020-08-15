@@ -64,8 +64,6 @@ class MembersController extends Controller
 			$user->roles()->sync($request->input("roles"));
 		}
 
-		// FIXME changes aren't synced! Guessing MemberRequest does not get constructed properly
-
 		$redirect_to = (strpos(URL::current(), 'profile') !== false) ? 'profile' : 'members/' . $member->id;
 
 		return redirect($redirect_to)->with([

@@ -102,15 +102,7 @@ class ProfileController extends Controller
 		if (Auth::user()->isMember()) {
 			return $this->membersController->update(
 				Auth::user()->profile,
-				new MemberRequest(
-					$request->query,
-					$request->request,
-					$request->attributes,
-					$request->cookies,
-					$request->files,
-					$request->server,
-					$request->content
-				)
+				MemberRequest::fromRequest($request)
 			);
 		}
 
