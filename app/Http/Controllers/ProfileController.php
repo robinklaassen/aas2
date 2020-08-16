@@ -97,31 +97,13 @@ class ProfileController extends Controller
 	 */
 	public function update(Request $request)
 	{
-		//dd(get_object_vars($request));
 
 		if (Auth::user()->isMember()) {
 			return $this->membersController->update(
 				Auth::user()->profile,
-				MemberRequest::fromRequest($request)
+				$request
 			);
 		}
-
-		// // Validate. First fields that are equal for both members and participants
-		// $v = \Validator::make($request->all(), [
-		// 	'voornaam' => 'required',
-		// 	'achternaam' => 'required',
-		// 	'geboortedatum' => 'required|regex:/\d{4}-\d{2}-\d{2}/',
-		// 	'geslacht' => 'required',
-		// 	'adres' => 'required',
-		// 	'postcode' => ['required', 'regex:/\d{4}\s?[A-z]{2}/'],
-		// 	'plaats' => 'required',
-		// 	'hoebij' => 'required'
-		// ]);
-
-		// // Required fields for members
-		// $v->sometimes(['telefoon', 'email', 'studie', 'afgestudeerd'], 'required', function ($input) {
-		// 	return (\Auth::user()->profile_type == 'App\Member');
-		// });
 
 		// // Required fields for participants
 		// $v->sometimes(['email_ouder', 'school', 'niveau', 'klas'], 'required', function ($input) {

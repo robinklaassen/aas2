@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Member;
 use App\Http\Requests;
+use Illuminate\Http\Request;
 use App\Http\Requests\MemberRequest;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\MembersExport;
+use App\Helpers\URLHelper;
 use Illuminate\Support\Facades\URL;
 
 class MembersController extends Controller
@@ -56,15 +58,18 @@ class MembersController extends Controller
 	}
 
 	# Update member in DB
-	public function update(Member $member, MemberRequest $request)
+	public function update(Member $member, Request $request)
 	{
+		// Manual validation here so requests can be passed from ProfileController to here
+		$request->validate(MemberRequest::RULES);
+
 		$member->update($request->except("roles"));
 		$user = $member->user()->first();
 		if ($user && $request->input('roles')) {
 			$user->roles()->sync($request->input("roles"));
 		}
 
-		$redirect_to = (strpos(URL::current(), 'profile') !== false) ? 'profile' : 'members/' . $member->id;
+		$redirect_to = URLHelper::isProfile() ? 'profile' : 'members/' . $member->id;
 
 		return redirect($redirect_to)->with([
 			'flash_message' => 'De wijzigingen zijn opgeslagen!'

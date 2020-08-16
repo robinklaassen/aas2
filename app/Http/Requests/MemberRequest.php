@@ -6,19 +6,21 @@ use App\Http\Requests\Request;
 
 class MemberRequest extends Request
 {
-	// TODO double with ParticipantRequest, how to refactor?
-	public static function fromRequest(Request $request): MemberRequest
-	{
-		return new MemberRequest(
-			$request->query->all(),
-			$request->request->all(),
-			$request->attributes->all(),
-			$request->cookies->all(),
-			$request->files->all(),
-			$request->server->all(),
-			$request->content
-		);
-	}
+	const RULES = [
+		'voornaam' => 'required',
+		'achternaam' => 'required',
+		'geboortedatum' => 'required|regex:/\d{4}-\d{2}-\d{2}/',
+		'geslacht' => 'required',
+		'adres' => 'required',
+		'postcode' => ['required', 'regex:/\d{4}\s?[A-z]{2}/'],
+		'plaats' => 'required',
+		'telefoon' => 'required|digits:10',
+		'email' => 'required|email',
+		'studie' => 'required',
+		'afgestudeerd' => 'required|boolean',
+		'email_anderwijs' => 'nullable|email',
+		'hoebij' => 'required'
+	];
 
 	/**
 	 * Determine if the user is authorized to make this request.
@@ -37,20 +39,6 @@ class MemberRequest extends Request
 	 */
 	public function rules()
 	{
-		return [
-			'voornaam' => 'required',
-			'achternaam' => 'required',
-			'geboortedatum' => 'required|regex:/\d{4}-\d{2}-\d{2}/',
-			'geslacht' => 'required',
-			'adres' => 'required',
-			'postcode' => ['required', 'regex:/\d{4}\s?[A-z]{2}/'],
-			'plaats' => 'required',
-			'telefoon' => 'required|digits:10',
-			'email' => 'required|email',
-			'studie' => 'required',
-			'afgestudeerd' => 'required|boolean',
-			'email_anderwijs' => 'sometimes|email',
-			'hoebij' => 'required'
-		];
+		return self::RULES;
 	}
 }
