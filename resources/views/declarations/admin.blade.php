@@ -127,11 +127,11 @@
 							<a href="{{ url('/members', $declaration->member->id) }}">{{ $declaration->member->voornaam }} {{ $declaration->member->tussenvoegsel }} {{ $declaration->member->achternaam }}</a>
 						</td>
 						<td>
-							@unless ($declaration->filename === null)
-								<a href="{{ asset('uploads/declarations/' . $declaration->member->id . '/' . $declaration->filename) }}" target="_blank">{{$declaration->filename}}</a>
+							@if ($declaration->filename)
+								<a href="{{ url('declarations/' . $declaration->id, 'file') }}" target="_blank">{{$declaration->original_filename}}</a>
 							@else
 								-
-							@endunless
+							@endif
 						</td>
 						<td>{{ $declaration->description }}</td>
 						<td>@money($declaration->amount)</td>
