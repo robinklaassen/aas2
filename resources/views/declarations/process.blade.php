@@ -65,11 +65,11 @@
     </p>
     @if ($member->iban)
     <p>
-        Bankrekening nummer <b>{{ $member->iban }}</b> ten name van <b>{{ $member->volnaam }}</b>
+        Bankrekeningnummer <b>{{ $member->iban }}</b> ten name van <b>{{ $member->volnaam }}</b>
     </p>
     @else
         <p class="alert alert-warning">
-            Geen bankrekening nummer voor {{ $member->volnaam }}
+            Geen bankrekeningnummer voor {{ $member->volnaam }}
         </p>
     @endif
 

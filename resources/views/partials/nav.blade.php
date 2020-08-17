@@ -47,7 +47,7 @@
 						@endrole
 						@can("viewOwn", \App\Declaration::class)
 						<li class="{{ substr(Request::path(),0,5) == 'declaration' ? 'active' : ''}}">
-							<a href="{{ url('/declarations') }}">Declarations</a>
+							<a href="{{ url('/declarations') }}">Declaraties</a>
 						</li>
 						@endcan
 					</ul>
