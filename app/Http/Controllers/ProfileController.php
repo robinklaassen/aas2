@@ -135,7 +135,7 @@ class ProfileController extends Controller
 			$profile->update($request->except('skills'));
 
 			// Update skills
-			$skills = $request->input('skills') ?: []; // this is an array with ids of existing skills (as strings!) and string tags of new skills
+			$skills = $request->input('skills') ?? []; // this is an array with ids of existing skills (as strings!) and string tags of new skills
 
 			$skill_ids = [];
 			foreach ($skills as $skill_id) {

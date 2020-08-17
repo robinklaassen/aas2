@@ -73,7 +73,7 @@ class MembersController extends Controller
 		$member->update($request->except(["skills", "roles"]));
 
 		// Update skills
-		$skills = $request->input('skills') ?: []; // this is an array with ids of existing skills (as strings!) and string tags of new skills
+		$skills = $request->input('skills') ?? []; // this is an array with ids of existing skills (as strings!) and string tags of new skills
 
 		$skill_ids = [];
 		foreach ($skills as $skill_id) {

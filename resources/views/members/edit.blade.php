@@ -36,7 +36,7 @@ Mijn gegevens bewerken
 
 @section('script')
 <script type="text/javascript">
-	$(document).ready(function() {
+$(document).ready(function() {
 	$("#skills").select2({
 		tags: true,
 		tokenSeparators: [',', ' ']
