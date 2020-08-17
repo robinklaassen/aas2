@@ -48,26 +48,6 @@
 	{{ Html::script('js/vendor.js') }}
 	{{ Html::script('js/app.js') }}
 
-	<!-- Load jQuery and Bootstrap scripts -->
-	{{-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script> --}}
-
-	<!-- Load DataTables scripts -->
-	{{-- <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.10/js/jquery.dataTables.min.js">
-	</script> --}}
-	{{-- <script type="text/javascript" charset="utf8"
-		src="https://cdn.datatables.net/1.10.10/js/dataTables.bootstrap.min.js"></script>
-	<script type="text/javascript" charset="utf8"
-		src="https://cdn.datatables.net/responsive/2.0.0/js/dataTables.responsive.min.js"></script>
-	<script type="text/javascript" charset="utf8"
-		src="https://cdn.datatables.net/responsive/2.0.0/js/responsive.bootstrap.min.js"></script> --}}
-
-	<!-- Load Modernizr and webshims scripts -->
-	{{-- <script type="text/javascript" charset="utf8"
-		src="//cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
-	<script type="text/javascript" charset="utf8"
-		src="//cdnjs.cloudflare.com/ajax/libs/webshim/1.15.7/minified/polyfiller.js"></script> --}}
-
 	<script type="text/javascript">
 
 		// On DOM ready...

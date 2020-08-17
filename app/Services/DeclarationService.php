@@ -2,13 +2,14 @@
 
 namespace App\Services;
 
+use App\Data\FileData;
 use App\Declaration;
 use App\Member;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use League\Flysystem\Filesystem;
 
-class DeclarationsService
+class DeclarationService
 {
     private const BASE_DIR = "uploads/declarations/";
 
@@ -20,20 +21,27 @@ class DeclarationsService
         $this->storage = Storage::disk("local");
     }
 
-    public function store(Member $member, UploadedFile $file): string
+    public function store(Member $member, ?UploadedFile $file): ?FileData
     {
-        $filepath = $this->getNewFilePath(
+        if ($file === null) {
+            return null;
+        }
+
+        $filedata = new FileData;
+        $filedata->originalFilepath = $file->getClientOriginalName();
+        $filedata->filepath = $this->getNewFilePath(
             $member, 
             $file
         );
+        $filedata->mimeType = $file->getClientMimeType();
         
         $this->storage->putFileAs(
-            dirname($filepath),
+            dirname($filedata->filepath),
             $file,
-            basename($filepath)
+            basename($filedata->filepath)
         );
 
-        return $filepath;
+        return $filedata;
     }
 
     public function getFileFor(Declaration $declaration): Array
@@ -51,7 +59,9 @@ class DeclarationsService
 
     public function deleteFileFor(Declaration $declaration) 
     {
-        $this->deleteFile($declaration->filename);
+        if($declaration->filename) {
+            $this->deleteFile($declaration->filename);
+        }
     }
 
     private function getFilePath(Member $member, string $fileName)

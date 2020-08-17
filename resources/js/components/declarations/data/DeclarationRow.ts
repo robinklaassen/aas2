@@ -25,7 +25,7 @@ export class DeclarationRow implements IDeclarationRow {
         newRow._date = row._date.clone();
         newRow.description = row.description;
         newRow.gift = row.gift;
-        return row;
+        return newRow;
     }
     
     public amount: string = "0.00";

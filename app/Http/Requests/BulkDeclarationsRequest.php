@@ -13,13 +13,6 @@ class BulkDeclarationsRequest extends Request {
 			'data.*.file' => 'file',
 		];
     }
-
-    public function messages()
-    {
-        return [
-            'gt' => ':attribute moet groter zijn dan :value'
-        ];
-    }
     
     public function attributes()
     {

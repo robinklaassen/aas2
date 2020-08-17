@@ -8,7 +8,7 @@
     <label for="amount">Bedrag:</label>
     <div class="input-group">
         <span class="input-group-addon">&euro;</span>
-        {!! Form::input('number', 'amount', null, ['class' => 'form-control', 'placeholder' => '0.00']) !!}
+        {!! Form::input('number', 'amount', null, ['class' => 'form-control', 'placeholder' => '0.00', 'step' => 'any' ]) !!}
     </div>
 </div>
     

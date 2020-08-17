@@ -57,7 +57,10 @@ class AddDeclarationCapability extends Migration
     {
         CapabilityHelper::delete([
             'declarations::self',
+            'declarations::create',
             'declarations::show',
+            'declarations::delete',
+            'declarations::edit',
             'declarations::process'
         ]);
     }

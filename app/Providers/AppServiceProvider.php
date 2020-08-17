@@ -70,7 +70,7 @@ class AppServiceProvider extends ServiceProvider
 			'App\Services\Registrar',
 		);
 		$this->app->bind(
-			'App\Services\DeclarationsService',
+			'App\Services\DeclarationService',
 		);
 	}
 }

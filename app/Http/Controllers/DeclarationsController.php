@@ -2,26 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Data\FileData;
 use App\Http\Requests\BulkDeclarationsRequest;
 use App\Declaration;
 use App\Member;
 use App\Http\Controllers\Controller;
-use App\Services\DeclarationsService;
+use App\Services\DeclarationService;
 use Carbon\Carbon;
-use Exception;
-use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 
 class DeclarationsController extends Controller {
 	const BASE_DIR = "uploads/declarations/";
 
 	/** @var DeclarationService */
 	private $declarationService;
-	public function __construct(DeclarationsService $declarationService)	{
+	public function __construct(DeclarationService $declarationService)	{
 		$this->declarationService = $declarationService;
 		
         $this->authorizeResource(Declaration::class, 'declaration');
@@ -59,19 +54,15 @@ class DeclarationsController extends Controller {
 	 * @return Response
 	 */
 	public function store(Request $request)
-	{	
-		/** @var UploadedFile */
-		$image = $request->file("image");	
+	{
 		/** @var Member */
 		$member = \Auth::user()->profile;
 		$data = $request->except("image");
 		
 		$data["member_id"] = $member->id;
 		
-		if ($image) {
-			$data["original_filename"] = $image->getClientOriginalName();
-			$this->declarationService->store($member, $image);
-		}
+		$fileData = $this->declarationService->store($member, $image = $request->file("image"));
+		$this->applyFileData($data, $fileData);
 
 		Declaration::create($data);
 
@@ -111,19 +102,18 @@ class DeclarationsController extends Controller {
 	{
 		$oldFilePath = $declaration->filename;
 		$data = $request->except("image");
-		if ($request->hasFile("image")) {
-			/** @var UploadedFile */
-			$image = $request->file("image");
-			$data["original_filename"] = $image->getClientOriginalName();
-			$data["filename"] = $this->declarationService->store(
-				$declaration->member,
-				$image
-			);
-		}
+		
+		$filedata = $this->declarationService->store(
+			$declaration->member,
+			$request->file("image")
+		);
+		$this->applyFileData($data, $filedata);
 
 		$declaration->update($data);
-		// delete file after update, to ensure the new file is stored and visible first
-		$this->declarationService->deleteFile($oldFilePath);
+        if ($filedata) {
+            // delete file after update, to ensure the new file is stored and visible first
+            $this->declarationService->deleteFile($oldFilePath);
+        }
 
 		return redirect('declarations')->with([
 			'flash_message' => 'De declaratie is bewerkt!'
@@ -171,13 +161,13 @@ class DeclarationsController extends Controller {
 		$dataRows = $request->input('data.*');
 		foreach ($dataRows as $key => $data) {
 			$data["member_id"] = $member->id;
-			$image = $request->file('data.' . $key . '.file');
 
-			if ($image) {
-				$data["original_filename"] = $image->getClientOriginalName();
-				$data["filename"] = $this->declarationService->store($member, $image);
-			}
-
+			$fileData = $this->declarationService->store(
+				$member,
+				$request->file("data.${key}.image")
+			);
+			$this->applyFileData($data, $fileData);
+			
 			Declaration::create($data);
 		}
 		
@@ -225,5 +215,13 @@ class DeclarationsController extends Controller {
 		return redirect('declarations/admin')->with([
 			'flash_message' => 'De declaraties zijn verwerkt!'
 		]);
+	}
+
+	private function applyFileData(array &$data, ?FileData $filedata)
+	{
+		if ($filedata) {
+			$data["original_filename"] = $filedata->originalFilepath;
+			$data["filename"] = $filedata->filepath;
+		}
 	}
 }

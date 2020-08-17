@@ -15,12 +15,6 @@ class DeclarationPolicy
         return $this->viewAll($user) || $this->viewOwn($user);
     }
 
-    /**
-     * Determine whether the user can view all declarations.
-     *
-     * @param  \App\User  $user
-     * @return mixed
-     */
     public function viewAll(User $user)
     {
         return $user->hasCapability('declarations::show');
@@ -31,26 +25,11 @@ class DeclarationPolicy
         return $user->hasCapability('declarations::show');
     }
 
-
-    /**
-     * Determine whether the user can view all declarations.
-     *
-     * @param  \App\User  $user
-     * @return mixed
-     */
     public function viewOwn(User $user)
     {
         return $user->hasCapability('declarations::self');
     }
 
-
-    /**
-     * Determine whether the user can view the declaration.
-     *
-     * @param  \App\User  $user
-     * @param  \App\Declaration  $declaration
-     * @return mixed
-     */
     public function view(User $user, Declaration $declaration)
     {
         return $user->hasCapability('declarations::show') 
@@ -61,24 +40,11 @@ class DeclarationPolicy
             );
     }
 
-    /**
-     * Determine whether the user can create declarations.
-     *
-     * @param  \App\User  $user
-     * @return mixed
-     */
     public function create(User $user)
     {
         return $user->hasCapability('declarations::create'); 
     }
 
-    /**
-     * Determine whether the user can update the declaration.
-     *
-     * @param  \App\User  $user
-     * @param  \App\Declaration  $declaration
-     * @return mixed
-     */
     public function update(User $user, Declaration $declaration)
     {
         return $user->hasCapability('declarations::edit') 
@@ -90,13 +56,6 @@ class DeclarationPolicy
             );
     }
 
-    /**
-     * Determine whether the user can delete the declaration.
-     *
-     * @param  \App\User  $user
-     * @param  \App\Declaration  $declaration
-     * @return mixed
-     */
     public function delete(User $user, Declaration $declaration)
     {
         return $user->hasCapability('declarations::delete') 
@@ -107,5 +66,4 @@ class DeclarationPolicy
                 && !$declaration->isClosed
             );
     }
-
 }

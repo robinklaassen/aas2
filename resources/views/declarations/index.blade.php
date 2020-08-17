@@ -69,7 +69,7 @@
 							@endunless
 						</td>
 						<td>{{ $declaration->description }}</td>
-						<td>{!! formatPrice($declaration->amount) !!}</td>
+						<td>@money($declaration->amount)</td>
 						<td>{{ ($declaration->gift ? 'Ja' : 'Nee') }}</td>
 						<td>
 							@can('update', $declaration)

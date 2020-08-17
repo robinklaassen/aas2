@@ -157,7 +157,7 @@ export default Vue.extend({
                 const row = rows[index];
                 const prefix = `data[${index}]`;
                 if(row.file) {
-                    formData.append(`${prefix}[file]`, row.file);
+                    formData.append(`${prefix}[image]`, row.file);
                 }
                 formData.append(`${prefix}[date]`, row.date);
                 formData.append(`${prefix}[amount]`, row.amount);
