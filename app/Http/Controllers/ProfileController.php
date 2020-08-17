@@ -6,6 +6,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\MembersController;
 use App\Http\Controllers\ParticipantsController;
+use App\Http\Controllers\UsersController;
 use App\Helpers\Payment\EventPayment;
 use App\Facades\Mollie;
 use Illuminate\Http\Request;
@@ -29,10 +30,17 @@ class ProfileController extends Controller
 	/** @var ParticipantsController */
 	private $participantsController;
 
-	public function __construct(MembersController $membersController, ParticipantsController $participantsController)
+	/** @var UsersController */
+	private $usersController;
+
+	public function __construct(
+		MembersController $membersController, 
+		ParticipantsController $participantsController, 
+		UsersController $usersController)
 	{
 		$this->membersController = $membersController;
 		$this->participantsController = $participantsController;
+		$this->usersController = $usersController;
 	}
 
 	/**
@@ -128,8 +136,7 @@ class ProfileController extends Controller
 		if ($request->hasFile('photo')) {
 			$file = $request->file('photo');
 			if ($file->isValid()) {
-				//dd('yes, this is a good file, with extension '.$file->getClientOriginalExtension());
-				$profile = \Auth::user()->profile;
+				$profile = Auth::user()->profile;
 
 				// Move the file to storage
 				$destPath = public_path() . '/img/profile/full/';
@@ -140,12 +147,6 @@ class ProfileController extends Controller
 				return redirect('profile')->with([
 					'flash_message' => 'Je foto is geupload! Hard refresh je browser (ctrl + F5) om hem te kunnen zien'
 				]);
-
-				/*
-				sleep(2);
-
-				return view('profile.cropPhoto', compact('fName'));
-				*/
 			} else {
 				// Upload error
 				dd('upload error :(');
@@ -159,30 +160,19 @@ class ProfileController extends Controller
 	# Set new password
 	public function password()
 	{
-		$user = \Auth::user();
 		$viewType = 'profile';
-		return view('users.password', compact('user', 'viewType'));
+		return $this->usersController->password(Auth::user(), $viewType);
 	}
 
 	public function passwordSave(Request $request)
 	{
-		$user = \Auth::user();
-		$this->validate($request, [
-			'password' => 'required|confirmed'
-		]);
-
-		$user->password = bcrypt($request->password);
-		$user->save();
-
-		return redirect('profile')->with([
-			'flash_message' => 'Het nieuwe wachtwoord is ingesteld!'
-		]);
+		return $this->usersController->passwordSave(Auth::user(), $request);
 	}
 
 	# Add course (member) (form)
 	public function addCourse()
 	{
-		$member = \Auth::user()->profile;
+		$member = Auth::user()->profile;
 		$viewType = 'profile';
 		return view('members.addCourse', compact('member', 'viewType'));
 	}
@@ -190,8 +180,8 @@ class ProfileController extends Controller
 	# Add course (member) (update database)
 	public function addCourseSave()
 	{
-		$member = \Auth::user()->profile;
-		$course_id = \Request::input('selected_course');
+		$member = Auth::user()->profile;
+		$course_id = Request::input('selected_course');
 		$course = \App\Course::find($course_id);
 		$courseLevelFrom = 0;
 
