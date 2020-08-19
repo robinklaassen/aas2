@@ -12,8 +12,8 @@ addons:
 stages:
   - test-backend
   - test-build-deploy
-  - name: deploy
-    if: (branch = master) AND (type = push)
+  # - name: deploy
+  #   if: (branch = master) AND (type = push)
 
 
 jobs:
@@ -35,17 +35,21 @@ jobs:
         - npm install
       script:
         - npm run production
-        - rsync -a --include-from=deployment/file-list.txt anderwijsnl@ftp.anderwijs.nl:~/domains/anderwijs.nl/htdocs/public/test
-    - stage: deploy
-      script:
-        - npm run production
       deploy:
         provider: script
         skip_cleanup: true
         script:
-          - deployment/before_deploy.sh
-          - deployment/deploy.sh
-          - deployment/after_deploy.sh
+          - rsync -r --delete-after --include-from=deployment/file-list.txt anderwijsnl@ftp.anderwijs.nl:~/domains/anderwijs.nl/htdocs/public/test
+    # - stage: deploy
+    #   script:
+    #     - npm run production
+    #   deploy:
+    #     provider: script
+    #     skip_cleanup: true
+    #     script:
+    #       - deployment/before_deploy.sh
+    #       - deployment/deploy.sh
+    #       - deployment/after_deploy.sh
 
 install:
   - mkdir -p bootstrap/cache

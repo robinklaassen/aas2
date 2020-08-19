@@ -7,4 +7,4 @@ git pull origin master
 
 EOF
 
-rsync -a --include-from=deployment/file-list.txt anderwijsnl@ftp.anderwijs.nl:~/domains/anderwijs.nl/htdocs/public 
+rsync -r --delete-after --include-from=deployment/file-list.txt anderwijsnl@ftp.anderwijs.nl:~/domains/anderwijs.nl/htdocs/public 
