@@ -70,12 +70,6 @@ jobs:
           - deployment/deploy.sh
           - deployment/after_deploy.sh
 
-# install:
-#   - mkdir -p bootstrap/cache
-#   - composer self-update
-#   - composer install --no-interaction
-#   - npm install
-
 cache:
   npm: true
   directories:
