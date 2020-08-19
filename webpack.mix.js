@@ -23,6 +23,7 @@ mix.ts('resources/js/app.ts', 'public/js')
    .extract([
       "vue",
       "jquery",
+      "select2",
       "bootstrap",
       "Modernizr",
       "webshim",

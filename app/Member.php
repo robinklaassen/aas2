@@ -2,11 +2,14 @@
 
 namespace App;
 
+use Collective\Html\Eloquent\FormAccessible;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 
 class Member extends Model
 {
+
+	use FormAccessible;
 
 	protected $guarded = ['id', 'created_at', 'updated_at'];
 
@@ -40,6 +43,12 @@ class Member extends Model
 	public function courses()
 	{
 		return $this->belongsToMany('App\Course')->withPivot('klas');
+	}
+
+	// A member belongs to many skills
+	public function skills()
+	{
+		return $this->belongsToMany('App\Skill')->withTimestamps();
 	}
 
 	// A member can have one user account
@@ -277,5 +286,10 @@ class Member extends Model
 	public function isUser(User $user)
 	{
 		return $this->user->id === $user->id;
+	}
+
+	public function formSkillsAttribute($value)
+	{
+		return $this->skills()->pluck('id');
 	}
 }

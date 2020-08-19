@@ -9,6 +9,7 @@ use App\Facades\Mollie;
 use Illuminate\Http\Request;
 use App\Participant;
 use App\Event;
+use App\Skill;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\internal\MemberOnEventNotification;
 use App\Mail\internal\CoverageChangedNotification;
@@ -127,7 +128,23 @@ class ProfileController extends Controller
 		}
 
 		$profile = \Auth::user()->profile;
-		$profile->update($request->all());
+
+		if (\Auth::user()->profile_type == 'App\Participant') {
+			$profile->update($request->all());
+		} else {
+			$profile->update($request->except('skills'));
+
+			// Update skills
+			$skills = $request->input('skills') ?? []; // this is an array with ids of existing skills (as strings!) and string tags of new skills
+
+			$skill_ids = [];
+			foreach ($skills as $skill_id) {
+				$skill_ids[] = Skill::findOrCreateFromString($skill_id)->id;
+			}
+
+			$profile->skills()->sync($skill_ids);
+		}
+
 
 		return redirect('profile')->with([
 			'flash_message' => 'Je profiel is bewerkt!'

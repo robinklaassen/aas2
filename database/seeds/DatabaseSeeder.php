@@ -29,7 +29,9 @@ class DatabaseSeeder extends Seeder
 			ActionTableSeeder::class,
 			ReviewTableSeeder::class,
 			MemberReviewPivotSeeder::class,
-			CommentTableSeeder::class
+			CommentTableSeeder::class,
+			SkillTableSeeder::class,
+			MemberSkillPivotSeeder::class
 		]);
 	}
 }

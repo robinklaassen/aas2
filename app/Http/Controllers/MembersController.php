@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Member;
+use App\Skill;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
@@ -69,7 +70,19 @@ class MembersController extends Controller
 	# Update member in DB
 	public function update(Member $member, Requests\MemberRequest $request)
 	{
-		$member->update($request->except("roles"));
+		$member->update($request->except(["skills", "roles"]));
+
+		// Update skills
+		$skills = $request->input('skills') ?? []; // this is an array with ids of existing skills (as strings!) and string tags of new skills
+
+		$skill_ids = [];
+		foreach ($skills as $skill_id) {
+			$skill_ids[] = Skill::findOrCreateFromString($skill_id)->id;
+		}
+
+		$member->skills()->sync($skill_ids);
+
+		// Update roles
 		$user = $member->user()->first();
 		if ($user) {
 			$user->roles()->sync($request->input("roles"));

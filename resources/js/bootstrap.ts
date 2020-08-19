@@ -21,7 +21,7 @@ try {
     require('bootstrap');
     require('datatables.net-bs');
     require('datatables.net-responsive-bs');
-} catch (e) {}
+} catch (e) { }
 
 const Modernizr = (window as any).Modernizr = require('Modernizr');
 const webshim = (window as any).webshim = require('webshim');
@@ -40,6 +40,8 @@ const webshim = (window as any).webshim = require('webshim');
 if (!Modernizr.inputtypes.date) {
     webshim.polyfill('forms-ext');
 }
+
+const select2 = (window as any).select2 = require('select2');
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
