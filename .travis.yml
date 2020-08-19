@@ -10,18 +10,18 @@ addons:
   ssh_known_hosts: ftp.anderwijs.nl
 
 stages:
-  - build
   - test
+  - test_build_deploy
   - name: deploy
     if: (branch = master) AND (type = push)
 
 
 jobs:
   include:
-    - stage: build
-      script:
-        - npm run production
-    - stage: test
+    - stage: test-backend
+      install:
+        - composer self-update
+        - composer update
       before_script:
         - cp .env.travis .env
         - php artisan key:generate
@@ -30,7 +30,19 @@ jobs:
         - vendor/bin/phpunit
       after_script:
         - rm .env
+    - stage: test_build_deploy
+      install:
+        - npm install
+      script:
+        - npm run production
+      deploy:
+        provider: script
+        skip_cleanup: true
+        script: 
+          - rsync -a --include-from=deployment/file-list.txt anderwijsnl@ftp.anderwijs.nl:~/domains/anderwijs.nl/htdocs/public/test
     - stage: deploy
+      script:
+        - npm run production
       deploy:
         provider: script
         skip_cleanup: true
@@ -46,8 +58,8 @@ install:
   - npm install
 
 cache:
+  npm: true
   directories:
-    - node_modules
     - vendor
 
 notifications:
