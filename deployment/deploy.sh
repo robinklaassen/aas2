@@ -7,4 +7,7 @@ git pull origin master
 
 EOF
 
-rsync -r --delete-after --include-from=deployment/file-list.txt anderwijsnl@ftp.anderwijs.nl:~/domains/anderwijs.nl/htdocs/public 
+rsync -r $TRAVIS_BUILD_DIR/public/js \
+         $TRAVIS_BUILD_DIR/public/css \
+         $TRAVIS_BUILD_DIR/public/fonts \
+    anderwijsnl@ftp.anderwijs.nl:~/domains/anderwijs.nl/htdocs/aas2/public
