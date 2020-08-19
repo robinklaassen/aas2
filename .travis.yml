@@ -40,6 +40,8 @@ jobs:
         skip_cleanup: true
         script:
           - rsync -r --delete-after --include-from=deployment/file-list.txt anderwijsnl@ftp.anderwijs.nl:~/domains/anderwijs.nl/htdocs/public/test
+        on:
+          branch: feature/new-deployment
     # - stage: deploy
     #   script:
     #     - npm run production
@@ -51,11 +53,11 @@ jobs:
     #       - deployment/deploy.sh
     #       - deployment/after_deploy.sh
 
-install:
-  - mkdir -p bootstrap/cache
-  - composer self-update
-  - composer install --no-interaction
-  - npm install
+# install:
+#   - mkdir -p bootstrap/cache
+#   - composer self-update
+#   - composer install --no-interaction
+#   - npm install
 
 cache:
   npm: true
