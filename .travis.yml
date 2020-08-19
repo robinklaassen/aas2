@@ -45,7 +45,7 @@ jobs:
         provider: script
         skip_cleanup: true
         script:
-          - rsync -r --delete-after --include-from=deployment/file-list.txt anderwijsnl@ftp.anderwijs.nl:~/domains/anderwijs.nl/htdocs/public/test
+          - rsync -r --delete-after --include-from=deployment/file-list.txt anderwijsnl@ftp.anderwijs.nl:~/domains/anderwijs.nl/htdocs/aas2/public/test
         on:
           branch: feature/new-deployment
     # - stage: deploy
