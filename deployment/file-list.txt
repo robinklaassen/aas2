@@ -1,0 +1,3 @@
+../public/js
+../public/fonts
+../public/css
