@@ -59,9 +59,7 @@ jobs:
         - eval "$(ssh-agent -s)"
         - chmod 600 /tmp/deploy_rsa
         - ssh-add /tmp/deploy_rsa
-        - chmod a+x deployment/before_deploy.sh
-        - chmod a+x deployment/deploy.sh
-        - chmod a+x deployment/after_deploy.sh
+        - chmod a+x deployment/*.sh
       deploy:
         provider: script
         skip_cleanup: true
