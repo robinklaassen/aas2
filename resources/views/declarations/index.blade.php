@@ -62,7 +62,7 @@
 					<tr>
 						<td>{{ $declaration->date->format('Y-m-d') }}</td>
 						<td>
-							@unless ($declaration->filename === null || $declaration->filename == '')
+							@unless ($declaration->original_filename === null)
 								<a href="{{ url('/declarations', [$declaration->id, 'file']) }}" target="_blank">{{$declaration->original_filename}}</a>
 							@else
 								-
@@ -110,8 +110,8 @@
 					<tr>
 						<td>{{ $declaration->date->format('Y-m-d') }}</td>
 						<td>
-							@unless ($declaration->filename === null)
-								<a href="{{ asset('uploads/declarations/' . $member->id . '/' . $declaration->filename) }}" target="_blank">{{$declaration->filename}}</a>
+							@unless ($declaration->original_filename === null)
+								<a href="{{ asset('uploads/declarations/' . $member->id . '/' . $declaration->filename) }}" target="_blank">{{$declaration->original_filename}}</a>
 							@else
 								-
 							@endunless
