@@ -70,9 +70,14 @@ export default Vue.extend({
     methods: {
         filesChanged() {
             const input = this.$refs.input as HTMLInputElement
-            if (input.files) {
-                this.addFiles(this.filterFileList(input.files));
+            if (!input.files) {
+                return;
             }
+            const allowedFiles = this.filterFileList(input.files);
+            if(allowedFiles.length) {
+                this.addFiles(allowedFiles);
+            }
+        
             input.value = "";
         },
         dragEnter(evt: DragEvent) {
@@ -83,7 +88,10 @@ export default Vue.extend({
                 return;
             }
             
-            this.addFiles(this.filterFileList(evt.dataTransfer.files));
+            const allowedFiles = this.filterFileList(evt.dataTransfer.files);
+            if(allowedFiles.length) {
+                this.addFiles(allowedFiles);
+            }
             this.isHovering = false;
         },
         dragLeave() {
@@ -91,9 +99,15 @@ export default Vue.extend({
         },
         filterFileList(files: FileList): File[] {
             const mimeTypes = this.mimetypes as string[];
-            return Array.from(files).filter((f) => {
-                return mimeTypes.includes(f.type);
-            })
+            const allFiles = Array.from(files);
+
+            const illegalFiles = allFiles.filter((f) => !mimeTypes.includes(f.type));
+            if(illegalFiles.length) {
+                this.$emit('files-not-allowed', illegalFiles);
+            }
+
+
+            return allFiles.filter((f) => mimeTypes.includes(f.type));
         },
         addFiles(files: File[]) {
             this.files.push(...files);

@@ -1,10 +1,29 @@
 <template>
 <div>
+    <flash-message 
+        type="alert-danger"
+        :showTime="5000"
+        v-for="file in illegalFiles"
+        :key="file.name"
+    >
+        Het bestand '{{ file.name }}' is van een type wat niet is toegestaan.
+    </flash-message >
+        
     <file-dropzone
         :multiple="true"
-        :mimetypes="['image/jpeg', 'image/png']"
+        :mimetypes="[
+            'image/jpeg',
+            'image/png',
+            'image/gif',    
+            'application/msword',
+            'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+            'application/vnd.oasis.opendocument.text',
+            'application/pdf',
+            'image/bmp'
+        ]"
         :listing="false"
         v-on:files-uploaded="newRows"
+        v-on:files-not-allowed="newIllegalFiles"
     >
         <template v-slot:label>
             <p>
@@ -62,8 +81,12 @@
     </div>
 
     <p class="declarations-error">{{errorMessage}}</p>
+    <errors :errors="errors.get('data')"></errors>
     
-    <button class="btn btn-primary" @click.prevent="submit()" :disabled="isLoading">
+    <button class="btn btn-primary" 
+        @click.prevent="submit()"
+        :disabled="isLoading || rows.length < 1"
+    >
         Versturen
     </button>
 </div>
@@ -92,6 +115,7 @@ export default Vue.extend({
     },
     data() {
         return {
+            illegalFiles: [] as File[],
             rows: [] as DeclarationRow[],
             isLoading: false,
             errorMessage: "",
@@ -103,6 +127,10 @@ export default Vue.extend({
             const newRow = DeclarationRow.FromDeclaration(row);
             this.rows.push(newRow);
             return newRow;
+        },
+        newIllegalFiles(files: File[]) {
+            this.illegalFiles.push(...files);
+            
         },
         newRows(files: File[]) {
             files.forEach( f => this.newRow(f));
@@ -134,7 +162,9 @@ export default Vue.extend({
                 
                 window.location.href = this.redirectTarget;
             } catch(err) {
-                if (
+                if (err.request.status === 413) {
+                    this.errorMessage = "Een van de bestanden is te groot"
+                } else if (
                     err.request.status >= 400 
                     && err.request.status < 500 
                     && err.response.data.errors
@@ -143,6 +173,7 @@ export default Vue.extend({
                 } else if (err.request) {
                     this.errorMessage = err.response.data.message;
                 } else {
+                    console.log(err);
                     this.errorMessage = err.message;
                 }
             }

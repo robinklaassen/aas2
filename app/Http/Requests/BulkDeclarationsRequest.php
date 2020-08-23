@@ -6,6 +6,7 @@ class BulkDeclarationsRequest extends Request {
     public function rules()
 	{
 		return [
+            'data' => 'required|array',
 			'data.*.amount' => 'required|numeric|gt:0',
 			'data.*.date' => 'required|regex:/\d{4}-\d{2}-\d{2}/',
 			'data.*.gift' => 'required|boolean',
@@ -22,6 +23,13 @@ class BulkDeclarationsRequest extends Request {
             'data.*.date' => 'Datum',
             'data.*.gift' => 'Gift',
             'data.*.file' => 'Bestand'
+        ];
+    }
+
+    public function messages()
+    {
+        return [
+            'data.required' => 'Er moet wel iets ingevuld worden'
         ];
     }
 }
