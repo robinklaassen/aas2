@@ -1,8 +1,10 @@
 import lodash from "lodash";
 import $ from "jquery";
 import axios from "axios";
+import moment from "moment";
 
 (window as any)._ = lodash;
+(window as any).moment = moment;
 
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support

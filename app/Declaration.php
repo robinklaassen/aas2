@@ -17,7 +17,7 @@ class Declaration extends Model {
 
 	public function getIsClosedAttribute(): bool
 	{
-		return $this->closed_at === null;
+		return $this->closed_at !== null;
 	}
 	
 	// Query scope for open declarations

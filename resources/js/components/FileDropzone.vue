@@ -1,21 +1,24 @@
 <template>
     <div 
         :class="{ 'file-drop': true, '-hover': isHovering }"
-        
+        @drop.prevent="fileDrop"
+        @dragover.prevent
+        @dragenter="dragEnter"
+        @dragleave="dragLeave"
     >
-        <label>
-            <div :if="!hasFiles"></div>
-            <input 
-                ref="input"
-                type="file"
-                :name="name"
-                :multiple="multiple"
-                @change="filesChanged"
-            />
-        </label>
-        <span>{{  }}</span>
-        
-    </div>
+            <label>
+                <slot name="label"></slot>
+                <span class="btn btn-primary">Selecteer</span>
+                <input 
+                    ref="input"
+                    type="file"
+                    :multiple="multiple"
+                    @change="filesChanged"
+                />
+            </label>
+            <slot name="more"></slot>     
+        </div>
+    
 </template>
 <style lang="sass" scoped>
     .file-drop
@@ -26,8 +29,6 @@
 
         &.-hover
             border-color: #2780E3
-
-
 
     input[type='file']
         height: 0.1px
@@ -42,8 +43,15 @@
 import Vue from 'vue'
 export default Vue.extend({
     props: {
-        name: String,
-        multiple: Boolean,
+        listing: {
+            type: Boolean,
+            default: true,
+        },
+        multiple: {
+            type: Boolean,
+            default: true,
+        },
+        mimetypes: Array,
     },
     data() {
         return {
@@ -58,14 +66,53 @@ export default Vue.extend({
         fileCount(): number {
             return this.files.length;
         },
-        labelText(): string {
-            return `Selecteer één ${this.multiple ? 'of meerdere bestanden' : 'bestand'}`;
-        }
     },
     methods: {
         filesChanged() {
-            console.log(this.$refs.input)
+            const input = this.$refs.input as HTMLInputElement
+            if (!input.files) {
+                return;
+            }
+            const allowedFiles = this.filterFileList(input.files);
+            if(allowedFiles.length) {
+                this.addFiles(allowedFiles);
+            }
+        
+            input.value = "";
         },
+        dragEnter(evt: DragEvent) {
+            this.isHovering = true;
+        },
+        fileDrop(evt: DragEvent) {
+            if (!evt.dataTransfer) {
+                return;
+            }
+            
+            const allowedFiles = this.filterFileList(evt.dataTransfer.files);
+            if(allowedFiles.length) {
+                this.addFiles(allowedFiles);
+            }
+            this.isHovering = false;
+        },
+        dragLeave() {
+            this.isHovering = false;
+        },
+        filterFileList(files: FileList): File[] {
+            const mimeTypes = this.mimetypes as string[];
+            const allFiles = Array.from(files);
+
+            const illegalFiles = allFiles.filter((f) => !mimeTypes.includes(f.type));
+            if(illegalFiles.length) {
+                this.$emit('files-not-allowed', illegalFiles);
+            }
+
+
+            return allFiles.filter((f) => mimeTypes.includes(f.type));
+        },
+        addFiles(files: File[]) {
+            this.files.push(...files);
+            this.$emit('files-uploaded', files);
+        }
     },
-})
+});
 </script>

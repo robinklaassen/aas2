@@ -30,6 +30,16 @@ class AddDeclarationCapability extends Migration
             'Declaraties - Inzien',
             'treasurer'
         );
+        CapabilityHelper::new(
+            'declarations::delete',
+            'Declaraties - Verwijderen',
+            'treasurer'
+        );
+        CapabilityHelper::new(
+            'declarations::edit',
+            'Declaraties - Bewerken',
+            'treasurer'
+        );
 
         CapabilityHelper::new(
             'declarations::process',
@@ -47,7 +57,10 @@ class AddDeclarationCapability extends Migration
     {
         CapabilityHelper::delete([
             'declarations::self',
+            'declarations::create',
             'declarations::show',
+            'declarations::delete',
+            'declarations::edit',
             'declarations::process'
         ]);
     }
