@@ -254,7 +254,7 @@ class PagesController extends Controller
 		$inschrijvingen_deelnemers = DB::table('event_participant')
 			->join("participants", 'event_participant.participant_id', '=', 'participants.id')
 			->join("events", 'event_participant.event_id', '=', 'events.id')
-			->where("event_participant.created_at", ">", Db::raw("DATE_SUB(NOW(), interval 6 month)"))
+			->where("event_participant.created_at", ">", Db::raw("DATE_SUB(NOW(), interval 1 year)"))
 			->select([
 				"event_participant.participant_id",
 				"event_participant.event_id",
@@ -280,7 +280,7 @@ class PagesController extends Controller
 			])
 			->orderByDesc("event_participant.created_at")->get();
 
-		$nieuwe_leiding = Member::where("members.created_at", ">", Carbon::now()->subMonths(6))
+		$nieuwe_leiding = Member::where("members.created_at", ">", Carbon::now()->subYear())
 			->orderByDesc("members.created_at")->get();
 
 
