@@ -14,17 +14,14 @@
 	</div>
 	<div class="col-sm-6">
 		<p class="text-right">
-			@if (\Auth::user()->is_admin)
-				<a class="btn btn-success" type="button" href="{{ url('declarations/admin') }}" style="margin-top:21px;">Admin dashboard</a>
-			@endif
-			<a class="btn btn-info" type="button" href="{{ url('declarations/files') }}" style="margin-top:21px;">Bestanden beheren</a>
-			<a class="btn btn-primary" type="button" href="{{ url('declarations/upload') }}" style="margin-top:21px;">Nieuwe declaratie</a>
+			@can('viewAll', \App\Declaration::class)
+				<a class="btn btn-success" type="button" href="{{ url('declarations/admin') }}" style="margin-top:21px;">Penningmeester dashboard</a>
+			@endcan
+			@can('create', \App\Declaration::class)
+				<a class="btn btn-primary" type="button" href="{{ url('declarations/create-bulk') }}" style="margin-top:21px;">Nieuwe declaratie</a>
+			@endcan
 		</p>
 	</div>
-</div>
-
-<div class="alert alert-danger alert-important">
-	Let op: in ontwikkeling! Declaraties die je hier doet, worden niet serieus door de penningmeester verwerkt.
 </div>
 
 @if (\Auth::user()->profile->iban == null)
@@ -36,7 +33,7 @@
 <hr/>
 
 <p class="text-right">
-	Totaal openstaand bedrag: <strong>{{ formatPrice($total_open) }}</strong>
+	Totaal openstaand bedrag: <strong>@money($total_open)</strong>
 </p>
 
 <ul class="nav nav-tabs" role="tablist">
@@ -65,17 +62,29 @@
 					<tr>
 						<td>{{ $declaration->date->format('Y-m-d') }}</td>
 						<td>
-							@unless ($declaration->filename === null || $declaration->filename == '')
-								<a href="{{ asset('uploads/declarations/' . $member->id . '/' . $declaration->filename) }}" target="_blank">{{$declaration->filename}}</a>
+							@unless ($declaration->original_filename === null)
+								<a href="{{ url('/declarations', [$declaration->id, 'file']) }}" target="_blank">{{$declaration->original_filename}}</a>
 							@else
 								-
 							@endunless
 						</td>
 						<td>{{ $declaration->description }}</td>
-						<td>{{ formatPrice($declaration->amount) }}</td>
+						<td>@money($declaration->amount)</td>
 						<td>{{ ($declaration->gift ? 'Ja' : 'Nee') }}</td>
-						<td><a href="{{ url('/declarations', [$declaration->id, 'edit']) }}"><span class="glyphicon glyphicon-edit" data-toggle="tooltip" title="Bewerken"></span></a></td>
-						<td><a href="{{ url('/declarations', [$declaration->id, 'delete']) }}"><span class="glyphicon glyphicon-remove" data-toggle="tooltip" title="Verwijderen"></span></a></td>
+						<td>
+							@can('update', $declaration)
+							<a href="{{ url('/declarations', [$declaration->id, 'edit']) }}">
+								<span class="glyphicon glyphicon-edit" data-toggle="tooltip" title="Bewerken"></span>
+							</a>
+							@endcan
+						</td>
+						<td>
+							@can('delete', $declaration)
+							<a href="{{ url('/declarations', [$declaration->id, 'delete']) }}">
+								<span class="glyphicon glyphicon-remove" data-toggle="tooltip" title="Verwijderen"></span>
+							</a>
+							@endcan
+						</td>
 					</tr>
 				@endforeach
 			</tbody>
@@ -101,14 +110,14 @@
 					<tr>
 						<td>{{ $declaration->date->format('Y-m-d') }}</td>
 						<td>
-							@unless ($declaration->filename === null)
-								<a href="{{ asset('uploads/declarations/' . $member->id . '/' . $declaration->filename) }}" target="_blank">{{$declaration->filename}}</a>
+							@unless ($declaration->original_filename === null)
+								<a href="{{ url('/declarations', [$declaration->id, 'file']) }}" target="_blank">{{$declaration->original_filename}}</a>
 							@else
 								-
 							@endunless
 						</td>
 						<td>{{ $declaration->description }}</td>
-						<td>{{ formatPrice($declaration->amount) }}</td>
+						<td>@money($declaration->amount)</td>
 						<td>{{ ($declaration->gift ? 'Ja' : 'Nee') }}</td>
 						<td>{{ $declaration->closed_at->format('Y-m-d') }}</td>
 					</tr>

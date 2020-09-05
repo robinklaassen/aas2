@@ -48,6 +48,10 @@ class AppServiceProvider extends ServiceProvider
 				return isset($data[$parameters[1]]) && isset($data[$parameters[2]]) && $data[$parameters[1]] !== $data[$parameters[2]];
 			}
 		});
+
+		Blade::directive('money', function ($amount) {
+			return "<?php echo '&euro; ' .  number_format($amount, 2); ?>";
+		});
 	}
 
 	/**
@@ -63,7 +67,10 @@ class AppServiceProvider extends ServiceProvider
 	{
 		$this->app->bind(
 			'Illuminate\Contracts\Auth\Registrar',
-			'App\Services\Registrar'
+			'App\Services\Registrar',
+		);
+		$this->app->bind(
+			'App\Services\DeclarationService',
 		);
 	}
 }

@@ -175,6 +175,10 @@ Mijn profiel
 				<td>Ranonkeltje</td>
 				<td>{{ $member->ranonkeltje }}</td>
 			</tr>
+			<tr>
+				<td>Vaardigheden & interesses</td>
+				<td>{{ $member->skills()->pluck('tag')->implode(', ') }}
+			</tr>
 			@can("showPractical", $member)
 			<tr>
 				<td>Overige informatie</td>

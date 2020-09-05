@@ -40,10 +40,16 @@
 						@can("viewAny", \App\User::class)
 						<li class="{{ substr(Request::path(),0,5) == 'users' ? 'active' : ''}}"><a href="{{ url('/users') }}">Gebruikers</a></li>
 						@endcan
-						@can("viewAny", \App\User::class)
-						<li class="{{ substr(Request::path(),0,5) == 'users' ? 'active' : ''}}"><a href="{{ url('/event-packages') }}">Pakketten</a></li>
+						@role(["board"])
+						<li class="{{ substr(Request::path(),0,5) == 'event-packages' ? 'active' : ''}}">
+							<a href="{{ url('/event-packages') }}">Pakketten</a>
+						</li>
+						@endrole
+						@can("viewOwn", \App\Declaration::class)
+						<li class="{{ substr(Request::path(),0,5) == 'declaration' ? 'active' : ''}}">
+							<a href="{{ url('/declarations') }}">Declaraties</a>
+						</li>
 						@endcan
-
 					</ul>
 					
 					<ul class="nav navbar-nav navbar-right">
