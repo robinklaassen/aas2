@@ -63,10 +63,7 @@ jobs:
       deploy:
         provider: script
         skip_cleanup: true
-        script:
-          - deployment/before_deploy.sh
-          - deployment/deploy.sh
-          - deployment/after_deploy.sh
+        script: deployment/deploy.sh
 
 cache:
   npm: true

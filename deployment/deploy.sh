@@ -3,6 +3,7 @@
 ssh anderwijsnl@ftp.anderwijs.nl << EOF
 
 cd ~/domains/anderwijs.nl/htdocs/aas2
+php72 artisan down
 git pull origin master
 
 EOF
@@ -11,3 +12,15 @@ rsync -r $TRAVIS_BUILD_DIR/public/js \
          $TRAVIS_BUILD_DIR/public/css \
          $TRAVIS_BUILD_DIR/public/fonts \
     anderwijsnl@ftp.anderwijs.nl:~/domains/anderwijs.nl/htdocs/aas2/public
+
+ssh anderwijsnl@ftp.anderwijs.nl << EOF
+
+cd ~/domains/anderwijs.nl/htdocs/aas2
+php72 composer.phar self-update
+php72 composer.phar install
+php72 artisan clear-compiled
+php72 artisan migrate --force
+php72 artisan optimize
+php72 artisan up
+
+EOF
