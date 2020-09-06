@@ -3,6 +3,9 @@ language: php
 php:
   - 7.3
 
+env:
+  - PHP_EXECUTABLE=php73
+
 services:
   - mysql
 
@@ -11,7 +14,6 @@ addons:
 
 stages:
   - test-backend
-  - test-build-deploy
   - name: deploy
     if: (branch = master) AND (type = push)
 
@@ -30,30 +32,13 @@ jobs:
         - vendor/bin/phpunit
       after_script:
         - rm .env
-    - stage: test-build-deploy
+   - stage: deploy
       install:
         - npm install
       script:
         - npm run production
       before_deploy:
-        - openssl aes-256-cbc -K $encrypted_2197a3ced061_key -iv $encrypted_2197a3ced061_iv
-          -in deploy_rsa.enc -out /tmp/deploy_rsa -d
-        - eval "$(ssh-agent -s)"
-        - chmod 600 /tmp/deploy_rsa
-        - ssh-add /tmp/deploy_rsa
-        - chmod a+x deployment/*.sh
-      deploy:
-        provider: script
-        skip_cleanup: true
-        on:
-          branch: feature/new-deployment
-        script: rsync -r $TRAVIS_BUILD_DIR/public/js $TRAVIS_BUILD_DIR/public/css $TRAVIS_BUILD_DIR/public/fonts anderwijsnl@ftp.anderwijs.nl:~/domains/anderwijs.nl/htdocs/aas2/public/test
-    - stage: deploy
-      install:
-        - npm install
-      script:
-        - npm run production
-      before_deploy:
+        - envsubst < deployment/deploy.partial.sh > deployment/deploy.sh
         - openssl aes-256-cbc -K $encrypted_2197a3ced061_key -iv $encrypted_2197a3ced061_iv
           -in deploy_rsa.enc -out /tmp/deploy_rsa -d
         - eval "$(ssh-agent -s)"
