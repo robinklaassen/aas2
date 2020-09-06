@@ -3,8 +3,8 @@ language: php
 php:
   - 7.3
 
-env:
-  - PHP_EXECUTABLE=php73
+# env:
+#   - PHP_EXECUTABLE=php73
 
 services:
   - mysql
