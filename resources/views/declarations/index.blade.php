@@ -26,7 +26,7 @@
 
 <div class="alert alert-danger alert-important">
 	Let op: Deze functionaliteit is nog niet live en kan nog niet gebruikt worden.
-	Klik <a href="{{ url('profile/declare') }}">hier</a> om naar het huidige declaratie formulier te gaan. 
+	Klik <a href="{{ url('profile/declare') }}">hier</a> om naar het huidige declaratieformulier te gaan. 
 </div>
 
 @if (\Auth::user()->profile->iban == null)
