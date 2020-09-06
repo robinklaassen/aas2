@@ -38,7 +38,7 @@ jobs:
       script:
         - npm run production
       before_deploy:
-        - envsubst < deployment/deploy.partial.sh > deployment/deploy.sh
+        - cat deployment/deploy.partial.sh | envsubst > deployment/deploy.sh
         - openssl aes-256-cbc -K $encrypted_2197a3ced061_key -iv $encrypted_2197a3ced061_iv
           -in deploy_rsa.enc -out /tmp/deploy_rsa -d
         - eval "$(ssh-agent -s)"
