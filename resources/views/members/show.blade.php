@@ -177,7 +177,7 @@ Mijn profiel
 			</tr>
 			<tr>
 				<td>Vaardigheden & interesses</td>
-				<td>{{ $member->skills()->pluck('tag')->implode(', ') }}
+				<td>{{ $member->skills()->pluck('tag')->implode(', ') }}</td>
 			</tr>
 			@can("showPractical", $member)
 			<tr>

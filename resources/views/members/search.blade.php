@@ -60,8 +60,7 @@ Lid zoeken op vakdekking
 	<tbody>
 		@forelse ($members as $member)
 		<tr>
-			<td><a href="{{ url('/members', $member->id) }}">{{$member->voornaam}} {{$member->tussenvoegsel}}
-					{{$member->achternaam}}</a></td>
+			<td><a href="{{ url('/members', $member->id) }}">{{$member->volnaam}}</a></td>
 			<td>{{$member->soort}}</td>
 			@can("showAdministrativeAny", \App\Member::class)
 			<td>

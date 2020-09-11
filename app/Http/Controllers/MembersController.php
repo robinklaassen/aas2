@@ -269,4 +269,25 @@ class MembersController extends Controller
 
 		return view('members.search', compact('courseList', 'courseCodes', 'courses', 'vog', 'members', 'level'));
 	}
+
+	# Search members by skills
+	public function searchSkills(\Illuminate\Http\Request $request)
+	{
+		$this->authorize("viewAny", Member::class);
+
+		$skills = $request->input('skills', []);
+		$require_how = $request->input('require_how', 'one');
+
+		$all_skills = Skill::pluck('tag', 'id')->toArray();
+
+		$members = Member::all()->filter(function ($m, $key) use ($skills, $require_how) {
+			$req_skills = $m->skills->pluck('id')->intersect(collect($skills));
+			if ($require_how == 'one')
+				return $req_skills->count() > 0;
+			else
+				return count($skills) != 0 & $req_skills->count() == count($skills);
+		});
+
+		return view('members.searchSkills', compact('all_skills', 'skills', 'require_how', 'members'));
+	}
 }
