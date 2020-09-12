@@ -8,6 +8,7 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\MembersExport;
+use Illuminate\Http\Request;
 
 class MembersController extends Controller
 {
@@ -231,7 +232,7 @@ class MembersController extends Controller
 	}
 
 	# Search members by coverage
-	public function search(\Illuminate\Http\Request $request)
+	public function search(Request $request)
 	{
 		$this->authorize("viewAny", \App\Member::class);
 		$this->authorize("showPracticalAny", \App\Member::class);
@@ -271,18 +272,18 @@ class MembersController extends Controller
 	}
 
 	# Search members by skills
-	public function searchSkills(\Illuminate\Http\Request $request)
+	public function searchSkills(Request $request)
 	{
 		$this->authorize("viewAny", Member::class);
 
 		$skills = $request->input('skills', []);
-		$require_how = $request->input('require_how', 'one');
+		$require_how = $request->input('require_how', 'any');
 
 		$all_skills = Skill::pluck('tag', 'id')->toArray();
 
 		$members = Member::all()->filter(function ($m, $key) use ($skills, $require_how) {
 			$req_skills = $m->skills->pluck('id')->intersect(collect($skills));
-			if ($require_how == 'one')
+			if ($require_how == 'any')
 				return $req_skills->count() > 0;
 			else
 				return count($skills) != 0 & $req_skills->count() == count($skills);

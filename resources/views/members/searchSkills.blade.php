@@ -25,7 +25,7 @@ Leden zoeken op vaardigheden & interesses
     
     <div class="form-group col-md-4">
         <label class="radio-inline">
-            <input type="radio" name="require_how" value="one" @if ($require_how == 'one') checked @endif>Eén van deze
+            <input type="radio" name="require_how" value="any" @if ($require_how == 'any') checked @endif>Eén van deze
         </label>
         <label class="radio-inline">
             <input type="radio" name="require_how" value="all" @if ($require_how == 'all') checked @endif>Alle
