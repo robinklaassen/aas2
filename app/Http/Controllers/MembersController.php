@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\MembersExport;
 use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Builder;
 
 class MembersController extends Controller
 {
@@ -281,13 +282,19 @@ class MembersController extends Controller
 
 		$all_skills = Skill::pluck('tag', 'id')->toArray();
 
-		$members = Member::all()->filter(function ($m, $key) use ($skills, $require_how) {
-			$req_skills = $m->skills->pluck('id')->intersect(collect($skills));
-			if ($require_how == 'any')
-				return $req_skills->count() > 0;
-			else
-				return count($skills) != 0 & $req_skills->count() == count($skills);
-		});
+		// TODO I think this can be even shorter when defining a $num_matches or something based on $require_how
+		switch ($require_how) {
+			case 'any':
+				$members = Member::whereHas('skills', function (Builder $query) use ($skills, $require_how) {
+					$query->whereIn('id', $skills);
+				})->get();
+				break;
+			case 'all':
+				$members = Member::whereHas('skills', function (Builder $query) use ($skills, $require_how) {
+					$query->whereIn('id', $skills);
+				}, '=', count($skills))->get();
+				break;
+		}
 
 		return view('members.searchSkills', compact('all_skills', 'skills', 'require_how', 'members'));
 	}
