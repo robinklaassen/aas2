@@ -282,19 +282,10 @@ class MembersController extends Controller
 
 		$all_skills = Skill::pluck('tag', 'id')->toArray();
 
-		// TODO I think this can be even shorter when defining a $num_matches or something based on $require_how
-		switch ($require_how) {
-			case 'any':
-				$members = Member::whereHas('skills', function (Builder $query) use ($skills, $require_how) {
-					$query->whereIn('id', $skills);
-				})->get();
-				break;
-			case 'all':
-				$members = Member::whereHas('skills', function (Builder $query) use ($skills, $require_how) {
-					$query->whereIn('id', $skills);
-				}, '=', count($skills))->get();
-				break;
-		}
+		$num_matches = ($require_how == 'all') ? count($skills) : 1;
+		$members = Member::whereHas('skills', function (Builder $query) use ($skills, $require_how) {
+			$query->whereIn('id', $skills);
+		}, '>=', $num_matches)->get();
 
 		return view('members.searchSkills', compact('all_skills', 'skills', 'require_how', 'members'));
 	}
