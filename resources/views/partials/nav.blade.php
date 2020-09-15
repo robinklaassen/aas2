@@ -46,11 +46,11 @@
 						</li>
 						@endrole
 						
-						{{-- @can("viewOwn", \App\Declaration::class)
+						@can("viewOwn", \App\Declaration::class)
 						<li class="{{ substr(Request::path(),0,5) == 'declaration' ? 'active' : ''}}">
 							<a href="{{ url('/declarations') }}">Declaraties</a>
 						</li>
-						@endcan --}}
+						@endcan
 					</ul>
 					
 					<ul class="nav navbar-nav navbar-right">
