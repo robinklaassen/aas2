@@ -29,8 +29,8 @@ Mijn profiel
 				kamp</a>
 			@endcan
 			@can("editFinance", $member)
-			<a class="btn btn-success" type="button" href="{{ url('/profile/declare') }}"
-				style="margin-top:21px;">Declaratie</a>
+			<a class="btn btn-success" type="button" href="{{ url('/declarations') }}" style="margin-top:21px;">
+				Declaratie</a>
 			@endcan
 			@can("editPassword", $member)
 			<a class="btn btn-warning" type="button" href="{{ url('/profile/password') }}"
