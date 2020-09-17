@@ -8,6 +8,8 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\MembersExport;
+use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Builder;
 
 class MembersController extends Controller
 {
@@ -231,7 +233,7 @@ class MembersController extends Controller
 	}
 
 	# Search members by coverage
-	public function search(\Illuminate\Http\Request $request)
+	public function search(Request $request)
 	{
 		$this->authorize("viewAny", \App\Member::class);
 		$this->authorize("showPracticalAny", \App\Member::class);
@@ -268,5 +270,23 @@ class MembersController extends Controller
 		}
 
 		return view('members.search', compact('courseList', 'courseCodes', 'courses', 'vog', 'members', 'level'));
+	}
+
+	# Search members by skills
+	public function searchSkills(Request $request)
+	{
+		$this->authorize("viewAny", Member::class);
+
+		$skills = $request->input('skills', []);
+		$require_how = $request->input('require_how', 'any');
+
+		$all_skills = Skill::pluck('tag', 'id')->toArray();
+
+		$num_matches = ($require_how == 'all') ? count($skills) : 1;
+		$members = Member::whereHas('skills', function (Builder $query) use ($skills, $require_how) {
+			$query->whereIn('id', $skills);
+		}, '>=', $num_matches)->get();
+
+		return view('members.searchSkills', compact('all_skills', 'skills', 'require_how', 'members'));
 	}
 }
