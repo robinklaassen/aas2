@@ -12,28 +12,31 @@ Leden zoeken op vaardigheden & interesses
 
 @include('errors.list')
 
-<form class="form-inline" method="get" action="#">
+<form class="form" method="get" action="#">
+    <div class="row">
+        <div class="col-md-6 row form-group">
+            <label class="col-sm-3 col-xs-12" for="skills">Vaardigheden: </label>
+            <div class="col-sm-9 col-xs-12">
+                <select style="width: 100%" name="skills[]" id="skills" multiple>
+                    @foreach ($all_skills as $id => $skill)
+                    <option value="{{$id}}" @if (in_array($id, $skills)) selected @endif>{{$skill}}</option>
+                    @endforeach
+                </select>
+            </div>
+        </div>
+        
+        <div class="form-group col-md-4 ">
+            <label class="radio-inline">
+                <input type="radio" name="require_how" value="any" @if ($require_how == 'any') checked @endif>Eén van deze
+            </label>
+            <label class="radio-inline">
+                <input type="radio" name="require_how" value="all" @if ($require_how == 'all') checked @endif>Alle
+            </label>
+        </div>
 
-	<div class="form-group col-md-6">
-		<label for="skills">Vaardigheden: </label>
-		<select class="form-control" style="width: 100%;" name="skills[]" id="skills" multiple>
-			@foreach ($all_skills as $id => $skill)
-			<option value="{{$id}}" @if (in_array($id, $skills)) selected @endif>{{$skill}}</option>
-			@endforeach
-		</select>
-    </div>
-    
-    <div class="form-group col-md-4">
-        <label class="radio-inline">
-            <input type="radio" name="require_how" value="any" @if ($require_how == 'any') checked @endif>Eén van deze
-        </label>
-        <label class="radio-inline">
-            <input type="radio" name="require_how" value="all" @if ($require_how == 'all') checked @endif>Alle
-        </label>
-    </div>
-
-    <div class="col-md-2">
-	    <button type="submit" class="btn btn-primary">Zoeken</button>
+        <div class="col-md-2">
+            <button type="submit" class="btn btn-primary">Zoeken</button>
+        </div>
     </div>
 </form>
 
@@ -66,7 +69,7 @@ Leden zoeken op vaardigheden & interesses
 
 @section('footer')
 <script type="text/javascript">
-	$(document).ready(function() {
+$(document).ready(function() {
 	$("#skills").select2();
 });
 </script>
