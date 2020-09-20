@@ -530,7 +530,54 @@ class PagesController extends Controller
 			];
 		}
 
-		return view('pages.graphs', compact('data', 'registration_series', 'camp_prefs', 'prefs_review_count', 'avg_days_before_event'));
+		$newUserStart = Carbon::now()->subYear(1);
+		$raw_new_users_per_source = DB::select(
+			DB::raw("
+			select *
+				from ( 
+					select count(*) as amount
+						, hoebij as source
+						, 'members' as type 
+					from members 
+					where created_at > :1
+					group by hoebij 
+				union all
+					select count(*) as amount
+						, hoebij as source
+						, 'participants' as type
+					from participants
+					where created_at > :2
+					group by hoebij
+				) x
+				order by amount desc, type
+			"),
+			[
+				$newUserStart,
+				$newUserStart
+			]			
+		);
+
+		$new_users_per_source = [];
+		foreach ($raw_new_users_per_source as $row) {
+			$new_users_per_source[$row->source] = $new_users_per_source[$row->source] ?? [
+				'source' => $row->source,
+				'participants' => 0,
+				'members' => 0
+			];
+			$new_users_per_source[$row->source][$row->type] = $row->amount;
+		}
+		$new_users_per_source = array_values($new_users_per_source);
+		
+		return view('pages.graphs', 
+			compact(
+				'data',
+				'registration_series',
+				'camp_prefs',
+				'prefs_review_count',
+				'avg_days_before_event',
+				'new_users_per_source'
+			)
+		);
 	}
 
 	# Exposes upcoming events as JSON for website integration
