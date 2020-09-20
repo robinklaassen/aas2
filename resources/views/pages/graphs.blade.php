@@ -358,7 +358,6 @@ Grafieken
       });
       
       const transformed = [].concat([cols], rows);
-      console.log(transformed);
 
       return transformed;
   }
