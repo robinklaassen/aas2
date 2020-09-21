@@ -17,6 +17,7 @@ Grafieken
     <li role="presentation"><a href="#camp-prefs" role="tab" data-toggle="tab">Kampvoorkeur deelnemers</a></li>
     <li role="presentation"><a href="#registration-days" role="tab" data-toggle="tab">Inschrijvingen dagen voor
             kamp</a></li>
+    <li role="presentation"><a href="#promo" role="tab" data-toggle="tab">Promotie</a></li>
 </ul>
 
 <div class="tab-content">
@@ -118,6 +119,16 @@ Grafieken
         <div class="row">
             <div class="col-sm-12">
                 <div id="avg-days-before-event" style="height:400px;"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <div role="tabpanel" class="tab-pane" id="promo">
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div id="new-users-per-source-graph" style="height:400px;"></div>
             </div>
         </div>
 
@@ -310,6 +321,28 @@ Grafieken
             }
         }
     });
+
+    drawGoogleChart({
+        element: "new-users-per-source-graph", 
+        rawData: {!! json_encode($new_users_per_source) !!}, 
+        columns: [
+            { id: "source", label: "Hoe bij", type: "string" },
+            { id: "participants", label: "Deelnemers", type: "number" },
+            { id: "members", label: "Leden", type: "number" },
+            
+        ],
+        chartType: "ColumnChart",
+        chartOptions: {
+            isStacked: true,
+            title: "'Hoe bij Anderwijs' van afgelopen jaar",
+            vAxis: {
+                title: 'Aantal',
+            },
+            legend: {
+                position: 'top'
+            }
+        }
+    });
   }
   
   function transformDataset(rawData, colOptions) {
@@ -317,13 +350,16 @@ Grafieken
           return { id: colName, label: colName };
       }));
 
+
       var rows = rawData.map(function(rowObject) {
           return cols.map(function(column) {
               return rowObject[column.id];
           });
       });
       
-      return [].concat([cols], rows);
+      const transformed = [].concat([cols], rows);
+
+      return transformed;
   }
 
     function drawGoogleChart(options) {
