@@ -334,7 +334,7 @@ Grafieken
         chartType: "ColumnChart",
         chartOptions: {
             isStacked: true,
-            title: "'Hoe bij anderwijs' van afgelopen jaar",
+            title: "'Hoe bij Anderwijs' van afgelopen jaar",
             vAxis: {
                 title: 'Aantal',
             },
