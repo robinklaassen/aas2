@@ -54,6 +54,12 @@
 		{!! Form::label('tijd_eind', 'Tijd eind:') !!}
 		{!! Form::input('time', 'tijd_eind', null, ['class' => 'form-control']) !!}
 	</div>
+
+	<div class="col-md-2 form-group">
+		{!! Form::label('cancelled', 'Afgelast?') !!}<br />
+		{!! Form::hidden('cancelled', 0) !!}
+		{!! Form::checkbox('cancelled', 1, null, ['style' => 'margin-top:14px;']) !!}
+	</div>
 </div>
 <div class="row">
 	<div class="col-md-2 form-group">

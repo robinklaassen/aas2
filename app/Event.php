@@ -83,6 +83,11 @@ class Event extends Model
 			' te ' . $this->location->plaats . ' (' . $this->datum_start->format('d-m-Y') . ')' . ($this->vol ? ' - VOL' : '');
 	}
 
+	public function getCancelledAttribute(): bool
+	{
+		return $this->cancelled_at !== null;
+	}
+
 	/**
 	 * Event is publicly visible
 	 */
@@ -120,5 +125,13 @@ class Event extends Model
 	public function scopeOngoing($query)
 	{
 		return $query->where('datum_eind', '>', date('Y-m-d'));
+	}
+
+	/**
+	 * Events which are not cancelled
+	 */
+	public function scopeProceeded($query)
+	{
+		return $query->where('cancelled_at', null);
 	}
 }

@@ -338,7 +338,9 @@ class PagesController extends Controller
 		$camps = \App\Event::where('type', 'kamp')
 			->where('datum_start', '<=', $maxDate)
 			->where('datum_start', '>=', $minDate)
-			->orderBy('datum_start')->get();
+			->proceeded()
+			->orderBy('datum_start')
+			->get();
 		$num_members = [];
 		foreach ($camps as $camp) {
 			preg_match('/\d{4}/', $camp->code, $matches); // obtains the year string from the camp code, e.g. '1415'
@@ -424,6 +426,7 @@ class PagesController extends Controller
 		$trainings = \App\Event::where('type', 'training')
 			->where('datum_start', '>=', $minDate)
 			->where('datum_start', '<=', $maxDate)
+			->proceeded()
 			->orderBy('datum_start')
 			->get();
 		$member_ids = [];
