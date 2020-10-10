@@ -88,6 +88,11 @@ class Event extends Model
 		return $this->cancelled_at !== null;
 	}
 
+	public function setCancelledAttribute($value)
+	{
+		$this->attributes['cancelled_at'] = ($value) ? Carbon::now() : null;
+	}
+
 	/**
 	 * Event is publicly visible
 	 */
@@ -130,7 +135,7 @@ class Event extends Model
 	/**
 	 * Events which are not cancelled
 	 */
-	public function scopeProceeded($query)
+	public function scopeNotCancelled($query)
 	{
 		return $query->where('cancelled_at', null);
 	}

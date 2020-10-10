@@ -338,7 +338,7 @@ class PagesController extends Controller
 		$camps = \App\Event::where('type', 'kamp')
 			->where('datum_start', '<=', $maxDate)
 			->where('datum_start', '>=', $minDate)
-			->proceeded()
+			->not_cancelled()
 			->orderBy('datum_start')
 			->get();
 		$num_members = [];
@@ -426,7 +426,7 @@ class PagesController extends Controller
 		$trainings = \App\Event::where('type', 'training')
 			->where('datum_start', '>=', $minDate)
 			->where('datum_start', '<=', $maxDate)
-			->proceeded()
+			->not_cancelled()
 			->orderBy('datum_start')
 			->get();
 		$member_ids = [];

@@ -93,7 +93,7 @@ class Member extends Model
 		$endDate = date('Y-m-d');
 
 		$camps = $this->events()
-					->proceeded()
+					->not_cancelled()
 					->where('type', 'kamp')
 					->where('datum_start', '>', $startDate)
 					->where('datum_eind', '<', $endDate)
@@ -123,7 +123,7 @@ class Member extends Model
 		$startDate = '2014-09-01';
 		$endDate = date('Y-m-d');
 
-		$base_query = $this->events()->proceeded()->where('datum_start', '>', $startDate)->where('datum_eind', '<', $endDate);
+		$base_query = $this->events()->not_cancelled()->where('datum_start', '>', $startDate)->where('datum_eind', '<', $endDate);
 		$camps_full = $base_query->where('type', 'kamp')->where('wissel', 0)->count();
 		$camps_partial = $base_query->where('type', 'kamp')->where('wissel', 1)->count();
 		$trainings = $base_query->where('type', 'training')->count();
@@ -161,7 +161,7 @@ class Member extends Model
 
 		// First the event data
 		$events = $this->events()
-					->proceeded()
+					->not_cancelled()
 					->whereIn('type', ['kamp', 'training'])
 					->where('datum_start', '>', $startDate)
 					->where('datum_eind', '<', $endDate)
@@ -216,7 +216,7 @@ class Member extends Model
 		$endDate = date('Y-m-d');
 
 		$lastEvent = $this->events()
-						->proceeded()
+						->not_cancelled()
 						->whereIn('type', ['kamp', 'training'])
 						->where('datum_start', '>', $startDate)
 						->where('datum_eind', '<', $endDate)

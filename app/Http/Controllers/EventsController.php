@@ -123,9 +123,6 @@ class EventsController extends Controller
 	public function update(Event $event, Requests\EventRequest $request)
 	{
 		$this->authorize("update", $event);
-		$request->merge([
-			'cancelled_at' => ($request->cancelled) ? date('c') : null
-		]);
 		$event->update($request->all());
 		return redirect('events/' . $event->id)->with([
 			'flash_message' => 'Het evenement is bewerkt!'
