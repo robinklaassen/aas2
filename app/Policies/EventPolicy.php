@@ -186,4 +186,9 @@ class EventPolicy
         // TODO: check if the user participated
         return $user->hasCapability("event::show::review");
     }
+
+    public function cancel(User $user, Event $event)
+    {
+        return $this->editAdvanced($user, $event);
+    }
 }

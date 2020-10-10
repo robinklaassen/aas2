@@ -92,7 +92,13 @@ class Member extends Model
 		$startDate = '2014-09-01';
 		$endDate = date('Y-m-d');
 
-		$camps = $this->events()->where('type', 'kamp')->where('datum_start', '>', $startDate)->where('datum_eind', '<', $endDate)->where('wissel', 0)->get();
+		$camps = $this->events()
+					->notCancelled()
+					->where('type', 'kamp')
+					->where('datum_start', '>', $startDate)
+					->where('datum_eind', '<', $endDate)
+					->where('wissel', 0)
+					->get();
 
 		$list = [];
 		foreach ($camps as $camp) {
@@ -117,11 +123,10 @@ class Member extends Model
 		$startDate = '2014-09-01';
 		$endDate = date('Y-m-d');
 
-		$camps_full = $this->events()->where('type', 'kamp')->where('datum_start', '>', $startDate)->where('datum_eind', '<', $endDate)->where('wissel', 0)->count();
-
-		$camps_partial = $this->events()->where('type', 'kamp')->where('datum_start', '>', $startDate)->where('datum_eind', '<', $endDate)->where('wissel', 1)->count();
-
-		$trainings = $this->events()->where('type', 'training')->where('datum_start', '>', $startDate)->where('datum_eind', '<', $endDate)->count();
+		$base_query = $this->events()->notCancelled()->where('datum_start', '>', $startDate)->where('datum_eind', '<', $endDate);
+		$camps_full = $base_query->where('type', 'kamp')->where('wissel', 0)->count();
+		$camps_partial = $base_query->where('type', 'kamp')->where('wissel', 1)->count();
+		$trainings = $base_query->where('type', 'training')->count();
 
 		$other = $this->actions()->where('date', '<=', $endDate)->sum('points');
 
@@ -140,7 +145,6 @@ class Member extends Model
 		$points = $this->points;
 
 		$ranks = [0, 3, 10, 20, 35, 50, 70, 100]; // this array is also in the view composer for member.show
-		//$rank = 0;
 		foreach ($ranks as $level => $number) {
 			if ($points >= $number) $rank = $level;
 		}
@@ -156,7 +160,13 @@ class Member extends Model
 		$data = [];
 
 		// First the event data
-		$events = $this->events()->whereIn('type', ['kamp', 'training'])->where('datum_start', '>', $startDate)->where('datum_eind', '<', $endDate)->orderBy('datum_start', 'asc')->get();
+		$events = $this->events()
+					->notCancelled()
+					->whereIn('type', ['kamp', 'training'])
+					->where('datum_start', '>', $startDate)
+					->where('datum_eind', '<', $endDate)
+					->orderBy('datum_start', 'asc')
+					->get();
 
 		foreach ($events as $event) {
 
@@ -205,7 +215,13 @@ class Member extends Model
 		$startDate = '2014-09-01';
 		$endDate = date('Y-m-d');
 
-		$lastEvent = $this->events()->whereIn('type', ['kamp', 'training'])->where('datum_start', '>', $startDate)->where('datum_eind', '<', $endDate)->orderBy('datum_start', 'desc')->first();
+		$lastEvent = $this->events()
+						->notCancelled()
+						->whereIn('type', ['kamp', 'training'])
+						->where('datum_start', '>', $startDate)
+						->where('datum_eind', '<', $endDate)
+						->orderBy('datum_start', 'desc')
+						->first();
 
 		$lastAction = $this->actions()->where('date', '<', $endDate)->orderBy('date', 'desc')->first();
 

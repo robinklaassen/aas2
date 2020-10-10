@@ -123,6 +123,14 @@ class EventsController extends Controller
 	public function update(Event $event, Requests\EventRequest $request)
 	{
 		$this->authorize("update", $event);
+
+		// Check for advanced editing authorization if changing cancellation status
+		if ($event->cancelled != $request->input('cancelled'))
+		{
+			$this->authorize('cancel', $event);
+		}
+
+		$event->cancelled = $request->input('cancelled');
 		$event->update($request->all());
 		return redirect('events/' . $event->id)->with([
 			'flash_message' => 'Het evenement is bewerkt!'

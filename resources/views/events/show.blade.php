@@ -117,6 +117,12 @@
 				<td>{{ ($event->vol) ? 'Ja' : 'Nee' }}</td>
 			</tr>
 			@endcan
+
+			<tr>
+				<td>Afgelast</td>
+				<td>{{ ($event->cancelled) ? 'Ja' : 'Nee' }}</td>
+			</tr>
+			
 			@can("showAdvanced", $event)
 			<tr>
 				<td>Openbaar</td>
