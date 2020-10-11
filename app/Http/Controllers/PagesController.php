@@ -570,6 +570,20 @@ class PagesController extends Controller
 			$new_users_per_source[$row->source][$row->type] = $row->amount;
 		}
 		$new_users_per_source = array_values($new_users_per_source);
+
+		$camp_prices = DB::select(
+			DB::raw("
+			select cast(year(datum_start) as CHAR(4)) as year
+				, code
+				, prijs as price
+				, naam as name
+				, REGEXP_SUBSTR(code, '[A-Za-z]+') as type
+			from events e
+			where type = 'kamp'
+			  and datum_start > '2015-01-01'	   
+			"),
+			[]			
+		);
 		
 		return view('pages.graphs', 
 			compact(
@@ -578,7 +592,8 @@ class PagesController extends Controller
 				'camp_prefs',
 				'prefs_review_count',
 				'avg_days_before_event',
-				'new_users_per_source'
+				'new_users_per_source',
+				'camp_prices'
 			)
 		);
 	}

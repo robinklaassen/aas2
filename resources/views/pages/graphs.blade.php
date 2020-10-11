@@ -17,6 +17,7 @@ Grafieken
     <li role="presentation"><a href="#camp-prefs" role="tab" data-toggle="tab">Kampvoorkeur deelnemers</a></li>
     <li role="presentation"><a href="#registration-days" role="tab" data-toggle="tab">Inschrijvingen dagen voor
             kamp</a></li>
+    <li role="presentation"><a href="#camp-prices" role="tab" data-toggle="tab">Kamp prijzen</a></li>
     <li role="presentation"><a href="#promo" role="tab" data-toggle="tab">Promotie</a></li>
 </ul>
 
@@ -119,6 +120,16 @@ Grafieken
         <div class="row">
             <div class="col-sm-12">
                 <div id="avg-days-before-event" style="height:400px;"></div>
+            </div>
+        </div>
+
+    </div>
+
+    <div role="tabpanel" class="tab-pane" id="camp-prices">
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div id="camp-prices" style="height:400px;"></div>
             </div>
         </div>
 
@@ -343,26 +354,91 @@ Grafieken
             }
         }
     });
+
+    drawGoogleChart({
+        element: "camp-prices",
+        rawData: {!! json_encode($camp_prices) !!},
+        pivot: {
+            rowField: 'year',
+            rowLabel: 'Jaar',
+            columnField: 'type',
+            columnLabel: function(row) { return row.name; },
+            valueField: 'price', 
+        },
+        chartOptions: {
+            title: "Prijs per kamp per jaar",
+            hAxis: {
+                title: 'Jaar',
+                minValue: 2014,
+                slantedText: true
+            },
+            vAxis: {
+                title: 'Prijs &euro;',
+            }
+        }
+    });
   }
   
-  function transformDataset(rawData, colOptions) {
-      var cols = colOptions || Object.keys(rawData[0].map(function(colName) {
-          return { id: colName, label: colName };
-      }));
+    function transformDataset(rawData, colOptions) {
+        var cols = colOptions || Object.keys(rawData[0].map(function(colName) {
+            return { id: colName, label: colName };
+        }));
 
+        var rows = rawData.map(function(rowObject) {
+            return cols.map(function(column) {
+                return rowObject[column.id];
+            });
+        });
+        
+        const transformed = [].concat([cols], rows);
 
-      var rows = rawData.map(function(rowObject) {
-          return cols.map(function(column) {
-              return rowObject[column.id];
-          });
-      });
-      
-      const transformed = [].concat([cols], rows);
+        return transformed;
+    }
 
-      return transformed;
-  }
+    function pivotDataSet(dataset, options) {
+        let obj = {};
+
+        let rowField = options.rowField;
+        let columnField = options.columnField;
+        let valueField = options.valueField;
+        let columnLabel = options.columnLabel || function(row, col) { return col; };
+
+        for(let iX = 0; iX < dataset.length; iX++) {
+            let row = dataset[iX][rowField];
+            let column = dataset[iX][columnField];
+            let value = dataset[iX][valueField];
+            
+            obj[row] = obj[row] || {};
+            obj[row][column] = { value: value, label: columnLabel(dataset[iX], column) };
+        }
+
+        let columns = { key: options.rowLabel };
+        let newRows = [];
+
+        Object.keys(obj).forEach(function(rowKey) {
+            let newRow = { key: rowKey };
+            Object.keys(obj[rowKey]).forEach(function(columnKey) {
+                let value = obj[rowKey][columnKey];
+                columns[columnKey] = columns[columnKey] || value.label;
+                newRow[columnKey] = value.value;
+            });
+            newRows.push(newRow);
+        });
+
+        return {
+            rows: newRows,
+            columns: Object.keys(columns).map(function (col) { return { id: col, label: columns[col] }; } )
+        };
+            
+    }
 
     function drawGoogleChart(options) {
+        if (options.pivot) {
+            let pivot = pivotDataSet(options.rawData, options.pivot);
+            console.log(pivot);
+            options.rawData = pivot.rows;
+            options.columns = pivot.columns;
+        }
         var data = transformDataset(options.rawData, options.columns);
         var dt = google.visualization.arrayToDataTable(data);
         var chart = new google.visualization[options.chartType || "LineChart"](document.getElementById(options.element));
