@@ -11,6 +11,8 @@ services:
 
 addons:
   ssh_known_hosts: ftp.anderwijs.nl
+  mariadb: '10.0'
+  
 
 stages:
   - test-backend

@@ -36,8 +36,7 @@ class PagesTest extends TestCase
     {
         $response = $this
             ->actingAs($this->user)
-            ->get('/graphs');
-        dd($response->getContent());
-            //->assertStatus(200);
+            ->get('/graphs')
+            ->assertStatus(200);
     }
 }
