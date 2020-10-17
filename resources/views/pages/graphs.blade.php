@@ -129,7 +129,13 @@ Grafieken
 
         <div class="row">
             <div class="col-sm-12">
-                <div id="camp-prices" style="height:400px;"></div>
+                <div id="camp-prices-graph" style="height:400px;"></div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div id="camp-prices-norm-graph" style="height:400px;"></div>
             </div>
         </div>
 
@@ -356,28 +362,56 @@ Grafieken
     });
 
     drawGoogleChart({
-        element: "camp-prices",
+        element: "camp-prices-graph",
         rawData: {!! json_encode($camp_prices) !!},
         pivot: {
-            rowField: 'year',
-            rowLabel: 'Jaar',
-            columnField: 'type',
-            columnLabel: function(row) { return row.name; },
+            rowField: 'commissie_year',
+            rowFormat: function(row, value) { return value.substr(0, 2) + "-" + value.substr(2); },
+            rowLabel: 'Commissie Jaar',
+            columnField: 'label',
             valueField: 'price', 
         },
         chartOptions: {
             title: "Prijs per kamp per jaar",
             hAxis: {
-                title: 'Jaar',
-                minValue: 2014,
-                slantedText: true
+                title: 'Jaar'
             },
             vAxis: {
-                title: 'Prijs &euro;',
+                title: 'Prijs €',
+            },
+            legend: {
+                position: 'top'
             }
+
+        }
+    });
+
+    drawGoogleChart({
+        element: "camp-prices-norm-graph",
+        rawData: {!! json_encode($camp_prices) !!},
+        pivot: {
+            rowField: 'commissie_year',
+            rowFormat: function(row, value) { return value.substr(0, 2) + "-" + value.substr(2); },
+            rowLabel: 'Commissie Jaar',
+            columnField: 'label',
+            valueField: 'price_norm', 
+        },
+        chartOptions: {
+            title: "Prijs per kamp per jaar per dag",
+            hAxis: {
+                title: 'Jaar'
+            },
+            vAxis: {
+                title: 'Prijs €',
+            },
+            legend: {
+                position: 'top'
+            }
+
         }
     });
   }
+  
   
     function transformDataset(rawData, colOptions) {
         var cols = colOptions || Object.keys(rawData[0].map(function(colName) {
@@ -408,6 +442,10 @@ Grafieken
             let column = dataset[iX][columnField];
             let value = dataset[iX][valueField];
             
+            if (options.rowFormat) {
+                row = options.rowFormat(dataset[iX], row);
+            }
+
             obj[row] = obj[row] || {};
             obj[row][column] = { value: value, label: columnLabel(dataset[iX], column) };
         }

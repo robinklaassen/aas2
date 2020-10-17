@@ -8,7 +8,7 @@ env:
 
 addons:
   ssh_known_hosts: ftp.anderwijs.nl
-  mariadb: 10.3
+  mariadb: 10.2
 
 stages:
   - test-backend

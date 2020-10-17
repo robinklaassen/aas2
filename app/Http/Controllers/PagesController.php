@@ -578,11 +578,26 @@ class PagesController extends Controller
 				, prijs as price
 				, naam as name
 				, REGEXP_SUBSTR(code, '[A-Za-z]+') as type
+				, REGEXP_SUBSTR(code, '[0-9]{4}') as commissie_year
+				, case 
+					when REGEXP_SUBSTR(code, '[A-Za-z]+') in ('N', 'K', 'W') then 'Winterkamp'
+					when REGEXP_SUBSTR(code, '[A-Za-z]+') in ('P') then 'Paaskamp'
+					when REGEXP_SUBSTR(code, '[A-Za-z]+') in ('V') then 'Voorjaarskamp'
+					when REGEXP_SUBSTR(code, '[A-Za-z]+') in ('Z') then 'Zomerkamp'
+					when REGEXP_SUBSTR(code, '[A-Za-z]+') in ('L') then 'Lentekamp'
+					when REGEXP_SUBSTR(code, '[A-Za-z]+') in ('M') then 'Meikamp'
+					when REGEXP_SUBSTR(code, '[A-Za-z]+') in ('H') then 'Herfstkamp'
+					else 'Unknown'
+				  end as label
+				, DATEDIFF(datum_eind, datum_start) as days
+				, cast(round(prijs / DATEDIFF(datum_eind, datum_start)) as int) as price_norm
+				
 			from events e
 			where type = 'kamp'
-			  and datum_start > '2015-01-01'	   
+			  and datum_start > '2015-01-01'	
+			  order by datum_start asc   
 			"),
-			[]			
+			[]
 		);
 		
 		return view('pages.graphs', 
