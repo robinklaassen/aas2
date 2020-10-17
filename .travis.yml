@@ -8,14 +8,12 @@ env:
 
 addons:
   ssh_known_hosts: ftp.anderwijs.nl
-  mariadb: '10.0'
-  
+  mariadb: 10.4
 
 stages:
   - test-backend
   - name: deploy
     if: (branch = master) AND (type = push)
-
 
 jobs:
   include:
@@ -24,6 +22,7 @@ jobs:
         - composer self-update
         - composer update
       before_script:
+        - sudo mysql -e 'create database aas2;'
         - cp .env.travis .env
         - php artisan key:generate
         - php artisan migrate --seed
