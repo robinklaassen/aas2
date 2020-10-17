@@ -6,9 +6,6 @@ php:
 env:
   - PHP_EXECUTABLE=php73
 
-services:
-  - mysql
-
 addons:
   ssh_known_hosts: ftp.anderwijs.nl
   mariadb: '10.0'
