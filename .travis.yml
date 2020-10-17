@@ -1,5 +1,4 @@
 language: php
-dist: precise
 
 php:
   - 7.3
@@ -9,7 +8,7 @@ env:
 
 addons:
   ssh_known_hosts: ftp.anderwijs.nl
-  mariadb: 10.4
+  mariadb: 10.3
 
 stages:
   - test-backend
@@ -24,6 +23,7 @@ jobs:
         - composer update
       before_script:
         - sudo mysql -e 'create database aas2;'
+        - sudo mysql -e 'grant all on *.* to travis@localhost;' || true
         - cp .env.travis .env
         - php artisan key:generate
         - php artisan migrate --seed
