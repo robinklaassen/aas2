@@ -23,8 +23,7 @@ jobs:
         - composer update
       before_script:
         - sudo mysql -e 'create database aas2;'
-        - sudo mysql -e 'grant all on *.* to travis@localhost;' || true
-        - mysql -e "SET Password=PASSWORD('travis')"
+        - sudo mysql -e 'grant all on *.* to root@localhost;' || true
         - cp .env.travis .env
         - php artisan key:generate
         - php artisan migrate --seed
