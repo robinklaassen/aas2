@@ -17,7 +17,7 @@ Grafieken
     <li role="presentation"><a href="#camp-prefs" role="tab" data-toggle="tab">Kampvoorkeur deelnemers</a></li>
     <li role="presentation"><a href="#registration-days" role="tab" data-toggle="tab">Inschrijvingen dagen voor
             kamp</a></li>
-    <li role="presentation"><a href="#camp-prices" role="tab" data-toggle="tab">Kamp prijzen</a></li>
+    <li role="presentation"><a href="#camp-prices" role="tab" data-toggle="tab">Kampprijzen</a></li>
     <li role="presentation"><a href="#promo" role="tab" data-toggle="tab">Promotie</a></li>
 </ul>
 
@@ -367,12 +367,12 @@ Grafieken
         pivot: {
             rowField: 'commissie_year',
             rowFormat: function(row, value) { return value.substr(0, 2) + "-" + value.substr(2); },
-            rowLabel: 'Commissie Jaar',
+            rowLabel: 'Verenigingsjaar',
             columnField: 'label',
             valueField: 'price', 
         },
         chartOptions: {
-            title: "Prijs per kamp per jaar",
+            title: "Kampprijzen per verenigingsjaar",
             hAxis: {
                 title: 'Jaar'
             },
@@ -392,12 +392,12 @@ Grafieken
         pivot: {
             rowField: 'commissie_year',
             rowFormat: function(row, value) { return value.substr(0, 2) + "-" + value.substr(2); },
-            rowLabel: 'Commissie Jaar',
+            rowLabel: 'Verenigingsjaar',
             columnField: 'label',
             valueField: 'price_norm', 
         },
         chartOptions: {
-            title: "Prijs per kamp per jaar per dag",
+            title: "Gemiddelde kampprijs per kampdag, per verenigingsjaar",
             hAxis: {
                 title: 'Jaar'
             },

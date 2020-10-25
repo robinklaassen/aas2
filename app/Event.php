@@ -94,6 +94,14 @@ class Event extends Model
 		$this->attributes['cancelled_at'] = ($value) ? Carbon::now() : null;
 	}
 
+	// The association year ('verenigingsjaar') starts at September 1st. This returns a string e.g. '14-15'
+	public function getVerenigingsjaarAttribute(): string
+	{
+		$startYear = $this->datum_start->subMonths(9)->year;
+		$endYear = $startYear + 1;
+		return substr($startYear, -2) . '-' . substr($endYear, -2);
+	}
+
 	/**
 	 * Event is publicly visible
 	 */
