@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Collective\Html\Eloquent\FormAccessible;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
@@ -123,14 +124,18 @@ class Member extends Model
 		$startDate = '2014-09-01';
 		$endDate = date('Y-m-d');
 
-		$base_query = $this->events()->notCancelled()->where('datum_start', '>', $startDate)->where('datum_eind', '<', $endDate);
-		$camps_full = $base_query->where('type', 'kamp')->where('wissel', 0)->count();
-		$camps_partial = $base_query->where('type', 'kamp')->where('wissel', 1)->count();
-		$trainings = $base_query->where('type', 'training')->count();
+		$base_query = $this->events()
+			->notCancelled()
+			->where('datum_start', '>', $startDate)
+			->where('datum_eind', '<', $endDate);
+
+		$camps_full = (clone $base_query)->where('type', 'kamp')->where('wissel', 0)->count();
+		$camps_partial = (clone $base_query)->where('type', 'kamp')->where('wissel', 1)->count();
+		$trainings = (clone $base_query)->where('type', 'training')->count();
 
 		$other = $this->actions()->where('date', '<=', $endDate)->sum('points');
 
-		$points = $camps_full * 3 + $camps_partial * 1 + $trainings * 2 + $other;
+		$points = $camps_full * 3 + $camps_partial * 1 + $trainings * 2 + $other;		
 
 		if ($this->hasstraightflush) {
 			$points += 3;
@@ -205,6 +210,14 @@ class Member extends Model
 		$data = Arr::sort($data, function ($item) {
 			return $item['date'];
 		});
+
+		if ($this->hasstraightflush) {
+			$data[] = [
+				'date' => Carbon::now(),
+				'name' => 'Straat',
+				'points' => 3
+			];
+		}
 
 		return $data;
 	}
