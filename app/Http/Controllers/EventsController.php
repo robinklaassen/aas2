@@ -470,6 +470,20 @@ class EventsController extends Controller
 			];
 		}
 
+		$placed = $event->participants()->orderBy('voornaam')->where('geplaatst', '=', '1');
+		$unplaced = $event->participants()->orderBy('voornaam')->where('geplaatst', '=', '0');
+		
+		$emails['participants']['unplaced'] = [
+			'participants' => $unplaced->pluck('email_deelnemer'),
+			'parents' => $unplaced->pluck('email_ouder')
+		];
+
+		$emails['participants']['placed'] = [
+			'participants' => $placed->pluck('email_deelnemer'),
+			'parents' => $placed->pluck('email_ouder')
+		];
+
+
 		return view('events.email', compact('event', "emails"));
 	}
 

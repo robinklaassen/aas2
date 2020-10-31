@@ -193,7 +193,9 @@ class MemberPolicy
 
     public function editPassword(User $user, Member $member)
     {
-        return $user->hasCapability("members::info::edit::password") || $this->ifSelf("members::info::edit::self", $user, $member);
+        return $member->user !== null && (
+            $user->hasCapability("members::info::edit::password") || $this->ifSelf("members::info::edit::self", $user, $member)
+        );
     }
 
     public function editAdministrativeAny(User $user)

@@ -7,8 +7,6 @@ use App\Participant;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Exports\ParticipantsExport;
-
-
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -160,7 +158,7 @@ class ParticipantsController extends Controller
 	# Edit participant on event (form)
 	public function editEvent(Participant $participant, Event $event)
 	{
-		$this->authorize("editParticipant", $event, $participant);
+		$this->authorize("editParticipant", [$event, $participant]);
 		$result = \DB::table('course_event_participant')->select('course_id', 'info')->whereParticipantIdAndEventId($participant->id, $event->id)->get();
 		$retrieved_courses = [];
 		foreach ($result as $row) {
@@ -172,7 +170,7 @@ class ParticipantsController extends Controller
 	# Edit participant on event (update database)
 	public function editEventSave(Participant $participant, Event $event, Request $request)
 	{
-		$this->authorize("editParticipant", $event, $participant);
+		$this->authorize("editParticipant", [$event, $participant]);
 		// Delete all current courses
 		\DB::table('course_event_participant')->whereParticipantIdAndEventId($participant->id, $event->id)->delete();
 

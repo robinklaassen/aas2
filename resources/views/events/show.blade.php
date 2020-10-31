@@ -153,7 +153,7 @@
 			@foreach($event->members()->orderBy('voornaam')->get() as $member)
 			<tr>
 				<td>
-					@can("showBasic", $member)
+					@can("view", $member)
 					<a href="{{ url('/members', $member->id) }}">
 						{{ $member->volnaam }}
 					</a>
@@ -305,7 +305,7 @@
 			@if( \Auth::user()->can("viewParticipantsAdvanced", $event) || $participant->pivot->geplaatst )
 			<tr>
 				<td>
-					@can("showBasic", $participant)
+					@can("view", $participant)
 					<a href="{{ url('/participants', $participant->id) }}">
 						{{ $participant->volnaam }}
 					</a>
