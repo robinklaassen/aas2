@@ -465,7 +465,9 @@ Grafieken
 
         return {
             rows: newRows,
-            columns: Object.keys(columns).map(function (col) { return { id: col, label: columns[col] }; } )
+            columns: Object.keys(columns).map(function (col) { 
+                return { id: col, label: columns[col], type: col === "key" ? "string" : "number"  }; 
+                })
         };
             
     }
