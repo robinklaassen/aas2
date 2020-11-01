@@ -113,7 +113,7 @@ class ParticipantRegistrationTest extends TestCase
 
                     $descr = $arg->getDescription();
                     return $arg->getCurrency() == "EUR"
-                        && $arg->getTotalAmount() == 1000.00
+                        && $arg->getTotalAmount() == 500.00
                         && $contains($this->event->code, $descr)
                         && $contains($this->data["voornaam"], $descr)
                         && $contains($this->data["achternaam"], $descr);

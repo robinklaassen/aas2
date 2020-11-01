@@ -44,7 +44,6 @@ class EventTableSeeder extends Seeder
 			'openbaar' => '0'
 		]);
 
-
 		Event::create([
 			'naam' => 'Training Meikamp',
 			'code' => 'TM1415',
@@ -72,7 +71,7 @@ class EventTableSeeder extends Seeder
 			'datum_start' => '2090-01-02',
 			'datum_eind' => '2090-01-05',
 			'location_id' => 2,
-			'prijs' => 1000,
+			'prijs' => 500,
 			'streeftal' => 10,
 			'openbaar' => '1'
 		]);
@@ -98,5 +97,78 @@ class EventTableSeeder extends Seeder
 			'openbaar' => '1',
 			'prijs' => 0,
 		]);
+
+		Event::create([
+			'naam' => 'Meikamp',
+			'code' => 'M1516',
+			'type' => 'kamp',
+			'datum_voordag' => '2016-05-01',
+			'datum_start' => '2016-05-03',
+			'tijd_start' => '13:00:00',
+			'datum_eind' => '2016-05-10',
+			'tijd_eind' => '17:00:00',
+			'location_id' => 1,
+			'prijs' => 420,
+			'streeftal' => 8,
+			'vol' => '1',
+			'beschrijving' => 'Ga mee op kamp!'
+		]);
+
+		Event::create([
+			'naam' => 'Meikamp',
+			'code' => 'M1617',
+			'type' => 'kamp',
+			'datum_voordag' => '2017-05-01',
+			'datum_start' => '2017-05-03',
+			'tijd_start' => '13:00:00',
+			'datum_eind' => '2017-05-10',
+			'tijd_eind' => '17:00:00',
+			'location_id' => 1,
+			'prijs' => 450,
+			'streeftal' => 8,
+			'vol' => '1',
+			'beschrijving' => 'Ga mee op kamp!'
+		]);
+
+		Event::create([
+			'naam' => 'Meikamp',
+			'code' => 'M1617',
+			'type' => 'kamp',
+			'datum_voordag' => '2017-05-01',
+			'datum_start' => '2017-05-03',
+			'tijd_start' => '13:00:00',
+			'datum_eind' => '2017-05-10',
+			'tijd_eind' => '17:00:00',
+			'location_id' => 1,
+			'prijs' => 550,
+			'streeftal' => 8,
+			'vol' => '1',
+			'beschrijving' => 'Ga mee op kamp!'
+		]);
+
+		Event::create([
+			'naam' => 'Zomerkamp 1',
+			'code' => 'Z1516-1',
+			'type' => 'kamp',
+			'datum_voordag' => '2016-07-28',
+			'datum_start' => '2016-08-01',
+			'datum_eind' => '2016-08-08',
+			'location_id' => 2,
+			'prijs' => 520,
+			'openbaar' => '0'
+		]);
+
+		Event::create([
+			'naam' => 'Zomerkamp 2',
+			'code' => 'Z1516-2',
+			'type' => 'kamp',
+			'datum_voordag' => '2016-07-28',
+			'datum_start' => '2016-08-01',
+			'datum_eind' => '2016-08-08',
+			'location_id' => 2,
+			'prijs' => 520,
+			'openbaar' => '0'
+		]);
+
 	}
 }
