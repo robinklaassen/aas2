@@ -475,7 +475,6 @@ Grafieken
     function drawGoogleChart(options) {
         if (options.pivot) {
             let pivot = pivotDataSet(options.rawData, options.pivot);
-            console.log(pivot);
             options.rawData = pivot.rows;
             options.columns = pivot.columns;
         }
