@@ -60,7 +60,15 @@
 	</div>
 	<div class="col-md-4 progress-container">
 		@foreach ($thermo as $c)
-		<h3>{{$c['naam']}} @if ($c['klikbaar'])<small>(<a href="{{ url('/events', $c['id']) }}">link</a>)</small>@endif</h3>
+
+		@can('view', $c['camp'])
+		<a href="{{ url('/events', $c['camp']['id']) }}">
+			<h3>{{$c['camp']['naam']}}</h3>
+		</a>
+		@else
+		<h3>{{$c['camp']['naam']}}</h3>
+		@endcan
+
 		<div style="display:flex;">
 			<div class="progress-label-left">L</div>
 			<div class="progress">

@@ -58,19 +58,6 @@ class PagesController extends Controller
 				->get();
 			$thermo = [];
 			foreach ($camps as $camp) {
-				$naam = $camp->naam;
-				$id = $camp->id;
-
-				// Admins and members who go on camp can click the link
-				$klikbaar = false;
-
-				$events = Auth::user()->profile->events->pluck('id');
-
-				if (Auth::user()->is_admin) {
-					$klikbaar = true;
-				} else if ($events->contains($id)) {
-					$klikbaar = true;
-				}
 
 				$streef_L = $camp->streeftal;
 				$streef_D = ($streef_L - 1) * 3;
@@ -93,7 +80,7 @@ class PagesController extends Controller
 				$perc_L_bijna = ($num_L_goed + $num_L_bijna > $streef_L) ? 100 - $perc_L_goed : ($num_L_bijna / $streef_L) * 100;
 				$perc_D_bijna = ($num_D_goed + $num_D_bijna > $streef_D) ? 100 - $perc_D_goed : ($num_D_bijna / $streef_D) * 100;
 
-				$thermo[] = compact('naam', 'id', 'klikbaar', 'streef_L', 'streef_D', 'num_L_goed', 'perc_L_goed', 'num_L_bijna', 'perc_L_bijna', 'num_D_goed', 'perc_D_goed', 'num_D_bijna', 'perc_D_bijna');
+				$thermo[] = compact('camp', 'streef_L', 'streef_D', 'num_L_goed', 'perc_L_goed', 'num_L_bijna', 'perc_L_bijna', 'num_D_goed', 'perc_D_goed', 'num_D_bijna', 'perc_D_bijna');
 			}
 
 			return view('pages.home-member', compact('today', 'thermo'));

@@ -160,7 +160,8 @@ class ParticipantPolicy
 
     public function changePassword(User $user, Participant $participant)
     {
-        return $user->hasCapability("participants::info::edit::password") ||  $this->ifSelf("participants::info::edit::self", $user, $participant);
+        return $participant->user !== null && 
+            ($user->hasCapability("participants::info::edit::password") ||  $this->ifSelf("participants::info::edit::self", $user, $participant));
     }
 
     public function onEvent(User $user, Participant $participant)
