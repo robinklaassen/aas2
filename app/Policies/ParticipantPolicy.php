@@ -123,6 +123,11 @@ class ParticipantPolicy
         return $user->hasCapability("participants::info::show::administrative");
     }
 
+    public function showAdministrative(User $user, Participant $participant)
+    {
+        return $this->showAdministrativeAny($user);
+    }
+
     public function editFinanceAny(User $user)
     {
         return $user->hasCapability("participants::info::edit::finance");
@@ -156,6 +161,11 @@ class ParticipantPolicy
     public function editAdministrativeAny(User $user)
     {
         return $user->hasCapability("participants::info::edit::administrative");
+    }
+
+    public function editAdministrative(User $user, Participant $participant)
+    {
+        return $this->editAdministrativeAny($user);
     }
 
     public function changePassword(User $user, Participant $participant)
