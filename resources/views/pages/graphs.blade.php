@@ -465,7 +465,9 @@ Grafieken
 
         return {
             rows: newRows,
-            columns: Object.keys(columns).map(function (col) { return { id: col, label: columns[col] }; } )
+            columns: Object.keys(columns).map(function (col) { 
+                return { id: col, label: columns[col], type: col === "key" ? "string" : "number"  }; 
+                })
         };
             
     }
@@ -473,7 +475,6 @@ Grafieken
     function drawGoogleChart(options) {
         if (options.pivot) {
             let pivot = pivotDataSet(options.rawData, options.pivot);
-            console.log(pivot);
             options.rawData = pivot.rows;
             options.columns = pivot.columns;
         }
