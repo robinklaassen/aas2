@@ -141,7 +141,7 @@
 	<div class="col-md-6">
 		<table class="table table-hover">
 			<caption>
-				@if ($event->type=='kamp')
+				@if ($event->type=='kamp' || $event->type=='online')
 				Leiding
 				@elseif ($event->type=='training')
 				Trainers
@@ -318,11 +318,7 @@
 				<td>
 					{{ $participant->vol_niveau }}
 				</td>
-
-				@if($event->package_type != null)
-				<td>{{ $participant->pivot->package->title }}</td>
-				@endif
-
+				
 				@can("viewParticipantsAdvanced", $event)
 				<td>
 					@if ($participantIsNew[$participant->id] == 1)
@@ -330,6 +326,10 @@
 					@endif
 				</td>
 				@endcan
+				
+				@if($event->package_type != null)
+				<td>{{ $participant->pivot->package ? $participant->pivot->package->title : 'GEEN' }}</td>
+				@endif
 
 				<td>{{ $participantCourseString[$participant->id] }}</td>
 
