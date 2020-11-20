@@ -1,5 +1,5 @@
 # AAS 2.0
-[![Build Status](https://travis-ci.org/robinklaassen/aas2.svg?branch=master)](https://travis-ci.org/robinklaassen/aas2)
+[![Build Status](https://travis-ci.com/robinklaassen/aas2.svg?branch=master)](https://travis-ci.com/robinklaassen/aas2)
 
 Custom administratiesysteem voor vereniging Anderwijs, www.anderwijs.nl.  
 Gebouwd april-mei 2015 door Robin Klaassen. Gebaseerd op Laravel 5.
