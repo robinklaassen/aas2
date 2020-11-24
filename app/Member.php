@@ -94,12 +94,12 @@ class Member extends Model
 		$endDate = date('Y-m-d');
 
 		$camps = $this->events()
-					->notCancelled()
-					->where('type', 'kamp')
-					->where('datum_start', '>', $startDate)
-					->where('datum_eind', '<', $endDate)
-					->where('wissel', 0)
-					->get();
+			->notCancelled()
+			->where('type', 'kamp')
+			->where('datum_start', '>', $startDate)
+			->where('datum_eind', '<', $endDate)
+			->where('wissel', 0)
+			->get();
 
 		$list = [];
 		foreach ($camps as $camp) {
@@ -135,7 +135,7 @@ class Member extends Model
 
 		$other = $this->actions()->where('date', '<=', $endDate)->sum('points');
 
-		$points = $camps_full * 3 + $camps_partial * 1 + $trainings * 2 + $other;		
+		$points = $camps_full * 3 + $camps_partial * 1 + $trainings * 2 + $other;
 
 		if ($this->hasstraightflush) {
 			$points += 3;
@@ -166,12 +166,12 @@ class Member extends Model
 
 		// First the event data
 		$events = $this->events()
-					->notCancelled()
-					->whereIn('type', ['kamp', 'training'])
-					->where('datum_start', '>', $startDate)
-					->where('datum_eind', '<', $endDate)
-					->orderBy('datum_start', 'asc')
-					->get();
+			->notCancelled()
+			->whereIn('type', ['kamp', 'training'])
+			->where('datum_start', '>', $startDate)
+			->where('datum_eind', '<', $endDate)
+			->orderBy('datum_start', 'asc')
+			->get();
 
 		foreach ($events as $event) {
 
@@ -213,7 +213,7 @@ class Member extends Model
 
 		if ($this->hasstraightflush) {
 			$data[] = [
-				'date' => Carbon::now(),
+				'date' => null,
 				'name' => 'Straat',
 				'points' => 3
 			];
@@ -229,12 +229,12 @@ class Member extends Model
 		$endDate = date('Y-m-d');
 
 		$lastEvent = $this->events()
-						->notCancelled()
-						->whereIn('type', ['kamp', 'training'])
-						->where('datum_start', '>', $startDate)
-						->where('datum_eind', '<', $endDate)
-						->orderBy('datum_start', 'desc')
-						->first();
+			->notCancelled()
+			->whereIn('type', ['kamp', 'training'])
+			->where('datum_start', '>', $startDate)
+			->where('datum_eind', '<', $endDate)
+			->orderBy('datum_start', 'desc')
+			->first();
 
 		$lastAction = $this->actions()->where('date', '<', $endDate)->orderBy('date', 'desc')->first();
 
