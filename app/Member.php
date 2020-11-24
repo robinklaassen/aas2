@@ -135,7 +135,7 @@ class Member extends Model
 
 		$other = $this->actions()->where('date', '<=', $endDate)->sum('points');
 
-		$points = $camps_full * 3 + $camps_partial * 1 + $trainings * 2 + $other;		
+		$points = $camps_full * 3 + $camps_partial * 1 + $trainings * 2 + $other;
 
 		if ($this->hasstraightflush) {
 			$points += 3;
