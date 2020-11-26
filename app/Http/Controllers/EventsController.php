@@ -322,8 +322,8 @@ class EventsController extends Controller
 	{
 		$this->authorize("subjectCheck", $event);
 
-		// Redirect if not camp
-		if ($event->type != 'kamp') {
+		// Redirect if not camp or online
+		if (!in_array($event->type, ['kamp', 'online'])) {
 			return redirect('events');
 		}
 
