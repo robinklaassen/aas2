@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Carbon\Carbon;
 use Collective\Html\Eloquent\FormAccessible;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
@@ -93,12 +94,12 @@ class Member extends Model
 		$endDate = date('Y-m-d');
 
 		$camps = $this->events()
-					->notCancelled()
-					->where('type', 'kamp')
-					->where('datum_start', '>', $startDate)
-					->where('datum_eind', '<', $endDate)
-					->where('wissel', 0)
-					->get();
+			->notCancelled()
+			->where('type', 'kamp')
+			->where('datum_start', '>', $startDate)
+			->where('datum_eind', '<', $endDate)
+			->where('wissel', 0)
+			->get();
 
 		$list = [];
 		foreach ($camps as $camp) {
@@ -123,10 +124,14 @@ class Member extends Model
 		$startDate = '2014-09-01';
 		$endDate = date('Y-m-d');
 
-		$base_query = $this->events()->notCancelled()->where('datum_start', '>', $startDate)->where('datum_eind', '<', $endDate);
-		$camps_full = $base_query->where('type', 'kamp')->where('wissel', 0)->count();
-		$camps_partial = $base_query->where('type', 'kamp')->where('wissel', 1)->count();
-		$trainings = $base_query->where('type', 'training')->count();
+		$base_query = $this->events()
+			->notCancelled()
+			->where('datum_start', '>', $startDate)
+			->where('datum_eind', '<', $endDate);
+
+		$camps_full = (clone $base_query)->where('type', 'kamp')->where('wissel', 0)->count();
+		$camps_partial = (clone $base_query)->where('type', 'kamp')->where('wissel', 1)->count();
+		$trainings = (clone $base_query)->where('type', 'training')->count();
 
 		$other = $this->actions()->where('date', '<=', $endDate)->sum('points');
 
@@ -161,12 +166,12 @@ class Member extends Model
 
 		// First the event data
 		$events = $this->events()
-					->notCancelled()
-					->whereIn('type', ['kamp', 'training'])
-					->where('datum_start', '>', $startDate)
-					->where('datum_eind', '<', $endDate)
-					->orderBy('datum_start', 'asc')
-					->get();
+			->notCancelled()
+			->whereIn('type', ['kamp', 'training'])
+			->where('datum_start', '>', $startDate)
+			->where('datum_eind', '<', $endDate)
+			->orderBy('datum_start', 'asc')
+			->get();
 
 		foreach ($events as $event) {
 
@@ -206,6 +211,14 @@ class Member extends Model
 			return $item['date'];
 		});
 
+		if ($this->hasstraightflush) {
+			$data[] = [
+				'date' => null,
+				'name' => 'Straight flush',
+				'points' => 3
+			];
+		}
+
 		return $data;
 	}
 
@@ -216,12 +229,12 @@ class Member extends Model
 		$endDate = date('Y-m-d');
 
 		$lastEvent = $this->events()
-						->notCancelled()
-						->whereIn('type', ['kamp', 'training'])
-						->where('datum_start', '>', $startDate)
-						->where('datum_eind', '<', $endDate)
-						->orderBy('datum_start', 'desc')
-						->first();
+			->notCancelled()
+			->whereIn('type', ['kamp', 'training'])
+			->where('datum_start', '>', $startDate)
+			->where('datum_eind', '<', $endDate)
+			->orderBy('datum_start', 'desc')
+			->first();
 
 		$lastAction = $this->actions()->where('date', '<', $endDate)->orderBy('date', 'desc')->first();
 

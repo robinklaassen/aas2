@@ -515,18 +515,11 @@ Mijn profiel
 					<tbody>
 						@foreach ($member->listofactions as $item)
 						<tr>
-							<td>{{$item['date']->format('d-m-Y')}}</td>
-							<td>{{$item['name']}}</td>
-							<td>{{$item['points']}}</td>
+							<td>{{ $item['date'] !== null ? $item['date']->format('d-m-Y') : '' }}</td>
+							<td>{{ $item['name'] }}</td>
+							<td>{{ $item['points'] }}</td>
 						</tr>
 						@endforeach
-						@if ($member->hasstraightflush)
-						<tr>
-							<td></td>
-							<td>Straight flush</td>
-							<td>3</td>
-						</tr>
-						@endif
 						<tr>
 							<td></td>
 							<td><strong>Totaal:</strong></td>
