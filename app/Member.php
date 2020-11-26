@@ -214,7 +214,7 @@ class Member extends Model
 		if ($this->hasstraightflush) {
 			$data[] = [
 				'date' => null,
-				'name' => 'Straat',
+				'name' => 'Straight flush',
 				'points' => 3
 			];
 		}
