@@ -3,9 +3,11 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Participant extends Model
 {
+    use SoftDeletes;
 
 	const INCOME_DESCRIPTION_TABLE = [
 		0 => 'Meer dan € 3400 (geen korting)',
@@ -104,4 +106,13 @@ class Participant extends Model
 	{
 		return $this->user->id === $user->id;
 	}
+
+	public function getLastPlacedCampAttribute(): ?Event
+    {
+        return $this->events()
+            ->wherePivot('geplaatst', '=', true)
+            ->whereIn('type', ['kamp', 'online'])
+            ->latest('datum_start')
+            ->first();
+    }
 }
