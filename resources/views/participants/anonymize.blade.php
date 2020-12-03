@@ -6,9 +6,8 @@
 
 
 @section('content')
-    <form action="{{ action('ParticipantsController@anonymizeStore') }}" method="post">
-        <input type="submit" value="Anonimiseren" />
-        <table>
+    <form action="{{ action('ParticipantsController@anonymizeConfirm') }}">
+        <table class="table table-hover">
             <thead>
                 <tr>
                     <th></th>
@@ -21,12 +20,13 @@
         @foreach ($participants as $participant)
 
             <tr>
-                <td><input name="participant[]" value="{{ $participant->id }}"  /></td>
+                <td><input type="checkbox" name="participant[]" value="{{ $participant->id }}"  checked /></td>
                 <td>{{$participant->volnaam}}</td>
                 <td>{{$participant->created_at}}</td>
-                <td>{{$participant->lastPlacedCamp->code ($participant->lastPlacedCamp->datum_start)}}</td>
+                <td>{{$participant->lastPlacedCamp !== null ? $participant->lastPlacedCamp->code : ""}}</td>
             </tr>
         @endforeach
         </table>
+        <input type="submit" value="Anonimiseren" class="btn btn-primary" />
     </form>
 @endsection

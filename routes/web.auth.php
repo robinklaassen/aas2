@@ -185,10 +185,21 @@ Route::put(
     'ParticipantsController@editEventSave'
 );
 Route::get('participants/{participant}/delete', 'ParticipantsController@delete');
+Route::get(
+    'participants/anonymize',
+    'ParticipantsController@anonymize'
+);
+Route::get(
+    'participants/anonymize/confirm',
+    'ParticipantsController@anonymizeConfirm'
+);
+Route::post(
+    'participants/anonymize/confirm',
+    'ParticipantsController@anonymizeStore'
+);
 Route::get('participants/export', 'ParticipantsController@export');
 Route::get('participants/map', 'ParticipantsController@map')->middleware(UnderConstruction::class);
 Route::resource('participants', 'ParticipantsController');
-
 
 # User things
 Route::get('users/{user}/admin', 'UsersController@admin');

@@ -108,5 +108,28 @@ class ParticipantTableSeeder extends Seeder
 			'hoebij' => 'Zusje',
 			'opmerkingen' => 'Enorm veel zin in kamp.',
 		]);
+
+		Participant::create([
+			'voornaam' => 'Jan',
+			'tussenvoegsel' => '',
+			'achternaam' => 'Janssen',
+			'geslacht' => 'M',
+			'geboortedatum' => '2004-12-01',
+			'adres' => 'Beukenstraat',
+			'postcode' => '0101 AA',
+			'plaats' => 'Almelo',
+			'telefoon_deelnemer' => '0698023759',
+			'telefoon_ouder_vast' => '0686723998',
+			'telefoon_ouder_mobiel' => '0612345678',
+			'email_deelnemer' => 'henk@janssen.nl',
+			'email_ouder' => 'piet@janssen.nl',
+			'mag_gemaild' => 0,
+			'inkomen' => 2,
+			'school' => 'Vreemans College',
+			'niveau' => 'HAVO',
+			'klas' => 1,
+			'hoebij' => 'Zusje',
+			'opmerkingen' => 'Enorm veel zin in kamp.',
+		]);
 	}
 }

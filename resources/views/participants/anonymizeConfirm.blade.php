@@ -5,11 +5,17 @@
 @endsection
 
 @section('content')
-    Weet je zeker dat je {{ count($participants) }} deelnemers wil verwijderen?
+    Weet je zeker dat je {{ count($participants) }} deelnemers wil anonimiseren?
 
-    <ul>
-        @foreach ($participants as $participant)
-            <li>{{$participant->volnaam}}</li>
-        @endforeach
-    </ul>
+    <form method="post">
+        <ul>
+            @foreach ($participants as $participant)
+                <input type="hidden" name="participants[]" value="{{$participant->id}}" />
+                <li>{{$participant->volnaam}}</li>
+            @endforeach
+        </ul>
+
+
+        <input type="submit" value="Ja, anonimiseren!" class="btn btn-danger" />
+    </form>
 @endsection

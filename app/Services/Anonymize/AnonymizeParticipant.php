@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Services\Anonymize;
 
 use App\Participant;
+use App\Services\ObjectManager\ObjectManagerInterface;
 use Carbon\Carbon;
 use DateTimeImmutable;
 use Illuminate\Database\Eloquent\Builder;
@@ -12,16 +13,22 @@ use Illuminate\Support\Collection;
 
 class AnonymizeParticipant implements AnonymizeParticipantInterface
 {
-    const YEAR_NO_CAMP = 8;
+    const YEAR_NO_CAMP = 2;
     /**
      * @var AnonymizeGeneratorInterface
      */
     private $generator;
+    /**
+     * @var ObjectManager
+     */
+    private $objectManager;
 
-    public function __construct(AnonymizeGeneratorInterface $generator)
-    {
-
+    public function __construct(
+        AnonymizeGeneratorInterface $generator,
+        ObjectManagerInterface $objectManager
+    ) {
         $this->generator = $generator;
+        $this->objectManager = $objectManager;
     }
 
     /** @return Collection<Participant> */
@@ -30,14 +37,20 @@ class AnonymizeParticipant implements AnonymizeParticipantInterface
         $inactiveBoundary = (new Carbon($currentTime))->subYears(self::YEAR_NO_CAMP);
 
         return Participant::query()
-            ->leftJoin('event_participant', 'participant.id', '=', 'event_participant.participant_id')
-            ->where('event_participant.created_at', '<=', $inactiveBoundary)
-            ->orWhere(function ($query) use ($inactiveBoundary) {
-                /** @var Builder $query */
-                $query->whereIsNull('event_participant.created_at')
-                    ->where('participant.created_at', '<=', $inactiveBoundary);
+            ->leftJoin('event_participant', 'participants.id', '=', 'event_participant.participant_id')
+            ->leftJoin('events', 'events.id', '=', 'event_participant.event_id')
+            ->whereNull('participants.anonymized_at')
+            ->where(function ($query) use ($inactiveBoundary) {
+                $query
+                    ->where('events.datum_eind', '<=', $inactiveBoundary)
+                    ->orWhere(function ($query) use ($inactiveBoundary) {
+                        /** @var Builder $query */
+                        $query->whereNull('event_participant.event_id')
+                            ->where('participants.created_at', '<=', $inactiveBoundary);
+                    });
             })
-            ->select('participant.*')
+            ->distinct()
+            ->select('participants.*')
             ->get();
     }
 
@@ -63,9 +76,13 @@ class AnonymizeParticipant implements AnonymizeParticipantInterface
         $participant->niveau = "VMBO";
         $participant->klas = 0;
         $participant->hoebij = "";
-        $participant->opmerking = "Geänonimiseerd";
+        $participant->opmerkingen = "Geänonimiseerd";
+        $participant->anonymized_at = new DateTimeImmutable();
 
-        $participant->comments()->forceDelete();
-        $participant->delete();
+        foreach ($participant->comments() as $comment) {
+            $this->objectManager->forceDelete($comment);
+        }
+
+        $this->objectManager->save($participant);
     }
 }

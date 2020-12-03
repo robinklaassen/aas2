@@ -17,7 +17,11 @@
 			@can("create", \App\Participant::class)
 			<a class="btn btn-primary" type="button" href="{{ url('participants/create') }}" style="margin-top:21px;">Nieuwe deelnemer</a>
 			@endcan
-			
+
+			@can("anonymize", \App\Participant::class)
+			<a class="btn btn-primary" type="button" href="{{ action('ParticipantsController@anonymize') }}" style="margin-top:21px;">Anonimiseren</a>
+			@endcan
+
 			{{-- <a class="btn btn-success" type="button" href="{{ url('participants/export') }}" style="margin-top:21px;">Exporteren</a> --}}
 		</p>
 	</div>
@@ -34,13 +38,13 @@
 			<th>Achternaam</th>
 			<th>Woonplaats</th>
 			<th>Geboortedatum</th>
-			@can("showPrivateAny",  \App\Participant::class)			
+			@can("showPrivateAny",  \App\Participant::class)
 			<th>Email ouder</th>
 			<th>Email deelnemer</th>
 			@endcan
 		</tr>
 	</thead>
-	
+
 	<tbody>
 		@foreach ($participants as $participant)
 			<tr>
@@ -57,7 +61,7 @@
 		@endforeach
 	</tbody>
 </table>
-	
+
 
 @endsection
 

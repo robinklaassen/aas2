@@ -33,7 +33,7 @@ class ParticipantsController extends Controller
 	 */
 	public function index()
 	{
-		$participants = Participant::all();
+		$participants = Participant::nonAnonymized()->get();
 		return view('participants.index', compact('participants'));
 	}
 
@@ -261,21 +261,27 @@ class ParticipantsController extends Controller
 
 	public function anonymize()
     {
+        $this->authorize('anonymize', Participant::class);
         $participants = $this->anonymizeParticipant->getParticipantsToAnonymize(new \DateTimeImmutable());
         return view('participants.anonymize', compact('participants'));
     }
 	public function anonymizeConfirm(AnonymizeParticipantRequest $request)
     {
+        $this->authorize('anonymize', Participant::class);
         $participants = Participant::findMany($request->get('participant', []));
-        return view('participants.anonymize', compact('participants'));
+        return view('participants.anonymizeConfirm', compact('participants'));
     }
 
 	public function anonymizeStore(AnonymizeParticipantRequest $request)
     {
+        $this->authorize('anonymize',  Participant::class);
         $participants = Participant::findMany($request->get('participant', []));
         foreach ($participants as $participant) {
             $this->anonymizeParticipant->anonymize($participant);
         }
-        return view('participants.anonymizeComplete');
+
+        return redirect(action('ParticipantsController@index'))->with([
+            'flash_message' => count($participants) . ' geanonimiseerd'
+        ]);
     }
 }

@@ -1,10 +1,11 @@
 <?php
 
+use App\Helpers\CapabilityHelper;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Database\Schema\Blueprint;
 
-class AddParticipantSoftDelete extends Migration
+class AddAnonymizeFieldsAndCapabilities extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +14,16 @@ class AddParticipantSoftDelete extends Migration
      */
     public function up()
     {
+        CapabilityHelper::new(
+            'participants::anonymize',
+            'Deelnemers - Anonimiseren',
+            'board'
+        );
+
         Schema::table('participants', function (Blueprint $table) {
-            $table->softDeletes();
+            $table->timestamp('anonymized_at')->nullable();
         });
+
     }
 
     /**
@@ -25,8 +33,12 @@ class AddParticipantSoftDelete extends Migration
      */
     public function down()
     {
+        CapabilityHelper::delete([
+            'participants::anonymize'
+        ]);
+
         Schema::table('participants', function (Blueprint $table) {
-            $table->dropSoftDeletes();
+            $table->dropColumn('anonymized_at');
         });
     }
 }

@@ -2,12 +2,11 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Participant extends Model
 {
-    use SoftDeletes;
 
 	const INCOME_DESCRIPTION_TABLE = [
 		0 => 'Meer dan € 3400 (geen korting)',
@@ -114,5 +113,10 @@ class Participant extends Model
             ->whereIn('type', ['kamp', 'online'])
             ->latest('datum_start')
             ->first();
+    }
+
+    public function scopeNonAnonymized(Builder $query)
+    {
+        return $query->whereNull('anonymized_at');
     }
 }
