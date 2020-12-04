@@ -51,16 +51,13 @@ class AnonymizeParticipantTest extends TestCase
 
         $fieldsToAnonymize = array_keys($data);
 
+        $comment1 = new Comment();
+        $comment2 = new Comment();
         $user = new User();
         $participant = new Participant();
         $participant->user = $user;
-        $comment1 = new Comment();
-        $comment2 = new Comment();
+        $participant->fill($data);
         $participant->comments = new Collection([$comment1, $comment2]);
-
-        foreach($fieldsToAnonymize as $field) {
-            $participant->$field = $data[$field];
-        }
 
         $this->objectManager->expects('save')->with($participant);
         $this->objectManager->expects('forceDelete')->with($user);
@@ -99,7 +96,7 @@ class AnonymizeParticipantTest extends TestCase
     }
 
 
-    public function test_it_gets_doesnt_get_anonymized()
+    public function test_it_gets_participant_to_anonymize()
     {
         $participant = new Participant();
         $participant->fill($this->fakeParticipantData());

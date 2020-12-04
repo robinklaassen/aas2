@@ -1,10 +1,10 @@
 language: php
 
 php:
-  - 7.3
+  - 7.4
 
 env:
-  - PHP_EXECUTABLE=php73
+  - PHP_EXECUTABLE=php74
 
 addons:
   ssh_known_hosts: ftp.anderwijs.nl

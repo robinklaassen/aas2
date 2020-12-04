@@ -8,7 +8,7 @@
   "license": "MIT",
   "type": "project",
   "require": {
-    "php": "^7.2",
+    "php": "^7.3",
     "laravel/framework": "^6.0",
     "laravelcollective/html": "^6.0",
     "nesbot/carbon": "^2.0",
@@ -70,7 +70,7 @@
   "config": {
     "preferred-install": "dist",
     "platform": {
-      "php": "7.2"
+      "php": "7.3"
     }
   }
 }
