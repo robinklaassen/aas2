@@ -13,13 +13,13 @@ use Illuminate\Support\Collection;
 
 class AnonymizeParticipant implements AnonymizeParticipantInterface
 {
-    const YEAR_NO_CAMP = 2;
+    const YEAR_NO_CAMP = 8;
     /**
      * @var AnonymizeGeneratorInterface
      */
     private $generator;
     /**
-     * @var ObjectManager
+     * @var ObjectManagerInterface
      */
     private $objectManager;
 
@@ -79,8 +79,12 @@ class AnonymizeParticipant implements AnonymizeParticipantInterface
         $participant->opmerkingen = "Geänonimiseerd";
         $participant->anonymized_at = new DateTimeImmutable();
 
-        foreach ($participant->comments() as $comment) {
+        foreach ($participant->comments as $comment) {
             $this->objectManager->forceDelete($comment);
+        }
+
+        if ($participant->user) {
+            $this->objectManager->forceDelete($participant->user);
         }
 
         $this->objectManager->save($participant);

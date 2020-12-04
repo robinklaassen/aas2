@@ -121,7 +121,7 @@ class ParticipantTableSeeder extends Seeder
 			'telefoon_deelnemer' => '0698023759',
 			'telefoon_ouder_vast' => '0686723998',
 			'telefoon_ouder_mobiel' => '0612345678',
-			'email_deelnemer' => 'henk@janssen.nl',
+			'email_deelnemer' => 'jan@janssen.nl',
 			'email_ouder' => 'piet@janssen.nl',
 			'mag_gemaild' => 0,
 			'inkomen' => 2,
