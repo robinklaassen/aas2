@@ -19,6 +19,7 @@ class AddAnonymizeFieldsAndCapabilities extends Migration
             'Deelnemers - Anonimiseren',
             'board'
         );
+        CapabilityHelper::attach('participants::anonymize', 'kantoorci');
 
         Schema::table('participants', function (Blueprint $table) {
             $table->timestamp('anonymized_at')->nullable();

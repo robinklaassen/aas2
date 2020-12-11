@@ -16,8 +16,8 @@ use Tests\TestCase;
 
 
 /**
- * Technically not an unit test because of `test_it_gets_participants_to_anonymize` hitting the database
- * But splitting this us was to much effort and code duplication for noww
+ * Technically not a unit test because of `test_it_gets_participants_to_anonymize` hitting the database
+ * But splitting this up was too much effort and code duplication for now
  */
 class AnonymizeParticipantTest extends TestCase
 {

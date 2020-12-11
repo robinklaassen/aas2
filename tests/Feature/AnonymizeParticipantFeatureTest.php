@@ -58,7 +58,7 @@ class AnonymizeParticipantFeatureTest extends TestCase
             ->assertDontSee('Annabelle');
     }
 
-    public function test_it_confirm_people_to_anonomyze()
+    public function test_it_confirms_people_to_anonymize()
     {
         $user = User::findOrFail(1); // Ranonkeltje
         $this->actingAs($user)->get(action('ParticipantsController@anonymizeConfirm', [
@@ -77,7 +77,7 @@ class AnonymizeParticipantFeatureTest extends TestCase
             ->assertDontSee('Jan');
     }
 
-    public function test_it_anomonyzes()
+    public function test_it_anonymizes()
     {
         $user = User::findOrFail(1); // Ranonkeltje
         $this->actingAs($user)->post(action('ParticipantsController@anonymizeConfirm'), [
