@@ -21,7 +21,7 @@ class AnonymizeParticipantFeatureTest extends TestCase
 
     public function test_it_is_not_accessible_for_members()
     {
-        $user = User::findOrFail(2); // Jon
+        $user = User::findOrFail(4); // Jon
         $this->actingAs($user)->get(action('ParticipantsController@anonymize'))
             ->assertStatus(403);
 
@@ -42,6 +42,16 @@ class AnonymizeParticipantFeatureTest extends TestCase
     public function test_it_is_accessible_for_board()
     {
         $user = User::findOrFail(1); // Ranonkeltje
+        $this->actingAs($user)->get(action('ParticipantsController@anonymize'))
+            ->assertStatus(200);
+
+        $this->actingAs($user)->get(action('ParticipantsController@index'))
+            ->assertSee('Anonimiseren');
+    }
+
+    public function test_it_is_accessible_for_kantoorci()
+    {
+        $user = User::findOrFail(2); // Jon
         $this->actingAs($user)->get(action('ParticipantsController@anonymize'))
             ->assertStatus(200);
 
