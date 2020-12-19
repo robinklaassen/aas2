@@ -3,20 +3,28 @@
 namespace App\Http\Controllers;
 
 use App\Event;
+use App\Http\Requests\AnonymizeParticipantRequest;
 use App\Participant;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Exports\ParticipantsExport;
+use App\Services\Anonymize\AnonymizeParticipantInterface;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ParticipantsController extends Controller
 {
 
-	public function __construct()
+    /**
+     * @var AnonymizeParticipantInterface
+     */
+    private $anonymizeParticipant;
+
+    public function __construct(AnonymizeParticipantInterface $anonymizeParticipant)
 	{
 		$this->authorizeResource(Participant::class, 'participant');
-	}
+        $this->anonymizeParticipant = $anonymizeParticipant;
+    }
 
 	/**
 	 * Display a listing of the resource.
@@ -25,7 +33,7 @@ class ParticipantsController extends Controller
 	 */
 	public function index()
 	{
-		$participants = Participant::all();
+		$participants = Participant::nonAnonymized()->get();
 		return view('participants.index', compact('participants'));
 	}
 
@@ -250,4 +258,30 @@ class ParticipantsController extends Controller
 
 		return view('participants.map', compact('campnames', 'amount', 'participantJSON'));
 	}
+
+	public function anonymize()
+    {
+        $this->authorize('anonymize', Participant::class);
+        $participants = $this->anonymizeParticipant->getParticipantsToAnonymize(new \DateTimeImmutable());
+        return view('participants.anonymize', compact('participants'));
+    }
+	public function anonymizeConfirm(AnonymizeParticipantRequest $request)
+    {
+        $this->authorize('anonymize', Participant::class);
+        $participants = Participant::findMany($request->get('participant', []));
+        return view('participants.anonymizeConfirm', compact('participants'));
+    }
+
+	public function anonymizeStore(AnonymizeParticipantRequest $request)
+    {
+        $this->authorize('anonymize',  Participant::class);
+        $participants = Participant::findMany($request->get('participant', []));
+        foreach ($participants as $participant) {
+            $this->anonymizeParticipant->anonymize($participant);
+        }
+
+        return redirect(action('ParticipantsController@index'))->with([
+            'flash_message' => count($participants) . ' geanonimiseerd'
+        ]);
+    }
 }

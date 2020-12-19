@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Participant extends Model
@@ -104,4 +105,18 @@ class Participant extends Model
 	{
 		return $this->user->id === $user->id;
 	}
+
+	public function getLastPlacedCampAttribute(): ?Event
+    {
+        return $this->events()
+            ->wherePivot('geplaatst', '=', true)
+            ->whereIn('type', ['kamp', 'online'])
+            ->latest('datum_start')
+            ->first();
+    }
+
+    public function scopeNonAnonymized(Builder $query)
+    {
+        return $query->whereNull('anonymized_at');
+    }
 }

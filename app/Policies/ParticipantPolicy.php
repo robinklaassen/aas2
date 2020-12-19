@@ -170,13 +170,18 @@ class ParticipantPolicy
 
     public function changePassword(User $user, Participant $participant)
     {
-        return $participant->user !== null && 
+        return $participant->user !== null &&
             ($user->hasCapability("participants::info::edit::password") ||  $this->ifSelf("participants::info::edit::self", $user, $participant));
     }
 
     public function onEvent(User $user, Participant $participant)
     {
         return $user->can("addParticipant", \App\Event::class) ||  $this->ifSelf("participants::info::edit::self", $user, $participant);
+    }
+
+    public function anonymize(User $user)
+    {
+        return $user->hasCapability("participants::anonymize");
     }
 
     private function ifSelf(string $capability, User $user, Participant $participant): bool

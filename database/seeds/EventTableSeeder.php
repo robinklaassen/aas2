@@ -170,5 +170,22 @@ class EventTableSeeder extends Seeder
 			'openbaar' => '0'
 		]);
 
+
+		Event::create([
+			'naam' => 'Yee-Oldy-kamp',
+			'code' => 'M0910',
+			'type' => 'kamp',
+			'datum_voordag' => '2009-05-01',
+			'datum_start' => '2009-05-03',
+			'tijd_start' => '13:00:00',
+			'datum_eind' => '2009-05-10',
+			'tijd_eind' => '17:00:00',
+			'location_id' => 1,
+			'prijs' => 400,
+			'streeftal' => 8,
+			'vol' => '1',
+			'beschrijving' => 'Ga mee op kamp!'
+		]);
+
 	}
 }
