@@ -38,7 +38,16 @@ class AnonymizeParticipant implements AnonymizeParticipantInterface
 
         return Participant::query()
             ->leftJoin('event_participant', 'participants.id', '=', 'event_participant.participant_id')
-            ->leftJoin('events', 'events.id', '=', 'event_participant.event_id')
+            ->leftJoin('events', function($query) {
+                    $query->on('events.id','=','event_participant.event_id')
+                        ->whereRaw('events.id IN (
+                            select MAX(e2.id) 
+                              from events as e2 
+                              join event_participant ep2 on e2.id = ep2.event_id 
+                             where ep2.participant_id = participants.id 
+                              group by ep2.participant_id
+                          )');
+            })
             ->whereNull('participants.anonymized_at')
             ->where(function ($query) use ($inactiveBoundary) {
                 $query
@@ -73,10 +82,10 @@ class AnonymizeParticipant implements AnonymizeParticipantInterface
         $participant->inkomen = 0;
         $participant->inkomensverklaring = false;
         $participant->school = "";
-        $participant->niveau = "VMBO";
+        // keep niveau
         $participant->klas = 0;
-        $participant->hoebij = "";
-        $participant->opmerkingen = "Geänonimiseerd";
+        // keep hoebij
+        $participant->opmerkingen = "Geanonimiseerd";
         $participant->anonymized_at = new DateTimeImmutable();
 
         foreach ($participant->comments as $comment) {
