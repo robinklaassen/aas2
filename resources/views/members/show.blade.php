@@ -201,7 +201,7 @@ Mijn profiel
 			<div class="col-md-9">
 				<div class="progress" style="height: 2em;">
 					<div class="progress-bar" role="progressbar"
-						style="width: {{ round(($member->points - $ranks[$member->rank]) / ($ranks[$member->rank + 1] - $ranks[$member->rank]) * 100) }}%;">
+						style="width: {{ $member->percentagetonextrank }}%;">
 					</div>
 				</div>
 			</div>
@@ -211,7 +211,11 @@ Mijn profiel
 				{{$member->points}} punten
 			</div>
 			<div class="col-md-9 text-right">
-				Nog {{ $ranks[$member->rank + 1] - $member->points }} punten tot level {{$member->rank + 1}}!
+				@if ($member->ismaxedrank)
+					Supergaaf! Je hebt het maximale level bereikt!
+				@else
+					Nog {{ $member->pointstonextrank }} punten tot level {{$member->rank + 1}}!
+				@endif
 			</div>
 		</div>
 		<div class="row">
