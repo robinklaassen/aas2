@@ -16,6 +16,8 @@ class Member extends Model
 
 	protected $dates = ['created_at', 'updated_at', 'geboortedatum'];
 
+	// Number of points needed for every level in the points system
+	const RANK_POINTS = [0, 3, 10, 20, 35, 50, 70, 100];
 
 	// Full name
 	public function getVolnaamAttribute()
@@ -119,7 +121,7 @@ class Member extends Model
 	}
 
 	// Custom getter for amount of points for this member
-	public function getPointsAttribute()
+	public function getPointsAttribute(): int
 	{
 		$startDate = '2014-09-01';
 		$endDate = date('Y-m-d');
@@ -145,20 +147,47 @@ class Member extends Model
 	}
 
 	// Custom getter for current rank (level in the points system) of this member
-	public function getRankAttribute()
+	public function getRankAttribute(): int
 	{
 		$points = $this->points;
 
-		$ranks = [0, 3, 10, 20, 35, 50, 70, 100]; // this array is also in the view composer for member.show
-		foreach ($ranks as $level => $number) {
+		foreach ($this::RANK_POINTS as $level => $number) {
 			if ($points >= $number) $rank = $level;
 		}
 
 		return $rank;
 	}
 
+	public function getIsMaxedRankAttribute(): bool
+	{
+		return $this->rank == array_key_last($this::RANK_POINTS);
+	}
+
+	public function getPointsToNextRankAttribute(): int
+	{
+		if ($this->is_maxed_rank) {
+			return 0;
+		}
+
+		$points_next_rank = $this::RANK_POINTS[$this->rank + 1];
+		return $points_next_rank - $this->points;
+	}
+
+	public function getPercentageToNextRankAttribute(): int
+	{
+		if ($this->is_maxed_rank) {
+			return 100;
+		}
+		
+		$current = $this->points;
+		$start = $this::RANK_POINTS[$this->rank];
+		$end = $this::RANK_POINTS[$this->rank + 1];
+
+		return round(($current - $start) / ($end - $start) * 100);
+	}
+
 	// Custom getter for a list of all actions and their points
-	public function getListofactionsAttribute()
+	public function getListOfActionsAttribute()
 	{
 		$startDate = '2014-09-01';
 		$endDate = date('Y-m-d');
@@ -223,7 +252,7 @@ class Member extends Model
 	}
 
 	// Custom getter for most recent action
-	public function getMostrecentactionAttribute()
+	public function getMostRecentActionAttribute()
 	{
 		$startDate = '2014-09-01';
 		$endDate = date('Y-m-d');
