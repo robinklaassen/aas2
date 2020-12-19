@@ -201,7 +201,7 @@ Mijn profiel
 			<div class="col-md-9">
 				<div class="progress" style="height: 2em;">
 					<div class="progress-bar" role="progressbar"
-						style="width: {{ $member->percentagetonextrank }}%;">
+						style="width: {{ $member->percentage_to_next_rank }}%;">
 					</div>
 				</div>
 			</div>
@@ -211,17 +211,17 @@ Mijn profiel
 				{{$member->points}} punten
 			</div>
 			<div class="col-md-9 text-right">
-				@if ($member->ismaxedrank)
+				@if ($member->is_maxed_rank)
 					Supergaaf! Je hebt het maximale level bereikt!
 				@else
-					Nog {{ $member->pointstonextrank }} punten tot level {{$member->rank + 1}}!
+					Nog {{ $member->points_to_next_rank }} punten tot level {{$member->rank + 1}}!
 				@endif
 			</div>
 		</div>
 		<div class="row">
 			<div class="col-md-7">
 				<br />
-				Meest recente actie: {{$member->mostrecentaction['name']}} ({{$member->mostrecentaction['points']}} pt)
+				Meest recente actie: {{$member->most_recent_action['name']}} ({{$member->most_recent_action['points']}} pt)
 			</div>
 			<div class="col-md-5 text-right">
 				<br />
@@ -517,7 +517,7 @@ Mijn profiel
 						</tr>
 					</thead>
 					<tbody>
-						@foreach ($member->listofactions as $item)
+						@foreach ($member->list_of_actions as $item)
 						<tr>
 							<td>{{ $item['date'] !== null ? $item['date']->format('d-m-Y') : '' }}</td>
 							<td>{{ $item['name'] }}</td>

@@ -158,14 +158,14 @@ class Member extends Model
 		return $rank;
 	}
 
-	public function getIsmaxedrankAttribute(): bool
+	public function getIsMaxedRankAttribute(): bool
 	{
 		return $this->rank == array_key_last($this::RANK_POINTS);
 	}
 
-	public function getPointstonextrankAttribute(): int
+	public function getPointsToNextRankAttribute(): int
 	{
-		if ($this->ismaxedrank) {
+		if ($this->is_maxed_rank) {
 			return 0;
 		}
 
@@ -173,9 +173,9 @@ class Member extends Model
 		return $points_next_rank - $this->points;
 	}
 
-	public function getPercentagetonextrankAttribute(): int
+	public function getPercentageToNextRankAttribute(): int
 	{
-		if ($this->ismaxedrank) {
+		if ($this->is_maxed_rank) {
 			return 100;
 		}
 		
@@ -187,7 +187,7 @@ class Member extends Model
 	}
 
 	// Custom getter for a list of all actions and their points
-	public function getListofactionsAttribute()
+	public function getListOfActionsAttribute()
 	{
 		$startDate = '2014-09-01';
 		$endDate = date('Y-m-d');
@@ -252,7 +252,7 @@ class Member extends Model
 	}
 
 	// Custom getter for most recent action
-	public function getMostrecentactionAttribute()
+	public function getMostRecentActionAttribute()
 	{
 		$startDate = '2014-09-01';
 		$endDate = date('Y-m-d');
