@@ -55,7 +55,6 @@ Inschrijven deelnemer
 	gegevens controleren en aanvullen en uw kind eenvoudig op een nieuw kamp sturen. Heeft u nog geen account, of bent u
 	uw inloggegevens vergeten, stuur dan een mail naar de <a href="mailto:kantoor@anderwijs.nl">kantoorcommissie</a>.
 </div>
-
 @include ('errors.list')
 
 {!! Form::open(['url' => 'register-participant']) !!}
@@ -185,6 +184,7 @@ Inschrijven deelnemer
 
 	<div class="row">
 		<div class="col-sm-6" style="display: none" id="selected_package_container">
+
 			<h3>Pakket</h3>
 			<div class="well">
 				Bij dit kamp kunt u kiezen uit meerdere pakketten. Maak uw keuze:
@@ -351,33 +351,35 @@ Inschrijven deelnemer
 	<script type="text/javascript">
 		var allPackages = {!! $packages->toJSON() !!};
 
-	var campType = {!! $package_type_per_camp->toJSON() !!};
+		var campType = {!! $package_type_per_camp->toJSON() !!};
 
 	function checkpackages() {
-		
+
 		var selectedCamp = $("#selected_camp").val();
 		var packageType = campType[selectedCamp];
 		var packages = allPackages[packageType];
 
-		var jPackage = $("#selected_package"); 
-		var jPackageContainer = $("#selected_package_container"); 
-
+		var jPackage = $("#selected_package");
+		var jPackageContainer = $("#selected_package_container");
 
 		if(!packageType) {
 			jPackage.empty();
 			jPackageContainer.hide();
 		} else {
 			jPackage.empty();
-			jPackage.html(packages.map(function(p) {
-				return "<option value='" + p.id + "'>" + p.title  + " (&euro; " + p.price + ")</option>";
-			}).join());
+			jPackage.html(
+				"<option>(geen)</option>" +
+				packages.map(function(p) {
+					let isSelected =  {!! old('selected_package') ?? 'null' !!} === p.id ? 'selected' : '';
+					return "<option value='" + p.id + "' " + isSelected + ">" + p.title  + " (&euro; " + p.price + ")</option>";
+				}).join());
 			jPackageContainer.show();
 		}
 	}
 
 
 	checkpackages();
-	
+
 	</script>
 	<script type="text/javascript">
 		$(function() {
