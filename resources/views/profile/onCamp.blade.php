@@ -139,13 +139,13 @@ Op kamp
 	var campType = {!! $package_type_per_camp->toJSON() !!};
 
 	function checkpackages() {
-		
+
 		var selectedCamp = $("#selected_camp").val();
 		var packageType = campType[selectedCamp];
 		var packages = allPackages[packageType];
 
-		var jPackage = $("#selected_package"); 
-		var jPackageContainer = $("#selected_package_container"); 
+		var jPackage = $("#selected_package");
+		var jPackageContainer = $("#selected_package_container");
 
 
 		if(!packageType) {
@@ -153,15 +153,18 @@ Op kamp
 			jPackageContainer.hide();
 		} else {
 			jPackage.empty();
-			jPackage.html(packages.map(function(p) {
-				return "<option value='" + p.id + "'>" + p.description  + " (&euro; " + p.price + ")</option>";
-			}).join());
+			jPackage.html(
+				"<option>(geen)</option>" +
+				packages.map(function(p) {
+					let isSelected =  {!! old('selected_package') ?? 'null' !!} === p.id ? 'selected' : '';
+					return "<option value='" + p.id + "' " + isSelected + ">" + p.title  + " (&euro; " + p.price + ")</option>";
+				}).join());
 			jPackageContainer.show();
 		}
 	}
 
 
 	checkpackages();
-	
+
 	</script>
 	@endsection

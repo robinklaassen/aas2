@@ -103,7 +103,7 @@ class Participant extends Model
 
 	public function isUser(User $user)
 	{
-		return $this->user->id === $user->id;
+		return $this->user && $this->user->id === $user->id;
 	}
 
 	public function getLastPlacedCampAttribute(): ?Event
