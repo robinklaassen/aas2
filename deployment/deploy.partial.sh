@@ -18,7 +18,9 @@ ssh anderwijsnl@ftp.anderwijs.nl << EOF
 cd ~/domains/anderwijs.nl/htdocs/aas2
 ${PHP_EXECUTABLE} composer.phar self-update
 ${PHP_EXECUTABLE} composer.phar install
+${PHP_EXECUTABLE} composer dump-autoload
 ${PHP_EXECUTABLE} artisan clear-compiled
+${PHP_EXECUTABLE} artisan optimize:clear
 ${PHP_EXECUTABLE} artisan migrate --force
 ${PHP_EXECUTABLE} artisan optimize
 ${PHP_EXECUTABLE} artisan up
