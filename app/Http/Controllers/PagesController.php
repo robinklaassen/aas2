@@ -544,7 +544,7 @@ class PagesController extends Controller
 			[
 				$newUserStart,
 				$newUserStart
-			]			
+			]
 		);
 
 		$new_users_per_source = [];
@@ -586,8 +586,8 @@ class PagesController extends Controller
 			"),
 			[]
 		);
-		
-		return view('pages.graphs', 
+
+		return view('pages.graphs',
 			compact(
 				'data',
 				'registration_series',
@@ -647,12 +647,15 @@ class PagesController extends Controller
 				$naam .= ' (VOL)';
 			}
 
-			$prijs_html = "<td style='white-space: nowrap;'>Prijs";
-
-			if ($event->prijs == null) {
-				$prijs_html .= "</td><td>Wordt nog vastgesteld</td>";
-			} else {
-				$prijs_html .= "<br/>- 15&percnt; korting<br/>- 30&percnt; korting<br/>- 50&percnt; korting</td><td>";
+			if ($event->prijs === null) {
+				$prijs_html = "<td>Prijs</td><td>Wordt nog vastgesteld</td>";
+			} else if($event->prijs === 0) {
+			    $prijs_html = "";
+            } else if ($event->prijs > 0) {
+				$prijs_html = "<td style='white-space: nowrap;'>Prijs<br />
+                    - 15&percnt; korting<br/>
+                    - 30&percnt; korting<br/>
+                    - 50&percnt; korting</td><td>";
 				$prijs_html .= implode('', array_map(function (float $disc) use ($event) {
 					return "&euro; " . EventPayment::calculate_price($event->prijs, $disc) . "<br/>";
 				}, Participant::INCOME_DISCOUNT_TABLE));
@@ -662,7 +665,7 @@ class PagesController extends Controller
 			// Create a string with Google Maps hyperlink for the members agenda
 			$adres = $event->location->adres;
 			$plaats = $event->location->plaats;
-			if ($plaats == "Onbekend") {
+			if ($plaats === "Onbekend") {
 				$kamphuis_link = $plaats;
 			} else {
 				$string = str_replace(" ", "+", $adres . " " . $plaats);
