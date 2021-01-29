@@ -1,0 +1,60 @@
+name: CI
+
+on: [ push, pull_request ]
+
+jobs:
+  tests:
+    name: Tests ${{ matrix.php }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        php: [ 7.3, 7.4 ]
+        experimental: [ false ]
+
+    services:
+      mariadb:
+        image: mariadb:latest
+        ports:
+          - 3306
+        env:
+          MYSQL_USER: ranonkeltje
+          MYSQL_PASSWORD: ranonkeltje
+          MYSQL_DATABASE: aas2
+          MYSQL_ROOT_PASSWORD: ranonkeltje
+        options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v1
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: xdebug
+
+      - name: Install composer dependencies
+        run: composer install --prefer-dist --ignore-platform-reqs
+
+      - name: Setup project
+        run: |
+          mysql -e 'create database aas2;'
+          mysql -e 'grant all on *.* to ranonkeltje@localhost;' || true
+          cp .env.github .env
+          php artisan key:generate
+          php artisan migrate --seed
+
+      - name: Run PHPUnit unit tests
+        run: php artisan
+
+    deploy:
+      name: Deploy
+      runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v1
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+
