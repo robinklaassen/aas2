@@ -18,7 +18,8 @@ mix.ts('resources/js/app.ts', 'public/js')
    .styles([
       "public/css/_app.less.css",
       "public/css/_app.scss.css",
-      "resources/css/*.css",
+      "resources/css/custom.css",
+      "resources/css/dropzone.css",
    ], "public/css/app.css")
    .extract([
       "vue",
