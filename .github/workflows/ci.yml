@@ -1,0 +1,97 @@
+name: CI
+
+on: [ push ]
+
+jobs:
+  tests:
+    name: Tests ${{ matrix.php }}
+    runs-on: ubuntu-latest
+    env:
+      MYSQL_USER: ranonkeltje
+      MYSQL_PASSWORD: ranonkeltje
+      MYSQL_DATABASE: aas2
+      MYSQL_ROOT_PASSWORD: ranonkeltje
+
+    strategy:
+      matrix:
+        php: [ '7.3', '7.4' ]
+        experimental: [ false ]
+
+    services:
+      mariadb:
+        image: mariadb:latest
+        ports:
+          - 3306
+        env:
+          MYSQL_USER: ranonkeltje
+          MYSQL_PASSWORD: ranonkeltje
+          MYSQL_DATABASE: aas2
+          MYSQL_ROOT_PASSWORD: ranonkeltje
+        options: --health-cmd="mysqladmin ping" --health-interval=5s --health-timeout=2s --health-retries=3
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v1
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: xdebug
+
+      - name: Install composer dependencies
+        run: composer install --prefer-dist --ignore-platform-reqs
+
+      - name: Setup project
+        env:
+          MYSQL_HOST: 127.0.0.1
+          MYSQL_PORT: ${{ job.services.mariadb.ports[3306] }}
+        run: |
+          envsubst < .env.github > .env
+          php artisan key:generate
+          php artisan env
+          php artisan migrate --seed
+
+      - name: Run PHPUnit unit tests
+        run: vendor/bin/phpunit
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: tests
+    if: github.ref == 'refs/heads/master'
+
+    steps:
+      - uses: appleboy/ssh-action@master
+        env:
+          PHP_EXECUTABLE: php73
+        with:
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USERNAME }}
+          key: ${{ secrets.REMOTE_KEY }}
+          envs: PHP_EXECUTABLE
+          script: |
+            cd ~/domains/anderwijs.nl/htdocs/aas2
+            ${PHP_EXECUTABLE} artisan down
+            git pull origin master
+
+            EOF
+
+            rsync -r $TRAVIS_BUILD_DIR/public/js \
+                     $TRAVIS_BUILD_DIR/public/css \
+                     $TRAVIS_BUILD_DIR/public/fonts \
+                anderwijsnl@ftp.anderwijs.nl:~/domains/anderwijs.nl/htdocs/aas2/public
+
+            ssh anderwijsnl@ftp.anderwijs.nl << EOF
+
+            cd ~/domains/anderwijs.nl/htdocs/aas2
+            ${PHP_EXECUTABLE} composer.phar self-update
+            ${PHP_EXECUTABLE} composer.phar install
+            ${PHP_EXECUTABLE} composer dump-autoload
+            ${PHP_EXECUTABLE} artisan clear-compiled
+            ${PHP_EXECUTABLE} artisan optimize:clear
+            ${PHP_EXECUTABLE} artisan migrate --force
+            ${PHP_EXECUTABLE} artisan optimize
+            ${PHP_EXECUTABLE} artisan up
+
+
