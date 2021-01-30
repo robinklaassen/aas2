@@ -62,22 +62,29 @@ jobs:
     if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/feature/github-actions'
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
       - name: Setup NodeJS
         uses: actions/setup-node@v2
         with:
           node-version: "14"
+
       - name: Install yarn dependencies
         run: yarn install
+
       - name: Compile assets
         run: yarn prod
+
       - name: Deploy assets
         uses: appleboy/scp-action@master
         with:
-            host: ${{ secrets.REMOTE_HOST }}
-            username: ${{ secrets.REMOTE_USERNAME }}
-            key: ${{ secrets.REMOTE_KEY }}
-            source: "./public/js,./public/css,./public/fonts"
-            target: "~/domains/anderwijs.nl/htdocs/aas2/public"
+          host: ${{ secrets.REMOTE_HOST }}
+          username: ${{ secrets.REMOTE_USERNAME }}
+          key: ${{ secrets.REMOTE_KEY }}
+          source: "./public/js,./public/css,./public/fonts"
+          target: "~/domains/anderwijs.nl/htdocs/aas2/public"
+
       - name: Deploy application
         uses: appleboy/ssh-action@master
         env:
