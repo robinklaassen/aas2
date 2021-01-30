@@ -83,7 +83,7 @@ jobs:
           username: ${{ secrets.REMOTE_USERNAME }}
           key: ${{ secrets.REMOTE_KEY }}
           source: "./public/js,./public/css,./public/fonts"
-          target: "~/domains/anderwijs.nl/htdocs/aas2/public"
+          target: "~/domains/anderwijs.nl/htdocs/aas2"
 
       - name: Deploy application
         uses: appleboy/ssh-action@master
