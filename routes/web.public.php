@@ -14,5 +14,7 @@ Route::get('camps-report', 'PagesController@campsReport');
 Route::get('enquete/{event}', 'ReviewsController@review');
 Route::post('enquete/{event}', 'ReviewsController@reviewPost');
 
-# icalendar routes    
+# icalendar routes
 Route::get('events/icalendar', 'EventsController@iCalendar');
+
+Route::post('auto-update', 'UpdateController');
