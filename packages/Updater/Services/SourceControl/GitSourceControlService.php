@@ -8,15 +8,20 @@ class GitSourceControlService implements SourceControlServiceInterface
 {
     private ExecutorInterface $executorService;
 
-    public function __construct(ExecutorInterface $executorService)
+    public function __construct(ExecutorInterface $shellExecutor)
     {
-        $this->executorService = $executorService;
+        $this->executorService = $shellExecutor;
     }
 
     public function checkout(string $branch = 'master', string $remote = 'origin'): void
     {
-        $this->executorService->execute('git fetch', $branch);
-        $this->executorService->execute('git checkout', $branch);
+        $this->executorService->execute('git fetch', [$branch]);
+        $this->executorService->execute('git checkout', [$branch]);
         $this->executorService->execute('git reset', ['--hard', $remote . '/' . $branch]);
+    }
+
+    public function currentVersion(): string
+    {
+        return $this->executorService->execute('git log -1 --pretty=format:"[%h] %cd: %s"');
     }
 }

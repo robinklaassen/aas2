@@ -33,6 +33,11 @@ class UpdaterService implements UpdaterServiceInterface
         $this->postUpdate();
     }
 
+    public function currentVersion(): string
+    {
+
+    }
+
     protected function preUpdate()
     {
         $this->artisanExecutor->execute('down');
