@@ -35,7 +35,7 @@ class UpdaterService implements UpdaterServiceInterface
 
     public function currentVersion(): string
     {
-
+        return $this->controlService->currentVersion();
     }
 
     protected function preUpdate()

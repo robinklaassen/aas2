@@ -11,10 +11,10 @@ class ShellExecutor implements ExecutorInterface
         exec($cmd . ' ' . implode(' ', $args), $output, $result);
 
         if ($result !== 0) {
-            return $output;
+            throw ExecutorException::shellResult($result, $output);
         }
 
-        throw ExecutorException::shellResult($result, $output);
+            return implode('\n', $output);
     }
 
 }

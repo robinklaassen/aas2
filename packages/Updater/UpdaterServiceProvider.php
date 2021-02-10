@@ -27,23 +27,23 @@ class UpdaterServiceProvider extends ServiceProvider
         ]);
 
         $this->app->bind(GitSourceControlService::class, function (Application $app) {
-            return $app->makeWith(GitSourceControlService::class, [
+            return new GitSourceControlService(
                 $app->make(ShellExecutor::class)
-            ]);
+            );
 
         });
         $this->app->bind(UpdaterServiceInterface::class, function (Application $app) {
-            return $app->makeWith(UpdaterService::class, [
+            return new UpdaterService(
                 $app->make(GitSourceControlService::class),
                 $app->make(ArtisanExecutor::class),
                 config('updater.git.remote'),
                 config('updater.git.branch')
-            ]);
+            );
         });
         $this->app->bind(ComposerPostUpdateSubscriber::class, function (Application $app) {
-            return $app->makeWith(ComposerExecutor::class, [
+            return newComposerExecutor(
                 config('updater.composer_path')
-            ]);
+            );
         });
     }
 }
