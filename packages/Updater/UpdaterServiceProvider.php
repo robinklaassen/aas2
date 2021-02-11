@@ -3,6 +3,7 @@
 namespace Updater;
 
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
 use Updater\Services\CommandExecutor\ArtisanExecutor;
 use Updater\Services\CommandExecutor\ComposerExecutor;
@@ -24,13 +25,12 @@ class UpdaterServiceProvider extends ServiceProvider
     {
         $this->publishes([
             __DIR__.'/config/updater.php' => config_path('updater.php'),
-        ]);
+        ], 'updater.config');
 
         $this->app->bind(GitSourceControlService::class, function (Application $app) {
             return new GitSourceControlService(
                 $app->make(ShellExecutor::class)
             );
-
         });
         $this->app->bind(UpdaterServiceInterface::class, function (Application $app) {
             return new UpdaterService(
@@ -41,9 +41,14 @@ class UpdaterServiceProvider extends ServiceProvider
             );
         });
         $this->app->bind(ComposerPostUpdateSubscriber::class, function (Application $app) {
-            return newComposerExecutor(
+            return new ComposerExecutor(
                 config('updater.composer_path')
             );
         });
+    }
+
+    public function register()
+    {
+        $this->mergeConfigFrom(__DIR__ . '/config/updater.php', 'updater');
     }
 }
