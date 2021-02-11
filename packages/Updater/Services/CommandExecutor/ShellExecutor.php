@@ -14,7 +14,7 @@ class ShellExecutor implements ExecutorInterface
             throw ExecutorException::shellResult($result, $output);
         }
 
-            return implode('\n', $output);
+        return implode('\n', $output);
     }
 
 }
