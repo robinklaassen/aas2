@@ -15,6 +15,7 @@ class GitSourceControlService implements SourceControlServiceInterface
 
     public function checkout(string $branch = 'master', string $remote = 'origin'): void
     {
+        // test
         $this->executorService->execute('git fetch', [$remote, $branch]);
         $this->executorService->execute('git reset', ['--hard', $remote . '/' . $branch]);
     }
