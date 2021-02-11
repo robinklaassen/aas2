@@ -16,7 +16,6 @@ class ComposerPostUpdateSubscriber {
 
     public function handlePostUpdate()
     {
-        $this->composerExecutor->execute('self-update');
         $this->composerExecutor->execute('install');
         $this->composerExecutor->execute('dump-autoload');
     }

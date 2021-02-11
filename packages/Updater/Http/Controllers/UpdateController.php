@@ -20,7 +20,7 @@ class UpdateController extends Controller
         $start = time();
         $secret = $request->get('secret');
 
-        if ($secret !== config('updater.token')) {
+        if ($secret !== config('updater.secret')) {
             abort(401);
         }
 
