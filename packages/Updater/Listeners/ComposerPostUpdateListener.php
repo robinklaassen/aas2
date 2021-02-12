@@ -1,11 +1,11 @@
 <?php
 
-namespace Updater\Subscribers;
+namespace Updater\Listeners;
 
-use Updater\Events\PostUpdateEvent;
 use Updater\Services\CommandExecutor\ExecutorInterface;
 
-class ComposerPostUpdateSubscriber {
+class ComposerPostUpdateListener
+{
 
     private ExecutorInterface $composerExecutor;
 
@@ -14,17 +14,9 @@ class ComposerPostUpdateSubscriber {
         $this->composerExecutor = $composerExecutor;
     }
 
-    public function handlePostUpdate()
+    public function handle()
     {
         $this->composerExecutor->execute('install');
         $this->composerExecutor->execute('dump-autoload');
-    }
-
-    public function subscribe($events)
-    {
-        $events->listen(
-            PostUpdateEvent::class,
-            [ComposerPostUpdateSubscriber::class, 'handlePostUpdate']
-        );
     }
 }

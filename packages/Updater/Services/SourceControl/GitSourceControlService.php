@@ -2,26 +2,32 @@
 
 namespace Updater\Services\SourceControl;
 
+use Updater\OutputAggregator\OutputRecorderInterface;
 use Updater\Services\CommandExecutor\ExecutorInterface;
 
 class GitSourceControlService implements SourceControlServiceInterface
 {
-    private ExecutorInterface $executorService;
+    private ExecutorInterface $shellExecutor;
+    private ExecutorInterface $recordedShellExecutor;
 
-    public function __construct(ExecutorInterface $shellExecutor)
-    {
-        $this->executorService = $shellExecutor;
+    public function __construct(
+        ExecutorInterface $shellExecutor,
+        ExecutorInterface $recordedShellExecutor
+    ) {
+        $this->shellExecutor = $shellExecutor;
+        $this->recordedShellExecutor = $recordedShellExecutor;
     }
 
     public function checkout(string $branch = 'master', string $remote = 'origin'): void
     {
-        // test
-        $this->executorService->execute('git fetch', [$remote, $branch]);
-        $this->executorService->execute('git reset', ['--hard', $remote . '/' . $branch]);
+        $this->recordedShellExecutor->execute('git fetch', [$remote, $branch]);
+        $this->recordedShellExecutor->execute('git reset', ['--hard', $remote . '/' . $branch]);
+        $this->recordedShellExecutor->execute('git pull', [$remote, $branch]);
+
     }
 
     public function currentVersion(): string
     {
-        return $this->executorService->execute('git log -1 --pretty=format:"[%h] %cd: %s"');
+        return $this->shellExecutor->execute('git log -1 --pretty=format:"[%h] %cd: %s"');
     }
 }

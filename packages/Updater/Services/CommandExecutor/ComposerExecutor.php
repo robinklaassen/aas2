@@ -4,8 +4,10 @@ namespace Updater\Services\CommandExecutor;
 
 use Illuminate\Support\Facades\Artisan;
 use Updater\Errors\ExecutorException;
+use Updater\OutputAggregator\OutputRecorderInterface;
+use Updater\Services\DateTimeProviderInterface;
 
-class ComposerExecutor implements ExecutorInterface
+class ComposerExecutor extends ShellExecutor
 {
     private string $composer;
 
@@ -16,12 +18,6 @@ class ComposerExecutor implements ExecutorInterface
 
     public function execute(string $cmd, array $args = []): string
     {
-        exec($this->composer . ' ' . $cmd . ' ' . implode(' ', $args), $output, $result);
-
-        if ($result !== 0) {
-            return $output;
-        }
-
-        throw ExecutorException::shellResult($result, $output);
+        return parent::execute($this->composer . ' ' . $cmd, $args);
     }
 }

@@ -1,12 +1,10 @@
 <?php
 
-namespace Updater\Subscribers;
+namespace Updater\Listeners;
 
-use Updater\Events\PostUpdateEvent;
-use Updater\Events\PreUpdateEvent;
 use Updater\Services\CommandExecutor\ExecutorInterface;
 
-class ArtisanPostUpdateSubscriber {
+class ArtisanPostUpdateListener {
 
     private ExecutorInterface $artisanExecutor;
 
@@ -15,18 +13,10 @@ class ArtisanPostUpdateSubscriber {
         $this->artisanExecutor = $artisanExecutor;
     }
 
-    public function handlePostUpdate()
+    public function handle()
     {
         $this->artisanExecutor->execute('clear-compiled');
         $this->artisanExecutor->execute('migrate --force');
         $this->artisanExecutor->execute('optimize');
-    }
-
-    public function subscribe($events)
-    {
-        $events->listen(
-            PostUpdateEvent::class,
-            [ArtisanPostUpdateSubscriber::class, 'handlePostUpdate']
-        );
     }
 }

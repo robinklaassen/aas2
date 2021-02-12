@@ -14,7 +14,7 @@ class ShellExecutor implements ExecutorInterface
            1 => array("pipe", "w"),
            2 => array("pipe", "w"),
         );
-        $process = proc_open($line . ' >&1', $descriptorspec, $pipes);
+        $process = proc_open($line, $descriptorspec, $pipes, base_path());
         if (is_resource($process)) {
             fclose($pipes[0]);
 
@@ -28,10 +28,9 @@ class ShellExecutor implements ExecutorInterface
         }
 
         if ($result !== 0) {
-            throw ExecutorException::shellResult($result, $stdErr, $stdOut);
+            throw ExecutorException::shellResult($cmd, $result, $stdErr, $stdOut, $cmd);
         }
 
         return $stdOut;
     }
-
 }

@@ -8,7 +8,7 @@ use Updater\Errors\ExecutorException;
 class ArtisanExecutor implements ExecutorInterface
 {
     public function execute(string $cmd, array $args = []): string
-    {
+{
         $result = Artisan::call($cmd, $args);
         if ($result !== 0) {
             throw ExecutorException::artisanResult($cmd, $result);
@@ -16,5 +16,4 @@ class ArtisanExecutor implements ExecutorInterface
 
         return Artisan::output();
     }
-
 }
