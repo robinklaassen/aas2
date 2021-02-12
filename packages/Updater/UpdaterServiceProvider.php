@@ -41,6 +41,20 @@ class UpdaterServiceProvider extends ServiceProvider
             __DIR__.'/config/updater.php' => config_path('updater.php'),
         ], 'updater.config');
 
+        $this->bindDependancies();
+
+        Event::listen(PostUpdateEvent::class, ComposerPostUpdateListener::class);
+        Event::listen(PreUpdateEvent::class, ArtisanPreUpdateListener::class);
+        Event::listen(PostUpdateEvent::class, ArtisanPostUpdateListener::class);
+    }
+
+    public function register()
+    {
+        $this->mergeConfigFrom(__DIR__ . '/config/updater.php', 'updater');
+    }
+
+    private function bindDependancies()
+    {
 
         $this->app->singleton(OutputRecorderInterface::class, InternalOutputRecorder::class);
         $this->app->bind(DateTimeProviderInterface::class, DateTimeProvider::class);
@@ -58,6 +72,7 @@ class UpdaterServiceProvider extends ServiceProvider
             ->give(function ($app) {
                 return $app->make('executor.recorded.artisan');
             });
+
         $this->app->bind(GitSourceControlService::class, function (Application $app) {
             return new GitSourceControlService(
                 $app->make('executor.shell'),
@@ -79,17 +94,9 @@ class UpdaterServiceProvider extends ServiceProvider
             ->needs('$composer')
             ->give(config('updater.composer_path'));
 
-        Event::listen(PostUpdateEvent::class, ComposerPostUpdateListener::class);
-        Event::listen(PreUpdateEvent::class, ArtisanPreUpdateListener::class);
-        Event::listen(PostUpdateEvent::class, ArtisanPostUpdateListener::class);
     }
 
-    public function register()
-    {
-        $this->mergeConfigFrom(__DIR__ . '/config/updater.php', 'updater');
-    }
-
-    protected function bindExecutors() {
+    private function bindExecutors() {
         $executors = [
             'composer' => ComposerExecutor::class,
             'shell' => ShellExecutor::class,
