@@ -111,6 +111,5 @@ class UpdaterServiceProvider extends ServiceProvider
                 );
             });
         }
-
     }
 }
