@@ -33,7 +33,7 @@ class UpdaterService implements UpdaterServiceInterface
     public function update(): void
     {
         $this->preUpdate();
-//        $this->controlService->checkout($this->branch, $this->remote);
+        $this->controlService->checkout($this->branch, $this->remote);
         $this->postUpdate();
     }
 
