@@ -143,6 +143,7 @@ return [
 		'Illuminate\Notifications\NotificationServiceProvider',
 		'GrahamCampbell\Markdown\MarkdownServiceProvider',
 
+        \Updater\UpdaterServiceProvider::class,
 
 		/*
 		 * Application Service Providers...
