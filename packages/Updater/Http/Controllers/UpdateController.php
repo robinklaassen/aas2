@@ -27,7 +27,6 @@ class UpdateController extends Controller
         $this->updaterService->update();
 
         return response()->json([
-            'success' => true,
             'took' => time() - $start,
             'output' => $this->updaterService->getUpdateOutput(),
             'current' => $this->updaterService->currentVersion()

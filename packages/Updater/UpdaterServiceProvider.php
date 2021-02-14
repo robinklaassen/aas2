@@ -28,12 +28,6 @@ use Updater\Listeners\ComposerPostUpdateListener;
 
 class UpdaterServiceProvider extends ServiceProvider
 {
-    protected $listen = [
-        PostUpdateEvent::class => [
-            ComposerPostUpdateListener::class,
-            ArtisanPostUpdateListener::class,
-        ],
-    ];
 
     public function boot()
     {
@@ -43,8 +37,8 @@ class UpdaterServiceProvider extends ServiceProvider
 
         $this->bindDependancies();
 
-        Event::listen(PostUpdateEvent::class, ComposerPostUpdateListener::class);
         Event::listen(PreUpdateEvent::class, ArtisanPreUpdateListener::class);
+        Event::listen(PostUpdateEvent::class, ComposerPostUpdateListener::class);
         Event::listen(PostUpdateEvent::class, ArtisanPostUpdateListener::class);
     }
 
