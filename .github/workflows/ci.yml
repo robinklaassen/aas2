@@ -76,14 +76,17 @@ jobs:
       - name: Compile assets
         run: yarn prod
 
-      - name: Deploy assets
-        uses: appleboy/scp-action@master
+      - name: Move assets for transport
+        run: 'mkdir deploy-unit && mv -t deploy-unit public/css public/js public/fonts'
+
+      - name: Upload assets
+        uses: sebastianpopp/ftp-action@releases/v2
         with:
-          host: ${{ secrets.REMOTE_HOST }}
-          username: ${{ secrets.REMOTE_USERNAME }}
-          key: ${{ secrets.REMOTE_KEY }}
-          source: "./public/js,./public/css,./public/fonts"
-          target: "~/domains/anderwijs.nl/htdocs/aas2"
+          host: ${{ secrets.FTP_HOSTNAME }}
+          user: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          localDir: "./deploy-unit/"
+          remoteDir: ${{ secrets.FTP_REMOTE_DIR }}
 
       - name: Deploy application
         id: req
