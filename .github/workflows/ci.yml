@@ -76,33 +76,22 @@ jobs:
       - name: Compile assets
         run: yarn prod
 
-      - name: Deploy assets
-        uses: appleboy/scp-action@master
+      - name: Move assets for transport
+        run: 'mkdir deploy-unit && mv -t deploy-unit public/css public/js public/fonts'
+
+      - name: Upload assets
+        uses: sebastianpopp/ftp-action@releases/v2
         with:
-          host: ${{ secrets.REMOTE_HOST }}
-          username: ${{ secrets.REMOTE_USERNAME }}
-          key: ${{ secrets.REMOTE_KEY }}
-          source: "./public/js,./public/css,./public/fonts"
-          target: "~/domains/anderwijs.nl/htdocs/aas2"
+          host: ${{ secrets.FTP_HOSTNAME }}
+          user: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          localDir: "./deploy-unit/"
+          remoteDir: ${{ secrets.FTP_REMOTE_DIR }}
 
       - name: Deploy application
-        uses: appleboy/ssh-action@master
-        env:
-          PHP_EXECUTABLE: php73
+        id: req
+        uses: fjogeleit/http-request-action@master
         with:
-          host: ${{ secrets.REMOTE_HOST }}
-          username: ${{ secrets.REMOTE_USERNAME }}
-          key: ${{ secrets.REMOTE_KEY }}
-          envs: PHP_EXECUTABLE
-          script: |
-            cd ~/domains/anderwijs.nl/htdocs/aas2
-            ${PHP_EXECUTABLE} artisan down
-            git pull origin master
-            ${PHP_EXECUTABLE} composer.phar self-update
-            ${PHP_EXECUTABLE} composer.phar install
-            ${PHP_EXECUTABLE} composer.phar dump-autoload
-            ${PHP_EXECUTABLE} artisan clear-compiled
-            ${PHP_EXECUTABLE} artisan optimize:clear
-            ${PHP_EXECUTABLE} artisan migrate --force
-            ${PHP_EXECUTABLE} artisan optimize
-            ${PHP_EXECUTABLE} artisan up
+          url: https://aas2.anderwijs.nl/updater/update?secret=${{ secrets.UPDATER_SECRET }}
+      - name: Show Response
+        run: echo ${{ steps.req.outputs.response }}
