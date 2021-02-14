@@ -79,6 +79,9 @@ jobs:
       - name: Move assets for transport
         run: 'mkdir deploy-unit && mv -t deploy-unit public/css public/js public/fonts'
 
+      - name: check assets for transport
+        run: 'ls deploy-unit'
+
       - name: Upload assets
         uses: sebastianpopp/ftp-action@releases/v2
         with:
