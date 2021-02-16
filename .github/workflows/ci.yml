@@ -14,7 +14,7 @@ jobs:
 
     strategy:
       matrix:
-        php: ["7.3", "7.4"]
+        php: ["7.4"]
         experimental: [false]
 
     services:
@@ -79,9 +79,6 @@ jobs:
       - name: Move assets for transport
         run: "mkdir deploy-unit && mv -t deploy-unit public/css public/js public/fonts"
 
-      - name: check assets for transport
-        run: 'ls deploy-unit'
-
       - name: Upload assets
         uses: SamKirkland/FTP-Deploy-Action@4.0.0
         with:
@@ -97,6 +94,8 @@ jobs:
         with:
           url: https://aas2.anderwijs.nl/updater/update?secret=${{ secrets.UPDATER_SECRET }}
           method: GET
+          timeout: 30000
+          preventFailureOnNoResponse: true
 
-      - name: Show Response
+      - name: Show response
         run: echo ${{ steps.req.outputs.response }}
