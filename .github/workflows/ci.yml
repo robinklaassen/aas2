@@ -77,13 +77,13 @@ jobs:
         run: yarn prod
 
       - name: Move assets for transport
-        run: 'mkdir deploy-unit && mv -t deploy-unit public/css public/js public/fonts'
+        run: "mkdir deploy-unit && mv -t deploy-unit public/css public/js public/fonts"
 
       - name: Upload assets
-        uses: sebastianpopp/ftp-action@releases/v2
+        uses: SamKirkland/FTP-Deploy-Action@4.0.0
         with:
-          host: ${{ secrets.FTP_HOSTNAME }}
-          user: ${{ secrets.FTP_USERNAME }}
+          server: ${{ secrets.FTP_HOSTNAME }}
+          username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           localDir: "./deploy-unit/"
           remoteDir: ${{ secrets.FTP_REMOTE_DIR }}
@@ -94,5 +94,6 @@ jobs:
         with:
           url: https://aas2.anderwijs.nl/updater/update?secret=${{ secrets.UPDATER_SECRET }}
           method: GET
+
       - name: Show Response
         run: echo ${{ steps.req.outputs.response }}
