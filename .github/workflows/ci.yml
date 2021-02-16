@@ -79,14 +79,17 @@ jobs:
       - name: Move assets for transport
         run: "mkdir deploy-unit && mv -t deploy-unit public/css public/js public/fonts"
 
+      - name: check assets for transport
+        run: 'ls deploy-unit'
+
       - name: Upload assets
         uses: SamKirkland/FTP-Deploy-Action@4.0.0
         with:
           server: ${{ secrets.FTP_HOSTNAME }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          localDir: "./deploy-unit/"
-          remoteDir: ${{ secrets.FTP_REMOTE_DIR }}
+          local-dir: "./deploy-unit/"
+          server-dir: ${{ secrets.FTP_REMOTE_DIR }}
 
       - name: Deploy application
         id: req
