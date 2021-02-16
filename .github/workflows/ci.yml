@@ -88,8 +88,8 @@ jobs:
           host: ${{ secrets.FTP_HOSTNAME }}
           user: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          localDir: "./deploy-unit/"
-          remoteDir: ${{ secrets.FTP_REMOTE_DIR }}
+          local-dir: "./deploy-unit/"
+          server-dir: ${{ secrets.FTP_REMOTE_DIR }}
 
       - name: Deploy application
         id: req
