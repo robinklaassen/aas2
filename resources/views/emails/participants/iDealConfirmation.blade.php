@@ -7,7 +7,7 @@
 </p>
 
 <p>
-	U bevindt zich nu in de tweede stap van het plaatsingsproces van uw kind voor een Anderwijskamp. Voor meer informatie over het proces, dat bestaat uit vier stappen, verwijs ik u naar de volgende link: <a href="http://www.anderwijs.nl/inschrijven/stappenplan/">http://www.anderwijs.nl/inschrijven/stappenplan/</a>.
+	U bevindt zich nu in de tweede stap van het plaatsingsproces van uw kind voor een Anderwijskamp. Voor meer informatie over het proces, dat bestaat uit vier stappen, verwijs ik u naar de volgende link: <a href="https://www.anderwijs.nl/inschrijven/inschrijven-scholieren/">https://www.anderwijs.nl/inschrijven/inschrijven-scholieren/</a>.
 </p>
 
 <p>
