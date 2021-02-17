@@ -79,9 +79,7 @@
 </p>
 
 <p>
-	U bevindt zich nu in de eerste stap van het plaatsingsproces van uw kind voor een Anderwijskamp. Voor meer
-	informatie over het proces, dat bestaat uit vier stappen, klikt u <a
-		href="http://www.anderwijs.nl/inschrijven/stappenplan">hier</a>.
+	U bevindt zich nu in de eerste stap van het plaatsingsproces van uw kind voor een Anderwijskamp. Voor meer informatie over het proces, dat bestaat uit vier stappen, gaat u naar de volgende pagina: <a href="https://www.anderwijs.nl/inschrijven/inschrijven-scholieren/">https://www.anderwijs.nl/inschrijven/inschrijven-scholieren/</a>.
 </p>
 
 @if ($event->prijs === null)
