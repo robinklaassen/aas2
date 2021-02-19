@@ -20,3 +20,4 @@ Route::get('events/icalendar', 'EventsController@iCalendar');
 Route::get('updater/update', [\Updater\Http\Controllers\UpdateController::class, 'update']);
 Route::get('updater/version', [\Updater\Http\Controllers\UpdateController::class, 'version']);
 
+Route::get('api/camps', [\App\Http\Controllers\Api\EventsController::class, 'viewPublicParticipantEvents']);
