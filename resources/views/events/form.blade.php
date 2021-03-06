@@ -101,7 +101,7 @@
 	</div>
 
 	<div class="col-md-2 form-group">
-		{!! Form::label('vol', 'Kamp vol') !!}<br />
+		{!! Form::label('vol', 'Kamp vol', ['title' => 'Volle kampen worden op de website als vol weergegeven, maar men kan zich er nog wel voor inschrijven.']) !!}<br />
 		{!! Form::hidden('vol', 0) !!}
 		{!! Form::checkbox('vol', 1, null, ['style' => 'margin-top:14px;']) !!}
 	</div>
