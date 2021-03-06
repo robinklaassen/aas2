@@ -107,7 +107,8 @@ class Event extends Model
 	 */
 	public function scopePublic($query)
 	{
-		return $query->where('openbaar', 1);
+		return $query->where('openbaar', 1)
+            ->whereNull('cancelled_at');
 	}
 
 	/**
@@ -115,14 +116,17 @@ class Event extends Model
 	 */
 	public function scopeOpen($query)
 	{
-
 		// List of future camps and online events to register for
 		// Note that online events can be registered for after start (until the end)
-		return $query->where(function ($query) {
-			return $query->where('type', '!=', 'online')->where('datum_start', '>', date('Y-m-d'));
-		})->orWhere(function ($query) {
-			return $query->where('type', '=', 'online')->where('datum_eind', '>', date('Y-m-d'));
-		});
+		return $query
+            ->whereNull('cancelled_at')
+            ->where(function ($query) {
+                return $query->where(function ($query) {
+                    return $query->where('type', '!=', 'online')->where('datum_start', '>', date('Y-m-d'));
+                })->orWhere(function ($query) {
+                    return $query->where('type', '=', 'online')->where('datum_eind', '>', date('Y-m-d'));
+                });
+            });
 	}
 
 	/**
