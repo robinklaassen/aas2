@@ -646,6 +646,9 @@ class PagesController extends Controller
 			if ($type == 'part' && $event->vol) {
 				$naam .= ' (VOL)';
 			}
+			if ($event->cancelled) {
+			    $naam .= ' (AFGELAST)';
+            }
 
 			if ($event->prijs === null) {
 				$prijs_html = "<td>Prijs</td><td>Wordt nog vastgesteld</td>";

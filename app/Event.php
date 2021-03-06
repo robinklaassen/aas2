@@ -107,8 +107,7 @@ class Event extends Model
 	 */
 	public function scopePublic($query)
 	{
-		return $query->where('openbaar', 1)
-            ->whereNull('cancelled_at');
+		return $query->where('openbaar', 1);
 	}
 
 	/**
