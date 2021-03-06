@@ -56,7 +56,7 @@
 	</div>
 
 	<div class="col-md-2 form-group">
-		{!! Form::label('cancelled', 'Afgelast', ['title' => 'Afgelaste kampen tellen niet mee in de statistieken, men kan zich er niet voor inschrijven en op de website wordt deze als afgelast weergegeven']) !!}<br />
+		{!! Form::label('cancelled', 'Afgelast', ['title' => 'Afgelaste evenementen tellen niet mee in de statistieken, men kan zich er niet voor inschrijven en op de website worden ze als afgelast weergegeven.']) !!}<br />
 		{!! Form::hidden('cancelled', 0) !!}
 		{!! Form::checkbox('cancelled', 1, null, ['style' => 'margin-top:14px;']) !!}
 	</div>
