@@ -18,7 +18,7 @@
 
 	@canany("editAdvanced", \App\Event::class, $event)
 	<div class="col-md-2 form-group">
-		{!! Form::label('openbaar', 'Openbaar?') !!}<br />
+		{!! Form::label('openbaar', 'Openbaar', ['title' => 'Openbare evenementen worden gepubliceerd op de website.']) !!}<br />
 		{!! Form::hidden('openbaar', 1) !!}
 		{!! Form::checkbox('openbaar', 1, null, ['style' => 'margin-top:14px;']) !!}
 	</div>
@@ -56,7 +56,7 @@
 	</div>
 
 	<div class="col-md-2 form-group">
-		{!! Form::label('cancelled', 'Afgelast?') !!}<br />
+		{!! Form::label('cancelled', 'Afgelast', ['title' => 'Afgelaste evenementen tellen niet mee in de statistieken, men kan zich er niet voor inschrijven en op de website worden ze als afgelast weergegeven.']) !!}<br />
 		{!! Form::hidden('cancelled', 0) !!}
 		{!! Form::checkbox('cancelled', 1, null, ['style' => 'margin-top:14px;']) !!}
 	</div>
@@ -101,7 +101,7 @@
 	</div>
 
 	<div class="col-md-2 form-group">
-		{!! Form::label('vol', 'Kamp vol') !!}<br />
+		{!! Form::label('vol', 'Kamp vol', ['title' => 'Volle kampen worden op de website als vol weergegeven, maar men kan zich er nog wel voor inschrijven.']) !!}<br />
 		{!! Form::hidden('vol', 0) !!}
 		{!! Form::checkbox('vol', 1, null, ['style' => 'margin-top:14px;']) !!}
 	</div>
