@@ -18,7 +18,7 @@
 
 	@canany("editAdvanced", \App\Event::class, $event)
 	<div class="col-md-2 form-group">
-		{!! Form::label('openbaar', 'Openbaar', ['title' => 'Openbare evenementen worden gepubliseerd op de website.']) !!}<br />
+		{!! Form::label('openbaar', 'Openbaar', ['title' => 'Openbare evenementen worden gepubliceerd op de website.']) !!}<br />
 		{!! Form::hidden('openbaar', 1) !!}
 		{!! Form::checkbox('openbaar', 1, null, ['style' => 'margin-top:14px;']) !!}
 	</div>
