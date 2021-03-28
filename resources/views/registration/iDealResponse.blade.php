@@ -25,41 +25,32 @@ iDeal betaling mislukt
 
 @if ($status == 'ok')
 <p>
-	U heeft uw kind succesvol ingeschreven voor een Anderwijskamp en direct via iDeal betaald. Als het goed is heeft u reeds een automatische bevestigingsmail gekregen op het door u opgegeven emailadres, anders ontvangt u die binnenkort. Lees de mail goed door, er staat belangrijke informatie in met betrekking tot de inschrijving.
+	U heeft uw kind succesvol ingeschreven voor een Anderwijskamp en direct via iDeal betaald. U ontvangt per mail een automatische bevestiging van inschrijving en betaling (twee losse mails).
 </p>
 @else
 <p>
-	U heeft uw kind ingeschreven voor een Anderwijskamp, maar de betaling via iDeal is helaas mislukt. Als het goed is heeft u reeds een automatische bevestigingsmail gekregen op het door u opgegeven emailadres, anders ontvangt u die binnenkort. In die mail staat onder andere de betalingsinformatie. Om de inschrijving definitief te maken, dient u het kampgeld over te maken op onze rekening zoals in de mail vermeld. Plaatsing van deelnemers op een kamp gebeurt op volgorde van betaling, dus wacht hier niet te lang mee.
+	U heeft uw kind ingeschreven voor een Anderwijskamp, maar de betaling via iDeal is helaas mislukt. U ontvangt per mail een automatische bevestiging van inschrijving, daarin staat de informatie om het kampgeld via overboeking te betalen. Het is handig om dit zo snel mogelijk te doen, want plaatsing voor een kamp gebeurt op volgorde van betaling.
 </p>
 @endif
 
 @if ($participant->events()->count() == 1)
-@if ($participant->inkomen)
-<p>
-	U heeft een korting op de kampprijs aangevraagd. Daarvoor dient u een inkomensverklaring van u en uw (eventuele) partner naar ons op te sturen. Dit kan naar:
-</p>
-<p>
-	Vereniging Anderwijs<br />
-	T.a.v. de penningmeester<br />
-	Postbus 13228<br />
-	3507 LE Utrecht
-</p>
-<p>
-	Na beoordeling van de kortingsaanvraag nemen wij zonodig contact met u op.
-</p>
-@endif
+	@if ($participant->inkomen)
+		<p>
+			U heeft een korting op de kampprijs aangevraagd. Daarvoor hebben wij een inkomensverklaring van u nodig. Kijk in de bevestigingsmail voor meer informatie hierover.
+		</p>
+	@endif
 
-<p>
-	Heeft u een nieuwe deelnemer ingeschreven? Dan is er ook automatisch een account aangemaakt. Hiermee kunt u inloggen op ons <a href=" {{ url("/") }} ">administratiesysteem</a> om de gegevens van uw kind te beheren. De details staan in de bevestigingsmail.
-</p>
+	<p>
+		Heeft u een nieuwe deelnemer ingeschreven? Dan is er ook automatisch een account aangemaakt. Hiermee kunt u inloggen op ons <a href="{{ url('/') }}">administratiesysteem</a> om de gegevens te beheren. De details staan in de bevestigingsmail.
+	</p>
 
-<p>
-	<a href="http://www.anderwijs.nl">Terug naar de website van Anderwijs</a>
-</p>
+	<p>
+		<a href="https://www.anderwijs.nl">Terug naar de website van Anderwijs</a>
+	</p>
 @else
-<p>
-	<a href="{{ url("profile") }}">Terug naar uw profiel</a>
-</p>
+	<p>
+		<a href="{{ url('profile') }}">Terug naar uw profiel</a>
+	</p>
 @endif
 
 @endsection
