@@ -25,7 +25,7 @@
 @else
 	@if ($iDeal == 0)
 		<p>
-			Uw kind staat op dit moment voorlopig ingeschreven voor het kamp. Om de inschrijving definitief te maken, dient u het kampgeld zoals hieronder vermeld over te maken op onze rekening. Beschikbare plaatsen op een kamp worden vegeven op volgorde van betaling, dus wacht hier niet te lang mee. Uiterlijk twee weken nadat u het kampgeld heeft overgemaakt, ontvangt u per e-mail een bevestiging van de inschrijving.
+			Uw kind staat op dit moment voorlopig ingeschreven voor het kamp. Om de inschrijving definitief te maken, dient u het kampgeld zoals hieronder vermeld over te maken op onze rekening. Beschikbare plaatsen op een kamp worden vergeven op volgorde van betaling, dus wacht hier niet te lang mee. Uiterlijk twee weken nadat u het kampgeld heeft overgemaakt, ontvangt u per e-mail een bevestiging van de inschrijving.
 		</p>
 	@else
 		<p>
