@@ -3,7 +3,7 @@
 </p>
 
 <p>
-    <b>{{$member->voornaam}} {{$member->tussenvoegsel}} {{$member->achternaam}}</b> heeft zojuist de volgende <b>declaratie</b> gedaan via AAS 2.0:
+    <b>{{$member->volnaam}}</b> heeft zojuist de volgende <b>declaratie</b> gedaan via AAS 2.0:
 </p>
 
 <table border="0" cellpadding="5" cellspacing="0" width="800">

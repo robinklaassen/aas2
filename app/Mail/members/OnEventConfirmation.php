@@ -26,8 +26,8 @@ class OnEventConfirmation extends Mailable
     public function build()
     {
         return $this->view('emails.members.onEventConfirmation')
-            ->subject("AAS 2.0 - Aangemeld voor kamp")
-            ->from([Config::get("mail.addresses.aas")])
+            ->subject("[Anderwijs] Bevestiging van aanmelding")
+            ->from([Config::get("mail.addresses.kamp")])
             ->to($this->member->email_anderwijs, $this->member->volnaam);
     }
 }

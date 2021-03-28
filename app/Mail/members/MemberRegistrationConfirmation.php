@@ -32,10 +32,9 @@ class MemberRegistrationConfirmation extends Mailable
 
     public function build()
     {
-        $from = Config::get("mail.addresses.kamp");
-        return $this->from($from["email"], $from["name"])
+        return $this->from([Config::get("mail.addresses.kamp")])
             ->to($this->member->email, $this->member->volnaam)
-            ->subject("ANDERWIJS - Bevestiging van inschrijving")
+            ->subject("[Anderwijs] Bevestiging van inschrijving")
             ->view('emails.members.registrationConfirmation');
     }
 }

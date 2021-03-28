@@ -33,6 +33,6 @@ class ResetPassword extends Mailable
         return $this->view('emails.resetPassword')
             ->from([Config::get("mail.addresses.aas")])
             ->to([$to])
-            ->subject('ANDERWIJS - Wachtwoord gereset');
+            ->subject('[Anderwijs] Wachtwoord gereset');
     }
 }
