@@ -3,23 +3,18 @@
 </p>
 
 <p>
-	Wij bevestigen hierbij dat de betaling via iDeal door ons is ontvangen en daarmee uw {{ ($participant->geslacht == 'M') ? 'zoon' : 'dochter' }} {{ $participant->volnaam }} definitief staat ingeschreven voor het {{$event->naam}} {{$event->datum_start->format('Y')}} ({{$event->datum_start->format('d-m-Y')}} t/m {{$event->datum_eind->format('d-m-Y')}}) te {{$event->location->plaats}}.
+	Wij bevestigen hierbij dat de betaling via iDeal door ons is ontvangen en daarmee {{ $participant->volnaam }} definitief staat ingeschreven voor het {{$event->naam}} {{$event->datum_start->format('Y')}} ({{$event->datum_start->format('d-m-Y')}} t/m {{$event->datum_eind->format('d-m-Y')}}) te {{$event->location->plaats}}.
+</p>
+<p>
+	Indien u gebruik maakt van de kortingsregeling, vergeet dan niet om een bewijs van het bruto gezinsinkomen met eventuele andere zaken op te sturen naar<a href="mailto:penningmeester@anderwijs.nl">penningmeester@anderwijs.nl</a> of per post naar Vereniging Anderwijs, Postbus 13228, 3507 LE Utrecht.
+</p>
+<p>
+	U bevindt zich nu in <a href="https://www.anderwijs.nl/inschrijven/inschrijven-scholieren/">de tweede stap</a>. van het plaatsingsproces van uw kind voor een Anderwijskamp. Dat wil zeggen dat wij aan de slag gaan om een geschikte leidingploeg samen te te stellen voor dit kamp. U hoeft in deze stap niets te doen. <br/>
+	Omdat wij voor alle gevraagde vakken op zoek gaan naar de juiste leiding, hebben we over het algemeen pas ongeveer twee weken voor het kamp de leidingploeg definitief samengesteld. U ontvangt dus uiterlijk twee weken voor het kamp een plaatsingsmail voor uw zoon/dochter, wanneer er genoeg plaats is op het kamp.
 </p>
 
 <p>
-	U bevindt zich nu in de tweede stap van het plaatsingsproces van uw kind voor een Anderwijskamp. Voor meer informatie over het proces, dat bestaat uit vier stappen, verwijs ik u naar de volgende link: <a href="https://www.anderwijs.nl/inschrijven/inschrijven-scholieren/">https://www.anderwijs.nl/inschrijven/inschrijven-scholieren/</a>.
-</p>
-
-<p>
-	Indien u gebruik maakt van de kortingsregeling, vergeet dan niet om een bewijs van het bruto gezinsinkomen met eventuele andere zaken op te sturen naar Vereniging Anderwijs, Postbus 13228, 3507 LE Utrecht.
-</p>
-
-<p>
-	We zijn momenteel nog steeds bezig met het samenstellen van een geschikte leidingploeg voor het Anderwijskamp. Hierbij letten wij op de hoeveelheid aanmeldingen voor het kamp en de vakken die de deelnemers hebben opgeven. Vanwege het feit dat we zorgvuldig onze leiding hierop selecteren, hebben we over het algemeen pas ongeveer twee weken voor het kamp de leidingploeg definitief rond. U ontvangt dus uiterlijk twee weken voor het kamp een plaatsingsmail voor uw zoon/dochter, wanneer er genoeg plaats is op het kamp.
-</p>
-
-<p>
-	Verder wil ik u mededelen dat na de dagtekening van de plaatsing van uw kind (stap 3 in het proces), uw inschrijving onherroepelijk is. Dit wil zeggen dat wanneer u zich na het ontvangen van de plaatsingsmail afmeldt, u het hele kampbedrag dient te betalen. Wanneer u zich eerder afmeldt, dient u slechts de administratiekosten van 50 euro te betalen.
+Verder willen we u laten weten dat uw inschrijving onherroepelijk is, zodra wij uw kind geplaatst hebben voor het kamp <a href="https://www.anderwijs.nl/inschrijven/inschrijven-scholieren/">(stap 3 in het proces)</a>. Dit wil zeggen dat u het hele kampbedrag dient te betalen, als u zich na het ontvangen van de plaatsingsmail afmeldt. Wanneer u zich eerder afmeldt, dient u slechts de administratiekosten van 50 euro te betalen.
 </p>
 
 <p>
