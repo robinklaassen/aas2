@@ -1,17 +1,17 @@
 @extends('master')
 
 @section('title')
-	Vrijwilliger ingeschreven
+	Aangemeld als vrijwilliger
 @endsection
 
 @section('content')
 
-<h1>Bedankt voor je inschrijving!</h1>
+<h1>Bedankt voor je aanmelding!</h1>
 
 <hr/>
 
 <p>
-	Je hebt je succesvol ingeschreven voor een Anderwijskamp. Binnen enkele momenten ontvang je een automatische bevestigingsmail op het door jou opgegeven emailadres. Verder neemt iemand van Anderwijs binnenkort contact met je op om het verdere proces uit te leggen en eventuele vragen te beantwoorden.
+	Je hebt je succesvol aangemeld voor een Anderwijskamp. Je ontvangt een automatische bevestigingsmail op het opgegeven emailadres. Verder neemt iemand van Anderwijs binnenkort contact met je op om het verdere proces uit te leggen en eventuele vragen te beantwoorden.
 </p>
 
 <p>
