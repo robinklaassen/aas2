@@ -20,7 +20,7 @@
 
 @if ($toPay == 0)
 	<p>
-		Uw kind staat op dit moment voorlopig ingeschreven voor het kamp. Om de inschrijving definitief te maken, dient u het kampgeld over te maken op onze rekening. <strong>Voor dit kamp is het kampgeld echter nog niet definitief vastgesteld.</strong> Zodra het kampgeld bekend is, ontvangt u daarover per e-mail bericht.
+		Uw kind staat op dit moment voorlopig ingeschreven voor het kamp. Om de inschrijving definitief te maken, dient u het kampgeld over te maken op onze rekening. <strong>Voor dit kamp is de prijst echter nog niet definitief vastgesteld.</strong> Zodra het kampgeld bekend is, ontvangt u daarover per e-mail bericht.
 	</p>
 @else
 	@if ($iDeal == 0)
@@ -54,7 +54,7 @@
 @endif
 
 <p>
-	Verder willen we u laten weten dat uw inschrijving onherroepelijk is, zodra wij uw kind geplaatst hebben voor het kamp <a href="https://www.anderwijs.nl/inschrijven/inschrijven-scholieren/">(stap 3 in het proces)</a>. Dit wil zeggen dat u het hele kampbedrag dient te betalen, als u zich na het ontvangen van de plaatsingsmail afmeldt. Wanneer u zich eerder afmeldt, dient u slechts de administratiekosten van 50 euro te betalen.
+	Mocht uw kind om wat voor reden dan ook toch niet op kamp kunnen, dan kunt dat melden bij de kantoorcommissie. Meldt u dit vóór de plaatsing (gewoonlijk 2 weken voor het kamp, wordt per mail bevestigd) dan krijgt u het inschrijfgeld minus 50 euro administratiekosten terug. Bij afmelding na de plaatsing krijgt u geen geld terug. Op onze website vindt u het volledige <a href="https://www.anderwijs.nl/inschrijven/inschrijven-scholieren/" target="_blank">plaatsingsproces</a>.
 </p>
 
 <p>
