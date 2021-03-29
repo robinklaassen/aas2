@@ -2,8 +2,9 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Facades\Mail;
 
 class MemberRegistrationTest extends TestCase
 {
@@ -69,6 +70,8 @@ class MemberRegistrationTest extends TestCase
      */
     public function testMemberRegistrationHandler()
     {
+        Mail::fake();
+        
         // POST and check status code
         $response = $this
             ->followingRedirects()
