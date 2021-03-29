@@ -156,11 +156,7 @@ class ParticipantRegistrationTest extends TestCase
         // Check output
         $response->assertStatus(200);
         $response->assertViewIs('registration.participantStored');
-        $response->assertSee("€ " . $this->event->prijs);
-        $response->assertSee("NL68 TRIO 0198 4197 83");
-        $response->assertDontSeeText("Kamp pakket");
-        $response->assertSee("naam deelnemer + deze kampcode: " . $this->event->code);
-        $response->assertSee(Participant::INCOME_DESCRIPTION_TABLE[$this->data["inkomen"]]);
+        $response->assertSee("bevestigingsmail");
     }
 
     public function testParticipantRegistrationWithPackage()
