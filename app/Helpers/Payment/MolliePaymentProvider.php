@@ -11,6 +11,7 @@ class MolliePaymentProvider implements PaymentProvider
 {
 
     protected $mollie;
+    protected $isTesting = false;
 
     public function __construct()
     {
@@ -26,12 +27,14 @@ class MolliePaymentProvider implements PaymentProvider
     public function fakeApi()
     {
         $this->mollie = Mockery::mock($this->mollie);
+        $this->isTesting = true;
         return $this->mollie;
     }
 
     public function fakePayments()
     {
         $this->mollie->payments = Mockery::mock($this->mollie->payments);
+        $this->isTesting = true;
         return $this->mollie->payments;
     }
 
@@ -45,11 +48,16 @@ class MolliePaymentProvider implements PaymentProvider
             ],
             "description" => $payment->getDescription(),
             "metadata"    => $payment->getMetadata(),
-            "webhookUrl"  => App::environment("local") ? null : url('iDeal-webhook'),
+            "webhookUrl"  => $this->webhookUrl(),
             "redirectUrl" => url("iDeal-response/{$keyString}"),
             "method" =>  \Mollie\Api\Types\PaymentMethod::IDEAL
         ));
 
         return redirect($p->getCheckoutUrl());
+    }
+
+    public function webhookUrl(): ?string
+    {
+        return !App::environment('local') || $this->isTesting ? url('iDeal-webhook') : null;
     }
 }
