@@ -1,266 +1,206 @@
-// Cosmo 3.4.1
+// Swatch 2.3.1
 // Bootswatch
 // -----------------------------------------------------
 
-@web-font-path: "https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,700&display=swap";
+// TYPOGRAPHY
+// -----------------------------------------------------
+h1 { color: #ff0000; }
+h2 { color: #ffcc00; }
+h3 { color: #ffff00; }
+h4 { color: #66ff00; }
+h5 { color: #0000ff; }
+h6 { color: #ff00ff; }
 
-.web-font(@path) {
-  @import (css) url("@{path}");
-}
-.web-font(@web-font-path);
-
-// Navbar =====================================================================
-
-.navbar {
-
-  &-inverse {
-
-    .badge {
-      background-color: #fff;
-      color: @brand-primary;
-    }
-  }
+.page-header {
+  border-bottom: 1px solid #B6B2A3;
+  .box-shadow(~"inset 0 -1px 0 rgba(0,0,0,.2), 0 1px 0 #EAE7D8");
 }
 
-// Buttons ====================================================================
+a {
+  text-decoration: underline;
+}
+a:hover {
+  text-decoration: underline !important;
+}
 
-// Typography =================================================================
+blink {
+  -webkit-animation: blink 1s linear infinite;
+     -moz-animation: blink 1s linear infinite;
+      -ms-animation: blink 1s linear infinite;
+       -o-animation: blink 1s linear infinite;
+          animation: blink 1s linear infinite;
+}
 
+// SCAFFOLDING
+// -----------------------------------------------------
 body {
-  -webkit-font-smoothing: antialiased;
+  background: @bodyBackground url('../img/microfab.gif') top left;
+  -webkit-font-smoothing: none;
 }
 
-.text-primary,
-.text-primary:hover {
-  color: @brand-primary;
+// NAVBAR
+// -----------------------------------------------------
+.navbar {
+  border-bottom: 1px solid #fff;
+  .box-shadow(~"0 2px 0 #D4D0C8, 0 3px 0 #808080, 0 4px 0 #404040");
+}
+.navbar-inner {
+  border-bottom: 1px solid #D4D0C8;
+  background: #000 url('../img/stars.gif') top left;
 }
 
-.text-success,
-.text-success:hover {
-  color: @brand-success;
+// NAV
+// -----------------------------------------------------
+
+// BUTTONS
+// -----------------------------------------------------
+.btn {
+  border: 6px ridge @btnBorder;
+}
+.btn-primary {
+  background: #000 url('../img/rainbow.gif') top left;
 }
 
-.text-danger,
-.text-danger:hover {
-  color: @brand-danger;
+// TABLES
+// -----------------------------------------------------
+
+// FORMS
+// -----------------------------------------------------
+legend {
+  font-weight: bold;
+  color: yellow;
+}
+.control-group.error input {
+  background: #000 url('../img/flames.gif') 0 -30px repeat-x;
 }
 
-.text-warning,
-.text-warning:hover {
-  color: @brand-warning;
+// DROPDOWNS
+// -----------------------------------------------------
+// .dropdown-menu {
+//   .border-radius(0)
+// }
+
+// ALERTS, LABELS, BADGES
+// -----------------------------------------------------
+.label-important,
+.badge-important {
+  background-color: red;
 }
 
-.text-info,
-.text-info:hover {
-  color: @brand-info;
+.label-important[href],
+.badge-important[href] {
+  background-color: red;
 }
 
-// Tables =====================================================================
-
-table,
-.table {
-
-  a:not(.btn) {
-    text-decoration: underline;
-  }
-
-  .dropdown-menu a {
-    text-decoration: none;
-  }
-
-  .success,
-  .warning,
-  .danger,
-  .info {
-    color: #fff;
-
-    a {
-      color: #fff;
-    }
-  }
+.label-warning,
+.badge-warning {
+  background-color: yellow;
+  color: black;
 }
 
-// Forms ======================================================================
-
-
-.has-warning {
-  .help-block,
-  .control-label,
-  .radio,
-  .checkbox,
-  .radio-inline,
-  .checkbox-inline,
-  &.radio label,
-  &.checkbox label,
-  &.radio-inline label,
-  &.checkbox-inline label,
-  .form-control-feedback {
-    color: @brand-warning;
-  }
-
-  .form-control,
-  .form-control:focus,
-  .input-group-addon {
-    border: 1px solid @brand-warning;
-  }
+.label-warning[href],
+.badge-warning[href] {
+  background-color: yellow;
+  color: black;
 }
 
-.has-error {
-  .help-block,
-  .control-label,
-  .radio,
-  .checkbox,
-  .radio-inline,
-  .checkbox-inline,
-  &.radio label,
-  &.checkbox label,
-  &.radio-inline label,
-  &.checkbox-inline label,
-  .form-control-feedback {
-    color: @brand-danger;
-  }
-
-  .form-control,
-  .form-control:focus,
-  .input-group-addon {
-    border: 1px solid @brand-danger;
-  }
+.label-success,
+.badge-success {
+  background-color: green;
 }
 
-.has-success {
-  .help-block,
-  .control-label,
-  .radio,
-  .checkbox,
-  .radio-inline,
-  .checkbox-inline,
-  &.radio label,
-  &.checkbox label,
-  &.radio-inline label,
-  &.checkbox-inline label,
-  .form-control-feedback {
-    color: @brand-success;
-  }
-
-  .form-control,
-  .form-control:focus,
-  .input-group-addon {
-    border: 1px solid @brand-success;
-  }
+.label-success[href],
+.badge-success[href] {
+  background-color: green;
 }
 
-// Navs =======================================================================
-
-.nav-pills {
-
-  & > li > a {
-    border-radius: 0;
-  }
+.label-info,
+.badge-info {
+  background-color: #00ffff;
 }
 
-.dropdown-menu {
-
-  & > li > a:hover,
-  & > li > a:focus {
-    background-image: none;
-  }
+.label-info[href],
+.badge-info[href] {
+  background-color: #00ffff;
 }
 
-// Indicators =================================================================
-
-.close {
-  text-decoration: none;
-  text-shadow: none;
-  opacity: 0.4;
-
-  &:hover,
-  &:focus {
-    opacity: 1;
-  }
+.label-inverse,
+.badge-inverse {
+  background-color: black;
 }
 
-.alert {
-  border: none;
-
-  .alert-link {
-    text-decoration: underline;
-    color: #fff;
-  }
+.label-inverse[href],
+.badge-inverse[href] {
+  background-color: black;
 }
 
-.label {
-  border-radius: 0;
+// MISC
+// -----------------------------------------------------
+.hero-unit, .well {
+  background: #000 url('../img/stars.gif') top left;
 }
 
-// Progress bars ==============================================================
-
-.progress {
-  height: 8px;
-  .box-shadow(none);
-  .progress-bar {
-    font-size: 8px;
-    line-height: 8px;
-  }
+.breadcrumb {
+  background: black;
+  color: white;
 }
 
-// Containers =================================================================
-
-.panel {
-  &-heading,
-  &-footer {
-    border-top-right-radius: 0;
-    border-top-left-radius: 0;
-  }
-
-  &-default {
-    .close {
-      color: @text-color;
-    }
-  }
+.nav-tabs > li > a:hover,
+.nav-tabs > li > a:focus {
+  border-color: black;
+  background: black;
 }
 
-a.list-group-item {
-
-  &-success {
-    &.active {
-      background-color: @state-success-bg;
-    }
-
-    &.active:hover,
-    &.active:focus {
-      background-color: darken(@state-success-bg, 5%);
-    }
-  }
-
-  &-warning {
-    &.active {
-      background-color: @state-warning-bg;
-    }
-
-    &.active:hover,
-    &.active:focus {
-      background-color: darken(@state-warning-bg, 5%);
-    }
-  }
-
-  &-danger {
-    &.active {
-      background-color: @state-danger-bg;
-    }
-
-    &.active:hover,
-    &.active:focus {
-      background-color: darken(@state-danger-bg, 5%);
-    }
-  }
+.progress .bar {
+  background: #C0C0C0 url('../img/progress.gif') top left repeat-x !important;
+  border: 1px solid #fff;
+  border-top: 1px solid #808080;
+  border-left: 1px solid #808080;
 }
 
-.modal {
-  .close {
-    color: @text-color;
-  }
+// ANIMATIONS
+// -----------------------------------------------------
+// Webkit
+@-webkit-keyframes blink {
+  0% { opacity: 0; }
+  40% { opacity: 0; }
+  41% { opacity: 1; }
+  99% { opacity: 1; }
+  100% { opacity: 0; }
 }
 
-.popover {
-  color: @text-color;
+// Firefox
+@-moz-keyframes blink {
+  0% { opacity: 0; }
+  40% { opacity: 0; }
+  41% { opacity: 1; }
+  99% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+// IE9
+@-ms-keyframes blink {
+  0% { opacity: 0; }
+  40% { opacity: 0; }
+  41% { opacity: 1; }
+  99% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+// Opera
+@-o-keyframes blink {
+  0% { opacity: 0; }
+  40% { opacity: 0; }
+  41% { opacity: 1; }
+  99% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+// Spec
+@keyframes blink {
+  0% { opacity: 0; }
+  40% { opacity: 0; }
+  41% { opacity: 1; }
+  99% { opacity: 1; }
+  100% { opacity: 0; }
 }
