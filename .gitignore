@@ -108,7 +108,6 @@ bootstrap/cache
 
 # AAS2 specifics
 /public/img
-/public/images
 /public/uploads
 
 # Ignore the composer archive
