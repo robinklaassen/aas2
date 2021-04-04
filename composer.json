@@ -27,7 +27,7 @@
     "symfony/dom-crawler": "^5.0",
     "symfony/css-selector": "^5.0",
     "phpunit/phpunit": "^9.0",
-    "phpspec/phpspec": "^6.1",
+    "phpspec/phpspec": "^7.0",
     "filp/whoops": "~2.0",
     "mockery/mockery": "^1.2",
     "laravel/homestead": "^10.8",
