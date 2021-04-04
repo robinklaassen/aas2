@@ -3,7 +3,7 @@
 </p>
 
 <p>
-	Zojuist heeft u uw kind opgegeven voor een Anderwijskamp. Onderaan deze mail vindt u de informatie die u bij ons hebt opgegeven.
+	Zojuist heeft u uw kind aangemeld voor een Anderwijskamp. Onderaan deze mail vindt u de informatie die u bij ons hebt opgegeven.
 </p>
 
 <p>
