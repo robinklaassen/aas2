@@ -1,8 +1,11 @@
 <?php
 
+namespace Database\Seeders;
+
 use App\Event;
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
+use DB;
 
 class CourseEventParticipantPivotSeeder extends Seeder
 {
