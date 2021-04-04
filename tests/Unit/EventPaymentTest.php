@@ -7,7 +7,7 @@ use App\Helpers\Payment\EventPayment;
 use App\Event;
 use App\Participant;
 
-class PaymentTest extends TestCase
+class EventPaymentTest extends TestCase
 {
 
     private $payment;
@@ -66,9 +66,9 @@ class PaymentTest extends TestCase
     public function testEventPaymentDescription()
     {
 
-        $this->assertContains($this->event->code, $this->payment->getDescription());
-        $this->assertContains($this->participant->voornaam, $this->payment->getDescription());
-        $this->assertContains($this->participant->achternaam, $this->payment->getDescription());
+        $this->assertStringContainsString($this->event->code, $this->payment->getDescription());
+        $this->assertStringContainsString($this->participant->voornaam, $this->payment->getDescription());
+        $this->assertStringContainsString($this->participant->achternaam, $this->payment->getDescription());
     }
 
     /**
