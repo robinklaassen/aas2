@@ -50,8 +50,10 @@ class CoverageChangedNotification extends Mailable
      */
     public function build()
     {
+        $subject = sprintf('%s Vakdekking gewijzigd', Config::get('mail.subject_prefix.internal'));
+        
         return $this->view('emails.internal.coverageChangedNotification')
-            ->subject('AAS 2.0 - Vakdekking gewijzigd')
+            ->subject($subject)
             ->from([Config::get('mail.addresses.aas')])
             ->to([Config::get('mail.addresses.kamp')]);
     }

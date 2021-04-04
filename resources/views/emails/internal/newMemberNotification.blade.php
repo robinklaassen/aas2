@@ -3,12 +3,10 @@
 </p>
 
 <p>
-	Zojuist heeft een nieuwe vrijwilliger, {{ $member->voornaam }} {{ $member->tussenvoegsel }} {{ $member->achternaam }}, zich ingeschreven voor {{ $event->naam }} ({{ $event->code }}). {{ ($member->geslacht == 'M') ? 'Zijn' : 'Haar' }} gegevens vind je <a href="{{ url('/members', $member->id) }}">hier</a>.
+	Zojuist heeft een nieuwe vrijwilliger, {{ $member->volnaam }}, zich ingeschreven voor {{ $event->naam }} ({{ $event->code }}). De gegevens vind je <a href="{{ url('/members', $member->id) }}" target="_blank">hier</a>.
 </p>
 
 <p>
 	Met vriendelijke groet,<br/>
 	AAS 2.0
 </p>
-
-<p><small>-dit is een geautomiseerd bericht, beantwoording is zinloos-</small></p>

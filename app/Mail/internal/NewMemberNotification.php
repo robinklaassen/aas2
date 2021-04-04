@@ -24,8 +24,10 @@ class NewMemberNotification extends Mailable
 
     public function build()
     {
+        $subject = sprintf('%s Nieuwe vrijwilliger', Config::get('mail.subject_prefix.internal'));
+        
         return $this->from("aas@anderwijs.nl", "ANDERWIJS - AAS")
-            ->subject("AAS 2.0 - Nieuwe vrijwilliger")
+            ->subject($subject)
             ->to([Config::get("mail.addresses.kamp")])
             ->view('emails.internal.newMemberNotification');
     }

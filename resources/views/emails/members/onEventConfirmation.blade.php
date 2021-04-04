@@ -1,9 +1,9 @@
 <p>
-	Beste {{ $member->voornaam }} {{ $member->tussenvoegsel }} {{ $member->achternaam }},
+	Beste {{ $member->volnaam }},
 </p>
 
 <p>
-	Zojuist heb je je via AAS 2.0 opgegeven voor het volgende kamp:
+	Zojuist heb je je via <a href="https://aas2.anderwijs.nl" target="_blank">AAS 2.0</a> aangemeld als leiding voor het volgende kamp:
 </p>
 
 <p>
@@ -15,7 +15,7 @@
 </p>
 
 <p>
-	Vergeet niet om naast het volledige kamp ook de <b>training</b> in je agenda te blokken! De datum daarvan vind je op de website.
+	Vergeet niet om naast het volledige kamp ook de <b>training</b> in je agenda te blokken! De datum daarvan vind je in onze <a href="https://www.anderwijs.nl/vrijwilligers/ledenagenda/" target="_blank">ledenagenda</a>.
 </p>
 
 <p>
@@ -26,5 +26,3 @@
 	Met vriendelijke groet,<br/>
 	Anderwijs
 </p>
-
-<p><small>-dit is een geautomiseerd bericht, beantwoording is zinloos-</small></p>

@@ -27,9 +27,11 @@ class IDealConfirmation extends Mailable
 
     public function build()
     {
+        $subject = sprintf('%s Betaling via iDeal ontvangen', Config::get('mail.subject_prefix.external'));
+
         return $this->view('emails.participants.iDealConfirmation')
             ->from(Config::get("mail.addresses.kantoor"))
             ->to([$this->participant->getParentEmail()])
-            ->subject('ANDERWIJS - Betaling via iDeal ontvangen');
+            ->subject($subject);
     }
 }

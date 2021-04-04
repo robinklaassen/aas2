@@ -30,9 +30,11 @@ class ResetPassword extends Mailable
             "name" => $isMember ? $this->user->profile->volnaam : $this->user->profile->parentName,
         ];
 
+        $subject = sprintf('%s Wachtwoord gereset', Config::get('mail.subject_prefix.external'));
+
         return $this->view('emails.resetPassword')
             ->from([Config::get("mail.addresses.aas")])
             ->to([$to])
-            ->subject('ANDERWIJS - Wachtwoord gereset');
+            ->subject($subject);
     }
 }

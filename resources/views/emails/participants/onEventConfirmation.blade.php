@@ -3,7 +3,7 @@
 </p>
 
 <p>
-	Zojuist heeft u uw kind via zijn/haar profiel aangemeld voor het volgende Anderwijskamp:
+	Zojuist heeft u uw kind via het Anderwijs administratiesysteem aangemeld voor het volgende Anderwijskamp:
 </p>
 
 <p>
@@ -15,34 +15,21 @@
 </p>
 
 <p>
-	VAKKEN<br/>
-	@foreach ($givenCourses as $i => $course)
-		<br/>
-		Vak {{$i + 1}}: {{ $course['naam'] }}<br/>
-		Info: {{ $course['info'] }}
-	@endforeach
-</p>
-
-<p>
-	--------------------
-</p>
-
-<p>
-	U bevindt zich nu in de eerste stap van het plaatsingsproces van uw kind voor een Anderwijskamp. Voor meer informatie over het proces, dat bestaat uit vier stappen, gaat u naar de volgende pagina: <a href="https://www.anderwijs.nl/inschrijven/inschrijven-scholieren/">https://www.anderwijs.nl/inschrijven/inschrijven-scholieren/</a>.
+	Onderaan dit bericht kunt u zien voor welke vakken u uw kind heeft opgegeven.
 </p>
 
 @if ($toPay == 0)
 	<p>
-		Uw kind staat op dit moment voorlopig ingeschreven voor het kamp. Om de inschrijving definitief te maken, dient u het kampgeld over te maken op onze rekening. <strong>Voor dit kamp is het kampgeld echter nog niet definitief vastgesteld.</strong> Zodra dat is gebeurd, ontvangt u daarover per e-mail bericht.
+		Uw kind staat op dit moment voorlopig ingeschreven voor het kamp. Om de inschrijving definitief te maken, dient u het kampgeld over te maken op onze rekening. <strong>Voor dit kamp is de prijs echter nog niet definitief vastgesteld.</strong> Zodra de prijs bekend is, ontvangt u daarover per e-mail bericht.
 	</p>
 @else
 	@if ($iDeal == 0)
 		<p>
-			Uw kind staat op dit moment voorlopig ingeschreven voor het kamp. Om de inschrijving definitief te maken, dient u het kampgeld zoals onderstaand over te maken op onze rekening. Plaatsing van deelnemers op een kamp gebeurt op volgorde van betaling, dus wacht hier niet te lang mee. Uiterlijk twee weken nadat u het kampgeld heeft overgemaakt, ontvangt u per e-mail een bevestiging van de inschrijving.
+			Uw kind staat op dit moment voorlopig ingeschreven voor het kamp. Om de inschrijving definitief te maken, dient u het kampgeld zoals hieronder vermeld over te maken op onze rekening. Beschikbare plaatsen op een kamp worden vergeven op volgorde van betaling, dus wacht hier niet te lang mee. Uiterlijk twee weken nadat u het kampgeld heeft overgemaakt, ontvangt u per e-mail een bevestiging van de inschrijving.
 		</p>
 	@else
 		<p>
-			U heeft aangegeven het kampgeld direct via iDeal te betalen. Wanneer dit succesvol ontvangen is, ontvangt u een aparte bevestiging daarvan. Is er onverhoopt toch iets misgegaan, dan dient u het kampgeld zoals onderstaand over te maken op onze rekening. Plaatsing van deelnemers op een kamp gebeurt op volgorde van betaling, dus wacht hier niet te lang mee. Uiterlijk twee weken nadat u het kampgeld heeft overgemaakt, ontvangt u per e-mail een bevestiging van de inschrijving.
+			U heeft aangegeven het kampgeld direct via iDeal te betalen. Wanneer dit succesvol ontvangen is, ontvangt u een aparte bevestiging daarvan. Is er onverhoopt toch iets misgegaan, dan dient u het kampgeld zoals hieronder vermeld over te maken op onze rekening. Beschikbare plaatsen op een kamp worden vergeven op volgorde van betaling, dus wacht hier niet te lang mee. Uiterlijk twee weken nadat u het kampgeld heeft overgemaakt, ontvangt u per e-mail een bevestiging van de inschrijving.
 		</p>
 	@endif
 	
@@ -56,7 +43,7 @@
 
 @if ($type == 'new' && $participant->inkomen)
 	<p>
-		U heeft een korting op de kampprijs aangevraagd. Daarvoor dient u ons een bewijs van inkomen te sturen. Een kopie van bijvoorbeeld uw loonstrook en die van uw eventuele partner is voldoende. Vermeld daarbij de samenstelling van uw gezin en eventuele andere zaken die van belang kunnen zijn voor de toekenning van de korting. U kunt dit sturen naar onderstaand adres. Let op: het draait om het <strong>bruto gezinsinkomen</strong> en niet om het netto gezinsinkomen! Na beoordeling van de kortingsaanvraag nemen wij zonodig contact met u op.
+		U heeft een korting op de kampprijs aangevraagd. Daarvoor hebben wij een bewijs van uw inkomen nodig. Een kopie van bijvoorbeeld uw loonstrook en die van uw eventuele partner is voldoende. Stuur deze naar ons op en vermeld daarbij de samenstelling van uw gezin en eventuele andere zaken die van belang kunnen zijn voor de toekenning van de korting. U kunt dit per mail sturen naar <a href="mailto:penningmeester@anderwijs.nl">penningmeester@anderwijs.nl</a> of per post naar onderstaand adres. Let op: het gaat hier om het <strong>bruto gezinsinkomen</strong> en niet om het netto gezinsinkomen! 
 	</p>
 	<p>
 		Vereniging Anderwijs<br/>
@@ -67,7 +54,7 @@
 @endif
 
 <p>
-	Verder delen we u mee dat na de dagtekening van de plaatsing van uw kind (stap 3 in het proces), uw inschrijving onherroepelijk is. Dit wil zeggen dat wanneer u zich na het ontvangen van de plaatsingsmail afmeldt, u het hele kampbedrag dient te betalen. Wanneer u zich eerder afmeldt, dient u slechts de administratiekosten van 50 euro te betalen.
+	Mocht uw kind om wat voor reden dan ook toch niet op kamp kunnen, dan kunt dat melden bij de kantoorcommissie. Meldt u dit vóór de plaatsing (gewoonlijk 2 weken voor het kamp, wordt per mail bevestigd) dan krijgt u het inschrijfgeld minus 50 euro administratiekosten terug. Bij afmelding na de plaatsing krijgt u geen geld terug. Op onze website vindt u het volledige <a href="https://www.anderwijs.nl/inschrijven/inschrijven-scholieren/" target="_blank">plaatsingsproces</a>.
 </p>
 
 <p>
@@ -77,4 +64,17 @@
 <p>
 	Met vriendelijke groet,<br/>
 	Anderwijs
+</p>
+
+<p>
+	-------------
+</p>
+
+<p>
+	INFORMATIE OPGEGEVEN VAKKEN<br/>
+	@foreach ($givenCourses as $i => $course)
+		<br/>
+		Vak {{$i + 1}}: {{ $course['naam'] }}<br/>
+		Info: {{ $course['info'] }}
+	@endforeach
 </p>

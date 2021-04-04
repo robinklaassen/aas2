@@ -35,9 +35,11 @@ class ParticipantRegistrationConfirmation extends Mailable
 
     public function build()
     {
+        $subject = sprintf('%s Bevestiging van inschrijving', Config::get('mail.subject_prefix.external'));
+
         return $this->view('emails.participants.registrationConfirmation')
             ->to([$this->participant->getParentEmail()])
             ->from([Config::get("mail.addresses.kantoor")])
-            ->subject('ANDERWIJS - Bevestiging van inschrijving');
+            ->subject($subject);
     }
 }

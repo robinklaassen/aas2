@@ -54,7 +54,7 @@ return [
 	|
 	*/
 
-	'from' => ['address' => 'aas@anderwijs.nl', 'name' => 'ANDERWIJS - AAS'],
+	'from' => ['address' => 'aas@anderwijs.nl', 'name' => 'Anderwijs - AAS'],
 
 	/*
 	|--------------------------------------------------------------------------
@@ -120,6 +120,11 @@ return [
 	*/
 
 	'pretend' => false,
+
+	'subject_prefix' => [
+		'internal' => '[AAS]',
+		'external' => '[Anderwijs]',
+	],
 
 	'addresses' => [
 		'aas' => [
