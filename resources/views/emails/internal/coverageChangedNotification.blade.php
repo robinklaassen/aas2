@@ -3,7 +3,7 @@
 </p>
 
 <p>
-	<a href="{{ url('/members', $member->id) }}" target="_blank">{{ $member->volnaam }}</a>, die binnenkort op <a href="{{ url('/events', $event->id) }}" target="_blank">{{ $event->naam }}</a> ({{ $event->code }}) gaat, heeft zojuist het volgende gewijzigd in {{ ($member->geslacht == 'M') ? 'zijn' : 'haar' }} vakdekking:
+	<a href="{{ url('/members', $member->id) }}" target="_blank">{{ $member->volnaam }}</a>, die binnenkort op <a href="{{ url('/events', $event->id) }}" target="_blank">{{ $event->naam }}</a> ({{ $event->code }}) gaat, heeft zojuist het volgende gewijzigd in de vakdekking:
 </p>
 
 @if ($courseLevelFrom == 0)

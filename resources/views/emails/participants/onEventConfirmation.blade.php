@@ -3,7 +3,7 @@
 </p>
 
 <p>
-	Zojuist heeft u uw kind via zijn/haar profiel aangemeld voor het volgende Anderwijskamp:
+	Zojuist heeft u uw kind via het Anderwijs administratiesysteem aangemeld voor het volgende Anderwijskamp:
 </p>
 
 <p>
