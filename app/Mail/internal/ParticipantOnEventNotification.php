@@ -25,8 +25,10 @@ class ParticipantOnEventNotification extends Mailable
 
     public function build()
     {
+        $subject = sprintf('%s Deelnemer op kamp', Config::get('mail.subject_prefix.internal'));
+
         return $this->view('emails.internal.participantOnEventNotification')
-            ->subject('AAS 2.0 - Deelnemer op kamp')
+            ->subject($subject)
             ->to([Config::get("mail.addresses.kantoor")])
             ->from([Config::get("mail.addresses.aas")]);
     }

@@ -41,8 +41,11 @@ class NewDeclaration extends Mailable
         foreach ($this->filePaths as $filePath) {
             $this->attach($filePath);
         }
+
+        $subject = sprintf('%s Nieuwe declaratie', Config::get('mail.subject_prefix.internal'));
+
         return $this->view('emails.internal.newDeclaration')
-            ->subject("AAS 2.0 - Nieuwe declaratie")
+            ->subject($subject)
             ->cc([$this->member->getAnderwijsEmail()])
             ->to([Config::get('mail.addresses.penningmeester')])
             ->from([$this->member->getAnderwijsEmail()]);

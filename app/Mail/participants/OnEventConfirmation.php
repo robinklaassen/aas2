@@ -32,10 +32,12 @@ class OnEventConfirmation extends Mailable
     }
 
     public function build()
-    {
+    {        
+        $subject = sprintf('%s Bevestiging van aanmelding', Config::get('mail.subject_prefix.external'));
+
         return $this->view('emails.participants.onEventConfirmation')
             ->from([Config::get("mail.addresses.kantoor")])
             ->to([$this->participant->getParentEmail()])
-            ->subject('ANDERWIJS - Bevestiging van aanmelding');
+            ->subject($subject);
     }
 }

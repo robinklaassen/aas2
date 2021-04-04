@@ -25,9 +25,11 @@ class ParticipantEditedEventCourseInformationNotification extends Mailable
 
     public function build()
     {
+        $subject = sprintf('%s Vakken voor kamp bewerkt', Config::get('mail.subject_prefix.internal'));
+        
         return $this->view('emails.internal.participantEditedEventCourseInformationNotification')
             ->from([Config::get("mail.addresses.aas")])
             ->to([Config::get("mail.addresses.kantoor")])
-            ->subject('AAS 2.0 - Vakken voor kamp bewerkt');
+            ->subject($subject);
     }
 }
