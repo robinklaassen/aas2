@@ -1,9 +1,12 @@
 {
-  "name": "laravel/laravel",
-  "description": "The Laravel Framework.",
+  "name": "anderwijs/aas2",
+  "description": "Het Anderwijs Administratiesysteem, versie 2.",
   "keywords": [
-    "framework",
-    "laravel"
+    "anderwijs",
+    "bijles",
+    "vrijwilligers",
+    "liefde",
+    "nerds"
   ],
   "license": "MIT",
   "type": "project",
