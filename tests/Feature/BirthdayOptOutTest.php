@@ -14,7 +14,7 @@ class BirthdayOptOutTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->member = \App\Member::findOrFail(2);
+        $this->member = \App\Member::findOrFail(2);  // Jön Snow
     }
 
     /**
@@ -27,7 +27,7 @@ class BirthdayOptOutTest extends TestCase
         $this
             ->actingAs($this->member->user)
             ->get('/lists')
-            ->assertSeeInOrder(['id="verjaardag"', 'Ranonkeltje', 'id="more"']);
+            ->assertSeeInOrder(['id="verjaardag"', 'Ranonkeltje', 'id="more"'], false);
     }
 
     /**

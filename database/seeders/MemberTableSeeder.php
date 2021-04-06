@@ -1,8 +1,11 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Carbon;
+use DB;
 use App\Member;
 
 class MemberTableSeeder extends Seeder

@@ -1,6 +1,9 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
+use DB;
 use \App\Member;
 use \App\Comment;
 use \App\Location;
