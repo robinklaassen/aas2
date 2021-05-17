@@ -23,3 +23,13 @@
 </p>
 
 @endsection
+
+@section('script')
+
+	@if ( env('GOOGLE_SITE_TAG') !== null && env('GOOGLE_CONVERSION_NEW_MEMBER') !== null)
+	<script>
+		gtag('event', 'conversion', {'send_to': '{{ env("GOOGLE_SITE_TAG") }}/{{ env("GOOGLE_CONVERSION_NEW_MEMBER") }}'});
+	</script>
+	@endif
+
+@endsection
