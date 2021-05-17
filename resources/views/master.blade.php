@@ -48,6 +48,18 @@
 	{{ Html::script('js/vendor.js') }}
 	{{ Html::script('js/app.js') }}
 
+	@if ( env('GOOGLE_SITE_TAG') !== null )
+	<!-- Global site tag (gtag.js) - Google Ads -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id={{ env('GOOGLE_SITE_TAG') }}"></script>
+	<script>
+	window.dataLayer = window.dataLayer || [];
+	function gtag(){dataLayer.push(arguments);}
+	gtag('js', new Date());
+
+	gtag('config', '{{ env("GOOGLE_SITE_TAG") }}');
+	</script>
+	@endif
+
 	<script type="text/javascript">
 
 		// On DOM ready...
