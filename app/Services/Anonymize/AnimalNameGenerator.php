@@ -8,7 +8,7 @@ class AnimalNameGenerator implements NameGenerator
 {
     const NAMES = [
         "Paard",
-        "lieveheersbeestje",
+        "Lieveheersbeestje",
         "Kikker",
         "Kikkervisje",
         "Adelaar",
