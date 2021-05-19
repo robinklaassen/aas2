@@ -7,18 +7,16 @@ use FakerProviderAnimals\Animals;
 
 class AnonymizeGenerator implements AnonymizeGeneratorInterface
 {
-    /** @var Generator  */
-    private $faker;
+    private NameGenerator $nameGenerator;
 
-    public function __construct()
+    public function __construct(NameGenerator $nameGenerator)
     {
-        $this->faker = new Generator();
-        $this->faker->addProvider(new Animals($this->faker));
+        $this->nameGenerator = $nameGenerator;
     }
 
     public function firstname(): string
     {
-        return "Anonymous";
+        return "Anonieme";
     }
 
     public function surnamePrefix(): ?string
@@ -28,7 +26,7 @@ class AnonymizeGenerator implements AnonymizeGeneratorInterface
 
     public function surname(): string
     {
-        return $this->faker->animal();
+        return $this->nameGenerator->name();
     }
 
     public function birthdate(): string

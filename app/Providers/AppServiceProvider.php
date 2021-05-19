@@ -2,10 +2,12 @@
 
 namespace App\Providers;
 
+use App\Services\Anonymize\AnimalNameGenerator;
 use App\Services\Anonymize\AnonymizeGenerator;
 use App\Services\Anonymize\AnonymizeGeneratorInterface;
 use App\Services\Anonymize\AnonymizeParticipant;
 use App\Services\Anonymize\AnonymizeParticipantInterface;
+use App\Services\Anonymize\NameGenerator;
 use App\Services\ObjectManager\EloquentObjectManager;
 use App\Services\ObjectManager\ObjectManagerInterface;
 use Illuminate\Support\Facades\Auth;
@@ -80,6 +82,7 @@ class AppServiceProvider extends ServiceProvider
 		);
 		$this->app->bind(AnonymizeParticipantInterface::class, AnonymizeParticipant::class);
 		$this->app->bind(AnonymizeGeneratorInterface::class, AnonymizeGenerator::class);
+		$this->app->when(AnonymizeGenerator::class)->needs(NameGenerator::class)->give(AnimalNameGenerator::class);
 		$this->app->bind(ObjectManagerInterface::class, EloquentObjectManager::class);
 	}
 }
