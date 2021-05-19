@@ -74,7 +74,11 @@ jobs:
         run: yarn install
 
       - name: Compile assets
-        run: yarn prod
+#        Runs prod complication 2 times, because webpack paralises compilation and doesnt wait for all stylesheets
+#        to be compiled before combining them
+        run: |
+          yarn prod
+          yarn prod
 
       - name: Move assets for transport
         run: "mkdir deploy-unit && mv -t deploy-unit public/css public/js public/fonts"
