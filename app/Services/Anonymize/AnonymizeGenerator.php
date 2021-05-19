@@ -7,9 +7,9 @@ use FakerProviderAnimals\Animals;
 
 class AnonymizeGenerator implements AnonymizeGeneratorInterface
 {
-    private NameGenerator $nameGenerator;
+    private NameGeneratorInterface $nameGenerator;
 
-    public function __construct(NameGenerator $nameGenerator)
+    public function __construct(NameGeneratorInterface $nameGenerator)
     {
         $this->nameGenerator = $nameGenerator;
     }

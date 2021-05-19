@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Anonymize;
 
-interface NameGenerator
+interface NameGeneratorInterface
 {
     public function name(): string;
 }
