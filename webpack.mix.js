@@ -13,23 +13,24 @@ require('laravel-mix-modernizr');
  */
 
 mix.ts('resources/js/app.ts', 'public/js')
-   .sass('resources/sass/app.sass', 'public/css/_app.scss.css')
-   .less('resources/less/app.less', 'public/css/_app.less.css')
-   .styles([
-      "public/css/_app.less.css",
-      "public/css/_app.scss.css",
-      "resources/css/custom.css",
-      "resources/css/dropzone.css",
-   ], "public/css/app.css")
-   .extract([
-      "vue",
-      "jquery",
-      "select2",
-      "bootstrap",
-      "Modernizr",
-      "webshim",
-      "datatables.net-responsive-bs",
-      "datatables.net-bs"
-   ])
-   .modernizr()
-   .sourceMaps();
+    .vue({version: 2})
+    .sass('resources/sass/app.sass', 'public/css/_app.scss.css')
+    .less('resources/less/app.less', 'public/css/_app.less.css')
+    .styles([
+        "public/css/_app.less.css",
+        "public/css/_app.scss.css",
+        "resources/css/custom.css",
+        "resources/css/dropzone.css",
+    ], "public/css/app.css")
+    .extract([
+       "vue",
+       "jquery",
+       "select2",
+       "bootstrap",
+       "Modernizr",
+       "webshim",
+       "datatables.net-responsive-bs",
+       "datatables.net-bs"
+    ])
+    .modernizr()
+    .sourceMaps();
