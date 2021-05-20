@@ -48,15 +48,15 @@
 	{{ Html::script('js/vendor.js') }}
 	{{ Html::script('js/app.js') }}
 
-	@if ( env('GOOGLE_SITE_TAG') !== null )
+	@if ( config('google.site_tag') !== null )
 	<!-- Global site tag (gtag.js) - Google Ads -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id={{ env('GOOGLE_SITE_TAG') }}"></script>
+	<script async src="https://www.googletagmanager.com/gtag/js?id={{ config('google.site_tag') }}"></script>
 	<script>
 	window.dataLayer = window.dataLayer || [];
 	function gtag(){dataLayer.push(arguments);}
 	gtag('js', new Date());
 
-	gtag('config', '{{ env("GOOGLE_SITE_TAG") }}');
+	gtag('config', '{{ config("google.site_tag") }}', { 'anonymize_ip': true });
 	</script>
 	@endif
 

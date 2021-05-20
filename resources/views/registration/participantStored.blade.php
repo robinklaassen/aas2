@@ -37,9 +37,9 @@
 
 @section('script')
 
-	@if ( env('GOOGLE_SITE_TAG') !== null && env('GOOGLE_CONVERSION_NEW_PARTICIPANT') !== null)
+	@if ( config('google.site_tag') !== null && config('google.conversion_new_participant') !== null)
 	<script>
-		gtag('event', 'conversion', {'send_to': '{{ env("GOOGLE_SITE_TAG") }}/{{ env("GOOGLE_CONVERSION_NEW_PARTICIPANT") }}'});
+		gtag('event', 'conversion', {'send_to': '{{ config("google.site_tag") }}/{{ config("google.conversion_new_participant") }}'});
 	</script>
 	@endif
 
