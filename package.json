@@ -37,6 +37,5 @@
         "vue-loader": "^15.9.5",
         "vue-template-compiler": "^2.6.12",
         "webshim": "^1.16.0"
-    },
-    "version": "0.0.0"
+    }
 }
