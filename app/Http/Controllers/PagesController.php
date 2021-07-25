@@ -161,8 +161,8 @@ class PagesController extends Controller
 		$stats['num_reviews'] = Review::all()->count();
 
 		// Ranonkeltje
-		$ranonkeltjePapier = \App\Member::whereIn('ranonkeltje', ['papier', 'beide'])->orderBy('voornaam', 'asc')->get();
-		$ranonkeltjeDigitaal = \App\Member::whereIn('ranonkeltje', ['digitaal', 'beide'])->orderBy('voornaam', 'asc')->get();
+		$ranonkeltjePapier = \App\Member::whereIn('ranonkeltje', ['papier', 'beide'])->where('soort', '<>', 'oud')->orderBy('voornaam', 'asc')->get();
+		$ranonkeltjeDigitaal = \App\Member::whereIn('ranonkeltje', ['digitaal', 'beide'])->where('soort', '<>', 'oud')->orderBy('voornaam', 'asc')->get();
 
 		// Ervaren trainers
 		$trainerList = \App\Member::where('ervaren_trainer', 1)->where('soort', '<>', 'oud')->orderBy('voornaam', 'asc')->get();
