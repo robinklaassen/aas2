@@ -39,14 +39,6 @@
 			vertical-align: top;
 		}
 
-		.frontpage {
-			/*margin-top: -100px;*/
-		}
-
-		.divider {
-			height: 0.5em;
-		}
-
 		.c-comment {
 
 		}
@@ -63,8 +55,13 @@
 
 		.table-title {
 			font-weight: bold;
+			font-size: 18px;
+			padding-top: 0.5rem;
 		}
 
+		.table-margin-after td {
+			padding-bottom: 1rem;
+		}
 	</style>
 </head>
 <body>
@@ -72,7 +69,7 @@
 <h1>{{ $event->naam }} {{ $event->datum_start->format('Y') }} ({{ $event->code }})</h1>
 
 <h2>Kamp gegevens</h2>
-<table class="frontpage">
+<table>
 	<tbody>
 		<tr>
 			<td style="width:11em;">Start voordag(en)</td>
@@ -96,10 +93,6 @@
 		</tr>
 
 		<tr>
-			<td colspan="2" class="divider"></td>
-		</tr>
-
-		<tr>
 			<td colspan="2" class="table-title">Leeftijdsverdeling</td>
 		</tr>
 		@foreach ($age_freq as $age => $freq)
@@ -110,22 +103,15 @@
 		@endforeach
 
 		<tr>
-			<td colspan="2" class="divider"></td>
-		</tr>
-
-		<tr>
 			<td colspan="2" class="table-title">Overige statestieken</td>
 		</tr>
 		<tr>
 			<td>Mannen</td>
 			<td>{{ $stats['num_males'] }}</td>
 		</tr>
-		<tr>
+		<tr class="table-margin-after">
 			<td>Vrouwen</td>
 			<td>{{ $stats['num_females'] }}</td>
-		</tr>
-		<tr>
-			<td colspan="2" class="divider"></td>
 		</tr>
 		<tr>
 			<td>VMBO</td>
@@ -135,23 +121,17 @@
 			<td>HAVO</td>
 			<td>{{ $stats['num_HAVO'] }}</td>
 		</tr>
-		<tr>
+		<tr class="table-margin-after">
 			<td>VWO</td>
 			<td>{{ $stats['num_VWO'] }}</td>
-		</tr>
-		<tr>
-			<td colspan="2" class="divider"></td>
 		</tr>
 		<tr>
 			<td>Nieuw dit kamp</td>
 			<td>{{ $stats['num_new'] }}</td>
 		</tr>
-		<tr>
+		<tr class="table-margin-after">
 			<td>Ervaren</td>
 			<td>{{ $stats['num_old'] }}</td>
-		</tr>
-		<tr>
-			<td colspan="2" class="divider"></td>
 		</tr>
 		<tr>
 			<td>Examenkandidaten</td>
@@ -178,7 +158,7 @@
 	<tbody>
 
 	<tr>
-		<td colspan="2">PERSOONS- EN CONTACTGEGEVENS DEELNEMER</td>
+		<td colspan="2" class="table-title">Persoons- en contactgegevens deelnemer</td>
 	</tr>
 	<tr>
 		<td style="width:200px;">Geboortedatum</td>
@@ -198,11 +178,7 @@
 	</tr>
 
 	<tr>
-		<td colspan="2" class="divider"></td>
-	</tr>
-
-	<tr>
-		<td colspan="2">CONTACTGEGEVENS OUDER</td>
+		<td colspan="2" class="table-title">Contactgegevens ouder</td>
 	</tr>
 
 	<tr>
@@ -231,11 +207,7 @@
 	</tr>
 
 	<tr>
-		<td colspan="2" class="divider"></td>
-	</tr>
-
-	<tr>
-		<td colspan="2">BIJSPIJKERINFORMATIE</td>
+		<td colspan="2" class="table-title">Bijspijkerinformatie</td>
 	</tr>
 	<tr>
 		<td>Naam school</td>
@@ -246,22 +218,15 @@
 		<td>{{ $participant->klas }} {{ $participant->niveau }}</td>
 	</tr>
 
-	<tr>
-		<td colspan="2" class="divider"></td>
-	</tr>
-
 	@foreach ($participantCourses[$participant->id] as $i => $course)
-	<tr>
+	<tr class="table-margin-after">
 		<td>Vak {{$i+1}}: {{ $course['naam'] }}</td>
 		<td>{{ $course['info'] }}</td>
-	</tr>
-	<tr>
-		<td colspan="2" class="divider"></td>
 	</tr>
 	@endforeach
 
 	<tr>
-		<td colspan="2">OVERIGE INFORMATIE</td>
+		<td colspan="2" class="table-title">Overige informatie</td>
 	</tr>
 	<tr>
 		<td>Hoe bij Anderwijs</td>
@@ -274,7 +239,7 @@
 	<tr>
 		<td>Opmerkingen administratie</td>
 		<td>
-				@foreach($participant->comments()->public() as $comment)
+				@foreach($participant->comments()->public()->get() as $comment)
 				<div class="c-comment">
 					<span class="c-comment__date">Door {{ $comment->user->volnaam }} op {{ $comment->updated_at ?? 'n.v.t' }}</span>
 					<p class="c-comment__text">{{ $comment->text }}</p>
