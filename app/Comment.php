@@ -49,6 +49,10 @@ class Comment extends Model
         return $this->belongsTo('App\User');
     }
 
+    public function scopePublic($query) {
+        return $query->where('is_secret', false);
+    }
+
     public function getEntityDescriptionAttribute()
     {
         return Comment::getEntityDescription($this->entity_type, $this->entity);

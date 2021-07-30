@@ -19,12 +19,11 @@
 			text-align: center;
 		}
 
-		.frontpage {
-			margin-left: 100em;
+		h3.c-participants {
+			page-break-before: always;
 		}
 
 		h2 {
-			page-break-before: always;
 		}
 
 		h2 small {
@@ -40,111 +39,130 @@
 			vertical-align: top;
 		}
 
+		.frontpage {
+			/*margin-top: -100px;*/
+		}
+
 		.divider {
 			height: 0.5em;
 		}
+
+		.c-comment {
+
+		}
+		.c-comment__text {
+			margin: 0;
+			padding: 0;
+			margin-bottom: 12px;
+		}
+
+		.c-comment__date {
+			font-size: 12px;
+			color: grey;
+		}
+
+		.table-title {
+			font-weight: bold;
+		}
+
 	</style>
 </head>
-
 <body>
 
 <h1>{{ $event->naam }} {{ $event->datum_start->format('Y') }} ({{ $event->code }})</h1>
-<h3>deelnemerinformatie</h3>
 
+<h2>Kamp gegevens</h2>
 <table class="frontpage">
 	<tbody>
-	<tr>
-		<td colspan="2">KAMPGEGEVENS</td>
-	</tr>
-	<tr>
-		<td style="width:11em;">Start voordag(en)</td>
-		<td style="width:40em;">{{ $event->datum_voordag->format('d-m-Y') }}</td>
-	</tr>
-	<tr>
-		<td>Start kamp</td>
-		<td>{{ $event->datum_start->format('d-m-Y') }}</td>
-	</tr>
-	<tr>
-		<td>Eind kamp</td>
-		<td>{{ $event->datum_eind->format('d-m-Y') }}</td>
-	</tr>
-	<tr>
-		<td>Locatie</td>
-		<td>{{ $event->location->naam }} ({{ $event->location->plaats }})</td>
-	</tr>
-	<tr>
-		<td>Aantal deelnemers</td>
-		<td>{{ count($participants) }} (waarvan nu {{ $num_participants_placed }} geplaatst)</td>
-	</tr>
+		<tr>
+			<td style="width:11em;">Start voordag(en)</td>
+			<td style="width:40em;">{{ $event->datum_voordag->format('d-m-Y') }}</td>
+		</tr>
+		<tr>
+			<td>Start kamp</td>
+			<td>{{ $event->datum_start->format('d-m-Y') }}</td>
+		</tr>
+		<tr>
+			<td>Eind kamp</td>
+			<td>{{ $event->datum_eind->format('d-m-Y') }}</td>
+		</tr>
+		<tr>
+			<td>Locatie</td>
+			<td>{{ $event->location->naam }} ({{ $event->location->plaats }})</td>
+		</tr>
+		<tr>
+			<td>Aantal deelnemers</td>
+			<td>{{ count($participants) }} (waarvan nu {{ $num_participants_placed }} geplaatst)</td>
+		</tr>
 
-	<tr>
-		<td colspan="2" class="divider"></td>
-	</tr>
+		<tr>
+			<td colspan="2" class="divider"></td>
+		</tr>
 
-	<tr>
-		<td colspan="2">LEEFTIJDSVERDELING</td>
-	</tr>
-	@foreach ($age_freq as $age => $freq)
-	<tr>
-		<td>{{ $age }}</td>
-		<td>{{ $freq }}</td>
-	</tr>
-	@endforeach
+		<tr>
+			<td colspan="2" class="table-title">Leeftijdsverdeling</td>
+		</tr>
+		@foreach ($age_freq as $age => $freq)
+		<tr>
+			<td>{{ $age }}</td>
+			<td>{{ $freq }}</td>
+		</tr>
+		@endforeach
 
-	<tr>
-		<td colspan="2" class="divider"></td>
-	</tr>
+		<tr>
+			<td colspan="2" class="divider"></td>
+		</tr>
 
-	<tr>
-		<td colspan="2">OVERIGE STATISTIEKEN</td>
-	</tr>
-	<tr>
-		<td>Mannen</td>
-		<td>{{ $stats['num_males'] }}</td>
-	</tr>
-	<tr>
-		<td>Vrouwen</td>
-		<td>{{ $stats['num_females'] }}</td>
-	</tr>
-	<tr>
-		<td colspan="2" class="divider"></td>
-	</tr>
-	<tr>
-		<td>VMBO</td>
-		<td>{{ $stats['num_VMBO'] }}</td>
-	</tr>
-	<tr>
-		<td>HAVO</td>
-		<td>{{ $stats['num_HAVO'] }}</td>
-	</tr>
-	<tr>
-		<td>VWO</td>
-		<td>{{ $stats['num_VWO'] }}</td>
-	</tr>
-	<tr>
-		<td colspan="2" class="divider"></td>
-	</tr>
-	<tr>
-		<td>Nieuw dit kamp</td>
-		<td>{{ $stats['num_new'] }}</td>
-	</tr>
-	<tr>
-		<td>Ervaren</td>
-		<td>{{ $stats['num_old'] }}</td>
-	</tr>
-	<tr>
-		<td colspan="2" class="divider"></td>
-	</tr>
-	<tr>
-		<td>Examenkandidaten</td>
-		<td>{{ $stats['num_exam'] }}</td>
-	</tr>
+		<tr>
+			<td colspan="2" class="table-title">Overige statestieken</td>
+		</tr>
+		<tr>
+			<td>Mannen</td>
+			<td>{{ $stats['num_males'] }}</td>
+		</tr>
+		<tr>
+			<td>Vrouwen</td>
+			<td>{{ $stats['num_females'] }}</td>
+		</tr>
+		<tr>
+			<td colspan="2" class="divider"></td>
+		</tr>
+		<tr>
+			<td>VMBO</td>
+			<td>{{ $stats['num_VMBO'] }}</td>
+		</tr>
+		<tr>
+			<td>HAVO</td>
+			<td>{{ $stats['num_HAVO'] }}</td>
+		</tr>
+		<tr>
+			<td>VWO</td>
+			<td>{{ $stats['num_VWO'] }}</td>
+		</tr>
+		<tr>
+			<td colspan="2" class="divider"></td>
+		</tr>
+		<tr>
+			<td>Nieuw dit kamp</td>
+			<td>{{ $stats['num_new'] }}</td>
+		</tr>
+		<tr>
+			<td>Ervaren</td>
+			<td>{{ $stats['num_old'] }}</td>
+		</tr>
+		<tr>
+			<td colspan="2" class="divider"></td>
+		</tr>
+		<tr>
+			<td>Examenkandidaten</td>
+			<td>{{ $stats['num_exam'] }}</td>
+		</tr>
 	</tbody>
 </table>
 
 @foreach ($participants as $participant)
 
-<h2>{{ $participant->voornaam }} {{ $participant->tussenvoegsel }} {{ $participant->achternaam }}
+<h3 class="c-participants">{{ $participant->voornaam }} {{ $participant->tussenvoegsel }} {{ $participant->achternaam }}
 
 @unless ($participant->pivot->geplaatst)
 <br/>
@@ -154,7 +172,7 @@
 
 @endunless
 
-</h2>
+</h3>
 
 <table>
 	<tbody>
@@ -255,7 +273,14 @@
 	</tr>
 	<tr>
 		<td>Opmerkingen administratie</td>
-		<td>{{ $participant->opmerkingen_admin }}</td>
+		<td>
+				@foreach($participant->comments()->public() as $comment)
+				<div class="c-comment">
+					<span class="c-comment__date">Door {{ $comment->user->volnaam }} op {{ $comment->updated_at ?? 'n.v.t' }}</span>
+					<p class="c-comment__text">{{ $comment->text }}</p>
+				</div>
+			@endforeach
+		</td>
 	</tr>
 
 	</tbody>
