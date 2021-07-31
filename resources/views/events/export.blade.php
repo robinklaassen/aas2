@@ -67,8 +67,9 @@
 <body>
 
 <h1>{{ $event->naam }} {{ $event->datum_start->format('Y') }} ({{ $event->code }})</h1>
+<small>Informatie alleen voor leidingploeg - vernietigen na kamp!</small>
 
-<h2>Kamp gegevens</h2>
+<h2>Kampgegevens</h2>
 <table>
 	<tbody>
 		<tr>
@@ -103,7 +104,7 @@
 		@endforeach
 
 		<tr>
-			<td colspan="2" class="table-title">Overige statestieken</td>
+			<td colspan="2" class="table-title">Overige statistieken</td>
 		</tr>
 		<tr>
 			<td>Mannen</td>
