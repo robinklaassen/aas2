@@ -122,7 +122,7 @@
 				<td>Afgelast</td>
 				<td>{{ ($event->cancelled) ? 'Ja' : 'Nee' }}</td>
 			</tr>
-			
+
 			@can("showAdvanced", $event)
 			<tr>
 				<td>Openbaar</td>
@@ -240,11 +240,11 @@
 	<a role="button" class="btn btn-success btn-sm" href="{{ url('/events', [$event->id, 'payments']) }}"><span
 			class="glyphicon glyphicon-usd" aria-hidden="true"></span> Betalingsoverzicht</a>
 	@endcan
-	@can("questionair")
+	@can("questionair", $event)
 	<a role="button" class="btn btn-primary btn-sm" href="{{ url('/enquete',[$event->id]) }}"><span
 			class="glyphicon glyphicon-comment" aria-hidden="true"></span> Enqu&ecirc;te</a>
 	@endcan
-	@can("placement")
+	@can("placement", $event)
 	<a role="button" class="btn btn-primary btn-sm" href="{{ url('/events', [$event->id, 'send']) }}"><span
 			class="glyphicon glyphicon-send" aria-hidden="true"></span> Plaatsen</a>
 	@endcan
@@ -318,7 +318,7 @@
 				<td>
 					{{ $participant->vol_niveau }}
 				</td>
-				
+
 				@can("viewParticipantsAdvanced", $event)
 				<td>
 					@if ($participantIsNew[$participant->id] == 1)
@@ -326,7 +326,7 @@
 					@endif
 				</td>
 				@endcan
-				
+
 				@if($event->package_type != null)
 				<td>{{ $participant->pivot->package ? $participant->pivot->package->title : 'GEEN' }}</td>
 				@endif
@@ -457,7 +457,7 @@
 	($(document).ready(function() {
 		makeTableSortable("#participantsTable");
 		makeTableSortable("#addressesTable");
-		
+
 	}));
 </script>
 @endsection
