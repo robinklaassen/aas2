@@ -11,6 +11,7 @@ use App\Exports\EventNightRegisterReport;
 use App\Exports\EventPaymentReport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
+use App\Http\Requests\Events\EditEventMemberRequest;
 
 class EventsController extends Controller
 {
@@ -168,11 +169,10 @@ class EventsController extends Controller
 		return view('events.editMember', compact('event', 'member'));
 	}
 
-	public function editMemberSave(Event $event, Member $member, Request $request)
+	public function editMemberSave(Event $event, Member $member, EditEventMemberRequest $request)
 	{
 		$this->authorize("editMember", [$event, $member]);
 		$event->members()->updateExistingPivot($member, ['wissel' => $request->wissel, 'wissel_datum_start' => $request->wissel_datum_start, 'wissel_datum_eind' => $request->wissel_datum_eind]);
-
 
 		return redirect('events/' . $event->id)->with([
 			'flash_message' => 'De leiding op dit evenement is bewerkt!'
@@ -472,7 +472,7 @@ class EventsController extends Controller
 
 		$placed = $event->participants()->orderBy('voornaam')->where('geplaatst', '=', '1');
 		$unplaced = $event->participants()->orderBy('voornaam')->where('geplaatst', '=', '0');
-		
+
 		$emails['participants']['unplaced'] = [
 			'participants' => $unplaced->pluck('email_deelnemer'),
 			'parents' => $unplaced->pluck('email_ouder')
