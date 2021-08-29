@@ -41,7 +41,7 @@ class AnonymizeParticipant implements AnonymizeParticipantInterface
             ->leftJoin('events', function($query) {
                     $query->on('events.id','=','event_participant.event_id')
                         ->whereRaw('events.id IN (
-                            select MAX(e2.id) 
+                            select MIN(e2.id) 
                               from events as e2 
                               join event_participant ep2 on e2.id = ep2.event_id 
                              where ep2.participant_id = participants.id 
