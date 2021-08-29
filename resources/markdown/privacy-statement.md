@@ -46,7 +46,7 @@ Als leiding word je lid van vereniging Anderwijs. We bewaren je gegevens in iede
 
 ### Opslag van gegevens
 
-Alle gegevens worden digitaal bewaard in een beveiligde omgeving. Wij zorgen ervoor dat de beveiliging bijgehouden wordt. Gegevens zijn alleen te raadplegen met een persoonlijk account met wachtwoord. Ons administratiesysteem is ondergebracht bij een hostingpartij, die ook zorgvuldig omgaat met de opslag van onze gegevens. Zij zullen alleen persoonsgegevens verwerken als dat volgens ons nodig is. Meer details over de privacyvoorwaarden van deze hostingpartij vind je [hier](https://www.pcextreme.nl/policies/privacy-policy).
+Alle gegevens worden digitaal bewaard in een beveiligde omgeving. Wij zorgen ervoor dat de beveiliging bijgehouden wordt. Gegevens zijn alleen te raadplegen met een persoonlijk account met wachtwoord. Ons administratiesysteem is ondergebracht bij een hostingpartij, die ook zorgvuldig omgaat met de opslag van onze gegevens. Zij zullen alleen persoonsgegevens verwerken als dat volgens ons nodig is. Meer details over de privacyvoorwaarden van deze hostingpartij vind je [hier](https://www.antagonist.nl/online-veiligheid).
 
 ### Mailcontact
 
