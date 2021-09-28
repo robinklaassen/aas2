@@ -12,7 +12,7 @@
     "devDependencies": {
         "@types/jquery": "^3.5.5",
         "@types/lodash": "^4.14.168",
-        "axios": "^0.21.1",
+        "axios": "^0.21.2",
         "bootstrap": "^3.4.1",
         "cross-env": "^7.0.3",
         "datatables.net-bs": "^1.10.23",
