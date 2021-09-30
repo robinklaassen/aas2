@@ -9,19 +9,19 @@ class BulkDeclarationsRequest extends Request {
             'data' => 'required|array',
 			'data.*.amount' => 'required|numeric|gt:0',
 			'data.*.date' => 'required|regex:/\d{4}-\d{2}-\d{2}/',
-			'data.*.gift' => 'required|boolean',
+			'data.*.declaration_type' => 'required|in:pay,gift,pay-biomeat',
 			'data.*.description' => 'required|string',
 			'data.*.file' => 'file',
 		];
     }
-    
+
     public function attributes()
     {
         return [
             'data.*.description' => 'Omschrijving',
             'data.*.amount' => 'Bedrag',
             'data.*.date' => 'Datum',
-            'data.*.gift' => 'Gift',
+            'data.*.declaration_type' => 'Type',
             'data.*.file' => 'Bestand'
         ];
     }

@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Http\Controllers;
 
@@ -18,25 +18,25 @@ class DeclarationsController extends Controller {
 	private $declarationService;
 	public function __construct(DeclarationService $declarationService)	{
 		$this->declarationService = $declarationService;
-		
+
         $this->authorizeResource(Declaration::class, 'declaration');
 	}
-	
+
 	/**
 	 * Display a listing of the resource.
 	 *
 	 * @return Response
 	 */
 	public function index()
-	{	
+	{
 		$this->authorize('viewOwn', Declaration::class);
 		$member = \Auth::user()->profile;
-		
-		$total_open = $member->declarations()->open()->where('gift',0)->sum('amount');
-		
+
+		$total_open = $member->declarations()->open()->where('declaration_type', 'pay')->sum('amount');
+
 		return view('declarations.index', compact('member', 'total_open'));
 	}
-	
+
 	/**
 	 * Show the form for creating a new resource.
 	 *
@@ -58,9 +58,9 @@ class DeclarationsController extends Controller {
 		/** @var Member */
 		$member = \Auth::user()->profile;
 		$data = $request->except("image");
-		
+
 		$data["member_id"] = $member->id;
-		
+
 		$fileData = $this->declarationService->store($member, $image = $request->file("image"));
 		$this->applyFileData($data, $fileData);
 
@@ -74,9 +74,9 @@ class DeclarationsController extends Controller {
 	public function file(Declaration $declaration)
 	{
 		$this->authorize('view', $declaration);
-		
+
 		$data = $this->declarationService->getFileFor($declaration);
-		
+
 		return response($data['file'], 200, [ 'Content-Type' => $data['type'] ]);
 	}
 
@@ -102,7 +102,7 @@ class DeclarationsController extends Controller {
 	{
 		$oldFilePath = $declaration->filename;
 		$data = $request->except("image");
-		
+
 		$filedata = $this->declarationService->store(
 			$declaration->member,
 			$request->file("image")
@@ -135,7 +135,7 @@ class DeclarationsController extends Controller {
 
 		return view('declarations.delete', compact('declaration'));
 	}
-	
+
 	public function destroy(Declaration $declaration)
 	{
 		$this->declarationService->deleteFileFor($declaration);
@@ -148,7 +148,7 @@ class DeclarationsController extends Controller {
 	public function bulk()
 	{
 		$this->authorize('create', Declaration::class);
-		
+
 		return view('declarations.bulk');
 	}
 
@@ -167,29 +167,35 @@ class DeclarationsController extends Controller {
 				$request->file("data.${key}.image")
 			);
 			$this->applyFileData($data, $fileData);
-			
+
 			Declaration::create($data);
 		}
-		
+
 		$request->session()->flash(
 			'flash_message', 'De declaraties zijn opgeslagen!'
 		);
 
 		return response()->json(["status" => "success"]);
 	}
-	
-	
+
+
 	public function admin()
 	{
 		$this->authorize('viewAll', Declaration::class);
-		$members = Member::whereHas("declarations", function($q) {
-			$q->whereNull('closed_at');
-		})->get();
-		$total_open = Declaration::open()->where('gift',0)->sum('amount');
-		
-		return view('declarations.admin', compact('members', 'total_open'));
+		$membersToPay = Member::with('declarations')
+            ->whereHas("declarations", function($q) {
+                $q->where('declaration_type', 'pay')->whereNull('closed_at');
+            })->get();
+		$membersWhoGiftToBiomeat = Member::with('declarations')
+            ->whereHas("declarations", function($q) {
+                $q->where('declaration_type', 'pay-biomeat')->whereNull('closed_at');
+            })->get();
+
+		$total_open = Declaration::open()->billable()->sum('amount');
+
+		return view('declarations.admin', compact('membersToPay', 'membersWhoGiftToBiomeat', 'total_open'));
 	}
-	
+
 	# Confirmation of processing a members declarations
 	public function confirmProcess(Member $member)
 	{
@@ -200,7 +206,7 @@ class DeclarationsController extends Controller {
 
 		$total = (clone $declarationsQuery)->billable()->sum('amount');
 		$declarations = $declarationsQuery->get();
-		
+
 		return view('declarations.process', compact('member', 'declarations', 'total'));
 	}
 
@@ -211,7 +217,7 @@ class DeclarationsController extends Controller {
 
 		Declaration::whereIn('id', $request->get('selected'))
 			->update(['closed_at' => Carbon::now()]);
-		
+
 		return redirect('declarations/admin')->with([
 			'flash_message' => 'De declaraties zijn verwerkt!'
 		]);

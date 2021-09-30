@@ -1,6 +1,6 @@
 <template>
 <div>
-    <flash-message 
+    <flash-message
         type="alert-danger"
         :showTime="5000"
         v-for="file in illegalFiles"
@@ -8,13 +8,13 @@
     >
         Het bestand '{{ file.name }}' is van een type wat niet is toegestaan.
     </flash-message >
-        
+
     <file-dropzone
         :multiple="true"
         :mimetypes="[
             'image/jpeg',
             'image/png',
-            'image/gif',    
+            'image/gif',
             'application/msword',
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
             'application/vnd.oasis.opendocument.text',
@@ -45,7 +45,7 @@
     </file-dropzone>
 
     <div class="declarations-form">
-        <div class="row header">
+        <div class="row header visible-md visible-lg">
             <div class="col-md-2">
                 Bestand
             </div>
@@ -58,17 +58,17 @@
                 Bedrag
             </div>
 
-            <div class="col-md-4">
+            <div class="col-md-3">
                 Omschrijving
             </div>
 
-            <div class="col-md-1">
-                <i class="glyphicon glyphicon-gift"></i>
+            <div class="col-md-2">
+                Actie
             </div>
 
         </div>
 
-        <declaration-input-row 
+        <declaration-input-row
             v-for="(row, index) in rows"
             :key="index"
             :row="row"
@@ -82,8 +82,8 @@
 
     <p class="declarations-error">{{errorMessage}}</p>
     <errors :errors="errors.get('data')"></errors>
-    
-    <button class="btn btn-primary" 
+
+    <button class="btn btn-primary"
         @click.prevent="submit()"
         :disabled="isLoading || rows.length < 1"
     >
@@ -92,7 +92,7 @@
 </div>
 </template>
 <style lang="sass" scoped>
-    .declarations-form 
+    .declarations-form
         margin:
             top: 2em
             bottom: 2em
@@ -130,7 +130,7 @@ export default Vue.extend({
         },
         newIllegalFiles(files: File[]) {
             this.illegalFiles.push(...files);
-            
+
         },
         newRows(files: File[]) {
             files.forEach( f => this.newRow(f));
@@ -147,7 +147,7 @@ export default Vue.extend({
         async submit() {
             this.isLoading = true;
             this.errorMessage = "";
-            
+
             try {
                 const res = await Axios.post(
                     this.target,
@@ -159,14 +159,14 @@ export default Vue.extend({
                         maxRedirects: 0,
                     }
                 );
-                
+
                 window.location.href = this.redirectTarget;
             } catch(err) {
                 if (err.request.status === 413) {
                     this.errorMessage = "Een van de bestanden is te groot"
                 } else if (
-                    err.request.status >= 400 
-                    && err.request.status < 500 
+                    err.request.status >= 400
+                    && err.request.status < 500
                     && err.response.data.errors
                 ) {
                     this.errors.load(err.response.data.errors);
@@ -193,7 +193,7 @@ export default Vue.extend({
                 formData.append(`${prefix}[date]`, row.date);
                 formData.append(`${prefix}[amount]`, row.amount);
                 formData.append(`${prefix}[description]`, row.description);
-                formData.append(`${prefix}[gift]`, row.gift ? "1" : "0");
+                formData.append(`${prefix}[declaration_type]`, row.type);
             }
 
             return formData;

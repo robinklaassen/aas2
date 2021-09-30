@@ -51,12 +51,12 @@
 					<th>Bestand</th>
 					<th>Omschrijving</th>
 					<th>Bedrag</th>
-					<th>Gift</th>
+					<th>Actie</th>
 					<th></th>
 					<th></th>
 				</tr>
 			</thead>
-			
+
 			<tbody>
 				@foreach ($member->declarations()->open()->get() as $declaration)
 					<tr>
@@ -70,7 +70,7 @@
 						</td>
 						<td>{{ $declaration->description }}</td>
 						<td>@money($declaration->amount)</td>
-						<td>{{ ($declaration->gift ? 'Ja' : 'Nee') }}</td>
+						<td>{{ __("declaration-types." . $declaration->declaration_type) }}</td>
 						<td>
 							@can('update', $declaration)
 							<a href="{{ url('/declarations', [$declaration->id, 'edit']) }}">
@@ -90,7 +90,7 @@
 			</tbody>
 		</table>
 	</div>
-	
+
 	<div role="tabpanel" class="tab-pane" id="declarations_closed">
 		<!-- Declaratietabel -->
 		<table class="table table-hover" id="declarationsClosedTable" data-page-length="25">
@@ -104,7 +104,7 @@
 					<th>Afgehandeld op</th>
 				</tr>
 			</thead>
-			
+
 			<tbody>
 				@foreach ($member->declarations()->closed()->get() as $declaration)
 					<tr>
@@ -145,7 +145,7 @@ $( document ).ready(function() {
 			{'orderable':false}
 		]
 	});
-	
+
     $('#declarationsClosedTable').DataTable({
 		responsive: true,
 		order: [[ 0, "desc" ]],
