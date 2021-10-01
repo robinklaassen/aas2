@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Services\Geocoder\PositionstackGeocoder;
 use Carbon\Carbon;
 use Collective\Html\Eloquent\FormAccessible;
 use Illuminate\Database\Eloquent\Model;
@@ -311,7 +312,7 @@ class Member extends Model
 		return $data;
 	}
 
-	// Get list of unique other members that this person has been on camp withPivot
+	// Get list of unique other members that this person has been on camp with
 	public function getFellowsAttribute()
 	{
 		$events = $this->events()->where('type', 'kamp')->where('datum_eind', '<', date('Y-m-d'))->get();
@@ -349,5 +350,17 @@ class Member extends Model
 	public function formSkillsAttribute($value)
 	{
 		return $this->skills()->pluck('id');
+	}
+
+	// TODO when to call this function? See docs on event listeners: https://laravel.com/docs/8.x/eloquent#events
+	public function updateGeolocation()
+	{
+		$geocoder = new PositionstackGeocoder();  // TODO should probably dependency inject this, figure out how
+
+		$address = $this->adres . ', ' . $this->postcode . ' ' . $this->plaats;
+		$geolocation = $geocoder->geocode($address);  // TODO catch exception
+
+		$this->attributes['geolocatie'] = $geolocation->toPoint();
+		$this->save();
 	}
 }

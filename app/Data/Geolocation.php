@@ -16,7 +16,7 @@ class Geolocation
         $this->longitude = $longitude;
     }
 
-    public function toPoint($self): string {
-        return sprintf('POINT(%f, %f)', $self->latitude, $self->longitude);
+    public function toPoint(): string {
+        return sprintf('POINT(%f, %f)', $this->latitude, $this->longitude);
     }
 }
