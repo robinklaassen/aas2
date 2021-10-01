@@ -3,6 +3,9 @@
 use Illuminate\Database\Eloquent\Model;
 
 class Declaration extends Model {
+    public const TYPE_GIFT = 'gift';
+    public const TYPE_PAY = 'pay';
+    public const TYPE_PAY_BIOMEAT = 'pay-biomeat';
 
 	protected $guarded = ['id', 'created_at', 'updated_at'];
 
@@ -28,7 +31,7 @@ class Declaration extends Model {
 
 	public function scopeBillable($query)
 	{
-		return $query->where('declaration_type', '!=', 'gift');
+		return $query->where('declaration_type', '!=', self::TYPE_GIFT);
 	}
 
 	public function scopeType($query, string $type)
@@ -38,7 +41,7 @@ class Declaration extends Model {
 
 	public function scopeGift($query)
     {
-        return $query->where('declaration_type', '=', 'gift');
+        return $query->where('declaration_type', '=', self::TYPE_GIFT);
     }
 
 	// Query scope for closed declarations

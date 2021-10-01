@@ -184,11 +184,11 @@ class DeclarationsController extends Controller {
 		$this->authorize('viewAll', Declaration::class);
 		$membersToPay = Member::with('declarations')
             ->whereHas("declarations", function($q) {
-                $q->where('declaration_type', 'pay')->whereNull('closed_at');
+                $q->where('declaration_type', Declaration::TYPE_PAY)->whereNull('closed_at');
             })->get();
 		$membersWhoGiftToBiomeat = Member::with('declarations')
             ->whereHas("declarations", function($q) {
-                $q->where('declaration_type', 'pay-biomeat')->whereNull('closed_at');
+                $q->where('declaration_type', Declaration::TYPE_PAY_BIOMEAT)->whereNull('closed_at');
             })->get();
 
 		$total_open = Declaration::open()->billable()->sum('amount');
