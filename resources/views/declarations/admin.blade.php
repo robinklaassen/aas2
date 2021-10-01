@@ -42,26 +42,22 @@
 						</tr>
 					</thead>
 					<tbody>
-						@foreach ($membersToPay as $member)
+						@foreach ($openDeclarations as $declaration)
 							<tr>
-								<td>@money($member->declarations()->open()->type('pay')->sum('amount'))</td>
-								<td>{{ $member->iban }}</td>
-								<td><a href="{{ url('/members', $member->id) }}">{{ $member->voornaam }} {{ $member->tussenvoegsel }} {{ $member->achternaam }}</a></td>
+								<td>@money($declaration->amount)</td>
 								<td>
-									@can('process', \App\Declaration::class)
-									<a href="{{ url('/declarations', ['process', $member->id]) }}"><span class="glyphicon glyphicon-check"></a></span>
-									@endcan
+									@if($declaration->declaration_type === 'pay')
+										{{ $declaration->iban }}
+									@else
+										{{ __('declaration-types.' . $declaration->declaration_type) }}
+									@endif
 								</td>
-							</tr>
-						@endforeach
-						@foreach ($membersWhoGiftToBiomeat as $member)
-							<tr>
-								<td>@money($member->declarations()->open()->type('pay-biomeat')->sum('amount'))</td>
-								<td>{{ __('declaration-types.pay-biomeat') }}</td>
-								<td><a href="{{ url('/members', $member->id) }}">{{ $member->voornaam }} {{ $member->tussenvoegsel }} {{ $member->achternaam }}</a></td>
+								<td><a href="{{ url('/members', $declaration->member_id) }}">{{ $declaration->voornaam }} {{ $declaration->tussenvoegsel }} {{ $declaration->achternaam }}</a></td>
 								<td>
 									@can('process', \App\Declaration::class)
-									<a href="{{ url('/declarations', ['process', $member->id]) }}"><span class="glyphicon glyphicon-check"></a></span>
+									<a href="{{ url('/declarations', ['process', $declaration->id, $declaration->declaration_type]) }}">
+										<span class="glyphicon glyphicon-check"></span>
+									</a>
 									@endcan
 								</td>
 							</tr>
@@ -116,7 +112,7 @@
 
 	<div role="tabpanel" class="tab-pane" id="declarations_closed">
 		<!-- Declaratietabel -->
-		<table class="table table-hover" id="declarationsClosedTable" data-page-length="25">
+		<table class="table table-hover" id="declarationsClosedTable" data-page-length="25" width="100%">
 			<thead>
 				<tr>
 					<th>Datum</th>
@@ -124,7 +120,7 @@
 					<th>Bestand</th>
 					<th>Omschrijving</th>
 					<th>Bedrag</th>
-					<th>Gift</th>
+					<th>Type</th>
 					<th>Afgehandeld op</th>
 					<th></th>
 					<th></th>
@@ -147,7 +143,7 @@
 						</td>
 						<td>{{ $declaration->description }}</td>
 						<td>@money($declaration->amount)</td>
-						<td>{{ ($declaration->gift ? 'Ja' : 'Nee') }}</td>
+						<td>{{ __('declaration-types.' . $declaration->declaration_type) }}</td>
 						<td>{{ $declaration->closed_at->format('Y-m-d') }}</td>
 						<td><a href="{{ url('/declarations', [$declaration->id, 'edit']) }}"><span class="glyphicon glyphicon-edit" data-toggle="tooltip" title="Bewerken"></span></a></td>
 						<td><a href="{{ url('/declarations', [$declaration->id, 'delete']) }}"><span class="glyphicon glyphicon-remove" data-toggle="tooltip" title="Verwijderen"></span></a></td>

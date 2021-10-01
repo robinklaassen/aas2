@@ -182,27 +182,24 @@ class DeclarationsController extends Controller {
 	public function admin()
 	{
 		$this->authorize('viewAll', Declaration::class);
-		$membersToPay = Member::with('declarations')
-            ->whereHas("declarations", function($q) {
-                $q->where('declaration_type', Declaration::TYPE_PAY)->whereNull('closed_at');
-            })->get();
-		$membersWhoGiftToBiomeat = Member::with('declarations')
-            ->whereHas("declarations", function($q) {
-                $q->where('declaration_type', Declaration::TYPE_PAY_BIOMEAT)->whereNull('closed_at');
-            })->get();
+        $openDeclarations = Declaration::query()
+            ->join("members", "member_id", "=", "members.id")
+            ->whereNull('closed_at')
+            ->selectRaw('SUM(amount) as amount, declaration_type, members.id, iban, voornaam, tussenvoegsel, achternaam')
+            ->groupBy('declaration_type', 'members.id', 'iban', 'voornaam', 'tussenvoegsel', 'achternaam')
+            ->get();
 
 		$total_open = Declaration::open()->billable()->sum('amount');
 
-		return view('declarations.admin', compact('membersToPay', 'membersWhoGiftToBiomeat', 'total_open'));
+		return view('declarations.admin', compact('openDeclarations', 'total_open'));
 	}
 
 	# Confirmation of processing a members declarations
-	public function confirmProcess(Member $member)
+	public function confirmProcess(Member $member, string $declarationType)
 	{
 		$this->authorize('process', Declaration::class);
 
-		$declarationsQuery = $member->declarations()
-						->open();
+		$declarationsQuery = $member->declarations()->open()->type($declarationType);
 
 		$total = (clone $declarationsQuery)->billable()->sum('amount');
 		$declarations = $declarationsQuery->get();

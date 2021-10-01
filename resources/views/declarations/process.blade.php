@@ -29,7 +29,7 @@
                     Omschrijving
                 </th>
                 <th>
-                    Gift
+                    Type
                 </th>
                 <th>
                     Bestand
@@ -42,12 +42,8 @@
                 <td>{{ $declaration->date->format('Y-m-d') }}</td>
                 <td>@money($declaration->amount)</td>
                 <td>{{ $declaration->description }}</td>
-                <td> 
-                    @if($declaration->gift)
-                        ja
-                    @else
-                        nee
-                    @endif
+                <td>
+                    {{ __('declaration-types.' . $declaration->declaration_type) }}
                 </td>
                 <td>
                     @if ($declaration->filename)
@@ -59,18 +55,20 @@
             </tr>
         @endforeach
     </table>
-    
+
     <p>
         Totaal gedeclareerde bedrag zonder giften betreft @money($total)
     </p>
-    @if ($member->iban)
-    <p>
-        Bankrekeningnummer <b>{{ $member->iban }}</b> ten name van <b>{{ $member->volnaam }}</b>
-    </p>
-    @else
-        <p class="alert alert-warning">
-            Geen bankrekeningnummer voor {{ $member->volnaam }}
+    @if ($declaration->type === "pay")
+        @if ($member->iban)
+        <p>
+            Bankrekeningnummer <b>{{ $member->iban }}</b> ten name van <b>{{ $member->volnaam }}</b>
         </p>
+        @else
+            <p class="alert alert-warning">
+                Geen bankrekeningnummer voor {{ $member->volnaam }}
+            </p>
+        @endif
     @endif
 
 	<div class="row">
