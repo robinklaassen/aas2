@@ -2,11 +2,12 @@
 
 namespace App;
 
-use App\Services\Geocoder\PositionstackGeocoder;
 use Carbon\Carbon;
 use Collective\Html\Eloquent\FormAccessible;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use GuzzleHttp\Exception\RequestException;
+use App\Events\MemberUpdated;
 
 class Member extends Model
 {
@@ -16,14 +17,24 @@ class Member extends Model
 	protected $guarded = ['id', 'created_at', 'updated_at'];
 
 	protected $dates = ['created_at', 'updated_at', 'geboortedatum'];
-
+	
 	// Number of points needed for every level in the points system
 	const RANK_POINTS = [0, 3, 10, 20, 35, 50, 70, 100];
+	
+	protected $dispatchesEvents = [
+		'updated' => MemberUpdated::class
+	];
 
 	// Full name
 	public function getVolnaamAttribute()
 	{
 		return str_replace('  ', ' ', $this->voornaam . ' ' . $this->tussenvoegsel . ' ' . $this->achternaam);
+	}
+
+	// Full address as single string
+	public function getVolledigAdresAttribute()
+	{
+		return $this->adres . ', ' . $this->postcode . ' ' . $this->plaats;
 	}
 
 	// Postcode mutator
@@ -350,17 +361,5 @@ class Member extends Model
 	public function formSkillsAttribute($value)
 	{
 		return $this->skills()->pluck('id');
-	}
-
-	// TODO when to call this function? See docs on event listeners: https://laravel.com/docs/8.x/eloquent#events
-	public function updateGeolocation()
-	{
-		$geocoder = new PositionstackGeocoder();  // TODO should probably dependency inject this, figure out how
-
-		$address = $this->adres . ', ' . $this->postcode . ' ' . $this->plaats;
-		$geolocation = $geocoder->geocode($address);  // TODO catch exception
-
-		$this->attributes['geolocatie'] = $geolocation->toPoint();
-		$this->save();
 	}
 }

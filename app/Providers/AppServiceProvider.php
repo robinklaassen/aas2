@@ -10,6 +10,8 @@ use App\Services\Anonymize\AnonymizeParticipantInterface;
 use App\Services\Anonymize\NameGeneratorInterface;
 use App\Services\ObjectManager\EloquentObjectManager;
 use App\Services\ObjectManager\ObjectManagerInterface;
+use App\Services\Geocoder\GeocoderInterface;
+use App\Services\Geocoder\PositionstackGeocoder;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
@@ -84,5 +86,6 @@ class AppServiceProvider extends ServiceProvider
 		$this->app->bind(AnonymizeGeneratorInterface::class, AnonymizeGenerator::class);
 		$this->app->when(AnonymizeGenerator::class)->needs(NameGeneratorInterface::class)->give(AnimalNameGenerator::class);
 		$this->app->bind(ObjectManagerInterface::class, EloquentObjectManager::class);
+		$this->app->bind(GeocoderInterface::class, PositionstackGeocoder::class);
 	}
 }

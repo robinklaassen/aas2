@@ -3,7 +3,7 @@
 namespace App\Data;
 
 /**
- * Utility class for a geolocation (point).
+ * Value object for a geolocation (point).
  */
 class Geolocation 
 {
