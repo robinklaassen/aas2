@@ -35,7 +35,7 @@ class UpdateMemberGeolocation
         $member = $event->member;
         try {
 			$geolocation = $this->geocoder->geocode($member->volledigAdres);
-		} catch (RequestException $e) {
+		} catch (RequestException | \UnexpectedValueException $e) {
 			return;  // TODO log errors?
 		}
 

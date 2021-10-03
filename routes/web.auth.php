@@ -118,7 +118,7 @@ Route::get('events/{event}', 'EventsController@show');
 Route::get('members/search', 'MembersController@search');
 Route::get('members/search-skills', 'MembersController@searchSkills');
 Route::get('members/export', 'MembersController@export');
-Route::get('members/map', 'MembersController@map')->middleware(UnderConstruction::class);
+Route::get('members/map', 'MembersController@map');
 Route::resource('members', 'MembersController');
 
 Route::get('members/{member}/on-event', 'MembersController@onEvent');

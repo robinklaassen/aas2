@@ -205,31 +205,31 @@ class MembersController extends Controller
 		$this->authorize("viewAny", Member::class);
 		$members = Member::where('soort', '<>', 'oud')->orderBy('soort')->get();
 
-		// Create member data for map
-		foreach ($members as $member) {
-			$markerURL = 'http://maps.google.com/mapfiles/ms/icons/';
-			switch ($member->soort) {
-				case 'normaal':
-					$markerURL .= 'red-dot.png';
-					break;
-				case 'aspirant':
-					$markerURL .= 'green-dot.png';
-					break;
-				case 'info':
-					$markerURL .= 'blue-dot.png';
-					break;
-			}
+		// // Create member data for map
+		// foreach ($members as $member) {
+		// 	$markerURL = 'http://maps.google.com/mapfiles/ms/icons/';
+		// 	switch ($member->soort) {
+		// 		case 'normaal':
+		// 			$markerURL .= 'red-dot.png';
+		// 			break;
+		// 		case 'aspirant':
+		// 			$markerURL .= 'green-dot.png';
+		// 			break;
+		// 		case 'info':
+		// 			$markerURL .= 'blue-dot.png';
+		// 			break;
+		// 	}
 
-			$memberData[] = [
-				'address' => $member->adres . ', ' . $member->plaats,
-				'name' => str_replace('  ', ' ', $member->voornaam . ' ' . $member->tussenvoegsel . ' ' . $member->achternaam),
-				'markerURL' => $markerURL
-			];
-		}
+		// 	$memberData[] = [
+		// 		'address' => $member->adres . ', ' . $member->plaats,
+		// 		'name' => str_replace('  ', ' ', $member->voornaam . ' ' . $member->tussenvoegsel . ' ' . $member->achternaam),
+		// 		'markerURL' => $markerURL
+		// 	];
+		// }
 
-		$memberJSON = json_encode($memberData);
+		// $memberJSON = json_encode($memberData);
 
-		return view('members.map', compact('memberJSON'));
+		return view('members.map', compact('members'));
 	}
 
 	# Search members by coverage

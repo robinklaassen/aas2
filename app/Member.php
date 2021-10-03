@@ -40,6 +40,16 @@ class Member extends Model
 		return $this->adres . ', ' . $this->postcode . ' ' . $this->plaats;
 	}
 
+	public function getGeolocatieAttribute()
+	{
+		// Call geocoder if location is not yet available
+		if ($this->attributes['geolocatie'] === null) {
+			MemberUpdated::dispatch($this);  // TODO this triggers other future listeners, make more specific
+		}
+
+		return $this->attributes['geolocatie'];
+	}
+
 	// Postcode mutator
 	public function setPostcodeAttribute($value)
 	{

@@ -23,8 +23,13 @@ class PositionstackGeocoder implements GeocoderInterface {
 
         $response->throw();  // throws Illuminate\Http\Client\RequestException if request failed
 
-        $geodata = $response->json()['data'][0];
+        $responseData = $response->json()['data'];
+        if (!$responseData) {  // empty array when geolocation cannot be found
+            throw new \UnexpectedValueException("No geolocation match found for address '$address'");
+        }
 
-        return new Geolocation($geodata['latitude'], $geodata['longitude']);
+        $match = $responseData[0];
+
+        return new Geolocation($match['latitude'], $match['longitude']);
     }
 }
