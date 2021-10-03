@@ -7,7 +7,6 @@ use Collective\Html\Eloquent\FormAccessible;
 use Grimzy\LaravelMysqlSpatial\Eloquent\SpatialTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
-use GuzzleHttp\Exception\RequestException;
 use App\Events\MemberUpdated;
 
 class Member extends Model
