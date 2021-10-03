@@ -2,6 +2,8 @@
 
 namespace App\Data;
 
+use Grimzy\LaravelMysqlSpatial\Types\Point;
+
 /**
  * Value object for a geolocation (point).
  */
@@ -16,7 +18,7 @@ class Geolocation
         $this->longitude = $longitude;
     }
 
-    public function toPoint(): string {
-        return sprintf('POINT(%f, %f)', $this->latitude, $this->longitude);
+    public function toPoint(): Point {
+        return new Point($this->latitude, $this->longitude);
     }
 }

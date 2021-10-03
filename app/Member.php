@@ -4,6 +4,7 @@ namespace App;
 
 use Carbon\Carbon;
 use Collective\Html\Eloquent\FormAccessible;
+use Grimzy\LaravelMysqlSpatial\Eloquent\SpatialTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use GuzzleHttp\Exception\RequestException;
@@ -12,11 +13,13 @@ use App\Events\MemberUpdated;
 class Member extends Model
 {
 
-	use FormAccessible;
+	use FormAccessible, SpatialTrait;
 
 	protected $guarded = ['id', 'created_at', 'updated_at'];
 
 	protected $dates = ['created_at', 'updated_at', 'geboortedatum'];
+
+	protected $spatialFields = ['geolocatie'];
 	
 	// Number of points needed for every level in the points system
 	const RANK_POINTS = [0, 3, 10, 20, 35, 50, 70, 100];
