@@ -203,33 +203,18 @@ class MembersController extends Controller
 	public function map()
 	{
 		$this->authorize("viewAny", Member::class);
-		$members = Member::where('soort', '<>', 'oud')->orderBy('soort')->get();
+		$members = Member::where('soort', '<>', 'oud')->get();
 
-		// // Create member data for map
-		// foreach ($members as $member) {
-		// 	$markerURL = 'http://maps.google.com/mapfiles/ms/icons/';
-		// 	switch ($member->soort) {
-		// 		case 'normaal':
-		// 			$markerURL .= 'red-dot.png';
-		// 			break;
-		// 		case 'aspirant':
-		// 			$markerURL .= 'green-dot.png';
-		// 			break;
-		// 		case 'info':
-		// 			$markerURL .= 'blue-dot.png';
-		// 			break;
-		// 	}
+		$markers = $members
+			->filter(fn($m) => $m->geolocatie !== null)  // filter here instead of in query, so empty locations get reprocessed
+			->map(fn($m) => [
+					'latlng' => [$m->geolocatie->getLat(), $m->geolocatie->getLng()],
+					'name' => $m->volnaam,
+					'type' => $m->soort,
+				]
+			)->values();
 
-		// 	$memberData[] = [
-		// 		'address' => $member->adres . ', ' . $member->plaats,
-		// 		'name' => str_replace('  ', ' ', $member->voornaam . ' ' . $member->tussenvoegsel . ' ' . $member->achternaam),
-		// 		'markerURL' => $markerURL
-		// 	];
-		// }
-
-		// $memberJSON = json_encode($memberData);
-
-		return view('members.map', compact('members'));
+		return view('members.map', compact('markers'));
 	}
 
 	# Search members by coverage

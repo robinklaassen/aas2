@@ -42,6 +42,7 @@ if (!Modernizr.inputtypes.date) {
 }
 
 const select2 = (window as any).select2 = require('select2');
+const L = (window as any).L = require('leaflet');
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening

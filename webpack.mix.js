@@ -30,7 +30,8 @@ mix.ts('resources/js/app.ts', 'public/js')
        "Modernizr",
        "webshim",
        "datatables.net-responsive-bs",
-       "datatables.net-bs"
+       "datatables.net-bs",
+       "L"
     ])
     .modernizr()
     .sourceMaps();
