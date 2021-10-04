@@ -9,11 +9,6 @@ class PositionstackGeocoderTest extends TestCase {
 
     public function testGeocode() {
 
-        // Skip test if API key not configured
-        // if (config('positionstack.api_key') === null) {
-        //     return;
-        // }
-
         $geocoder = new PositionstackGeocoder();
         
         $test_address = 'Putterweg 2, 3886 PC Garderen';  // IJssalon IJstijd Garderen, altijd goed!
