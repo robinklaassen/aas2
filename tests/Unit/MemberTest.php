@@ -8,10 +8,10 @@ use App\Jobs\UpdateMemberGeolocation;
 
 class MemberTest extends TestCase
 {
-    public function testGeolocatieAccessorDispatchesJob()  // TODO this test fails and I'm not sure why
+    public function testGeolocatieAccessorDispatchesJob()
     {
         $member = Member::findOrFail(1);
-        $this->expectsJobs(UpdateMemberGeolocation::class);
+        $this->expectsJobs(UpdateMemberGeolocation::class);  // TODO this fails, probably because dispatchSync doesn't actually get sent to the Bus
         $something = $member->geolocatie;
     }
 }

@@ -54,7 +54,7 @@
 		attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 	}).addTo(map);
 
-	const markers = {!! json_encode($markers) !!}
+	const markers = @json($markers);
 
 	const markerTypeMap = {
 		'normaal': redIcon,

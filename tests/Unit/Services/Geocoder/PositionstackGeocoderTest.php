@@ -4,7 +4,7 @@ namespace Tests\Unit\Services;
 
 use Tests\TestCase;
 use App\Services\Geocoder\PositionstackGeocoder;
-use Illuminate\Http\Client\RequestException;
+use App\Exceptions\GeocoderException;
 use Illuminate\Support\Facades\Http;
 
 class PositionstackGeocoderTest extends TestCase
@@ -43,7 +43,7 @@ class PositionstackGeocoderTest extends TestCase
     {
         Http::fake(Http::response(null, 500));
 
-        $this->expectException(RequestException::class);
+        $this->expectException(GeocoderException::class);
         $this->geocoder->geocode('some address');
     }
 
@@ -55,7 +55,7 @@ class PositionstackGeocoderTest extends TestCase
 
         Http::fake(Http::response(json_encode($fakeBody)));
 
-        $this->expectException(\UnexpectedValueException::class);
+        $this->expectException(GeocoderException::class);
         $this->geocoder->geocode('some address');
     }
 }

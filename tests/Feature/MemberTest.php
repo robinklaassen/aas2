@@ -42,4 +42,13 @@ class MemberTest extends TestCase
             ->assertStatus(200)
             ->assertSee('Bewerken', 'Flipstoeje', 'Lijst met acties', 'Natuurkunde');
     }
+
+    public function testMap()
+    {
+        $this->withoutJobs();
+        $response = $this
+            ->actingAs($this->user)
+            ->get('/members/map')
+            ->assertStatus(200);
+    }
 }

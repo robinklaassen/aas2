@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Member;
+use App\Exceptions\GeocoderException;
 use App\Services\Geocoder\GeocoderInterface;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -10,7 +11,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Http\Client\RequestException;
 use Illuminate\Support\Facades\Log;
 
 
@@ -39,12 +39,13 @@ class UpdateMemberGeolocation implements ShouldQueue
     {
         try {
             $geolocation = $geocoder->geocode($this->member->volledigAdres);
-        } catch (RequestException | \UnexpectedValueException $e) {
+        } catch (GeocoderException $e) {
             Log::warning("Exception when geocoding address for member {$this->member->volnaam}: {$e->getMessage()}");
+            // TODO maybe set geolocatie to null on failure? because otherwise it won't be updated again if it's an old address for example
             return;
         }
 
         $this->member->geolocatie = $geolocation->toPoint();
-        $this->member->saveQuietly();  // Prevent dispatching new events in an endless loop    
+        $this->member->saveQuietly();  // TODO could be regular save() if event only gets dispatched on address property changes
     }
 }
