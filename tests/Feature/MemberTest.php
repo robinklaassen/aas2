@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
+use App\User;
 
 class MemberTest extends TestCase
 {
@@ -11,7 +12,7 @@ class MemberTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = \App\User::findOrFail(1);
+        $this->user = User::findOrFail(1);
     }
 
     /**

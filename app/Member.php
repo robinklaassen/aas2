@@ -47,7 +47,8 @@ class Member extends Model
 			UpdateMemberGeolocation::dispatchSync($this);
 		}
 
-		return $this->attributes['geolocatie'];  // TODO this still returns null even if geolocatie was updated, how to get the new value?
+		$this->refresh();
+		return $this->attributes['geolocatie'];
 	}
 
 	// Postcode mutator

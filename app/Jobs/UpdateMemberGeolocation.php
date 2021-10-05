@@ -38,11 +38,11 @@ class UpdateMemberGeolocation implements ShouldQueue
     public function handle(GeocoderInterface $geocoder)
     {
         try {
-			$geolocation = $geocoder->geocode($this->member->volledigAdres);
-		} catch (RequestException | \UnexpectedValueException $e) {
-			Log::warning("Exception when geocoding address for member {$this->member->volnaam}: {$e->getMessage()}");
+            $geolocation = $geocoder->geocode($this->member->volledigAdres);
+        } catch (RequestException | \UnexpectedValueException $e) {
+            Log::warning("Exception when geocoding address for member {$this->member->volnaam}: {$e->getMessage()}");
             return;
-		}
+        }
 
         $this->member->geolocatie = $geolocation->toPoint();
         $this->member->saveQuietly();  // Prevent dispatching new events in an endless loop    
