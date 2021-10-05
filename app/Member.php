@@ -8,6 +8,7 @@ use Grimzy\LaravelMysqlSpatial\Eloquent\SpatialTrait;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
 use App\Events\MemberUpdated;
+use App\Jobs\UpdateMemberGeolocation;
 
 class Member extends Model
 {
@@ -24,7 +25,7 @@ class Member extends Model
 	const RANK_POINTS = [0, 3, 10, 20, 35, 50, 70, 100];
 	
 	protected $dispatchesEvents = [
-		'updated' => MemberUpdated::class
+		'updated' => MemberUpdated::class  // TODO dispatch event only if address properties have updated?
 	];
 
 	// Full name
@@ -43,10 +44,10 @@ class Member extends Model
 	{
 		// Call geocoder if location is not yet available
 		if ($this->attributes['geolocatie'] === null) {
-			MemberUpdated::dispatch($this);  // TODO this triggers other future listeners, make more specific
+			UpdateMemberGeolocation::dispatchSync($this);
 		}
 
-		return $this->attributes['geolocatie'];
+		return $this->attributes['geolocatie'];  // TODO this still returns null even if geolocatie was updated, how to get the new value?
 	}
 
 	// Postcode mutator

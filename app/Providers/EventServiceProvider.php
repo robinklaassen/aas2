@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use App\Listeners\SetLastLoginDate;
-use App\Listeners\UpdateMemberGeolocation;
+use App\Listeners\QueueMemberGeolocation;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Contracts\Events\Dispatcher as DispatcherContract;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -22,7 +22,7 @@ class EventServiceProvider extends ServiceProvider
 			SetLastLoginDate::class,
 		],
 		MemberUpdated::class => [
-			UpdateMemberGeolocation::class
+			QueueMemberGeolocation::class
 		]
 	];
 
