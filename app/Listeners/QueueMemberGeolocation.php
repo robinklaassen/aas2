@@ -25,6 +25,8 @@ class QueueMemberGeolocation
      */
     public function handle(MemberUpdated $event)
     {
-        UpdateMemberGeolocation::dispatch($event->member);
+        if ($event->member->wasChanged(['adres', 'postcode', 'plaats'])) {
+            UpdateMemberGeolocation::dispatch($event->member);
+        }
     }
 }

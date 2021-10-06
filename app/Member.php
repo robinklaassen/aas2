@@ -25,7 +25,7 @@ class Member extends Model
 	const RANK_POINTS = [0, 3, 10, 20, 35, 50, 70, 100];
 	
 	protected $dispatchesEvents = [
-		'updated' => MemberUpdated::class  // TODO dispatch event only if address properties have updated?
+		'updated' => MemberUpdated::class
 	];
 
 	// Full name
