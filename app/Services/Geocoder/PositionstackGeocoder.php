@@ -18,13 +18,13 @@ class PositionstackGeocoder implements GeocoderInterface
 
     const HTTP_TIMEOUT_SECONDS = 4;
 
-    public function geocode(string $address): Geolocation
+    public function geocode(string $address, string $country = 'NL'): Geolocation
     {
         try {
             $response = Http::timeout($this::HTTP_TIMEOUT_SECONDS)->get('http://api.positionstack.com/v1/forward', [
                 'access_key' => config('positionstack.api_key'),
                 'query' => $address,
-                'country' => 'NL',  // TODO allow overriding?
+                'country' => $country,
                 'limit' => 1
             ]);
         } catch (ConnectionException $e) {
