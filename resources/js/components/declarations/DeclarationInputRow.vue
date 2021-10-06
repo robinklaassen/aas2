@@ -93,7 +93,7 @@ export default Vue.extend({
                 >
                     <option value="pay">Uitbetalen</option>
                     <option value="gift">Gift aan Anderwijs</option>
-                    <option value="pay-biomeat">Gift aan het biovlees potje</option>
+                    <option value="pay-biomeat">Gift aan het biovleespotje</option>
                 </select>
             </div>
             <span class="help-block">
