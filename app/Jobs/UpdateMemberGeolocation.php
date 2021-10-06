@@ -39,13 +39,12 @@ class UpdateMemberGeolocation implements ShouldQueue
     {
         try {
             $geolocation = $geocoder->geocode($this->member->volledigAdres);
+            $this->member->geolocatie = $geolocation->toPoint();
         } catch (GeocoderException $e) {
             Log::warning("Exception when geocoding address for member {$this->member->volnaam}: {$e->getMessage()}");
-            // TODO maybe set geolocatie to null on failure? because otherwise it won't be updated again if it's an old address for example
-            return;
+            $this->member->geolocatie = null;  // So gets updated again on next attribute call
+        } finally {
+            $this->member->save();
         }
-
-        $this->member->geolocatie = $geolocation->toPoint();
-        $this->member->saveQuietly();  // TODO could be regular save() if event only gets dispatched on address property changes
     }
 }
