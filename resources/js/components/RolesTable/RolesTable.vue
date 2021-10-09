@@ -1,6 +1,6 @@
 <template>
   <div class="c-roles-explanation">
-    <input v-model="filter" class="form-control" placeholder="Zoek text, zoals: Deelnemer"/>
+    <input v-model="filter" class="form-control" placeholder="Zoek tekst, zoals: Deelnemer"/>
     <table class="c-roles-explanation__table">
       <thead>
       <tr>

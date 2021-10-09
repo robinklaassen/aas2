@@ -1,7 +1,7 @@
 @extends('master')
 
 @section('title')
-Rollen en Rechten
+Rollen en rechten
 @endsection
 
 @section('content')
