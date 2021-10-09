@@ -93,6 +93,8 @@ export default Vue.extend({
                 >
                     <option value="pay">Uitbetalen</option>
                     <option value="gift">Gift aan Anderwijs</option>
+                    <!-- From a member perspective you gift to the biomeat,
+                         but from the system's perspective you pay to the biomeat -->
                     <option value="pay-biomeat">Gift aan het biovleespotje</option>
                 </select>
             </div>
