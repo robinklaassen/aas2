@@ -43,7 +43,10 @@
 									<a href="{{ url('/event-packages') }}">Pakketten</a>
 								</li>
 								@endrole
+
+								@role(["member"])
 								<li class="{{ substr(Request::path(),0,6) == 'graphs' ? 'active' : ''}}"><a href="{{ url('/graphs') }}">Grafieken</a></li>
+								@endrole
 
 								@role(["member"])
 								<li class="{{ substr(Request::path(),0,5) == 'lists' ? 'active' : ''}}"><a href="{{ url('/lists') }}">Lijsten</a></li>
