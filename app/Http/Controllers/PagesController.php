@@ -296,7 +296,7 @@ class PagesController extends Controller
 	public function graphs()
 	{
         if (!\Auth::user()->hasRole("member")) {
-			abort(403, 'Onvoldoende rechten om lijsten in te zien');
+			abort(403, 'Onvoldoende rechten om grafieken in te zien');
 		}
 
 		// Determine end date for graph range; from 1st of August we include the current Anderwijs year
