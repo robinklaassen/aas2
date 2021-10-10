@@ -1,0 +1,49 @@
+.c-roles-explanation
+  position: relative
+  height: 80vh
+
+  overflow: auto
+
+  &__table
+    border-collapse: collapse
+
+    th
+      background: #fff
+      padding: 8px
+
+    thead th
+      position: sticky
+      top: 0
+      border: 0
+      vertical-align: bottom
+      text-align: center
+      z-index: 2
+
+    tbody th
+      position: sticky
+      left: 0
+      z-index: 1
+
+    tr:hover
+      background-color: #f5f5f5
+
+    tbody td
+      position: relative
+
+      &:hover::after
+        content: ""
+        position: absolute
+        background-color: #f5f5f5
+        left: 0
+        top: -5000px
+        height: 5000px
+        width: 100%
+        z-index: -1
+
+    td
+      padding: 4px
+      border-bottom: 1px solid #ddd
+
+    &__cell
+      &.--active
+        background-color: #dff0d8

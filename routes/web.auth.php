@@ -43,7 +43,7 @@ Route::get("accept-privacy", "PagesController@showAcceptPrivacyStatement")->name
 Route::post("accept-privacy", "PagesController@storePrivacyStatement")->name("store-accept-privacy");
 
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
-
+Route::get("roles/explain", "RolesController@explain")->name("roles.explain");
 
 # Declaration things
 Route::get(

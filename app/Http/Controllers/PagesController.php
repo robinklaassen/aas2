@@ -295,6 +295,10 @@ class PagesController extends Controller
 	# Analytical graphs
 	public function graphs()
 	{
+        if (!\Auth::user()->hasRole("member")) {
+			abort(403, 'Onvoldoende rechten om grafieken in te zien');
+		}
+
 		// Determine end date for graph range; from 1st of August we include the current Anderwijs year
 		$maxYear = Carbon::now()->addMonths(5)->year - 1;
 
