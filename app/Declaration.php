@@ -5,6 +5,7 @@ use Illuminate\Database\Eloquent\Model;
 class Declaration extends Model {
     public const TYPE_GIFT = 'gift';
     public const TYPE_PAY = 'pay';
+    // From a member perspective you gift to the biomeat, but from the system's perspective you pay to the biomeat
     public const TYPE_PAY_BIOMEAT = 'pay-biomeat';
 
 	protected $guarded = ['id', 'created_at', 'updated_at'];
