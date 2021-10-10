@@ -27,7 +27,7 @@
 </ul>
 
 <div class="tab-content" style="margin-top:20px;">
-	
+
 	<div role="tabpanel" class="tab-pane active" id="declarations_to_process">
 		<div class="row">
 			<div class="col-md-8">
@@ -42,14 +42,22 @@
 						</tr>
 					</thead>
 					<tbody>
-						@foreach ($members as $member)
+						@foreach ($openDeclarations as $declaration)
 							<tr>
-								<td>@money($member->declarations()->open()->where('gift', 0)->sum('amount'))</td>
-								<td>{{ $member->iban }}</td>
-								<td><a href="{{ url('/members', $member->id) }}">{{ $member->voornaam }} {{ $member->tussenvoegsel }} {{ $member->achternaam }}</a></td>
+								<td>@money($declaration->amount)</td>
+								<td>
+									@if($declaration->declaration_type === 'pay')
+										{{ $declaration->iban }}
+									@else
+										{{ __('declaration-types.' . $declaration->declaration_type) }}
+									@endif
+								</td>
+								<td><a href="{{ url('/members', $declaration->member_id) }}">{{ $declaration->voornaam }} {{ $declaration->tussenvoegsel }} {{ $declaration->achternaam }}</a></td>
 								<td>
 									@can('process', \App\Declaration::class)
-									<a href="{{ url('/declarations', ['process', $member->id]) }}"><span class="glyphicon glyphicon-check"></a></span>
+									<a href="{{ url('/declarations', ['process', $declaration->id, $declaration->declaration_type]) }}">
+										<span class="glyphicon glyphicon-check"></span>
+									</a>
 									@endcan
 								</td>
 							</tr>
@@ -62,7 +70,7 @@
 
 	<div role="tabpanel" class="tab-pane" id="declarations_open">
 		<!-- Openstaande declaraties -->
-		<table class="table table-hover" id="declarationsOpenTable" data-page-length="25">
+		<table class="table table-hover" id="declarationsOpenTable" data-page-length="25" width="100%">
 			<thead>
 				<tr>
 					<th>Datum</th>
@@ -70,13 +78,13 @@
 					<th>Bestand</th>
 					<th>Omschrijving</th>
 					<th>Bedrag</th>
-					<th>Gift</th>
+					<th>Actie</th>
 					<th></th>
 					<th></th>
 					<th></th>
 				</tr>
 			</thead>
-			
+
 			<tbody>
 				@foreach (App\Declaration::open()->get() as $declaration)
 					<tr>
@@ -93,7 +101,7 @@
 						</td>
 						<td>{{ $declaration->description }}</td>
 						<td>@money($declaration->amount)</td>
-						<td>{{ ($declaration->gift ? 'Ja' : 'Nee') }}</td>
+						<td>{{ __('declaration-types.' . $declaration->declaration_type) }}</td>
 						<td><a href="{{ url('/declarations', [$declaration->id, 'edit']) }}"><span class="glyphicon glyphicon-edit" data-toggle="tooltip" title="Bewerken"></span></a></td>
 						<td><a href="{{ url('/declarations', [$declaration->id, 'delete']) }}"><span class="glyphicon glyphicon-remove" data-toggle="tooltip" title="Verwijderen"></span></a></td>
 					</tr>
@@ -101,10 +109,10 @@
 			</tbody>
 		</table>
 	</div>
-	
+
 	<div role="tabpanel" class="tab-pane" id="declarations_closed">
 		<!-- Declaratietabel -->
-		<table class="table table-hover" id="declarationsClosedTable" data-page-length="25">
+		<table class="table table-hover" id="declarationsClosedTable" data-page-length="25" width="100%">
 			<thead>
 				<tr>
 					<th>Datum</th>
@@ -112,13 +120,13 @@
 					<th>Bestand</th>
 					<th>Omschrijving</th>
 					<th>Bedrag</th>
-					<th>Gift</th>
+					<th>Type</th>
 					<th>Afgehandeld op</th>
 					<th></th>
 					<th></th>
 				</tr>
 			</thead>
-			
+
 			<tbody>
 				@foreach (App\Declaration::closed()->get() as $declaration)
 					<tr>
@@ -135,7 +143,7 @@
 						</td>
 						<td>{{ $declaration->description }}</td>
 						<td>@money($declaration->amount)</td>
-						<td>{{ ($declaration->gift ? 'Ja' : 'Nee') }}</td>
+						<td>{{ __('declaration-types.' . $declaration->declaration_type) }}</td>
 						<td>{{ $declaration->closed_at->format('Y-m-d') }}</td>
 						<td><a href="{{ url('/declarations', [$declaration->id, 'edit']) }}"><span class="glyphicon glyphicon-edit" data-toggle="tooltip" title="Bewerken"></span></a></td>
 						<td><a href="{{ url('/declarations', [$declaration->id, 'delete']) }}"><span class="glyphicon glyphicon-remove" data-toggle="tooltip" title="Verwijderen"></span></a></td>
@@ -165,7 +173,7 @@ $( document ).ready(function() {
 			{'orderable':false}
 		]
 	});
-	
+
     $('#declarationsClosedTable').DataTable({
 		responsive: true,
 		order: [[ 0, "desc" ]],

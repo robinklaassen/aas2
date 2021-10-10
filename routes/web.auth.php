@@ -156,7 +156,7 @@ Route::resource('courses', 'CoursesController');
 
 # Declaration things
 Route::get(
-    'declarations/process/{member}',
+    'declarations/process/{member}/{declarationType}',
     'DeclarationsController@confirmProcess'
 );
 Route::post('declarations/process', 'DeclarationsController@process');

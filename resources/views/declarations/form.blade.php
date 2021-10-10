@@ -11,11 +11,15 @@
         {!! Form::input('number', 'amount', null, ['class' => 'form-control', 'placeholder' => '0.00', 'step' => 'any' ]) !!}
     </div>
 </div>
-    
+
 <div class="form-group">
-    {!! Form::label('gift', 'Gift:') !!}<br/>
-    {!! Form::hidden('gift', 0) !!}
-    {!! Form::checkbox('gift', 1, null, ['style' => 'margin-top: 14px;']) !!}
+    {!! Form::label('declaration_type', 'Actie:') !!}<br/>
+    {!! Form::select('declaration_type', [
+        'pay' => __('declaration-types.pay'),
+        'gift' => __('declaration-types.gift'),
+        'pay-biomeat' => __('declaration-types.pay-biomeat')
+    ], null,  ['class' => 'form-control' ]) !!}
+
 </div>
 
 <div class="form-group">
