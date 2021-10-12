@@ -15,6 +15,7 @@ class AddMemberLocationPoint extends Migration
     {
         Schema::table('members', function (Blueprint $table) {
             $table->point('geolocatie')->after('opmerkingen')->nullable()->default(null);
+            $table->string('geolocatie_error')->after('geolocatie')->nullable()->default(null);
         });
     }
 
@@ -27,6 +28,7 @@ class AddMemberLocationPoint extends Migration
     {
         Schema::table('members', function (Blueprint $table) {
             $table->dropColumn('geolocatie');
+            $table->dropColumn('geolocatie_error');
         });
     }
 }

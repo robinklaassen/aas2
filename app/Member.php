@@ -2,13 +2,11 @@
 
 namespace App;
 
-use Carbon\Carbon;
-use Collective\Html\Eloquent\FormAccessible;
-use Grimzy\LaravelMysqlSpatial\Eloquent\SpatialTrait;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Arr;
 use App\Events\MemberUpdated;
-use App\Jobs\UpdateMemberGeolocation;
+use Collective\Html\Eloquent\FormAccessible;
+use Illuminate\Support\Arr;
+use Illuminate\Database\Eloquent\Model;
+use Grimzy\LaravelMysqlSpatial\Eloquent\SpatialTrait;
 
 class Member extends Model
 {
@@ -38,17 +36,6 @@ class Member extends Model
 	public function getVolledigAdresAttribute()
 	{
 		return $this->adres . ', ' . $this->postcode . ' ' . $this->plaats;
-	}
-
-	public function getGeolocatieAttribute()
-	{
-		// Call geocoder if location is not yet available
-		if ($this->attributes['geolocatie'] === null) {
-			UpdateMemberGeolocation::dispatchSync($this);
-		}
-
-		$this->refresh();
-		return $this->attributes['geolocatie'];
 	}
 
 	// Postcode mutator
