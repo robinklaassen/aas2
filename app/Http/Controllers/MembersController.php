@@ -204,14 +204,14 @@ class MembersController extends Controller
 	public function map()
 	{
 		$this->authorize("viewAny", Member::class);
-		$members = Member::where('soort', '<>', 'oud')->get();
+		$members = Member::where('soort', '<>', 'oud')->whereNotNull('geolocatie')->get();
 
 		$markers = $members
-			->filter(fn($m) => $m->geolocatie !== null)  // filter here instead of in query, so empty locations get reprocessed
 			->map(fn($m) => [
 					'latlng' => [$m->geolocatie->getLat(), $m->geolocatie->getLng()],
 					'name' => $m->volnaam,
 					'type' => $m->soort,
+					'link' => "<a href='" . url('members', $m->id) . "'>$m->volnaam</a>",
 				]
 			)->values();
 

@@ -11,7 +11,7 @@
 
 	<hr/>
 
-	<p>Legenda: rood = normaal, groen = aspirant, blauw = info.</p>
+	<p>Legenda: donkergroen = normaal lid, lichtgroen = aspirant lid, roze = infolid.</p>
 
 	<div id="mapdiv" style="width:100%; height:750px; margin-bottom:10px;"></div>
 
@@ -43,9 +43,9 @@
 		});
 	}
 
-	const redIcon = getColoredIcon('red');
-	const greenIcon = getColoredIcon('green');
-	const blueIcon = getColoredIcon('blue');
+	const normalIcon = getColoredIcon('#1c5128');  // donkergroen
+	const aspiringIcon = getColoredIcon('#4db848');  // lichtgroen
+	const infoIcon = getColoredIcon('#b12e62');  // roze
 
 	// Setup map
 	var map = L.map('mapdiv').setView([51.505, 5.4], 7);
@@ -57,9 +57,9 @@
 	const markers = @json($markers);
 
 	const markerTypeMap = {
-		'normaal': redIcon,
-		'aspirant': greenIcon,
-		'info': blueIcon
+		'normaal': normalIcon,
+		'aspirant': aspiringIcon,
+		'info': infoIcon
 	};
 
 	markers.map(function (item) {
@@ -67,7 +67,8 @@
 			icon: markerTypeMap[item.type],
 		})
 		.addTo(map)
-		.bindPopup(item.name);
+		.bindTooltip(item.name)
+		.bindPopup(item.link);
 	});
 
 	</script>
