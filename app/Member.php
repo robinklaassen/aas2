@@ -2,27 +2,40 @@
 
 namespace App;
 
-use Carbon\Carbon;
+use App\Events\MemberUpdated;
 use Collective\Html\Eloquent\FormAccessible;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Arr;
+use Illuminate\Database\Eloquent\Model;
+use Grimzy\LaravelMysqlSpatial\Eloquent\SpatialTrait;
 
 class Member extends Model
 {
 
-	use FormAccessible;
+	use FormAccessible, SpatialTrait;
 
 	protected $guarded = ['id', 'created_at', 'updated_at'];
 
 	protected $dates = ['created_at', 'updated_at', 'geboortedatum'];
 
+	protected $spatialFields = ['geolocatie'];
+	
 	// Number of points needed for every level in the points system
 	const RANK_POINTS = [0, 3, 10, 20, 35, 50, 70, 100];
+	
+	protected $dispatchesEvents = [
+		'updated' => MemberUpdated::class
+	];
 
 	// Full name
 	public function getVolnaamAttribute()
 	{
 		return str_replace('  ', ' ', $this->voornaam . ' ' . $this->tussenvoegsel . ' ' . $this->achternaam);
+	}
+
+	// Full address as single string
+	public function getVolledigAdresAttribute()
+	{
+		return $this->adres . ', ' . $this->postcode . ' ' . $this->plaats;
 	}
 
 	// Postcode mutator
@@ -311,7 +324,7 @@ class Member extends Model
 		return $data;
 	}
 
-	// Get list of unique other members that this person has been on camp withPivot
+	// Get list of unique other members that this person has been on camp with
 	public function getFellowsAttribute()
 	{
 		$events = $this->events()->where('type', 'kamp')->where('datum_eind', '<', date('Y-m-d'))->get();

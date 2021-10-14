@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
+use App\User;
 
 class MemberTest extends TestCase
 {
@@ -11,7 +12,7 @@ class MemberTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = \App\User::findOrFail(1);
+        $this->user = User::findOrFail(1);
     }
 
     /**
@@ -40,5 +41,14 @@ class MemberTest extends TestCase
             ->get('/members/3')
             ->assertStatus(200)
             ->assertSee('Bewerken', 'Flipstoeje', 'Lijst met acties', 'Natuurkunde');
+    }
+
+    public function testMap()
+    {
+        $this->withoutJobs();
+        $response = $this
+            ->actingAs($this->user)
+            ->get('/members/map')
+            ->assertStatus(200);
     }
 }

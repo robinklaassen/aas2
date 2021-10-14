@@ -7,56 +7,70 @@
 
 @section('content')
 
-<h1>Ledenkaart</h1>
+	<h1>Ledenkaart</h1>
 
-<hr/>
+	<hr/>
 
-<p><b>Noot</b>: de markers worden een voor een geladen omdat Google een limiet stelt aan het aantal queries per seconde. Je moet dus even geduld hebben.</p>
+	<p>Legenda: donkergroen = normaal lid, lichtgroen = aspirant lid, roze = infolid.</p>
 
-<p>Legenda: rood = normaal, groen = aspirant, blauw = info.</p>
-
-<div id="map-canvas" style="width:100%; height:1000px; margin-bottom:10px;"></div>
+	<div id="mapdiv" style="width:100%; height:750px; margin-bottom:10px;"></div>
 
 @endsection
 
+@section('script')
 
-@section('header')
-<!-- Load Google maps script -->
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js"></script>
+	<script type="text/javascript">
 
-<script type="text/javascript">
-function initialize() {
-	// First initialize map
-	var geocoder = new google.maps.Geocoder();
-	var mapOptions = {
-		center: { lat: 52.31, lng: 5.55},
-		zoom: 8
+	function getColoredIcon(color) {
+		const markerHtmlStyles = `
+			background-color: ${color};
+			width: 3rem;
+			height: 3rem;
+			display: block;
+			left: -1.5rem;
+			top: -1.5rem;
+			position: relative;
+			border-radius: 3rem 3rem 0;
+			transform: rotate(45deg);
+			border: 1px solid #FFFFFF`
+
+		return L.divIcon({
+			// className: "my-custom-pin",
+			iconAnchor: [0, 24],
+			labelAnchor: [-6, 0],
+			popupAnchor: [0, -36],
+			html: `<span style="${markerHtmlStyles}" />`
+		});
+	}
+
+	const normalIcon = getColoredIcon('#1c5128');  // donkergroen
+	const aspiringIcon = getColoredIcon('#4db848');  // lichtgroen
+	const infoIcon = getColoredIcon('#b12e62');  // roze
+
+	// Setup map
+	var map = L.map('mapdiv').setView([51.505, 5.4], 7);
+
+	L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+	}).addTo(map);
+
+	const markers = @json($markers);
+
+	const markerTypeMap = {
+		'normaal': normalIcon,
+		'aspirant': aspiringIcon,
+		'info': infoIcon
 	};
-	var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
-	
-	// Then code addresses and place markers
-	var memberData = <?php echo $memberJSON; ?>;
-	var timer = 0;
-	memberData.forEach(function(member) {
-		window.setTimeout(function() {
-			geocoder.geocode( { 'address': member.address}, function(results, status) {
-				if (status == google.maps.GeocoderStatus.OK) {
-					var marker = new google.maps.Marker({
-						map: map,
-						position: results[0].geometry.location,
-						icon: member.markerURL,
-						title: member.name,
-						animation: google.maps.Animation.DROP
-					});
-				} else {
-					alert("Geocode was not successful for the following reason: " + status);
-				}
-			});
-		}, timer += 1000);
-	});
-}
 
-// Only load the map when the DOM is fully loaded
-google.maps.event.addDomListener(window, 'load', initialize);
-</script>
+	markers.map(function (item) {
+		L.marker(item.latlng, {
+			icon: markerTypeMap[item.type],
+		})
+		.addTo(map)
+		.bindTooltip(item.name)
+		.bindPopup(item.link);
+	});
+
+	</script>
+
 @endsection

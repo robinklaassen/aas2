@@ -6,9 +6,10 @@ use App\Member;
 use App\Skill;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\MembersExport;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
 
 class MembersController extends Controller
@@ -25,7 +26,7 @@ class MembersController extends Controller
 		$current_members = Member::orderBy('voornaam', 'asc')->whereIn('soort', ['normaal', 'aspirant', 'info'])->get();
 		$former_members = Member::orderBy('voornaam', 'asc')->where('soort', 'oud')->get();
 		return view('members.index', compact('current_members', 'former_members'));
-		if (\Auth::user()->can("listOldMembers", Member::class)) {
+		if (Auth::user()->can("listOldMembers", Member::class)) {
 			// Show standard index
 			$current_members = Member::orderBy('voornaam', 'asc')->whereIn('soort', ['normaal', 'aspirant', 'info'])->get();
 			$former_members = Member::orderBy('voornaam', 'asc')->where('soort', 'oud')->get();
@@ -124,7 +125,7 @@ class MembersController extends Controller
 	{
 		$this->authorize("onEvent", $member);
 		// Should not be attached if the member has already been sent on this event! That's why we use sync instead of attach, without detaching (second parameter false)
-		$status = $member->events()->sync([\Request::input('selected_event')], false);
+		$status = $member->events()->sync([Request::input('selected_event')], false);
 		$message = ($status['attached'] == []) ? 'Het lid is reeds op dit evenement gestuurd!' : 'Het lid is op evenement gestuurd!';
 		return redirect('members/' . $member->id)->with([
 			'flash_message' => $message
@@ -143,11 +144,11 @@ class MembersController extends Controller
 	public function addCourseSave(Member $member)
 	{
 		$this->authorize("editPractical", $member);
-		$status = $member->courses()->sync([\Request::input('selected_course')], false);
+		$status = $member->courses()->sync([Request::input('selected_course')], false);
 		if ($status['attached'] == []) {
 			$message = 'Vak reeds toegevoegd!';
 		} else {
-			$member->courses()->updateExistingPivot(\Request::input('selected_course'), ['klas' => \Request::input('klas')]);
+			$member->courses()->updateExistingPivot(Request::input('selected_course'), ['klas' => Request::input('klas')]);
 			$message = 'Vak toegevoegd!';
 		}
 		return redirect('members/' . $member->id)->with([
@@ -168,7 +169,7 @@ class MembersController extends Controller
 	public function editCourseSave(Member $member, $course_id)
 	{
 		$this->authorize("editPractical", $member);
-		$member->courses()->updateExistingPivot($course_id, ['klas' => \Request::input('klas')]);
+		$member->courses()->updateExistingPivot($course_id, ['klas' => Request::input('klas')]);
 		return redirect('members/' . $member->id)->with([
 			'flash_message' => 'Het vak is bewerkt!'
 		]);
@@ -203,33 +204,18 @@ class MembersController extends Controller
 	public function map()
 	{
 		$this->authorize("viewAny", Member::class);
-		$members = Member::where('soort', '<>', 'oud')->orderBy('soort')->get();
+		$members = Member::where('soort', '<>', 'oud')->whereNotNull('geolocatie')->get();
 
-		// Create member data for map
-		foreach ($members as $member) {
-			$markerURL = 'http://maps.google.com/mapfiles/ms/icons/';
-			switch ($member->soort) {
-				case 'normaal':
-					$markerURL .= 'red-dot.png';
-					break;
-				case 'aspirant':
-					$markerURL .= 'green-dot.png';
-					break;
-				case 'info':
-					$markerURL .= 'blue-dot.png';
-					break;
-			}
+		$markers = $members
+			->map(fn($m) => [
+					'latlng' => [$m->geolocatie->getLat(), $m->geolocatie->getLng()],
+					'name' => $m->volnaam,
+					'type' => $m->soort,
+					'link' => "<a href='" . url('members', $m->id) . "'>$m->volnaam</a>",
+				]
+			)->values();
 
-			$memberData[] = [
-				'address' => $member->adres . ', ' . $member->plaats,
-				'name' => str_replace('  ', ' ', $member->voornaam . ' ' . $member->tussenvoegsel . ' ' . $member->achternaam),
-				'markerURL' => $markerURL
-			];
-		}
-
-		$memberJSON = json_encode($memberData);
-
-		return view('members.map', compact('memberJSON'));
+		return view('members.map', compact('markers'));
 	}
 
 	# Search members by coverage
@@ -245,7 +231,7 @@ class MembersController extends Controller
 		$courseCodes = \App\Course::pluck('code', 'id')->toArray();
 
 		$allMembers = \App\Member::where('soort', '<>', 'oud');
-		if (\Auth::user()->can("showAdministrativeAny", \App\Member::class)) {
+		if (Auth::user()->can("showAdministrativeAny", \App\Member::class)) {
 			$allMembers = $allMembers->where('vog', '>=', $vog);
 		}
 		$allMembers = $allMembers->orderBy('voornaam')->get();

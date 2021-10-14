@@ -25,10 +25,10 @@ Leden
 			@can("viewAny", \App\Member::class)
 			<a class="btn btn-info" type="button" href="{{ url('members/search-skills')}}" style="margin-top:21px;">Zoeken op
 				vaardigheden</a>
+			<a class="btn btn-warning" type="button" href="{{ url('members/map') }}"
+			style="margin-top:21px;">Kaart</a>
 			@endcan
 			@can("showAdministrativeAny", \App\Member::class)
-			{{-- <a class="btn btn-warning" type="button" href="{{ url('members/map') }}"
-			style="margin-top:21px;">Kaart</a> --}}
 			<a class="btn btn-success" type="button" href="{{ url('members/export') }}"
 				style="margin-top:21px;">Exporteren</a>
 			@endcan
