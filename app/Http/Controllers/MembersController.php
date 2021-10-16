@@ -71,9 +71,8 @@ class MembersController extends Controller
 	}
 
 	# Edit member form
-	public function edit(Member $member)
+	public function edit(Member $member, string $viewType = 'admin')
 	{
-		$viewType = 'admin';
 		return view('members.edit', compact('member', 'viewType'));
 	}
 

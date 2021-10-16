@@ -39,6 +39,8 @@ class ParticipantsController extends Controller
 		return view('participants.index', compact('participants'));
 	}
 
+	// TODO creating and storing new participants from here is never used -- we have a registration page... consider removing
+
 	/**
 	 * Show the form for creating a new resource.
 	 *
@@ -92,9 +94,8 @@ class ParticipantsController extends Controller
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function edit(Participant $participant)
+	public function edit(Participant $participant, string $viewType = 'admin')
 	{
-		$viewType = 'admin';
 		return view('participants.edit', compact('participant', 'viewType'));
 	}
 

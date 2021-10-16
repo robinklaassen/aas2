@@ -82,14 +82,12 @@ class ProfileController extends Controller
 	{
 		$viewType = 'profile';
 
-		if (Auth::user()->profile_type == Member::class) {
-			$member = Auth::user()->profile;
-			return view('members.edit', compact('member', 'viewType'));
+		if ($this->member) {
+			return $this->membersController->edit($this->member, $viewType);
 		}
 
-		if (Auth::user()->profile_type == Participant::class) {
-			$participant = Auth::user()->profile;
-			return view('participants.edit', compact('participant', 'viewType'));
+		if ($this->participant) {
+			return $this->participantsController->edit($this->participant, $viewType);
 		}
 	}
 
