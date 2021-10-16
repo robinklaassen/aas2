@@ -10,20 +10,15 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\MemberRequest;
 use App\Exports\MembersExport;
 use Illuminate\Http\Request;
-use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Builder;
 use Maatwebsite\Excel\Facades\Excel;
 
 class MembersController extends Controller
 {
-	
-	/** @var User */
-	private $user;
 
-	public function __construct(Authenticatable $user)
+	public function __construct()
 	{
 		$this->authorizeResource(Member::class, 'member');
-		$this->user = $user;
 	}
 
 	# Index page
@@ -32,17 +27,6 @@ class MembersController extends Controller
 		$current_members = Member::orderBy('voornaam', 'asc')->whereIn('soort', ['normaal', 'aspirant', 'info'])->get();
 		$former_members = Member::orderBy('voornaam', 'asc')->where('soort', 'oud')->get();
 		return view('members.index', compact('current_members', 'former_members'));
-		// TODO below code is never executed? Is it better?
-		if ($this->user->can("listOldMembers", Member::class)) {
-			// Show standard index
-			$current_members = Member::orderBy('voornaam', 'asc')->whereIn('soort', ['normaal', 'aspirant', 'info'])->get();
-			$former_members = Member::orderBy('voornaam', 'asc')->where('soort', 'oud')->get();
-			return view('members.index', compact('current_members', 'former_members'));
-		} else {
-			// Something
-			$members = Member::orderBy('voornaam', 'asc')->whereIn('soort', ['normaal', 'aspirant', 'info'])->get();
-			return view('members.list', compact('members'));
-		}
 	}
 
 	# Member details page
@@ -77,7 +61,7 @@ class MembersController extends Controller
 	}
 
 	# Update member in DB
-	public function update(Member $member, MemberRequest $request)
+	public function update(Member $member, MemberRequest $request, string $successMessage = null)
 	{
 		$member->update($request->except(["skills", "roles"]));
 
@@ -98,7 +82,7 @@ class MembersController extends Controller
 		}
 
 		return redirect('members/' . $member->id)->with([
-			'flash_message' => 'Het lid is bewerkt!'
+			'flash_message' => $successMessage ?? 'Het lid is bewerkt!'
 		]);
 	}
 
@@ -230,6 +214,9 @@ class MembersController extends Controller
 		$this->authorize("viewAny", Member::class);
 		$this->authorize("showPracticalAny", Member::class);
 
+		/** @var User */
+		$user = $request->user();
+
 		$courses = $request->input('courses', []);
 		$vog = $request->input('vog', 0);
 
@@ -237,7 +224,7 @@ class MembersController extends Controller
 		$courseCodes = Course::pluck('code', 'id')->toArray();
 
 		$allMembers = Member::where('soort', '<>', 'oud');
-		if ($this->user->can("showAdministrativeAny", Member::class)) {
+		if ($user->can("showAdministrativeAny", Member::class)) {
 			$allMembers = $allMembers->where('vog', '>=', $vog);
 		}
 		$allMembers = $allMembers->orderBy('voornaam')->get();

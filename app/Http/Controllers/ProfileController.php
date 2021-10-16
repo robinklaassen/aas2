@@ -11,13 +11,13 @@ use App\Event;
 use App\EventPackage;
 use App\Facades\Mollie;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\MemberRequest;
+use App\Http\Requests\ParticipantRequest;
 use App\Helpers\Payment\EventPayment;
 use Illuminate\Http\Request;
-use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Request as RequestFacade;
 use App\Mail\internal\MemberOnEventNotification;
 use App\Mail\internal\CoverageChangedNotification;
@@ -29,130 +29,54 @@ use Barryvdh\DomPDF\PDF;
 class ProfileController extends Controller
 {
 
-	/** @var User */
-	private $user;
-
-	/** @var Member */
-	private $member;
-
-	/** @var Participant */
-	private $participant;
-
 	private $membersController;
 	private $participantsController;
 
-	public function __construct(Authenticatable $user, MembersController $membersController, ParticipantsController $participantsController)
+	public function __construct(MembersController $membersController, ParticipantsController $participantsController)
 	{
 		$this->membersController = $membersController;
 		$this->participantsController = $participantsController;
-		$this->user = $user;
+	}
 
-		if ($this->user->profile_type == Member::class) {
-			$this->member = $this->user->profile;
-		} elseif ($this->user->profile_type == Participant::class) {
-			$this->participant = $this->user->profile;
+	# Helper function to determine controller to pass request to, based on authenticated user
+	// TODO would love to type hint the output but union types are only supported from PHP 8.0 onward
+	private function getController(Request $request)
+	{
+		if ($request->user()->isMember()) {
+			return $this->membersController;
+		}
+
+		if ($request->user()->isParticipant()) {
+			return $this->participantsController;
 		}
 	}
 
-	/**
-	 * Display the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function show()
+	# Display requested resource.
+	public function show(Request $request)
 	{
 		$viewType = 'profile';
-
-		if ($this->member) {
-			return $this->membersController->show($this->member, $viewType);
-		}
-
-		if ($this->participant) {
-			return $this->participantsController->show($this->participant, $viewType);
-		}
+		return $this->getController($request)->show($request->user()->profile, $viewType);
 	}
 
-	/**
-	 * Show the form for editing the specified resource.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
-	public function edit()
+	# Show form for editing requested resource.
+	public function edit(Request $request)
 	{
 		$viewType = 'profile';
-
-		if ($this->member) {
-			return $this->membersController->edit($this->member, $viewType);
-		}
-
-		if ($this->participant) {
-			return $this->participantsController->edit($this->participant, $viewType);
-		}
+		return $this->getController($request)->edit($request->user()->profile, $viewType);
 	}
 
-	/**
-	 * Update the specified resource in storage.
-	 *
-	 * @param  int  $id
-	 * @return Response
-	 */
+	# Update the specified resource in storage.
 	public function update(Request $request)
 	{
-		// Validate. First fields that are equal for both members and participants
-		$v = Validator::make($request->all(), [
-			'voornaam' => 'required',
-			'achternaam' => 'required',
-			'geboortedatum' => 'required|regex:/\d{4}-\d{2}-\d{2}/',
-			'geslacht' => 'required',
-			'adres' => 'required',
-			'postcode' => ['required', 'regex:/\d{4}\s?[A-z]{2}/'],
-			'plaats' => 'required',
-			'hoebij' => 'required'
-		]);
-
-		// Required fields for members
-		$v->sometimes(['telefoon', 'email', 'studie', 'afgestudeerd'], 'required', function ($input) {
-			return (Auth::user()->profile_type == Member::class);
-		});
-
-		// Required fields for participants
-		$v->sometimes(['email_ouder', 'school', 'niveau', 'klas'], 'required', function ($input) {
-			return (Auth::user()->profile_type == Participant::class);
-		});
-
-		if ($v->fails()) {
-			return redirect()->back()->withErrors($v->errors());
-		}
-
-		$profile = Auth::user()->profile;
-
-		if (Auth::user()->profile_type == Participant::class) {
-			$profile->update($request->all());
-		} else {
-			$profile->update($request->except('skills'));
-
-			// Update skills
-			$skills = $request->input('skills') ?? []; // this is an array with ids of existing skills (as strings!) and string tags of new skills
-
-			$skill_ids = [];
-			foreach ($skills as $skill_id) {
-				$skill_ids[] = Skill::findOrCreateFromString($skill_id)->id;
-			}
-
-			$profile->skills()->sync($skill_ids);
-		}
-
-
-		return redirect('profile')->with([
-			'flash_message' => 'Je profiel is bewerkt!'
-		]);
+		$successMessage = 'Je profiel is bewerkt!';
+		$validatedRequest = ($request->user()->isMember()) ? app(MemberRequest::class) : app(ParticipantRequest::class);
+		return $this->getController($request)->update($request->user()->profile, $validatedRequest, $successMessage);
 	}
 
 	# Upload photo
 	public function upload(Request $request)
 	{
+		// TODO move all this code to a separate service
 		if ($request->hasFile('photo')) {
 			$file = $request->file('photo');
 			if ($file->isValid()) {
@@ -178,9 +102,9 @@ class ProfileController extends Controller
 	}
 
 	# Set new password
-	public function password()
+	public function password(Request $request)
 	{
-		$user = Auth::user();
+		$user = $request->user();
 		$viewType = 'profile';
 		return view('users.password', compact('user', 'viewType'));
 	}
@@ -188,7 +112,7 @@ class ProfileController extends Controller
 	public function passwordSave(Request $request)
 	{
 		/** @var User */
-		$user = Auth::user();
+		$user = $request->user();
 		$this->validate($request, [
 			'password' => 'required|confirmed'
 		]);

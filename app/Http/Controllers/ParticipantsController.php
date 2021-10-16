@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
 use App\Event;
 use App\Participant;
 use App\Http\Requests\ParticipantRequest;
@@ -105,11 +104,11 @@ class ParticipantsController extends Controller
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update(Participant $participant, ParticipantRequest $request)
+	public function update(Participant $participant, ParticipantRequest $request, string $successMessage = null)
 	{
 		$participant->update($request->all());
 		return redirect('participants/' . $participant->id)->with([
-			'flash_message' => 'De deelnemer is bewerkt!'
+			'flash_message' => $successMessage ?? 'De deelnemer is bewerkt!'
 		]);
 	}
 

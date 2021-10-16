@@ -2,6 +2,7 @@
 
 namespace App;
 
+use Illuminate\Support\Carbon;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
@@ -59,7 +60,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
 	public function roles()
 	{
-		return $this->belongsToMany('App\Role', 'user_role');
+		return $this->belongsToMany(Role::class, 'user_role');
 	}
 
 	public function hasRole($tag)
@@ -96,12 +97,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
 	public function isMember()
 	{
-		return $this->profile_type === "App\Member";
+		return $this->profile_type === Member::class;
 	}
 
 	public function isParticipant()
 	{
-		return $this->profile_type === "App\Participant";
+		return $this->profile_type === Participant::class;
 	}
 
 	public function getVolnaamAttribute()
