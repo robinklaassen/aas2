@@ -2,22 +2,28 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use App\Member;
 use App\Skill;
-use App\Http\Requests;
+use App\Course;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Request;
-use Maatwebsite\Excel\Facades\Excel;
+use App\Http\Requests\MemberRequest;
 use App\Exports\MembersExport;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
+use Maatwebsite\Excel\Facades\Excel;
 
 class MembersController extends Controller
 {
+	
+	/** @var User */
+	private $user;
 
 	public function __construct()
 	{
 		$this->authorizeResource(Member::class, 'member');
+		$this->user = Auth::user();
 	}
 
 	# Index page
@@ -26,7 +32,8 @@ class MembersController extends Controller
 		$current_members = Member::orderBy('voornaam', 'asc')->whereIn('soort', ['normaal', 'aspirant', 'info'])->get();
 		$former_members = Member::orderBy('voornaam', 'asc')->where('soort', 'oud')->get();
 		return view('members.index', compact('current_members', 'former_members'));
-		if (Auth::user()->can("listOldMembers", Member::class)) {
+		// TODO below code is never executed? Is it better?
+		if ($this->user->can("listOldMembers", Member::class)) {
 			// Show standard index
 			$current_members = Member::orderBy('voornaam', 'asc')->whereIn('soort', ['normaal', 'aspirant', 'info'])->get();
 			$former_members = Member::orderBy('voornaam', 'asc')->where('soort', 'oud')->get();
@@ -46,6 +53,8 @@ class MembersController extends Controller
 		return view('members.show', compact('member', 'viewType'));
 	}
 
+	// TODO creating and storing new members from here is never used -- we have a registration page... consider removing
+
 	# Create new member
 	public function create()
 	{
@@ -54,7 +63,7 @@ class MembersController extends Controller
 	}
 
 	# Store new member
-	public function store(Requests\MemberRequest $request)
+	public function store(MemberRequest $request)
 	{
 
 		Member::create($request->except("roles"));
@@ -71,7 +80,7 @@ class MembersController extends Controller
 	}
 
 	# Update member in DB
-	public function update(Member $member, Requests\MemberRequest $request)
+	public function update(Member $member, MemberRequest $request)
 	{
 		$member->update($request->except(["skills", "roles"]));
 
@@ -121,11 +130,11 @@ class MembersController extends Controller
 	}
 
 	# Send member on event (update database)
-	public function onEventSave(Member $member)
+	public function onEventSave(Request $request, Member $member)
 	{
 		$this->authorize("onEvent", $member);
 		// Should not be attached if the member has already been sent on this event! That's why we use sync instead of attach, without detaching (second parameter false)
-		$status = $member->events()->sync([Request::input('selected_event')], false);
+		$status = $member->events()->sync([$request->input('selected_event')], false);
 		$message = ($status['attached'] == []) ? 'Het lid is reeds op dit evenement gestuurd!' : 'Het lid is op evenement gestuurd!';
 		return redirect('members/' . $member->id)->with([
 			'flash_message' => $message
@@ -141,14 +150,14 @@ class MembersController extends Controller
 	}
 
 	# Add course for this member (update database)
-	public function addCourseSave(Member $member)
+	public function addCourseSave(Request $request, Member $member)
 	{
 		$this->authorize("editPractical", $member);
-		$status = $member->courses()->sync([Request::input('selected_course')], false);
+		$status = $member->courses()->sync([$request->input('selected_course')], false);
 		if ($status['attached'] == []) {
 			$message = 'Vak reeds toegevoegd!';
 		} else {
-			$member->courses()->updateExistingPivot(Request::input('selected_course'), ['klas' => Request::input('klas')]);
+			$member->courses()->updateExistingPivot($request->input('selected_course'), ['klas' => $request->input('klas')]);
 			$message = 'Vak toegevoegd!';
 		}
 		return redirect('members/' . $member->id)->with([
@@ -166,10 +175,10 @@ class MembersController extends Controller
 	}
 
 	# Edit course for this member (update database)
-	public function editCourseSave(Member $member, $course_id)
+	public function editCourseSave(Request $request, Member $member, $course_id)
 	{
 		$this->authorize("editPractical", $member);
-		$member->courses()->updateExistingPivot($course_id, ['klas' => Request::input('klas')]);
+		$member->courses()->updateExistingPivot($course_id, ['klas' => $request->input('klas')]);
 		return redirect('members/' . $member->id)->with([
 			'flash_message' => 'Het vak is bewerkt!'
 		]);
@@ -179,7 +188,7 @@ class MembersController extends Controller
 	public function removeCourseConfirm(Member $member, $course_id)
 	{
 		$this->authorize("editPractical", $member);
-		$course = \App\Course::findOrFail($course_id);
+		$course = Course::findOrFail($course_id);
 		$viewType = 'admin';
 		return view('members.removeCourse', compact('member', 'course', 'viewType'));
 	}
@@ -221,17 +230,17 @@ class MembersController extends Controller
 	# Search members by coverage
 	public function search(Request $request)
 	{
-		$this->authorize("viewAny", \App\Member::class);
-		$this->authorize("showPracticalAny", \App\Member::class);
+		$this->authorize("viewAny", Member::class);
+		$this->authorize("showPracticalAny", Member::class);
 
 		$courses = $request->input('courses', []);
 		$vog = $request->input('vog', 0);
 
-		$courseList = \App\Course::orderBy('naam')->pluck('naam', 'id')->toArray();
-		$courseCodes = \App\Course::pluck('code', 'id')->toArray();
+		$courseList = Course::orderBy('naam')->pluck('naam', 'id')->toArray();
+		$courseCodes = Course::pluck('code', 'id')->toArray();
 
-		$allMembers = \App\Member::where('soort', '<>', 'oud');
-		if (Auth::user()->can("showAdministrativeAny", \App\Member::class)) {
+		$allMembers = Member::where('soort', '<>', 'oud');
+		if ($this->user->can("showAdministrativeAny", Member::class)) {
 			$allMembers = $allMembers->where('vog', '>=', $vog);
 		}
 		$allMembers = $allMembers->orderBy('voornaam')->get();
@@ -269,7 +278,7 @@ class MembersController extends Controller
 		$all_skills = Skill::pluck('tag', 'id')->toArray();
 
 		$num_matches = ($require_how == 'all') ? count($skills) : 1;
-		$members = Member::whereHas('skills', function (Builder $query) use ($skills, $require_how) {
+		$members = Member::whereHas('skills', function (Builder $query) use ($skills) {
 			$query->whereIn('id', $skills);
 		}, '>=', $num_matches)->get();
 

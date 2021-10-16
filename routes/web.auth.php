@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Middleware\UnderConstruction;
+use Illuminate\Support\Facades\Route;
 
 Route::get('home', 'PagesController@home');
 Route::get('info', 'PagesController@info');
@@ -198,7 +199,6 @@ Route::post(
     'ParticipantsController@anonymizeStore'
 );
 Route::get('participants/export', 'ParticipantsController@export');
-Route::get('participants/map', 'ParticipantsController@map')->middleware(UnderConstruction::class);
 Route::resource('participants', 'ParticipantsController');
 
 # User things
