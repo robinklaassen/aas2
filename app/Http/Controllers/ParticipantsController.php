@@ -67,10 +67,8 @@ class ParticipantsController extends Controller
 	 * Display the specified resource.
 	 *
 	 */
-	public function show(Participant $participant)
+	public function show(Participant $participant, string $viewType = 'admin')
 	{
-
-		$viewType = 'admin';
 		// Make a 'courses on camp' array
 		$courseOnCamp = [];
 		foreach ($participant->events as $event) {

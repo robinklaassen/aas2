@@ -336,7 +336,7 @@ class Member extends Model
 		if (($key = array_search($this->id, $fellow_ids)) !== false) {
 			unset($fellow_ids[$key]);
 		}
-		$fellows = \App\Member::whereIn('id', $fellow_ids)->orderBy('voornaam')->get();
+		$fellows = Member::whereIn('id', $fellow_ids)->orderBy('voornaam')->get();
 		return $fellows;
 	}
 

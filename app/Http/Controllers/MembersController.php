@@ -46,10 +46,8 @@ class MembersController extends Controller
 	}
 
 	# Member details page
-	public function show(Member $member)
+	public function show(Member $member, string $viewType = 'admin')
 	{
-		$viewType = 'admin';
-
 		return view('members.show', compact('member', 'viewType'));
 	}
 

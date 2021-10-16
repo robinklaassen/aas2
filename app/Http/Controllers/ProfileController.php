@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use App\Member;
 use App\Participant;
-use App\Event;
 use App\Skill;
 use App\Course;
+use App\Event;
 use App\EventPackage;
-use App\User;
+use App\Facades\Mollie;
 use App\Http\Controllers\Controller;
 use App\Helpers\Payment\EventPayment;
-use App\Facades\Mollie;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -28,6 +28,15 @@ use Barryvdh\DomPDF\PDF;
 class ProfileController extends Controller
 {
 
+	/** @var User */
+	private $user;
+
+	/** @var Member */
+	private $member;
+
+	/** @var Participant */
+	private $participant;
+
 	private $membersController;
 	private $participantsController;
 
@@ -35,6 +44,13 @@ class ProfileController extends Controller
 	{
 		$this->membersController = $membersController;
 		$this->participantsController = $participantsController;
+		$this->user = Auth::user();
+
+		if ($this->user->profile_type == Member::class) {
+			$this->member = $this->user->profile;
+		} elseif ($this->user->profile_type == Participant::class) {
+			$this->participant = $this->user->profile;
+		}
 	}
 
 	/**
@@ -47,40 +63,12 @@ class ProfileController extends Controller
 	{
 		$viewType = 'profile';
 
-		if (Auth::user()->profile_type == Member::class) {
-			$member = Auth::user()->profile;
-
-			// Who has this member been on camp with?
-			$events = $member->events()->where('type', 'kamp')->where('datum_eind', '<', date('Y-m-d'))->get();
-			$fellow_ids = [];
-			foreach ($events as $event) {
-				$fellow_ids = array_merge($fellow_ids, $event->members()->pluck('id')->toArray());
-			}
-			$fellow_ids = array_unique($fellow_ids);
-			if (($key = array_search($member->id, $fellow_ids)) !== false) {
-				unset($fellow_ids[$key]);
-			}
-			$fellows = Member::whereIn('id', $fellow_ids)->orderBy('voornaam')->get();
-
-			return view('members.show', compact('member', 'viewType', 'fellows'));
+		if ($this->member) {
+			return $this->membersController->show($this->member, $viewType);
 		}
 
-		if (Auth::user()->profile_type == Participant::class) {
-			$participant = Auth::user()->profile;
-			// Make a 'courses on camp' array
-			$courseOnCamp = [];
-			foreach ($participant->events as $event) {
-				$courseOnCamp[$event->id] = [];
-			}
-			$result = DB::table('course_event_participant')
-				->where('participant_id', '=', $participant->id)
-				->join('courses', 'course_event_participant.course_id', '=', 'courses.id')
-				->orderBy('courses.naam')
-				->get();
-			foreach ($result as $row) {
-				$courseOnCamp[$row->event_id][] = ['id' => $row->course_id, 'naam' => $row->naam, 'code' => $row->code];
-			}
-			return view('participants.show', compact('participant', 'viewType', 'courseOnCamp'));
+		if ($this->participant) {
+			return $this->participantsController->show($this->participant, $viewType);
 		}
 	}
 
