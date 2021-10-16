@@ -10,7 +10,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\MemberRequest;
 use App\Exports\MembersExport;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Builder;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -20,10 +20,10 @@ class MembersController extends Controller
 	/** @var User */
 	private $user;
 
-	public function __construct()
+	public function __construct(Authenticatable $user)
 	{
 		$this->authorizeResource(Member::class, 'member');
-		$this->user = Auth::user();
+		$this->user = $user;
 	}
 
 	# Index page

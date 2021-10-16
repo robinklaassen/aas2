@@ -13,6 +13,7 @@ use App\Facades\Mollie;
 use App\Http\Controllers\Controller;
 use App\Helpers\Payment\EventPayment;
 use Illuminate\Http\Request;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
@@ -40,11 +41,11 @@ class ProfileController extends Controller
 	private $membersController;
 	private $participantsController;
 
-	public function __construct(MembersController $membersController, ParticipantsController $participantsController)
+	public function __construct(Authenticatable $user, MembersController $membersController, ParticipantsController $participantsController)
 	{
 		$this->membersController = $membersController;
 		$this->participantsController = $participantsController;
-		$this->user = Auth::user();
+		$this->user = $user;
 
 		if ($this->user->profile_type == Member::class) {
 			$this->member = $this->user->profile;
