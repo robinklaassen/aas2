@@ -1,8 +1,12 @@
-<?php namespace App\Http\Middleware;
+<?php
+
+namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Http\Request;
 
-class RedirectIfNotAnAdmin {
+class RedirectIfNotAnAdmin
+{
 
 	/**
 	 * Handle an incoming request.
@@ -11,14 +15,12 @@ class RedirectIfNotAnAdmin {
 	 * @param  \Closure  $next
 	 * @return mixed
 	 */
-	public function handle($request, Closure $next)
+	public function handle(Request $request, Closure $next)
 	{
-		if ( ! \Auth::user()->is_admin )
-		{
+		if (!$request->user()->is_admin) {
 			return redirect('/home?noadmin');
 		}
-		
+
 		return $next($request);
 	}
-
 }

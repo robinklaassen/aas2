@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Middleware\UnderConstruction;
+use App\Http\Middleware\RedirectIfNotAMember;
+use App\Http\Middleware\RedirectIfNotAParticipant;
 use Illuminate\Support\Facades\Route;
 
 Route::get('home', 'PagesController@home');
@@ -14,22 +16,26 @@ Route::get('profile/edit', 'ProfileController@edit');
 Route::patch('profile', 'ProfileController@update');
 Route::get('profile/password', 'ProfileController@password');
 Route::put('profile/password', 'ProfileController@passwordSave');
-Route::get('profile/declare', 'ProfileController@declareForm');
-Route::put('profile/declare', 'ProfileController@declareSubmit');
-Route::get('profile/add-course', 'ProfileController@addCourse');
-Route::put('profile/add-course', 'ProfileController@addCourseSave');
-Route::get('profile/edit-course/{course}', 'ProfileController@editCourse');
-Route::put('profile/edit-course/{course}', 'ProfileController@editCourseSave');
-Route::get(
-    'profile/remove-course/{course}',
-    'ProfileController@removeCourseConfirm'
-);
 Route::get('profile/on-camp', 'ProfileController@onCamp');
 Route::put('profile/on-camp', 'ProfileController@onCampSave');
-Route::get('profile/edit-camp/{event}', 'ProfileController@editCamp');
-Route::put('profile/edit-camp/{event}', 'ProfileController@editCampSave');
-Route::delete('profile/remove-course/{course}', 'ProfileController@removeCourse');
-Route::get('profile/reviews/{event}', 'ProfileController@reviews');
+
+Route::middleware([RedirectIfNotAMember::class])->group(function () {
+    Route::get('profile/add-course', 'ProfileController@addCourse');
+    Route::put('profile/add-course', 'ProfileController@addCourseSave');
+    Route::get('profile/edit-course/{course}', 'ProfileController@editCourse');
+    Route::put('profile/edit-course/{course}', 'ProfileController@editCourseSave');
+    Route::get(
+        'profile/remove-course/{course}',
+        'ProfileController@removeCourseConfirm'
+    );
+    Route::delete('profile/remove-course/{course}', 'ProfileController@removeCourse');
+    Route::get('profile/reviews/{event}', 'ProfileController@reviews');
+});
+
+Route::middleware([RedirectIfNotAParticipant::class])->group(function () {
+    Route::get('profile/edit-camp/{event}', 'ProfileController@editCamp');
+    Route::put('profile/edit-camp/{event}', 'ProfileController@editCampSave');
+});
 
 # Comments
 Route::get("comments/{comment}/delete", "CommentsController@delete");

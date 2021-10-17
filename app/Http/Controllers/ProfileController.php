@@ -2,10 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
-use App\Member;
-use App\Participant;
-use App\Skill;
 use App\Course;
 use App\Event;
 use App\EventPackage;
@@ -18,13 +14,12 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Request as RequestFacade;
 use App\Mail\internal\MemberOnEventNotification;
 use App\Mail\internal\CoverageChangedNotification;
-use App\Mail\internal\NewDeclaration;
 use App\Mail\internal\ParticipantOnEventNotification;
 use App\Mail\internal\ParticipantEditedEventCourseInformationNotification;
-use Barryvdh\DomPDF\PDF;
+use App\Mail\participants\OnEventConfirmation as ParticipantOnEventConfirmationMail;
+use App\Mail\members\OnEventConfirmation as MemberOnEventConfirmationMail;
 
 class ProfileController extends Controller
 {
@@ -69,6 +64,8 @@ class ProfileController extends Controller
 	public function update(Request $request)
 	{
 		$successMessage = 'Je profiel is bewerkt!';
+
+		// Get the related form request from the container, this automatically performs the validation
 		$validatedRequest = ($request->user()->isMember()) ? app(MemberRequest::class) : app(ParticipantRequest::class);
 		return $this->getController($request)->update($request->user()->profile, $validatedRequest, $successMessage);
 	}
@@ -109,9 +106,9 @@ class ProfileController extends Controller
 		return view('users.password', compact('user', 'viewType'));
 	}
 
+	# Save new password in database
 	public function passwordSave(Request $request)
 	{
-		/** @var User */
 		$user = $request->user();
 		$this->validate($request, [
 			'password' => 'required|confirmed'
@@ -126,18 +123,18 @@ class ProfileController extends Controller
 	}
 
 	# Add course (member) (form)
-	public function addCourse()
+	public function addCourse(Request $request)
 	{
-		$member = Auth::user()->profile;
+		$member = $request->user()->profile;
 		$viewType = 'profile';
 		return view('members.addCourse', compact('member', 'viewType'));
 	}
 
 	# Add course (member) (update database)
-	public function addCourseSave()
+	public function addCourseSave(Request $request)
 	{
-		$member = Auth::user()->profile;
-		$course_id = RequestFacade::input('selected_course');  // TODO can probably be Request, as argument
+		$member = $request->user()->profile;
+		$course_id = $request->input('selected_course');
 		$course = Course::find($course_id);
 		$courseLevelFrom = 0;
 
@@ -150,11 +147,12 @@ class ProfileController extends Controller
 		if ($status['attached'] == []) {
 			$message = 'Vak reeds toegevoegd!';
 		} else {
+			// TODO put below code into an event listener
 			// Check if member goes on camp in near future
-			if ($event_id = goesOnCamp($member)) {
-				$camp = \App\Event::findOrFail($event_id);
+			if ($event_id = goesOnCamp($member)) {  // TODO refactor to Model method
+				$camp = Event::findOrFail($event_id);
 				// If so, check if this change makes or breaks the course coverage
-				$courseLevelTo = RequestFacade::input('klas');  // TODO remove facade
+				$courseLevelTo = $request->input('klas');
 				$member->courses()->updateExistingPivot($course_id, ['klas' => $courseLevelTo]);
 				$statusAfter = checkCoverage($camp, $course_id);
 
@@ -173,7 +171,7 @@ class ProfileController extends Controller
 				}
 			} else {
 				// If not, just update the course
-				$member->courses()->updateExistingPivot($course_id, ['klas' => RequestFacade::input('klas')]);  // TODO remove facade
+				$member->courses()->updateExistingPivot($course_id, ['klas' => $request->input('klas')]);
 			}
 
 			$message = 'Vak toegevoegd!';
@@ -184,27 +182,28 @@ class ProfileController extends Controller
 	}
 
 	# Edit course (member) (form)
-	public function editCourse($course_id)
+	public function editCourse(Request $request, $course_id)
 	{
-		$member = Auth::user()->profile;
+		$member = $request->user()->profile;
 		$course = $member->courses->find($course_id);
 		$viewType = 'profile';
 		return view('members.editCourse', compact('member', 'course', 'viewType'));
 	}
 
 	# Edit course (member) (update database)
-	public function editCourseSave($course_id)
+	public function editCourseSave(Request $request, $course_id)
 	{
-		$member = Auth::user()->profile;
+		$member = $request->user()->profile;
 		$course = Course::find($course_id);
 		$courseLevelFrom = $member->courses()->whereId($course_id)->first()->pivot->klas;
 
+		// TODO put below code into event listener
 		// Check if member goes on camp in near future
 		if ($event_id = goesOnCamp($member)) {
 			$camp = Event::findOrFail($event_id);
 			// If so, check if this change makes or breaks the course coverage
 			$statusBefore = checkCoverage($camp, $course_id);
-			$courseLevelTo = RequestFacade::input('klas');  // TODO remove facade
+			$courseLevelTo = $request->input('klas');
 			$member->courses()->updateExistingPivot($course_id, ['klas' => $courseLevelTo]);
 			$statusAfter = checkCoverage($camp, $course_id);
 
@@ -223,7 +222,7 @@ class ProfileController extends Controller
 			}
 		} else {
 			// If not, just update the course
-			$member->courses()->updateExistingPivot($course_id, ['klas' => RequestFacade::input('klas')]);  // TODO remove facade
+			$member->courses()->updateExistingPivot($course_id, ['klas' => $request->input('klas')]);
 		}
 
 		return redirect('profile')->with([
@@ -232,21 +231,22 @@ class ProfileController extends Controller
 	}
 
 	# Remove (detach) a course from this member (form)
-	public function removeCourseConfirm($course_id)
+	public function removeCourseConfirm(Request $request, $course_id)
 	{
-		$member = Auth::user()->profile;
+		$member = $request->user()->profile;
 		$course = Course::findOrFail($course_id);
 		$viewType = 'profile';
 		return view('members.removeCourse', compact('member', 'course', 'viewType'));
 	}
 
 	# Remove (detach) a course from this member (update database)
-	public function removeCourse($course_id)
+	public function removeCourse(Request $request, $course_id)
 	{
-		$member = Auth::user()->profile;
+		$member = $request->user()->profile;
 		$course = Course::find($course_id);
 		$courseLevelFrom = $member->courses()->whereId($course_id)->first()->pivot->klas;
 
+		// TODO put below code into event listener
 		// Check if member goes on camp in near future
 		if ($event_id = goesOnCamp($member)) {
 			$camp = Event::findOrFail($event_id);
@@ -280,9 +280,9 @@ class ProfileController extends Controller
 	}
 
 	# Go on camp (form)
-	public function onCamp()
+	public function onCamp(Request $request)
 	{
-		$profile = Auth::user()->profile;
+		$profile = $request->user()->profile;
 
 		// List of future camps that are not full
 		$camps = Event::participantEvent()
@@ -301,17 +301,18 @@ class ProfileController extends Controller
 		$course_options = Course::orderBy('naam')->pluck('naam', 'id')->toArray();
 		$course_options = [0 => '-geen vak-'] + $course_options;
 
+		// TODO view should be separated to member and participant versions
 		return view('profile.onCamp', compact('profile', 'camps', 'course_options', 'packages', 'package_type_per_camp'));
 	}
 
 	# Go on camp (update database)
 	public function onCampSave(Request $request)
 	{
-		$camp = \App\Event::findOrFail($request->selected_camp);
+		$camp = Event::findOrFail($request->selected_camp);
 
 		// Check if member or participant that's logged in
-		if (Auth::user()->profile_type == 'App\Member') {
-			$member = Auth::user()->profile;
+		if ($request->user()->isMember()) {
+			$member = $request->user()->profile;
 			$status = $member->events()->sync([$request->selected_camp], false);
 			if ($status['attached'] == []) {
 				return redirect('profile')->with([
@@ -323,15 +324,15 @@ class ProfileController extends Controller
 				Mail::send(new MemberOnEventNotification($member, $camp));
 
 				// Send confirmation to member
-				Mail::send(new \App\Mail\members\OnEventConfirmation($member, $camp));
+				Mail::send(new MemberOnEventConfirmationMail($member, $camp));
 
 				return redirect('profile')->with([
 					'flash_message' => 'Je gaat op kamp!'
 				]);
 			}
-		} elseif (Auth::user()->profile_type == Participant::class) {
+		} elseif ($request->user()->isParticipant()) {
 
-			$package = \App\EventPackage::find($request->selected_package);
+			$package = EventPackage::find($request->selected_package);
 
 			// Check given package for camp
 			if ($camp['package_type'] !== null && ($package === null || $package['type'] !== $camp['package_type'])) {
@@ -343,8 +344,7 @@ class ProfileController extends Controller
 				$package = null;
 			}
 
-
-			$participant = Auth::user()->profile;
+			$participant = $request->user()->profile;
 
 			$status = $participant->events()->sync([
 				$request->selected_camp => ["package_id" => $package !== null ? $package->id : null]
@@ -365,7 +365,7 @@ class ProfileController extends Controller
 					}
 				}
 
-				// Income table
+				// Setup payment
 				$payment = (new EventPayment())
 					->event($camp)
 					->participant($participant)
@@ -383,7 +383,7 @@ class ProfileController extends Controller
 				));
 
 				// Send confirmation email to parent
-				Mail::send(new \App\Mail\participants\OnEventConfirmation(
+				Mail::send(new ParticipantOnEventConfirmationMail(
 					$participant,
 					$camp,
 					$givenCourses,
@@ -406,16 +406,11 @@ class ProfileController extends Controller
 	}
 
 	# Edit camp (participant) (form)
-	public function editCamp($event_id)
+	public function editCamp(Request $request, $event_id)
 	{
-		// Redirect if not a participant
-		if (Auth::user()->profile_type != 'App\Participant') {
-			return redirect('profile');
-		}
-
-		$participant = Auth::user()->profile;
-		$event = \App\Event::findOrFail($event_id);
-		$course_options = \App\Course::orderBy('naam')->pluck('naam', 'id')->toArray();
+		$participant = $request->user()->profile;
+		$event = Event::findOrFail($event_id);
+		$course_options = Course::orderBy('naam')->pluck('naam', 'id')->toArray();
 		$course_options = [0 => '-geen vak-'] + $course_options;
 		$result = DB::table('course_event_participant')->select('course_id', 'info')->whereParticipantIdAndEventId($participant->id, $event_id)->get();
 		$retrieved_courses = [];
@@ -428,10 +423,7 @@ class ProfileController extends Controller
 	# Edit camp (participant) (save)
 	public function editCampSave(Request $request, $event_id)
 	{
-		// Throw a hopeless error when user is not a participant ;)
-		if (Auth::user()->profile_type == 'App\Participant') {
-			$participant = Auth::user()->profile;
-		}
+		$participant = $request->user()->profile;
 
 		// Delete all current courses
 		DB::table('course_event_participant')->whereParticipantIdAndEventId($participant->id, $event_id)->delete();
@@ -445,7 +437,7 @@ class ProfileController extends Controller
 			}
 		}
 
-		$camp = \App\Event::findOrFail($event_id);
+		$camp = Event::findOrFail($event_id);
 
 		// Send update to office committee
 		Mail::send(
@@ -460,105 +452,10 @@ class ProfileController extends Controller
 		]);
 	}
 
-	# Declaration (form)
-	public function declareForm()
-	{
-
-		return view('profile.declare');
-	}
-
-
-	# Declaration (submit)
-	public function declareSubmit(Request $request)
-	{
-
-		// Member profile
-		$member = Auth::user()->profile;
-
-		// Create destination folder if not exists
-		$destination = public_path() . '/img/declarations/' . $member->id . '/';
-		if (!file_exists($destination)) {
-			mkdir($destination, 0777, true);
-		}
-
-
-		// Check and move files
-		$file_numbers = [];
-		$file_names = [];
-		for ($i = 0; $i < count($request->get('denotion')); $i++) {
-			if ($request->hasFile('uploaded' . ($i + 1))) {
-				$file_numbers[] = $i + 1;
-				$file = $request->file('uploaded' . ($i + 1));
-				$filename = $file->getClientOriginalName();
-				$newFilename = date('Y-m-d') . ' - ' . ($i + 1) . ' - ' . $filename;
-
-				$file->move($destination, $newFilename);
-
-				$file_names[] = $destination . $newFilename;
-			}
-		}
-
-		// Obtain other inputs and check
-		$fileNumberArray = $request->get('fileNumber');
-		$dateArray = $request->get('date');
-		$descriptionArray = $request->get('description');
-		$amountArray = $request->get('amount');
-		$giftArray = $request->get('gift'); // Watch it, not complete array, only has keys for checked
-		$totalAmount = $request->get('totalAmount');
-
-		$inputData = [];
-		foreach ($fileNumberArray as $key => $fileNumber) {
-			if ($fileNumber != "") {
-
-				$gift = (isset($giftArray[$key])) ? 1 : 0;
-
-				$inputData[] = [
-					'fileNumber' => $fileNumber,
-					'date' => $dateArray[$key],
-					'description' => $descriptionArray[$key],
-					'amount' => sprintf('%0.2f', $amountArray[$key]),
-					'gift' => $gift
-				];
-			}
-		}
-
-		if ($inputData == []) {
-			return redirect('profile')->with([
-				'flash_error' => 'Geen informatie opgegeven, declaratie is niet verstuurd!'
-			]);
-		} else {
-
-			// Create pdf of declaration info
-			$formFilePath = $destination . date('Y-m-d') . ' declaratieformulier.pdf';
-			$pdf = PDF::loadView('profile.declarePDF', compact('member', 'inputData', 'totalAmount'))
-				->setPaper('a4')
-				//->setOrientation('landscape')
-				->setWarnings(true)
-				->save($formFilePath);
-
-			//return $pdf->stream();
-
-			// Send email with data and files to treasurer and uploader
-			Mail::send(
-				new NewDeclaration(
-					$member,
-					$formFilePath,
-					$inputData,
-					$totalAmount,
-					$file_names
-				)
-			);
-
-			return redirect('profile')->with([
-				'flash_message' => 'De declaratie is verstuurd!'
-			]);
-		}
-	}
-
 	# Show reviews of specified camp
-	public function reviews($event_id)
+	public function reviews(Request $request, $event_id)
 	{
-		$member = Auth::user()->profile;
+		$member = $request->user()->profile;
 		$event = Event::findOrFail($event_id);
 
 		$options = [
