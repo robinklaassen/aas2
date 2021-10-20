@@ -1,13 +1,7 @@
 <?php
-// Formats an integer to a proper price format, e.g. € 17,95
-function formatPrice($price)
-{
-	$formatted = number_format($price, 2, ',', '');
-	$formatted = '&euro; ' . $formatted;
-	
-	return $formatted;
-}
 
+use Illuminate\Support\Facades\DB;
+use Khill\Lavacharts\Laravel\LavachartsFacade as Lava; 
 
 // Checks if a member goes on camp in the near future, returns first event ID or false
 function goesOnCamp($member)
@@ -33,7 +27,7 @@ function checkCoverage($camp, $course_id)
 	$memberIDs = $camp->members->pluck('id')->toArray();
 
 	// Obtain members that have this course
-	$result = \DB::table('course_member')
+	$result = DB::table('course_member')
 		->whereIn('member_id', $memberIDs)
 		->where('course_id', $course_id)
 		->get();
@@ -46,7 +40,7 @@ function checkCoverage($camp, $course_id)
 	}
 	
 	// Obtain participants that have this course
-	$result = \DB::table('course_event_participant')
+	$result = DB::table('course_event_participant')
 		->where('event_id', $camp->id)
 		->where('course_id', $course_id)
 		->join('participants', 'course_event_participant.participant_id', '=', 'participants.id')
@@ -103,19 +97,19 @@ function checkCoverage($camp, $course_id)
 
 # Function to create a bar chart for review results using LavaCharts
 function createReviewChart($event, $name, $options, $member = NULL) {
-	$dt = \Lava::DataTable();
+	$dt = Lava::DataTable();
 	$dt->addStringColumn('Optie');
 	$dt->addNumberColumn('Aantal');
 	
 	if (is_null($member)) {
 		$q = $event->reviews()
-				->select($name, \DB::raw('count(*) as total'))
+				->select($name, DB::raw('count(*) as total'))
 				->groupBy($name)
 				->pluck('total', $name)->toArray();
 	} else {
 		$q = $member->reviews()
 				->where('event_id', $event->id)
-				->select($name, \DB::raw('count(*) as total'))
+				->select($name, DB::raw('count(*) as total'))
 				->groupBy($name)
 				->pluck('total', $name)->toArray();
 	}
@@ -128,7 +122,7 @@ function createReviewChart($event, $name, $options, $member = NULL) {
 		}
 	}
 	
-	\Lava::BarChart($name, $dt, [
+	Lava::BarChart($name, $dt, [
 		'width' => '100%',
 		'height' => '250',
 		'chartArea' => [
@@ -148,60 +142,6 @@ function createReviewChart($event, $name, $options, $member = NULL) {
 			'position' => 'none'
 		]
 	]);
-}
-
-
-/* Zip function from David Walsh, https://davidwalsh.name/create-zip-php */
-function create_zip($files = array(),$destination = '',$overwrite = false, $flat = true) {
-
-	//if the zip file already exists and overwrite is false, return false
-	if(file_exists($destination) && !$overwrite) { return "Error - was told not to overwrite existing zip file"; }
-	//vars
-	$valid_files = array();
-	//if files were passed in...
-	if(is_array($files)) {
-		//cycle through each file
-		foreach($files as $file) {
-			//make sure the file exists
-			if(file_exists($file)) {
-				$valid_files[] = $file;
-			}
-		}
-	}
-	//if we have good files...
-	if(count($valid_files)) {
-		//create the archive
-		$zip = new ZipArchive();
-
-		if($zip->open($destination,$overwrite ? ZIPARCHIVE::OVERWRITE|ZIPARCHIVE::CREATE : ZIPARCHIVE::CREATE) !== true) {
-			return "Error opening zip file for writing";
-		}
-
-		//add the files
-		foreach($valid_files as $file) {
-			if ($flat) {
-				$local = array_slice(explode('/', $file), -1)[0];
-				//$debug .= $local;
-				$zip->addFile($file, $local);
-			} else {
-				$zip->addFile($file,$file);
-			}
-			
-		}
-		//debug
-		//$debug = 'The zip archive contains '. $zip->numFiles . ' files with a status of ' . $zip->status;
-		
-		//close the zip -- done!
-		$zip->close();
-		
-		//check to make sure the file exists
-		//return file_exists($destination);
-		return true;
-	}
-	else
-	{
-		return "Error - no valid files found";
-	}
 }
 
 ?>

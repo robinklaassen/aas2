@@ -63,17 +63,16 @@ class ProfileController extends Controller
 	# Update the specified resource in storage.
 	public function update(Request $request)
 	{
-		$successMessage = 'Je profiel is bewerkt!';
-
 		// Get the related form request from the container, this automatically performs the validation
 		$validatedRequest = ($request->user()->isMember()) ? app(MemberRequest::class) : app(ParticipantRequest::class);
+		$successMessage = 'Je profiel is bewerkt!';
 		return $this->getController($request)->update($request->user()->profile, $validatedRequest, $successMessage);
 	}
 
 	# Upload photo
 	public function upload(Request $request)
 	{
-		// TODO move all this code to a separate service
+		// TODO move all this code to a separate photo/avatar service
 		if ($request->hasFile('photo')) {
 			$file = $request->file('photo');
 			if ($file->isValid()) {
@@ -149,12 +148,12 @@ class ProfileController extends Controller
 		} else {
 			// TODO put below code into an event listener
 			// Check if member goes on camp in near future
-			if ($event_id = goesOnCamp($member)) {  // TODO refactor to Model method
+			if ($event_id = goesOnCamp($member)) {  // TODO refactor to Member model method
 				$camp = Event::findOrFail($event_id);
 				// If so, check if this change makes or breaks the course coverage
 				$courseLevelTo = $request->input('klas');
 				$member->courses()->updateExistingPivot($course_id, ['klas' => $courseLevelTo]);
-				$statusAfter = checkCoverage($camp, $course_id);
+				$statusAfter = checkCoverage($camp, $course_id);  // TODO refactor to Event model method
 
 				// If coverage status changes, send email to camp committe
 				if ($statusBefore != $statusAfter) {

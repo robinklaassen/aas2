@@ -209,6 +209,7 @@ class MembersController extends Controller
 	}
 
 	# Search members by coverage
+	// TODO method is quite long, refactor into model/service
 	public function search(Request $request)
 	{
 		$this->authorize("viewAny", Member::class);
