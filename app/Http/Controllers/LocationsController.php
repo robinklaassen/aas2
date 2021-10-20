@@ -6,8 +6,7 @@ use App\Location;
 use App\Event;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-
-use Illuminate\Http\Request;
+use App\Services\ReviewChartService;
 
 class LocationsController extends Controller
 {
@@ -113,18 +112,16 @@ class LocationsController extends Controller
 	public function reviews(Location $location, Event $event)
 	{
 		$this->authorize("viewReviewResults", $event);
-		// Repeatedly set options and create charts using a helper function based on LavaCharts
+		
+		$questions = collect([
+			'kh-slaap',
+			'kh-bijspijker',
+			'kh-geheel'
+		]);
 
-		$options = [
-			1 => 'Slecht',
-			2 => 'Onvoldoende',
-			3 => 'Voldoende',
-			4 => 'Goed'
-		];
-
-		createReviewChart($event, 'kh-slaap', $options);
-		createReviewChart($event, 'kh-bijspijker', $options);
-		createReviewChart($event, 'kh-geheel', $options);
+		$questions->map(function ($question) use ($event) {
+			ReviewChartService::create($event, $question);
+		});
 
 		return view('locations.reviews', compact('location', 'event'));
 	}

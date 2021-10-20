@@ -11,6 +11,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\MemberRequest;
 use App\Http\Requests\ParticipantRequest;
 use App\Helpers\Payment\EventPayment;
+use App\Services\ReviewChartService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
@@ -459,43 +460,16 @@ class ProfileController extends Controller
 		$member = $request->user()->profile;
 		$event = Event::findOrFail($event_id);
 
-		$options = [
-			1 => 'Zeer slecht',
-			2 => 'Slecht',
-			3 => 'Gewoon',
-			4 => 'Goed',
-			5 => 'Zeer goed'
-		];
+		$questions = collect([
+			'stof',
+			'aandacht',
+			'mening',
+			'tevreden'
+		]);
 
-		createReviewChart($event, 'stof', $options, $member);
-
-		$options = [
-			1 => 'Te weinig',
-			2 => 'Weinig',
-			3 => 'Voldoende',
-			4 => 'Veel'
-		];
-
-		createReviewChart($event, 'aandacht', $options, $member);
-
-		$options = [
-			1 => 'Zeer vervelend',
-			2 => 'Vervelend',
-			3 => 'Gewoon',
-			4 => 'Prettig',
-			5 => 'Zeer prettig'
-		];
-
-		createReviewChart($event, 'mening', $options, $member);
-
-		$options = [
-			1 => 'Erg ontevreden',
-			2 => 'Een beetje ontevreden',
-			3 => 'Een beetje tevreden',
-			4 => 'Erg tevreden'
-		];
-
-		createReviewChart($event, 'tevreden', $options, $member);
+		$questions->map(function ($question) use ($event, $member) {
+			ReviewChartService::create($event, $question, $member);
+		});
 
 		return view('profile.reviews', compact('event', 'member'));
 	}

@@ -2,14 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Review;
-use App\Member;
 use App\Event;
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
+use App\Review;
 use Carbon\Carbon;
-
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class ReviewsController extends Controller
 {
@@ -37,7 +34,8 @@ class ReviewsController extends Controller
 	# Process survey form
 	public function reviewPost(Event $event, Request $request)
 	{
-
+		// TODO create a ReviewRequest for validation
+		
 		// Error messages
 		$messages = [
 			'bs-uren.required' => 'Vul het gemiddeld aantal bijspijkeruren per dag in.',
@@ -69,7 +67,7 @@ class ReviewsController extends Controller
 		}
 
 		// Validate
-		$validator = \Validator::make($request->all(), [
+		$validator = Validator::make($request->all(), [
 			'bs-uren' => 'required|numeric',
 			'bs-mening' => 'required',
 			'bs-tevreden' => 'required',

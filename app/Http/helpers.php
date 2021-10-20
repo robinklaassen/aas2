@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\DB;
 use Khill\Lavacharts\Laravel\LavachartsFacade as Lava; 
 
 // Checks the current status of coverage for a certain course at a certain event, returns true or false
+// TODO this is used by profile controller, how does the coverage checker work? We can probably combine those methods
 function checkCoverage($camp, $course_id)
 {
 
@@ -76,55 +77,6 @@ function checkCoverage($camp, $course_id)
 
 	return $status;
 	
-}
-
-# Function to create a bar chart for review results using LavaCharts
-function createReviewChart($event, $name, $options, $member = NULL) {
-	$dt = Lava::DataTable();
-	$dt->addStringColumn('Optie');
-	$dt->addNumberColumn('Aantal');
-	
-	if (is_null($member)) {
-		$q = $event->reviews()
-				->select($name, DB::raw('count(*) as total'))
-				->groupBy($name)
-				->pluck('total', $name)->toArray();
-	} else {
-		$q = $member->reviews()
-				->where('event_id', $event->id)
-				->select($name, DB::raw('count(*) as total'))
-				->groupBy($name)
-				->pluck('total', $name)->toArray();
-	}
-	
-	foreach ($options as $n => $t) {
-		if (array_key_exists($n, $q)) {
-			$dt->addRow([$t, $q[$n]]);
-		} else {
-			$dt->addRow([$t, 0]);
-		}
-	}
-	
-	Lava::BarChart($name, $dt, [
-		'width' => '100%',
-		'height' => '250',
-		'chartArea' => [
-			'top' => 25,
-			'left' => '25%',
-		//	'height' => 180,
-			'width' => '70%'
-		],
-		'fontSize' => 14,
-		'hAxis' => [
-			'minValue' => 0,
-			'gridlines' => [
-				'count' => -1
-			]
-		],
-		'legend' => [
-			'position' => 'none'
-		]
-	]);
 }
 
 ?>

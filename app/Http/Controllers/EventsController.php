@@ -12,6 +12,7 @@ use App\Exports\EventPaymentReport;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Http\Request;
 use App\Http\Requests\Events\EditEventMemberRequest;
+use App\Services\ReviewChartService;
 
 class EventsController extends Controller
 {
@@ -569,65 +570,20 @@ class EventsController extends Controller
 	# Show review results
 	public function reviews(Event $event)
 	{
-
 		$this->authorize("viewReviewResults", $event);
-		// // Auth: either have to be admin or have gone on this camp as a member
-		// if (!(\Auth::user()->is_admin)) {
 
-		// 	$is_member = (\Auth::user()->profile_type == "App\Member");
-		// 	$on_camp = \Auth::user()->profile->events->contains("id", $event->id);
+		$questions = collect([
+			'bs-mening',
+			'bs-tevreden',
+			'bs-manier',
+			'bs-thema',
+			'slaaptijd',
+			'kamplengte'
+		]);
 
-		// 	if (!($is_member && $on_camp)) {
-		// 		return redirect()->back();
-		// 	}
-		// }
-
-		// Repeatedly set options and create charts using a helper function based on LavaCharts
-
-		$options = [
-			1 => 'Te weinig',
-			2 => 'Voldoende',
-			3 => 'Te veel'
-		];
-
-		createReviewChart($event, 'bs-mening', $options);
-
-		$options = [
-			1 => 'Erg ontevreden',
-			2 => 'Een beetje ontevreden',
-			3 => 'Een beetje tevreden',
-			4 => 'Erg tevreden'
-		];
-
-		createReviewChart($event, 'bs-tevreden', $options);
-
-		$options = [
-			0 => 'Nee',
-			1 => 'Ja'
-		];
-
-		createReviewChart($event, 'bs-manier', $options);
-
-		createReviewChart($event, 'bs-thema', $options);
-
-		$options = [
-			1 => 'Veel te weinig',
-			2 => 'Weinig',
-			3 => 'Genoeg',
-			4 => 'Meer dan genoeg'
-		];
-
-		createReviewChart($event, 'slaaptijd', $options);
-
-		$options = [
-			1 => 'Veel te kort',
-			2 => 'Te kort',
-			3 => 'Precies goed',
-			4 => 'Te lang',
-			5 => 'Veel te lang'
-		];
-
-		createReviewChart($event, 'kamplengte', $options);
+		$questions->map(function ($question) use ($event) {
+			ReviewChartService::create($event, $question);
+		});
 
 		return view('events.reviews', compact('event'));
 	}
