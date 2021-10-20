@@ -3,23 +3,6 @@
 use Illuminate\Support\Facades\DB;
 use Khill\Lavacharts\Laravel\LavachartsFacade as Lava; 
 
-// Checks if a member goes on camp in the near future, returns first event ID or false
-function goesOnCamp($member)
-{
-	$result = false;
-	
-	$dates = $member->events()->where('type', 'kamp')->orderBy('datum_start')->pluck('datum_start','id')->toArray();
-
-	foreach ($dates as $id => $date) {
-		if (strtotime($date) > time() ) {
-			$result = $id;
-			break;
-		}
-	}
-	
-	return $result;
-}
-
 // Checks the current status of coverage for a certain course at a certain event, returns true or false
 function checkCoverage($camp, $course_id)
 {

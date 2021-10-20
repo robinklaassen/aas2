@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Events\MemberUpdated;
+use Carbon\Carbon;
 use Collective\Html\Eloquent\FormAccessible;
 use Illuminate\Support\Arr;
 use Illuminate\Database\Eloquent\Model;
@@ -18,10 +19,10 @@ class Member extends Model
 	protected $dates = ['created_at', 'updated_at', 'geboortedatum'];
 
 	protected $spatialFields = ['geolocatie'];
-	
+
 	// Number of points needed for every level in the points system
 	const RANK_POINTS = [0, 3, 10, 20, 35, 50, 70, 100];
-	
+
 	protected $dispatchesEvents = [
 		'updated' => MemberUpdated::class
 	];
@@ -191,7 +192,7 @@ class Member extends Model
 		if ($this->is_maxed_rank) {
 			return 100;
 		}
-		
+
 		$current = $this->points;
 		$start = $this::RANK_POINTS[$this->rank];
 		$end = $this::RANK_POINTS[$this->rank + 1];
@@ -362,5 +363,15 @@ class Member extends Model
 	public function formSkillsAttribute($value)
 	{
 		return $this->skills()->pluck('id');
+	}
+
+	# Return first future camp that this member goes on, or null
+	public function getNextCamp(): ?Event
+	{
+		return $this->events()
+			->where('type', 'kamp')
+			->where('datum_start', '>', Carbon::now())
+			->orderBy('datum_start')
+			->first();
 	}
 }

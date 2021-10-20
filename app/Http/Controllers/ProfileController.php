@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Course;
 use App\Event;
 use App\EventPackage;
+use App\Member;
 use App\Facades\Mollie;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MemberRequest;
@@ -137,8 +138,9 @@ class ProfileController extends Controller
 		$course = Course::find($course_id);
 		$courseLevelFrom = 0;
 
-		if ($event_id = goesOnCamp($member)) {
-			$camp = Event::findOrFail($event_id);
+		$camp = $member->getNextCamp();
+
+		if ($camp !== null) {
 			$statusBefore = checkCoverage($camp, $course_id);
 		}
 
@@ -148,8 +150,7 @@ class ProfileController extends Controller
 		} else {
 			// TODO put below code into an event listener
 			// Check if member goes on camp in near future
-			if ($event_id = goesOnCamp($member)) {  // TODO refactor to Member model method
-				$camp = Event::findOrFail($event_id);
+			if ($camp !== null) {
 				// If so, check if this change makes or breaks the course coverage
 				$courseLevelTo = $request->input('klas');
 				$member->courses()->updateExistingPivot($course_id, ['klas' => $courseLevelTo]);
@@ -192,14 +193,15 @@ class ProfileController extends Controller
 	# Edit course (member) (update database)
 	public function editCourseSave(Request $request, $course_id)
 	{
+		/** @var Member */
 		$member = $request->user()->profile;
 		$course = Course::find($course_id);
 		$courseLevelFrom = $member->courses()->whereId($course_id)->first()->pivot->klas;
 
 		// TODO put below code into event listener
 		// Check if member goes on camp in near future
-		if ($event_id = goesOnCamp($member)) {
-			$camp = Event::findOrFail($event_id);
+		$camp = $member->getNextCamp();
+		if ($camp !== null) {
 			// If so, check if this change makes or breaks the course coverage
 			$statusBefore = checkCoverage($camp, $course_id);
 			$courseLevelTo = $request->input('klas');
@@ -247,8 +249,8 @@ class ProfileController extends Controller
 
 		// TODO put below code into event listener
 		// Check if member goes on camp in near future
-		if ($event_id = goesOnCamp($member)) {
-			$camp = Event::findOrFail($event_id);
+		$camp = $member->getNextCamp();
+		if ($camp !== null) {
 			// If so, check if this change makes or breaks the course coverage
 			$statusBefore = checkCoverage($camp, $course_id);
 			$courseLevelTo = 0;
