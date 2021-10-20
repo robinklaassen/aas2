@@ -5,14 +5,16 @@ namespace App\Http\Controllers;
 use App\Event;
 use App\Member;
 use App\Participant;
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
 use App\Exports\EventNightRegisterReport;
 use App\Exports\EventPaymentReport;
-use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Http\Request;
+use App\Http\Requests\EventRequest;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Events\EditEventMemberRequest;
 use App\Services\ReviewChartService;
+use Barryvdh\DomPDF\Facade as PDF;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class EventsController extends Controller
 {
@@ -52,7 +54,7 @@ class EventsController extends Controller
 	 *
 	 * @return Response
 	 */
-	public function store(Requests\EventRequest $request)
+	public function store(EventRequest $request)
 	{
 		Event::create($request->all());
 		return redirect('events')->with([
@@ -66,13 +68,13 @@ class EventsController extends Controller
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function show(Event $event)
+	public function show(Request $request, Event $event)
 	{
 
 		// Obtain participant course information
 		$participantCourseString = array();
 		foreach ($event->participants->all() as $p) {
-			$result = \DB::table('course_event_participant')
+			$result = DB::table('course_event_participant')
 				->where('event_id', $event->id)
 				->where('participant_id', $p->id)
 				->join('courses', 'course_event_participant.course_id', '=', 'courses.id')
@@ -95,7 +97,7 @@ class EventsController extends Controller
 		}
 
 		// Check number of participants to show
-		if (\Auth::user()->can("viewParticipantsAdvanced", $event)) {
+		if ($request->user()->can("viewParticipantsAdvanced", $event)) {
 			$numberOfParticipants = $event->participants->count();
 		} else {
 			$numberOfParticipants = $event->participants()->wherePivot('geplaatst', 1)->count();
@@ -122,7 +124,7 @@ class EventsController extends Controller
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update(Event $event, Requests\EventRequest $request)
+	public function update(Event $event, EventRequest $request)
 	{
 		$this->authorize("update", $event);
 
@@ -204,7 +206,7 @@ class EventsController extends Controller
 
 		$participant = $event->participants->find($participant->id);
 
-		$result = \DB::table('course_event_participant')->select('course_id', 'info')->whereParticipantIdAndEventId($participant->id, $event->id)->get();
+		$result = DB::table('course_event_participant')->select('course_id', 'info')->whereParticipantIdAndEventId($participant->id, $event->id)->get();
 		$retrieved_courses = [];
 		foreach ($result as $row) {
 			$retrieved_courses[] = ['id' => $row->course_id, 'info' => $row->info];
@@ -221,12 +223,12 @@ class EventsController extends Controller
 		$event->participants()->updateExistingPivot($participant->id, ['datum_betaling' => $request->datum_betaling, 'geplaatst' => $request->geplaatst]);
 
 		// Delete all current courses
-		\DB::table('course_event_participant')->whereParticipantIdAndEventId($participant->id, $event->id)->delete();
+		DB::table('course_event_participant')->whereParticipantIdAndEventId($participant->id, $event->id)->delete();
 
 		// Insert new courses
 		foreach (array_unique($request->vak) as $key => $course_id) {
 			if ($course_id) {
-				\DB::table('course_event_participant')->insert(
+				DB::table('course_event_participant')->insert(
 					['course_id' => $course_id, 'event_id' => $event->id, 'participant_id' => $participant->id, 'info' => $request->vakinfo[$key]]
 				);
 			}
@@ -249,7 +251,7 @@ class EventsController extends Controller
 		$this->authorize("removeParticipant", [$event, $participant]);
 
 		$event->participants()->detach($participant->id);
-		\DB::table('course_event_participant')->where('event_id', $event->id)->where('participant_id', $participant->id)->delete();
+		DB::table('course_event_participant')->where('event_id', $event->id)->where('participant_id', $participant->id)->delete();
 		return redirect('events/' . $event->id)->with([
 			'flash_message' => 'De deelnemer is van dit evenement verwijderd!'
 		]);
@@ -275,7 +277,7 @@ class EventsController extends Controller
 		}
 
 		// Construct course array
-		$result = \DB::table('course_event_participant')
+		$result = DB::table('course_event_participant')
 			->where('event_id', '=', $event->id)
 			->join('courses', 'course_event_participant.course_id', '=', 'courses.id')
 			->orderBy('courses.naam')
@@ -314,11 +316,12 @@ class EventsController extends Controller
 		}
 
 		// Generate and output PDF
-		$pdf = \PDF::loadView('events.export', compact('event', 'participants', 'num_participants_placed', 'participantCourses', 'stats', 'age_freq'))->setPaper('a4')->setWarnings(true);
+		$pdf = PDF::loadView('events.export', compact('event', 'participants', 'num_participants_placed', 'participantCourses', 'stats', 'age_freq'))->setPaper('a4')->setWarnings(true);
 		return $pdf->stream();
 	}
 
 	# Check course coverage (vakdekking)
+	// TODO refactor to CourseCoverageService or something, code could also be used for member/course changes
 	public function check(Event $event, $type)
 	{
 		$this->authorize("subjectCheck", $event);
@@ -334,7 +337,7 @@ class EventsController extends Controller
 		// Loop through all courses
 		foreach ($courses as $course) {
 			// Obtain members that have this course
-			$result = \DB::table('course_member')
+			$result = DB::table('course_member')
 				->whereIn('member_id', $memberIDs)
 				->where('course_id', $course->id)
 				->join('members', 'course_member.member_id', '=', 'members.id')
@@ -352,7 +355,7 @@ class EventsController extends Controller
 
 
 			// Obtain participants that have this course
-			$result = \DB::table('course_event_participant')
+			$result = DB::table('course_event_participant')
 				->where('event_id', $event->id)
 				->where('course_id', $course->id)
 				->join('participants', 'course_event_participant.participant_id', '=', 'participants.id')
@@ -412,6 +415,7 @@ class EventsController extends Controller
 	}
 
 	# Calculate camp budget
+	// TODO method is not up to date anymore with current calculations, check if still used, otherwise remove
 	public function budget(Event $event)
 	{
 		$this->authorize("budget", $event);
@@ -605,7 +609,7 @@ class EventsController extends Controller
 		foreach (['event_participant', 'course_event_participant'] as $table) {
 			$query = "UPDATE " . $table . " SET event_id = " . $request->destination . " WHERE event_id = " . $event->id . " AND participant_id = " . $participant_id;
 
-			\DB::statement($query);
+			DB::statement($query);
 		}
 
 		return redirect('events')->with([
