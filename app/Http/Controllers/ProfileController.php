@@ -14,7 +14,6 @@ use App\Http\Requests\ParticipantRequest;
 use App\Helpers\Payment\EventPayment;
 use App\Services\ReviewChartService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
 use App\Mail\internal\MemberOnEventNotification;
@@ -79,7 +78,7 @@ class ProfileController extends Controller
 		if ($request->hasFile('photo')) {
 			$file = $request->file('photo');
 			if ($file->isValid()) {
-				$profile = Auth::user()->profile;
+				$profile = $request->user()->profile;
 
 				// Move the file to storage
 				$destPath = public_path() . '/img/profile/full/';
