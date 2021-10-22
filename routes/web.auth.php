@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Middleware\UnderConstruction;
 use App\Http\Middleware\RedirectIfNotAMember;
 use App\Http\Middleware\RedirectIfNotAParticipant;
 use Illuminate\Support\Facades\Route;

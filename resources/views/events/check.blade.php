@@ -26,20 +26,35 @@
 		</tr>
 	</thead>
 	<tbody>
-		@foreach ($courses as $course)
-			<tr @if ($numbers[$course->id]['p'] == 0) class="changeable" style="display:none;" @endif >
-				<td>{{ $course->naam }}</td>
-
-				<td><span data-toggle="tooltip" data-html="true" data-placement="right" title="{{ $tooltips[$course->id]['p'] }}">{{ $numbers[$course->id]['p'] }}</span></td>
-
-				<td><span data-toggle="tooltip" data-html="true" data-placement="right" title="{{ $tooltips[$course->id]['m'] }}">{{ $numbers[$course->id]['m'] }}</span></td>
+		@foreach ($coverageInfo as $c)
+			<tr @if ($c['participants']->isEmpty()) class="changeable" style="display:none;" @endif >
+				<td>{{ $c['naam'] }}</td>
 
 				<td>
-					@if ($status[$course->id] == 'ok')
+					<span data-toggle="tooltip" data-html="true" data-placement="right"
+					 title="@foreach ($c['participants'] as $p)
+					 	{{ $p->voornaam }} ({{ $p->klas }})<br/>
+					 @endforeach">
+					 	{{ $c['participants']->count() }}
+					</span>
+				</td>
+
+				<td>
+					<span 
+					data-toggle="tooltip" data-html="true" data-placement="right" 
+					title="@foreach ($c['members'] as $m)
+						{{ $m->voornaam }} ({{ $m->pivot->klas }})<br/>
+					@endforeach">
+						{{ $c['members']->count() }}
+					</span>
+				</td>
+
+				<td>
+					@if ($c['status'] == 'ok')
 						<span data-toggle="tooltip" data-placement="right" title="OK!" class="glyphicon glyphicon-ok"></span>
-					@elseif ($status[$course->id] == 'badquota')
+					@elseif ($c['status'] == 'badquota')
 						<span data-toggle="tooltip" data-placement="right" title="Niet genoeg leiding!" class="glyphicon glyphicon-alert"></span>
-					@elseif ($status[$course->id] == 'badlevel')
+					@elseif ($c['status'] == 'badlevel')
 						<span data-toggle="tooltip" data-placement="right" title="Onvoldoende niveau!" class="glyphicon glyphicon-alert"></span>
 					@endif
 				</td>

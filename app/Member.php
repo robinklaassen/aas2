@@ -374,4 +374,12 @@ class Member extends Model
 			->orderBy('datum_start')
 			->first();
 	}
+
+	# Query scope to filter members on a specific event
+	public function scopeOnEvent($query, Event $event)
+	{
+		return $query->whereHas('events', function ($q) use ($event) {
+			$q->where('id', $event->id);
+		});
+	}
 }

@@ -1,5 +1,7 @@
 <?php
 
+namespace Tests\Unit\Models;
+
 use App\Member;
 use App\Event;
 use Illuminate\Foundation\Testing\DatabaseTransactions;

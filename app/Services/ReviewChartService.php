@@ -112,7 +112,7 @@ class ReviewChartService
     ];
 
     # Function to create a bar chart for review results using LavaCharts
-    static function create(Event $event, string $question, ?Member $member = null): void
+    public static function create(Event $event, string $question, ?Member $member = null): void
     {
         $dt = Lava::DataTable();
         $dt->addStringColumn('Optie');

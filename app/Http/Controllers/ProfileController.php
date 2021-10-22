@@ -7,6 +7,7 @@ use App\Event;
 use App\EventPackage;
 use App\Member;
 use App\Facades\Mollie;
+use App\Helpers\CourseCoverageHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\MemberRequest;
 use App\Http\Requests\ParticipantRequest;
@@ -142,7 +143,7 @@ class ProfileController extends Controller
 		$camp = $member->getNextCamp();
 
 		if ($camp !== null) {
-			$statusBefore = checkCoverage($camp, $course_id);
+			$statusBefore = CourseCoverageHelper::getStatus($camp, $course);
 		}
 
 		$status = $member->courses()->sync([$course_id], false);
@@ -155,7 +156,7 @@ class ProfileController extends Controller
 				// If so, check if this change makes or breaks the course coverage
 				$courseLevelTo = $request->input('klas');
 				$member->courses()->updateExistingPivot($course_id, ['klas' => $courseLevelTo]);
-				$statusAfter = checkCoverage($camp, $course_id);  // TODO refactor to Event model method
+				$statusAfter = CourseCoverageHelper::getStatus($camp, $course);
 
 				// If coverage status changes, send email to camp committe
 				if ($statusBefore != $statusAfter) {
@@ -204,10 +205,10 @@ class ProfileController extends Controller
 		$camp = $member->getNextCamp();
 		if ($camp !== null) {
 			// If so, check if this change makes or breaks the course coverage
-			$statusBefore = checkCoverage($camp, $course_id);
+			$statusBefore = CourseCoverageHelper::getStatus($camp, $course);
 			$courseLevelTo = $request->input('klas');
 			$member->courses()->updateExistingPivot($course_id, ['klas' => $courseLevelTo]);
-			$statusAfter = checkCoverage($camp, $course_id);
+			$statusAfter = CourseCoverageHelper::getStatus($camp, $course);
 
 			// If coverage status changes, send email to camp committe
 			if ($statusBefore != $statusAfter) {
@@ -253,10 +254,10 @@ class ProfileController extends Controller
 		$camp = $member->getNextCamp();
 		if ($camp !== null) {
 			// If so, check if this change makes or breaks the course coverage
-			$statusBefore = checkCoverage($camp, $course_id);
+			$statusBefore = CourseCoverageHelper::getStatus($camp, $course);
 			$courseLevelTo = 0;
 			$member->courses()->detach($course_id);
-			$statusAfter = checkCoverage($camp, $course_id);
+			$statusAfter = CourseCoverageHelper::getStatus($camp, $course);
 
 			// If coverage status changes, send email to camp committe
 			if ($statusBefore != $statusAfter) {

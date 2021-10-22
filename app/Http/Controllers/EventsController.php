@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Course;
 use App\Event;
 use App\Member;
 use App\Participant;
 use App\Exports\EventNightRegisterReport;
 use App\Exports\EventPaymentReport;
+use App\Helpers\CourseCoverageHelper;
 use App\Http\Requests\EventRequest;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Events\EditEventMemberRequest;
@@ -321,8 +323,7 @@ class EventsController extends Controller
 	}
 
 	# Check course coverage (vakdekking)
-	// TODO refactor to CourseCoverageService or something, code could also be used for member/course changes
-	public function check(Event $event, $type)
+	public function check(Event $event, string $type)
 	{
 		$this->authorize("subjectCheck", $event);
 
@@ -331,87 +332,22 @@ class EventsController extends Controller
 			return redirect('events');
 		}
 
-		$courses = \App\Course::orderBy('naam')->get();
-		$memberIDs = $event->members->pluck('id')->toArray();
+		$onlyPlacedParticipants = $type == 'placed';
 
-		// Loop through all courses
-		foreach ($courses as $course) {
-			// Obtain members that have this course
-			$result = DB::table('course_member')
-				->whereIn('member_id', $memberIDs)
-				->where('course_id', $course->id)
-				->join('members', 'course_member.member_id', '=', 'members.id')
-				->select('members.voornaam', 'course_member.klas')
-				->orderBy('members.voornaam')
-				->get();
+		$courses = Course::orderBy('naam')->get();
+		$coverageInfo = $courses->map(fn ($c) => [
+			'naam' => $c->naam,
+			'participants' => DB::table('course_event_participant')
+								->where('event_id', $event->id)
+								->where('course_id', $c->id)
+								->join('participants', 'course_event_participant.participant_id', '=', 'participants.id')
+								->orderBy('voornaam')
+								->get(),
+			'members' => $c->members()->onEvent($event)->orderBy('voornaam')->get(),
+			'status' => CourseCoverageHelper::getStatus($event, $c, $onlyPlacedParticipants)
+		]);
 
-			$numbers[$course->id]['m'] = count($result);
-			$tooltips[$course->id]['m'] = '';
-			$levels['m'] = [];
-			foreach ($result as $row) {
-				$tooltips[$course->id]['m'] .= $row->voornaam . ' (' . $row->klas . ')<br/>';
-				$levels['m'][] = $row->klas;
-			}
-
-
-			// Obtain participants that have this course
-			$result = DB::table('course_event_participant')
-				->where('event_id', $event->id)
-				->where('course_id', $course->id)
-				->join('participants', 'course_event_participant.participant_id', '=', 'participants.id')
-				->select('participants.id', 'participants.voornaam', 'participants.klas')
-				->orderBy('participants.voornaam')
-				->get();
-
-			// Filter out unplaced participants, if requested
-			if ($type == 'placed') {
-				$unplaced = $event->participants()->where('geplaatst', 0)->get()->pluck('id');
-				$result = $result->filter(function ($participant) use ($unplaced) {
-					return !$unplaced->contains($participant->id);
-				});
-			}
-
-			$numbers[$course->id]['p'] = count($result);
-			$tooltips[$course->id]['p'] = '';
-			$levels['p'] = [];
-			foreach ($result as $row) {
-				$tooltips[$course->id]['p'] .= $row->voornaam . ' (' . $row->klas . ')<br/>';
-				$levels['p'][] = $row->klas;
-			}
-
-			// Now determine the status of this course...
-			$status[$course->id] = 'ok';
-
-			// Start by checking if just the number of members is sufficient
-			if (3 * $numbers[$course->id]['m'] < $numbers[$course->id]['p']) {
-				$status[$course->id] = 'badquota';
-			} else {
-				// If the number of members is sufficient, then check if their levels are
-
-				// Create 'triple-array' for member levels
-				$m = [];
-				foreach ($levels['m'] as $val) {
-					$m[] = $val;
-					$m[] = $val;
-					$m[] = $val;
-				}
-
-				$p = $levels['p'];
-
-				// Sort both arrays from high to low
-				rsort($m, SORT_NUMERIC);
-				rsort($p, SORT_NUMERIC);
-
-				// Compare element-wise
-				foreach ($p as $key => $value) {
-					if ($value > $m[$key]) {
-						$status[$course->id] = 'badlevel';
-					}
-				}
-			}
-		}
-
-		return view('events.check', compact('type', 'event', 'courses', 'numbers', 'tooltips', 'status'));
+		return view('events.check', compact('event', 'type', 'coverageInfo'));
 	}
 
 	# Calculate camp budget
