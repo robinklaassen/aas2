@@ -19,7 +19,9 @@ class CourseCoverageHelper
             ->get();
         
         if ($onlyPlacedParticipants) {
-            $participants = $participants->filter(fn ($p) => $camp->participants->contains($p->id));
+            $participants = $participants->filter(
+                fn ($p) => $camp->participants()->find($p->id)->pivot->geplaatst
+            );
         }
 
         // Check if number of members is sufficient
