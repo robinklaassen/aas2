@@ -8,6 +8,10 @@ use Illuminate\Support\Facades\DB;
 
 class CourseCoverageHelper
 {
+    
+    // During tutoring on camps there is a default maximum number of participants per member
+    const NUM_PARTICIPANTS_PER_MEMBER = 3;
+
     // Get coverage status for a specific course on a camp
     public static function getStatus(Event $camp, Course $course, bool $onlyPlacedParticipants = false): string
     {
@@ -29,7 +33,9 @@ class CourseCoverageHelper
             return 'badquota';
         
         // Check if levels are sufficient
-        $memberLevels = $members->pluck('pivot.klas')->flatMap(fn ($v) => array_fill(0, 3, $v))->sortDesc();
+        $memberLevels = $members->pluck('pivot.klas')->flatMap(
+            fn ($v) => array_fill(0, CourseCoverageHelper::NUM_PARTICIPANTS_PER_MEMBER, $v)
+            )->sortDesc();
         $participantLevels = $participants->pluck('klas')->sortDesc();
 
         foreach ($memberLevels->zip($participantLevels) as [$ml, $pl]) {
