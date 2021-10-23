@@ -2,16 +2,15 @@
 
 namespace Tests\Feature;
 
-use Mockery;
-use Tests\TestCase;
 use App\Event;
 use App\EventPackage;
-use App\Participant;
+use App\Helpers\Payment\MolliePaymentProvider;
 use App\Helpers\Payment\PaymentInterface;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use App\Helpers\Payment\MolliePaymentProvider;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Mail;
+use Mockery;
+use Tests\TestCase;
 
 class ParticipantRegistrationTest extends TestCase
 {
@@ -106,7 +105,6 @@ class ParticipantRegistrationTest extends TestCase
             $mock->shouldReceive('process')
                 ->once()
                 ->with(Mockery::on(function (PaymentInterface $arg) {
-
                     $contains = function ($needle, $haystack) {
                         return strpos($haystack, $needle) !== false;
                     };
@@ -171,7 +169,6 @@ class ParticipantRegistrationTest extends TestCase
             $mock->shouldReceive('process')
                 ->once()
                 ->with(Mockery::on(function (PaymentInterface $arg) {
-
                     $contains = function ($needle, $haystack) {
                         return strpos($haystack, $needle) !== false;
                     };

@@ -2,17 +2,16 @@
 
 namespace Tests\Feature;
 
-use Mockery;
-use Tests\TestCase;
-use App\User;
-use App\Helpers\Payment\MolliePaymentProvider;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 use App\Event;
 use App\EventPackage;
 use App\Helpers\Payment\EventPayment;
+use App\Helpers\Payment\MolliePaymentProvider;
+use App\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Illuminate\Support\Facades\Mail;
+use Mockery;
+use Tests\TestCase;
 
 class ParticipantProfileOnCampTest extends TestCase
 {
@@ -70,7 +69,6 @@ class ParticipantProfileOnCampTest extends TestCase
             $mock->shouldReceive('process')
                 ->once()
                 ->with(Mockery::on(function (EventPayment $arg) {
-
                     $contains = function ($needle, $haystack) {
                         return strpos($haystack, $needle) !== false;
                     };
@@ -115,7 +113,6 @@ class ParticipantProfileOnCampTest extends TestCase
             $mock->shouldReceive('process')
                 ->once()
                 ->with(Mockery::on(function (EventPayment $arg) {
-
                     $contains = function ($needle, $haystack) {
                         return strpos($haystack, $needle) !== false;
                     };

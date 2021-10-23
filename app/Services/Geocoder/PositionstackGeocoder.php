@@ -15,8 +15,7 @@ use Illuminate\Support\Facades\Http;
  */
 class PositionstackGeocoder implements GeocoderInterface
 {
-
-    const HTTP_TIMEOUT_SECONDS = 4;
+    public const HTTP_TIMEOUT_SECONDS = 4;
 
     public function geocode(string $address, string $country = 'NL'): Geolocation
     {

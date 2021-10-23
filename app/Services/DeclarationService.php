@@ -17,7 +17,7 @@ class DeclarationService
     private $storage;
     
     public function __construct()
-	{
+    {
         $this->storage = Storage::disk("local");
     }
 
@@ -27,10 +27,10 @@ class DeclarationService
             return null;
         }
 
-        $filedata = new FileData;
+        $filedata = new FileData();
         $filedata->originalFilepath = $file->getClientOriginalName();
         $filedata->filepath = $this->getNewFilePath(
-            $member, 
+            $member,
             $file
         );
         $filedata->mimeType = $file->getClientMimeType();
@@ -44,7 +44,7 @@ class DeclarationService
         return $filedata;
     }
 
-    public function getFileFor(Declaration $declaration): Array
+    public function getFileFor(Declaration $declaration): array
     {
         $file = $this->storage->get($declaration->filename);
         $type = $this->storage->mimeType($declaration->filename);
@@ -57,23 +57,23 @@ class DeclarationService
         $this->storage->delete($path);
     }
 
-    public function deleteFileFor(Declaration $declaration) 
+    public function deleteFileFor(Declaration $declaration)
     {
-        if($declaration->filename) {
+        if ($declaration->filename) {
             $this->deleteFile($declaration->filename);
         }
     }
 
     private function getFilePath(Member $member, string $fileName)
     {
-		return self::BASE_DIR . $member->id . '/' . $fileName;
-	}
+        return self::BASE_DIR . $member->id . '/' . $fileName;
+    }
 
     private function getNewFilePath(Member $member, UploadedFile $file)
     {
-		return $this->getFilePath(
-			$member,  
-			date('YmdHis') . '_' . random_int(0, 9999) . '.' . $file->extension()
-		);
-	}
+        return $this->getFilePath(
+            $member,
+            date('YmdHis') . '_' . random_int(0, 9999) . '.' . $file->extension()
+        );
+    }
 }

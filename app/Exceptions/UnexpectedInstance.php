@@ -3,7 +3,6 @@
 
 namespace App\Exceptions;
 
-
 class UnexpectedInstance extends \UnexpectedValueException
 {
     public function __construct(string $class, $instance)

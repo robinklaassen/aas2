@@ -7,21 +7,21 @@ use App\Role;
 
 class CapabilityHelper
 {
-    static function detach($capa, $role)
+    public static function detach($capa, $role)
     {
         $capa = Capability::where("name", "=", $capa)->firstOrFail();
         $role = Role::where("tag", "=", $role)->firstOrFail();
         $role->capabilities()->detach($capa->id);
     }
 
-    static function attach($capa, $role)
+    public static function attach($capa, $role)
     {
         $capa = Capability::where("name", "=", $capa)->firstOrFail();
         $role = Role::where("tag", "=", $role)->firstOrFail();
         $role->capabilities()->attach($capa->id);
     }
 
-    static function new($capa, $description, $role)
+    public static function new($capa, $description, $role)
     {
         $capa = Capability::create([
             "name" => $capa,
@@ -31,7 +31,7 @@ class CapabilityHelper
         $role->capabilities()->attach($capa->id);
     }
 
-    static function delete($capa)
+    public static function delete($capa)
     {
         if (!is_array($capa)) {
             $capa = [$capa];

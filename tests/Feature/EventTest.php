@@ -2,8 +2,8 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Tests\TestCase;
 
 class EventTest extends TestCase
 {
@@ -82,7 +82,7 @@ class EventTest extends TestCase
 
         $databaseData = $eventData;
         $databaseData['datum_voordag'] = null;
-        // database stores time differently 
+        // database stores time differently
         $databaseData['tijd_start'] = '12:00:00';
         $databaseData['tijd_eind'] = '12:00:00';
 

@@ -2,14 +2,13 @@
 
 namespace Tests\Unit\Services;
 
-use Tests\TestCase;
-use App\Services\Geocoder\PositionstackGeocoder;
 use App\Exceptions\GeocoderException;
+use App\Services\Geocoder\PositionstackGeocoder;
 use Illuminate\Support\Facades\Http;
+use Tests\TestCase;
 
 class PositionstackGeocoderTest extends TestCase
 {
-
     private $geocoder;
 
     protected function setUp(): void
@@ -21,7 +20,6 @@ class PositionstackGeocoderTest extends TestCase
 
     public function test_geocode_returns_geolocation()
     {
-
         $fakeBody = [
             'data' => [
                 [

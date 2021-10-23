@@ -6,7 +6,7 @@ namespace App\Services\Anonymize;
 
 class AnimalNameGenerator implements NameGeneratorInterface
 {
-    const NAMES = [
+    public const NAMES = [
         "Paard",
         "Lieveheersbeestje",
         "Kikker",

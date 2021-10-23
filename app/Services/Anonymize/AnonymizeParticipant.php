@@ -13,7 +13,7 @@ use Illuminate\Support\Collection;
 
 class AnonymizeParticipant implements AnonymizeParticipantInterface
 {
-    const YEAR_NO_CAMP = 8;
+    public const YEAR_NO_CAMP = 8;
     /**
      * @var AnonymizeGeneratorInterface
      */
@@ -38,8 +38,8 @@ class AnonymizeParticipant implements AnonymizeParticipantInterface
 
         return Participant::query()
             ->leftJoin('event_participant', 'participants.id', '=', 'event_participant.participant_id')
-            ->leftJoin('events', function($query) {
-                    $query->on('events.id','=','event_participant.event_id')
+            ->leftJoin('events', function ($query) {
+                $query->on('events.id', '=', 'event_participant.event_id')
                         ->whereRaw('events.id IN (
                             select MIN(e2.id) 
                               from events as e2 

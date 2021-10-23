@@ -2,16 +2,16 @@
 
 namespace App\Exports;
 
-use Maatwebsite\Excel\Concerns\WithTitle;
-use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\FromCollection;
+use Maatwebsite\Excel\Concerns\WithHeadings;
+use Maatwebsite\Excel\Concerns\WithTitle;
 
 class EventNightRegisterSheetTrainers implements FromCollection, WithHeadings, WithTitle
 {
-
     protected $event;
 
-    public function __construct(\App\Event $event) {
+    public function __construct(\App\Event $event)
+    {
         $this->event = $event;
     }
 
@@ -33,5 +33,4 @@ class EventNightRegisterSheetTrainers implements FromCollection, WithHeadings, W
     {
         return 'Leiding';
     }
-
 }

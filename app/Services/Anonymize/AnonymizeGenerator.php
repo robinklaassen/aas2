@@ -2,9 +2,6 @@
 
 namespace App\Services\Anonymize;
 
-use Faker\Generator;
-use FakerProviderAnimals\Animals;
-
 class AnonymizeGenerator implements AnonymizeGeneratorInterface
 {
     private NameGeneratorInterface $nameGenerator;

@@ -2,8 +2,8 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use App\Comment;
+use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Auth;
 
 class CommentRequest extends FormRequest
@@ -20,7 +20,7 @@ class CommentRequest extends FormRequest
             return false;
         }
 
-        $comment =  $this->route('comment');
+        $comment = $this->route('comment');
 
         // You can only edit your own comments
         if ($comment && $comment->user_id != Auth::user()->id) {
@@ -29,7 +29,7 @@ class CommentRequest extends FormRequest
 
 
         // Secret comments can only be set by admins
-        return (!$this->get('is_secret') || Auth::user()->is_admin == 2);
+        return !$this->get('is_secret') || Auth::user()->is_admin == 2;
     }
 
     /**

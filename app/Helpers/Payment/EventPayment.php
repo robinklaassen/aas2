@@ -8,7 +8,6 @@ use App\Participant;
 
 class EventPayment implements PaymentInterface
 {
-
     public static function calculate_price(?int $fullprice, float $discount = 1.0)
     {
         return round(($discount * $fullprice) / 5) * 5;

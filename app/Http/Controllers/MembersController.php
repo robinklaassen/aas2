@@ -2,277 +2,275 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\MembersExport;
+use App\Http\Requests;
+use App\Http\Requests\Request;
 use App\Member;
 use App\Skill;
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Request;
-use Maatwebsite\Excel\Facades\Excel;
-use App\Exports\MembersExport;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 class MembersController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Member::class, 'member');
+    }
 
-	public function __construct()
-	{
-		$this->authorizeResource(Member::class, 'member');
-	}
+    # Index page
+    public function index()
+    {
+        $current_members = Member::orderBy('voornaam', 'asc')->whereIn('soort', ['normaal', 'aspirant', 'info'])->get();
+        $former_members = Member::orderBy('voornaam', 'asc')->where('soort', 'oud')->get();
+        return view('members.index', compact('current_members', 'former_members'));
+        if (Auth::user()->can("listOldMembers", Member::class)) {
+            // Show standard index
+            $current_members = Member::orderBy('voornaam', 'asc')->whereIn('soort', ['normaal', 'aspirant', 'info'])->get();
+            $former_members = Member::orderBy('voornaam', 'asc')->where('soort', 'oud')->get();
+            return view('members.index', compact('current_members', 'former_members'));
+        } else {
+            // Something
+            $members = Member::orderBy('voornaam', 'asc')->whereIn('soort', ['normaal', 'aspirant', 'info'])->get();
+            return view('members.list', compact('members'));
+        }
+    }
 
-	# Index page
-	public function index()
-	{
-		$current_members = Member::orderBy('voornaam', 'asc')->whereIn('soort', ['normaal', 'aspirant', 'info'])->get();
-		$former_members = Member::orderBy('voornaam', 'asc')->where('soort', 'oud')->get();
-		return view('members.index', compact('current_members', 'former_members'));
-		if (Auth::user()->can("listOldMembers", Member::class)) {
-			// Show standard index
-			$current_members = Member::orderBy('voornaam', 'asc')->whereIn('soort', ['normaal', 'aspirant', 'info'])->get();
-			$former_members = Member::orderBy('voornaam', 'asc')->where('soort', 'oud')->get();
-			return view('members.index', compact('current_members', 'former_members'));
-		} else {
-			// Something
-			$members = Member::orderBy('voornaam', 'asc')->whereIn('soort', ['normaal', 'aspirant', 'info'])->get();
-			return view('members.list', compact('members'));
-		}
-	}
+    # Member details page
+    public function show(Member $member)
+    {
+        $viewType = 'admin';
 
-	# Member details page
-	public function show(Member $member)
-	{
-		$viewType = 'admin';
+        return view('members.show', compact('member', 'viewType'));
+    }
 
-		return view('members.show', compact('member', 'viewType'));
-	}
+    # Create new member
+    public function create()
+    {
+        $viewType = 'admin';
+        return view('members.create', compact('viewType'));
+    }
 
-	# Create new member
-	public function create()
-	{
-		$viewType = 'admin';
-		return view('members.create', compact('viewType'));
-	}
+    # Store new member
+    public function store(Requests\MemberRequest $request)
+    {
+        Member::create($request->except("roles"));
+        return redirect('members')->with([
+            'flash_message' => 'Het lid is aangemaakt!'
+        ]);
+    }
 
-	# Store new member
-	public function store(Requests\MemberRequest $request)
-	{
+    # Edit member form
+    public function edit(Member $member)
+    {
+        $viewType = 'admin';
+        return view('members.edit', compact('member', 'viewType'));
+    }
 
-		Member::create($request->except("roles"));
-		return redirect('members')->with([
-			'flash_message' => 'Het lid is aangemaakt!'
-		]);
-	}
+    # Update member in DB
+    public function update(Member $member, Requests\MemberRequest $request)
+    {
+        $member->update($request->except(["skills", "roles"]));
 
-	# Edit member form
-	public function edit(Member $member)
-	{
-		$viewType = 'admin';
-		return view('members.edit', compact('member', 'viewType'));
-	}
+        // Update skills
+        $skills = $request->input('skills') ?? []; // this is an array with ids of existing skills (as strings!) and string tags of new skills
 
-	# Update member in DB
-	public function update(Member $member, Requests\MemberRequest $request)
-	{
-		$member->update($request->except(["skills", "roles"]));
+        $skill_ids = [];
+        foreach ($skills as $skill_id) {
+            $skill_ids[] = Skill::findOrCreateFromString($skill_id)->id;
+        }
 
-		// Update skills
-		$skills = $request->input('skills') ?? []; // this is an array with ids of existing skills (as strings!) and string tags of new skills
+        $member->skills()->sync($skill_ids);
 
-		$skill_ids = [];
-		foreach ($skills as $skill_id) {
-			$skill_ids[] = Skill::findOrCreateFromString($skill_id)->id;
-		}
+        // Update roles
+        $user = $member->user()->first();
+        if ($user) {
+            $user->roles()->sync($request->input("roles"));
+        }
 
-		$member->skills()->sync($skill_ids);
+        return redirect('members/' . $member->id)->with([
+            'flash_message' => 'Het lid is bewerkt!'
+        ]);
+    }
 
-		// Update roles
-		$user = $member->user()->first();
-		if ($user) {
-			$user->roles()->sync($request->input("roles"));
-		}
+    # Delete confirmation
+    public function delete(Member $member)
+    {
+        $this->authorize("delete", $member);
+        return view('members.delete', compact('member'));
+    }
 
-		return redirect('members/' . $member->id)->with([
-			'flash_message' => 'Het lid is bewerkt!'
-		]);
-	}
+    # Remove member from database
+    public function destroy(Member $member)
+    {
+        $member->user()->delete();
+        $member->delete();
+        return redirect('members')->with([
+            'flash_message' => 'Het lid is verwijderd!'
+        ]);
+    }
 
-	# Delete confirmation
-	public function delete(Member $member)
-	{
-		$this->authorize("delete", $member);
-		return view('members.delete', compact('member'));
-	}
+    # Send member on event (form)
+    public function onEvent(Member $member)
+    {
+        $this->authorize("onEvent", $member);
+        return view('members.onEvent', compact('member'));
+    }
 
-	# Remove member from database
-	public function destroy(Member $member)
-	{
-		$member->user()->delete();
-		$member->delete();
-		return redirect('members')->with([
-			'flash_message' => 'Het lid is verwijderd!'
-		]);
-	}
+    # Send member on event (update database)
+    public function onEventSave(Member $member)
+    {
+        $this->authorize("onEvent", $member);
+        // Should not be attached if the member has already been sent on this event! That's why we use sync instead of attach, without detaching (second parameter false)
+        $status = $member->events()->sync([Request::input('selected_event')], false);
+        $message = ($status['attached'] == []) ? 'Het lid is reeds op dit evenement gestuurd!' : 'Het lid is op evenement gestuurd!';
+        return redirect('members/' . $member->id)->with([
+            'flash_message' => $message
+        ]);
+    }
 
-	# Send member on event (form)
-	public function onEvent(Member $member)
-	{
-		$this->authorize("onEvent", $member);
-		return view('members.onEvent', compact('member'));
-	}
+    # Add course for this member (form)
+    public function addCourse(Member $member)
+    {
+        $this->authorize("editPractical", $member);
+        $viewType = 'admin';
+        return view('members.addCourse', compact('member', 'viewType'));
+    }
 
-	# Send member on event (update database)
-	public function onEventSave(Member $member)
-	{
-		$this->authorize("onEvent", $member);
-		// Should not be attached if the member has already been sent on this event! That's why we use sync instead of attach, without detaching (second parameter false)
-		$status = $member->events()->sync([Request::input('selected_event')], false);
-		$message = ($status['attached'] == []) ? 'Het lid is reeds op dit evenement gestuurd!' : 'Het lid is op evenement gestuurd!';
-		return redirect('members/' . $member->id)->with([
-			'flash_message' => $message
-		]);
-	}
+    # Add course for this member (update database)
+    public function addCourseSave(Member $member)
+    {
+        $this->authorize("editPractical", $member);
+        $status = $member->courses()->sync([Request::input('selected_course')], false);
+        if ($status['attached'] == []) {
+            $message = 'Vak reeds toegevoegd!';
+        } else {
+            $member->courses()->updateExistingPivot(Request::input('selected_course'), ['klas' => Request::input('klas')]);
+            $message = 'Vak toegevoegd!';
+        }
+        return redirect('members/' . $member->id)->with([
+            'flash_message' => $message
+        ]);
+    }
 
-	# Add course for this member (form)
-	public function addCourse(Member $member)
-	{
-		$this->authorize("editPractical", $member);
-		$viewType = 'admin';
-		return view('members.addCourse', compact('member', 'viewType'));
-	}
+    # Edit course for this member (form)
+    public function editCourse(Member $member, $course_id)
+    {
+        $this->authorize("editPractical", $member);
+        $course = $member->courses->find($course_id);
+        $viewType = 'admin';
+        return view('members.editCourse', compact('member', 'course', 'viewType'));
+    }
 
-	# Add course for this member (update database)
-	public function addCourseSave(Member $member)
-	{
-		$this->authorize("editPractical", $member);
-		$status = $member->courses()->sync([Request::input('selected_course')], false);
-		if ($status['attached'] == []) {
-			$message = 'Vak reeds toegevoegd!';
-		} else {
-			$member->courses()->updateExistingPivot(Request::input('selected_course'), ['klas' => Request::input('klas')]);
-			$message = 'Vak toegevoegd!';
-		}
-		return redirect('members/' . $member->id)->with([
-			'flash_message' => $message
-		]);
-	}
+    # Edit course for this member (update database)
+    public function editCourseSave(Member $member, $course_id)
+    {
+        $this->authorize("editPractical", $member);
+        $member->courses()->updateExistingPivot($course_id, ['klas' => Request::input('klas')]);
+        return redirect('members/' . $member->id)->with([
+            'flash_message' => 'Het vak is bewerkt!'
+        ]);
+    }
 
-	# Edit course for this member (form)
-	public function editCourse(Member $member, $course_id)
-	{
-		$this->authorize("editPractical", $member);
-		$course = $member->courses->find($course_id);
-		$viewType = 'admin';
-		return view('members.editCourse', compact('member', 'course', 'viewType'));
-	}
+    # Remove (detach) a course from this member (form)
+    public function removeCourseConfirm(Member $member, $course_id)
+    {
+        $this->authorize("editPractical", $member);
+        $course = \App\Course::findOrFail($course_id);
+        $viewType = 'admin';
+        return view('members.removeCourse', compact('member', 'course', 'viewType'));
+    }
 
-	# Edit course for this member (update database)
-	public function editCourseSave(Member $member, $course_id)
-	{
-		$this->authorize("editPractical", $member);
-		$member->courses()->updateExistingPivot($course_id, ['klas' => Request::input('klas')]);
-		return redirect('members/' . $member->id)->with([
-			'flash_message' => 'Het vak is bewerkt!'
-		]);
-	}
+    # Remove (detach) a course from this member (update database)
+    public function removeCourse(Member $member, $course_id)
+    {
+        $this->authorize("editPractical", $member);
+        $member->courses()->detach($course_id);
+        return redirect('members/' . $member->id)->with([
+            'flash_message' => 'Het vak is van dit lid verwijderd!'
+        ]);
+    }
 
-	# Remove (detach) a course from this member (form)
-	public function removeCourseConfirm(Member $member, $course_id)
-	{
-		$this->authorize("editPractical", $member);
-		$course = \App\Course::findOrFail($course_id);
-		$viewType = 'admin';
-		return view('members.removeCourse', compact('member', 'course', 'viewType'));
-	}
+    # Export all members to Excel
+    public function export()
+    {
+        return Excel::download(new MembersExport(), date('Y-m-d') . ' AAS leden.xlsx');
+    }
 
-	# Remove (detach) a course from this member (update database)
-	public function removeCourse(Member $member, $course_id)
-	{
-		$this->authorize("editPractical", $member);
-		$member->courses()->detach($course_id);
-		return redirect('members/' . $member->id)->with([
-			'flash_message' => 'Het vak is van dit lid verwijderd!'
-		]);
-	}
+    # Show all members on a Google Map
+    public function map()
+    {
+        $this->authorize("viewAny", Member::class);
+        $members = Member::where('soort', '<>', 'oud')->whereNotNull('geolocatie')->get();
 
-	# Export all members to Excel
-	public function export()
-	{
-		return Excel::download(new MembersExport, date('Y-m-d') . ' AAS leden.xlsx');
-	}
+        $markers = $members
+            ->map(
+                fn ($m) => [
+                    'latlng' => [$m->geolocatie->getLat(), $m->geolocatie->getLng()],
+                    'name' => $m->volnaam,
+                    'type' => $m->soort,
+                    'link' => "<a href='" . url('members', $m->id) . "'>$m->volnaam</a>",
+                ]
+            )->values();
 
-	# Show all members on a Google Map
-	public function map()
-	{
-		$this->authorize("viewAny", Member::class);
-		$members = Member::where('soort', '<>', 'oud')->whereNotNull('geolocatie')->get();
+        return view('members.map', compact('markers'));
+    }
 
-		$markers = $members
-			->map(fn($m) => [
-					'latlng' => [$m->geolocatie->getLat(), $m->geolocatie->getLng()],
-					'name' => $m->volnaam,
-					'type' => $m->soort,
-					'link' => "<a href='" . url('members', $m->id) . "'>$m->volnaam</a>",
-				]
-			)->values();
+    # Search members by coverage
+    public function search(Request $request)
+    {
+        $this->authorize("viewAny", \App\Member::class);
+        $this->authorize("showPracticalAny", \App\Member::class);
 
-		return view('members.map', compact('markers'));
-	}
+        $courses = $request->input('courses', []);
+        $vog = $request->input('vog', 0);
 
-	# Search members by coverage
-	public function search(Request $request)
-	{
-		$this->authorize("viewAny", \App\Member::class);
-		$this->authorize("showPracticalAny", \App\Member::class);
+        $courseList = \App\Course::orderBy('naam')->pluck('naam', 'id')->toArray();
+        $courseCodes = \App\Course::pluck('code', 'id')->toArray();
 
-		$courses = $request->input('courses', []);
-		$vog = $request->input('vog', 0);
+        $allMembers = \App\Member::where('soort', '<>', 'oud');
+        if (Auth::user()->can("showAdministrativeAny", \App\Member::class)) {
+            $allMembers = $allMembers->where('vog', '>=', $vog);
+        }
+        $allMembers = $allMembers->orderBy('voornaam')->get();
 
-		$courseList = \App\Course::orderBy('naam')->pluck('naam', 'id')->toArray();
-		$courseCodes = \App\Course::pluck('code', 'id')->toArray();
+        $members = [];
 
-		$allMembers = \App\Member::where('soort', '<>', 'oud');
-		if (Auth::user()->can("showAdministrativeAny", \App\Member::class)) {
-			$allMembers = $allMembers->where('vog', '>=', $vog);
-		}
-		$allMembers = $allMembers->orderBy('voornaam')->get();
+        $level = [];
+        foreach ($allMembers as $member) {
+            $status = true;
 
-		$members = [];
+            foreach ($courses as $course_id) {
+                if ($member->courses->find($course_id) == null) {
+                    $status = false;
+                } else {
+                    $level[$member->id][$course_id] = $member->courses->find($course_id)->pivot->klas;
+                }
+            }
 
-		$level = [];
-		foreach ($allMembers as $member) {
-			$status = true;
+            if ($status) {
+                $members[] = $member;
+            }
+        }
 
-			foreach ($courses as $course_id) {
-				if ($member->courses->find($course_id) == null) {
-					$status = false;
-				} else {
-					$level[$member->id][$course_id] = $member->courses->find($course_id)->pivot->klas;
-				}
-			}
+        return view('members.search', compact('courseList', 'courseCodes', 'courses', 'vog', 'members', 'level'));
+    }
 
-			if ($status) {
-				$members[] = $member;
-			}
-		}
+    # Search members by skills
+    public function searchSkills(Request $request)
+    {
+        $this->authorize("viewAny", Member::class);
 
-		return view('members.search', compact('courseList', 'courseCodes', 'courses', 'vog', 'members', 'level'));
-	}
+        $skills = $request->input('skills', []);
+        $require_how = $request->input('require_how', 'any');
 
-	# Search members by skills
-	public function searchSkills(Request $request)
-	{
-		$this->authorize("viewAny", Member::class);
+        $all_skills = Skill::pluck('tag', 'id')->toArray();
 
-		$skills = $request->input('skills', []);
-		$require_how = $request->input('require_how', 'any');
+        $num_matches = ($require_how == 'all') ? count($skills) : 1;
+        $members = Member::whereHas('skills', function (Builder $query) use ($skills, $require_how) {
+            $query->whereIn('id', $skills);
+        }, '>=', $num_matches)->get();
 
-		$all_skills = Skill::pluck('tag', 'id')->toArray();
-
-		$num_matches = ($require_how == 'all') ? count($skills) : 1;
-		$members = Member::whereHas('skills', function (Builder $query) use ($skills, $require_how) {
-			$query->whereIn('id', $skills);
-		}, '>=', $num_matches)->get();
-
-		return view('members.searchSkills', compact('all_skills', 'skills', 'require_how', 'members'));
-	}
+        return view('members.searchSkills', compact('all_skills', 'skills', 'require_how', 'members'));
+    }
 }

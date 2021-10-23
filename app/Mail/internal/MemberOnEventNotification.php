@@ -2,12 +2,12 @@
 
 namespace App\Mail\internal;
 
+use App\Event;
+use App\Member;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Config;
-use App\Member;
-use App\Event;
 
 class MemberOnEventNotification extends Mailable
 {

@@ -13,7 +13,6 @@ class AddPasswordRightToKantoorci extends Migration
      */
     public function up()
     {
-
         function addCapability_20200728($role, $capa)
         {
             $capa = Capability::where("name", "=", $capa)->firstOrFail();
@@ -22,7 +21,6 @@ class AddPasswordRightToKantoorci extends Migration
         }
         
         addCapability_20200728("kantoorci", "participants::info::edit::password");
-
     }
 
     /**

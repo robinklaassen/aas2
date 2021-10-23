@@ -2,8 +2,8 @@
 
 namespace App\Policies;
 
-use App\User;
 use App\Comment;
+use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class CommentPolicy
@@ -48,11 +48,10 @@ class CommentPolicy
      */
     public function update(User $user, Comment $comment)
     {
-
         return $this->view($user, $comment)
             && ((!$comment->is_secret && $user->hasCapability("comments::edit"))
                 || ($comment->is_secret && $user->hasCapability("comments::edit::secret"))
-                ||  $comment->user_id == $user->id);
+                || $comment->user_id == $user->id);
     }
 
     /**

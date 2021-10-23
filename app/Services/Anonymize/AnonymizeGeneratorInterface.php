@@ -3,7 +3,6 @@
 
 namespace App\Services\Anonymize;
 
-
 interface AnonymizeGeneratorInterface
 {
     public function firstname(): string;

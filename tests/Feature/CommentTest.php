@@ -2,13 +2,12 @@
 
 namespace Tests\Unit;
 
-use Tests\TestCase;
 use App\Comment;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 use App\Member;
 use App\User;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Str;
+use Tests\TestCase;
 
 class CommentTest extends TestCase
 {
@@ -80,7 +79,7 @@ class CommentTest extends TestCase
         $text = "Testing " . $random;
 
         $comment->user_id = 1;
-        $comment->text  = $text;
+        $comment->text = $text;
         $comment->is_secret = true;
 
         $user->profile->comments()->save($comment);
@@ -92,7 +91,6 @@ class CommentTest extends TestCase
 
     public function testCreateSecretCommentAsNonSuperAdminNotAllowed()
     {
-
         $random = Str::random(40);
         $text = "Testing " . $random;
         $this->actingAs(User::findOrFail(2))
@@ -115,7 +113,6 @@ class CommentTest extends TestCase
 
     public function testCreateSecretCommentAsAdmin()
     {
-
         $random = Str::random(40);
         $text = "Testing " . $random;
         $this->actingAs(User::findOrFail(1))

@@ -2,13 +2,13 @@
 
 namespace Tests\Unit\Jobs;
 
-use Mockery;
-use Tests\TestCase;
-use App\Member;
 use App\Data\Geolocation;
 use App\Jobs\UpdateMemberGeolocation;
+use App\Member;
 use App\Services\Geocoder\GeocoderInterface;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Mockery;
+use Tests\TestCase;
 
 class UpdateMemberGeolocationTest extends TestCase
 {

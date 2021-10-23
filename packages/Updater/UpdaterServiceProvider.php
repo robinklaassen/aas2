@@ -3,18 +3,17 @@
 namespace Updater;
 
 use Illuminate\Foundation\Application;
-use Illuminate\Foundation\Support\Providers\EventServiceProvider;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Updater\Events\PostUpdateEvent;
 use Updater\Events\PreUpdateEvent;
+use Updater\Listeners\ArtisanPostUpdateListener;
 use Updater\Listeners\ArtisanPreUpdateListener;
+use Updater\Listeners\ComposerPostUpdateListener;
 use Updater\OutputAggregator\InternalOutputRecorder;
 use Updater\OutputAggregator\OutputRecorderInterface;
 use Updater\Services\CommandExecutor\ArtisanExecutor;
-use Updater\Services\CommandExecutor\ArtisanExecutorInterface;
 use Updater\Services\CommandExecutor\ComposerExecutor;
-use Updater\Services\CommandExecutor\ComposerExecutorInterface;
 use Updater\Services\CommandExecutor\ExecutorInterface;
 use Updater\Services\CommandExecutor\RecordedExecutor;
 use Updater\Services\CommandExecutor\ShellExecutor;
@@ -23,16 +22,13 @@ use Updater\Services\DateTimeProviderInterface;
 use Updater\Services\SourceControl\GitSourceControlService;
 use Updater\Services\Updater\UpdaterService;
 use Updater\Services\Updater\UpdaterServiceInterface;
-use Updater\Listeners\ArtisanPostUpdateListener;
-use Updater\Listeners\ComposerPostUpdateListener;
 
 class UpdaterServiceProvider extends ServiceProvider
 {
-
     public function boot()
     {
         $this->publishes([
-            __DIR__.'/config/updater.php' => config_path('updater.php'),
+            __DIR__ . '/config/updater.php' => config_path('updater.php'),
         ], 'updater.config');
 
         $this->bindDependancies();
@@ -49,7 +45,6 @@ class UpdaterServiceProvider extends ServiceProvider
 
     private function bindDependancies()
     {
-
         $this->app->singleton(OutputRecorderInterface::class, InternalOutputRecorder::class);
         $this->app->bind(DateTimeProviderInterface::class, DateTimeProvider::class);
 
@@ -87,10 +82,10 @@ class UpdaterServiceProvider extends ServiceProvider
         $this->app->when(ComposerExecutor::class)
             ->needs('$composer')
             ->give(config('updater.composer_path'));
-
     }
 
-    private function bindExecutors() {
+    private function bindExecutors()
+    {
         $executors = [
             'composer' => ComposerExecutor::class,
             'shell' => ShellExecutor::class,

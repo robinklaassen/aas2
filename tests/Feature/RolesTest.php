@@ -29,5 +29,4 @@ class RolesTest extends TestCase
             ->get('/roles/explain')
             ->assertStatus(302);
     }
-
 }

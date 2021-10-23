@@ -3,7 +3,6 @@
 use App\Helpers\CapabilityHelper;
 use Illuminate\Database\Migrations\Migration;
 
-
 class AddDeclarationCapability extends Migration
 {
     /**

@@ -6,6 +6,7 @@ namespace App\Services\Geocoder;
 
 use App\Data\Geolocation;
 
-interface GeocoderInterface {
+interface GeocoderInterface
+{
     public function geocode(string $address, string $country = 'NL'): Geolocation;
 }

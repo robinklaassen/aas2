@@ -4,363 +4,363 @@ namespace App;
 
 use App\Events\MemberUpdated;
 use Collective\Html\Eloquent\FormAccessible;
-use Illuminate\Support\Arr;
-use Illuminate\Database\Eloquent\Model;
 use Grimzy\LaravelMysqlSpatial\Eloquent\SpatialTrait;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Arr;
 
 class Member extends Model
 {
+    use FormAccessible, SpatialTrait;
 
-	use FormAccessible, SpatialTrait;
+    protected $guarded = ['id', 'created_at', 'updated_at'];
 
-	protected $guarded = ['id', 'created_at', 'updated_at'];
+    protected $dates = ['created_at', 'updated_at', 'geboortedatum'];
 
-	protected $dates = ['created_at', 'updated_at', 'geboortedatum'];
+    protected $spatialFields = ['geolocatie'];
+    
+    // Number of points needed for every level in the points system
+    public const RANK_POINTS = [0, 3, 10, 20, 35, 50, 70, 100];
+    
+    protected $dispatchesEvents = [
+        'updated' => MemberUpdated::class
+    ];
 
-	protected $spatialFields = ['geolocatie'];
-	
-	// Number of points needed for every level in the points system
-	const RANK_POINTS = [0, 3, 10, 20, 35, 50, 70, 100];
-	
-	protected $dispatchesEvents = [
-		'updated' => MemberUpdated::class
-	];
+    // Full name
+    public function getVolnaamAttribute()
+    {
+        return str_replace('  ', ' ', $this->voornaam . ' ' . $this->tussenvoegsel . ' ' . $this->achternaam);
+    }
 
-	// Full name
-	public function getVolnaamAttribute()
-	{
-		return str_replace('  ', ' ', $this->voornaam . ' ' . $this->tussenvoegsel . ' ' . $this->achternaam);
-	}
+    // Full address as single string
+    public function getVolledigAdresAttribute()
+    {
+        return $this->adres . ', ' . $this->postcode . ' ' . $this->plaats;
+    }
 
-	// Full address as single string
-	public function getVolledigAdresAttribute()
-	{
-		return $this->adres . ', ' . $this->postcode . ' ' . $this->plaats;
-	}
+    // Postcode mutator
+    public function setPostcodeAttribute($value)
+    {
+        $value = strtoupper($value);
+        if (preg_match('/\d{4}[A-Z]{2}/', $value)) {
+            $this->attributes['postcode'] = substr($value, 0, 4) . ' ' . substr($value, 4, 2);
+        } else {
+            $this->attributes['postcode'] = $value;
+        }
+    }
 
-	// Postcode mutator
-	public function setPostcodeAttribute($value)
-	{
-		$value = strtoupper($value);
-		if (preg_match('/\d{4}[A-Z]{2}/', $value)) {
-			$this->attributes['postcode'] = substr($value, 0, 4) . ' ' . substr($value, 4, 2);
-		} else {
-			$this->attributes['postcode'] = $value;
-		}
-	}
+    // A member belongs to many events
+    public function events()
+    {
+        return $this->belongsToMany('App\Event')->withTimestamps()->withPivot('wissel')->withPivot('wissel_datum_start')->withPivot('wissel_datum_eind');
+    }
 
-	// A member belongs to many events
-	public function events()
-	{
-		return $this->belongsToMany('App\Event')->withTimestamps()->withPivot('wissel')->withPivot('wissel_datum_start')->withPivot('wissel_datum_eind');
-	}
+    // A member belongs to many courses
+    public function courses()
+    {
+        return $this->belongsToMany('App\Course')->withPivot('klas');
+    }
 
-	// A member belongs to many courses
-	public function courses()
-	{
-		return $this->belongsToMany('App\Course')->withPivot('klas');
-	}
+    // A member belongs to many skills
+    public function skills()
+    {
+        return $this->belongsToMany('App\Skill')->withTimestamps();
+    }
 
-	// A member belongs to many skills
-	public function skills()
-	{
-		return $this->belongsToMany('App\Skill')->withTimestamps();
-	}
+    // A member can have one user account
+    public function user()
+    {
+        return $this->morphOne('App\User', 'profile');
+    }
 
-	// A member can have one user account
-	public function user()
-	{
-		return $this->morphOne('App\User', 'profile');
-	}
+    // A Member can have comments
+    public function comments()
+    {
+        return $this->morphMany('App\Comment', 'entity');
+    }
 
-	// A Member can have comments
-	public function comments()
-	{
-		return $this->morphMany('App\Comment', 'entity');
-	}
+    // A member has many actions
+    public function actions()
+    {
+        return $this->hasMany('App\Action');
+    }
 
-	// A member has many actions
-	public function actions()
-	{
-		return $this->hasMany('App\Action');
-	}
+    // A member has many declarations
+    public function declarations()
+    {
+        return $this->hasMany('App\Declaration');
+    }
 
-	// A member has many declarations
-	public function declarations()
-	{
-		return $this->hasMany('App\Declaration');
-	}
+    // A member belongs to many reviews
+    public function reviews()
+    {
+        return $this->belongsToMany('App\Review')
+            ->withPivot('stof')
+            ->withPivot('aandacht')
+            ->withPivot('mening')
+            ->withPivot('tevreden')
+            ->withPivot('bericht');
+    }
 
-	// A member belongs to many reviews
-	public function reviews()
-	{
-		return $this->belongsToMany('App\Review')
-			->withPivot('stof')
-			->withPivot('aandacht')
-			->withPivot('mening')
-			->withPivot('tevreden')
-			->withPivot('bericht');
-	}
+    // Custom getter for the 'straight flush' - a member having done 5 or more unique types of camp (gets 3 bonus points)
+    public function getHasstraightflushAttribute()
+    {
+        $startDate = '2014-09-01';
+        $endDate = date('Y-m-d');
 
-	// Custom getter for the 'straight flush' - a member having done 5 or more unique types of camp (gets 3 bonus points)
-	public function getHasstraightflushAttribute()
-	{
-		$startDate = '2014-09-01';
-		$endDate = date('Y-m-d');
+        $camps = $this->events()
+            ->notCancelled()
+            ->where('type', 'kamp')
+            ->where('datum_start', '>', $startDate)
+            ->where('datum_eind', '<', $endDate)
+            ->where('wissel', 0)
+            ->get();
 
-		$camps = $this->events()
-			->notCancelled()
-			->where('type', 'kamp')
-			->where('datum_start', '>', $startDate)
-			->where('datum_eind', '<', $endDate)
-			->where('wissel', 0)
-			->get();
+        $list = [];
+        foreach ($camps as $camp) {
+            $list[] = substr($camp->code, 0, 1);
+        }
 
-		$list = [];
-		foreach ($camps as $camp) {
-			$list[] = substr($camp->code, 0, 1);
-		}
+        $ulist = array_unique($list);
 
-		$ulist = array_unique($list);
+        // Filter K and N to 1
+        if (in_array('K', $ulist) && in_array('N', $ulist)) {
+            $ulist = array_diff($ulist, ['K']);
+        }
 
-		// Filter K and N to 1
-		if (in_array('K', $ulist) && in_array('N', $ulist)) {
-			$ulist = array_diff($ulist, ['K']);
-		}
+        $result = (count($ulist) >= 5) ? true : false;
 
-		$result = (count($ulist) >= 5) ? true : false;
+        return $result;
+    }
 
-		return $result;
-	}
+    // Custom getter for amount of points for this member
+    public function getPointsAttribute(): int
+    {
+        $startDate = '2014-09-01';
+        $endDate = date('Y-m-d');
 
-	// Custom getter for amount of points for this member
-	public function getPointsAttribute(): int
-	{
-		$startDate = '2014-09-01';
-		$endDate = date('Y-m-d');
+        $base_query = $this->events()
+            ->notCancelled()
+            ->where('datum_start', '>', $startDate)
+            ->where('datum_eind', '<', $endDate);
 
-		$base_query = $this->events()
-			->notCancelled()
-			->where('datum_start', '>', $startDate)
-			->where('datum_eind', '<', $endDate);
+        $camps_full = (clone $base_query)->where('type', 'kamp')->where('wissel', 0)->count();
+        $camps_partial = (clone $base_query)->where('type', 'kamp')->where('wissel', 1)->count();
+        $trainings = (clone $base_query)->where('type', 'training')->count();
 
-		$camps_full = (clone $base_query)->where('type', 'kamp')->where('wissel', 0)->count();
-		$camps_partial = (clone $base_query)->where('type', 'kamp')->where('wissel', 1)->count();
-		$trainings = (clone $base_query)->where('type', 'training')->count();
+        $other = $this->actions()->where('date', '<=', $endDate)->sum('points');
 
-		$other = $this->actions()->where('date', '<=', $endDate)->sum('points');
+        $points = $camps_full * 3 + $camps_partial * 1 + $trainings * 2 + $other;
 
-		$points = $camps_full * 3 + $camps_partial * 1 + $trainings * 2 + $other;
+        if ($this->hasstraightflush) {
+            $points += 3;
+        }
 
-		if ($this->hasstraightflush) {
-			$points += 3;
-		}
+        return $points;
+    }
 
-		return $points;
-	}
+    // Custom getter for current rank (level in the points system) of this member
+    public function getRankAttribute(): int
+    {
+        $points = $this->points;
 
-	// Custom getter for current rank (level in the points system) of this member
-	public function getRankAttribute(): int
-	{
-		$points = $this->points;
+        foreach ($this::RANK_POINTS as $level => $number) {
+            if ($points >= $number) {
+                $rank = $level;
+            }
+        }
 
-		foreach ($this::RANK_POINTS as $level => $number) {
-			if ($points >= $number) $rank = $level;
-		}
+        return $rank;
+    }
 
-		return $rank;
-	}
+    public function getIsMaxedRankAttribute(): bool
+    {
+        return $this->rank == array_key_last($this::RANK_POINTS);
+    }
 
-	public function getIsMaxedRankAttribute(): bool
-	{
-		return $this->rank == array_key_last($this::RANK_POINTS);
-	}
+    public function getPointsToNextRankAttribute(): int
+    {
+        if ($this->is_maxed_rank) {
+            return 0;
+        }
 
-	public function getPointsToNextRankAttribute(): int
-	{
-		if ($this->is_maxed_rank) {
-			return 0;
-		}
+        $points_next_rank = $this::RANK_POINTS[$this->rank + 1];
+        return $points_next_rank - $this->points;
+    }
 
-		$points_next_rank = $this::RANK_POINTS[$this->rank + 1];
-		return $points_next_rank - $this->points;
-	}
+    public function getPercentageToNextRankAttribute(): int
+    {
+        if ($this->is_maxed_rank) {
+            return 100;
+        }
+        
+        $current = $this->points;
+        $start = $this::RANK_POINTS[$this->rank];
+        $end = $this::RANK_POINTS[$this->rank + 1];
 
-	public function getPercentageToNextRankAttribute(): int
-	{
-		if ($this->is_maxed_rank) {
-			return 100;
-		}
-		
-		$current = $this->points;
-		$start = $this::RANK_POINTS[$this->rank];
-		$end = $this::RANK_POINTS[$this->rank + 1];
+        return round(($current - $start) / ($end - $start) * 100);
+    }
 
-		return round(($current - $start) / ($end - $start) * 100);
-	}
+    // Custom getter for a list of all actions and their points
+    public function getListOfActionsAttribute()
+    {
+        $startDate = '2014-09-01';
+        $endDate = date('Y-m-d');
+        $data = [];
 
-	// Custom getter for a list of all actions and their points
-	public function getListOfActionsAttribute()
-	{
-		$startDate = '2014-09-01';
-		$endDate = date('Y-m-d');
-		$data = [];
+        // First the event data
+        $events = $this->events()
+            ->notCancelled()
+            ->whereIn('type', ['kamp', 'training'])
+            ->where('datum_start', '>', $startDate)
+            ->where('datum_eind', '<', $endDate)
+            ->orderBy('datum_start', 'asc')
+            ->get();
 
-		// First the event data
-		$events = $this->events()
-			->notCancelled()
-			->whereIn('type', ['kamp', 'training'])
-			->where('datum_start', '>', $startDate)
-			->where('datum_eind', '<', $endDate)
-			->orderBy('datum_start', 'asc')
-			->get();
+        foreach ($events as $event) {
+            $name = $event->naam . ' ' . $event->datum_start->format('Y');
+            if ($event->pivot->wissel) {
+                $name .= ' (w)';
+            }
 
-		foreach ($events as $event) {
+            if ($event->type == 'training') {
+                $points = 2;
+            } elseif ($event->pivot->wissel) {
+                $points = 1;
+            } else {
+                $points = 3;
+            }
 
-			$name = $event->naam . ' ' . $event->datum_start->format('Y');
-			if ($event->pivot->wissel) {
-				$name .= ' (w)';
-			}
+            $data[] = [
+                'date' => $event->datum_start,
+                'name' => $name,
+                'points' => $points
+            ];
+        }
 
-			if ($event->type == 'training') {
-				$points = 2;
-			} elseif ($event->pivot->wissel) {
-				$points = 1;
-			} else {
-				$points = 3;
-			}
+        // Then the action data
+        $actions = $this->actions()->where('date', '<=', $endDate)->orderBy('date', 'asc')->get();
 
-			$data[] = [
-				'date' => $event->datum_start,
-				'name' => $name,
-				'points' => $points
-			];
-		}
+        foreach ($actions as $action) {
+            $data[] = [
+                'date' => $action->date,
+                'name' => $action->description,
+                'points' => $action->points
+            ];
+        }
 
-		// Then the action data
-		$actions = $this->actions()->where('date', '<=', $endDate)->orderBy('date', 'asc')->get();
+        // Then sort and return
+        $data = Arr::sort($data, function ($item) {
+            return $item['date'];
+        });
 
-		foreach ($actions as $action) {
-			$data[] = [
-				'date' => $action->date,
-				'name' => $action->description,
-				'points' => $action->points
-			];
-		}
+        if ($this->hasstraightflush) {
+            $data[] = [
+                'date' => null,
+                'name' => 'Straight flush',
+                'points' => 3
+            ];
+        }
 
-		// Then sort and return
-		$data = Arr::sort($data, function ($item) {
-			return $item['date'];
-		});
+        return $data;
+    }
 
-		if ($this->hasstraightflush) {
-			$data[] = [
-				'date' => null,
-				'name' => 'Straight flush',
-				'points' => 3
-			];
-		}
+    // Custom getter for most recent action
+    public function getMostRecentActionAttribute()
+    {
+        $startDate = '2014-09-01';
+        $endDate = date('Y-m-d');
 
-		return $data;
-	}
+        $lastEvent = $this->events()
+            ->notCancelled()
+            ->whereIn('type', ['kamp', 'training'])
+            ->where('datum_start', '>', $startDate)
+            ->where('datum_eind', '<', $endDate)
+            ->orderBy('datum_start', 'desc')
+            ->first();
 
-	// Custom getter for most recent action
-	public function getMostRecentActionAttribute()
-	{
-		$startDate = '2014-09-01';
-		$endDate = date('Y-m-d');
+        $lastAction = $this->actions()->where('date', '<', $endDate)->orderBy('date', 'desc')->first();
 
-		$lastEvent = $this->events()
-			->notCancelled()
-			->whereIn('type', ['kamp', 'training'])
-			->where('datum_start', '>', $startDate)
-			->where('datum_eind', '<', $endDate)
-			->orderBy('datum_start', 'desc')
-			->first();
+        $e = $lastEvent !== null;
+        $a = $lastAction !== null;
 
-		$lastAction = $this->actions()->where('date', '<', $endDate)->orderBy('date', 'desc')->first();
+        if ($e && $a) {
+            $result = ($lastEvent->datum_eind > $lastAction->date) ? 'e' : 'a';
+        } elseif ($e) {
+            $result = 'e';
+        } elseif ($a) {
+            $result = 'a';
+        } else {
+            $result = null;
+        }
 
-		$e = $lastEvent !== null;
-		$a = $lastAction !== null;
+        switch ($result) {
+            case 'e':
+                if ($lastEvent->type == 'training') {
+                    $points = 2;
+                } elseif ($lastEvent->pivot->wissel == 0) {
+                    $points = 3;
+                } else {
+                    $points = 1;
+                }
 
-		if ($e && $a) {
-			$result = ($lastEvent->datum_eind > $lastAction->date) ? 'e' : 'a';
-		} elseif ($e) {
-			$result = 'e';
-		} elseif ($a) {
-			$result = 'a';
-		} else {
-			$result = null;
-		}
+                $data = [
+                    'name' => $lastEvent->naam . ' ' . $lastEvent->datum_eind->format('Y'),
+                    'points' => $points
+                ];
+                break;
+            case 'a':
+                $data = [
+                    'name' => $lastAction->description,
+                    'points' => $lastAction->points
+                ];
+                break;
+            default:
+                $data = [
+                    'name' => '-',
+                    'points' => 0
+                ];
+        }
 
-		switch ($result) {
-			case 'e':
-				if ($lastEvent->type == 'training') {
-					$points = 2;
-				} elseif ($lastEvent->pivot->wissel == 0) {
-					$points = 3;
-				} else {
-					$points = 1;
-				}
+        return $data;
+    }
 
-				$data = [
-					'name' => $lastEvent->naam . ' ' . $lastEvent->datum_eind->format('Y'),
-					'points' => $points
-				];
-				break;
-			case 'a':
-				$data = [
-					'name' => $lastAction->description,
-					'points' => $lastAction->points
-				];
-				break;
-			default:
-				$data = [
-					'name' => '-',
-					'points' => 0
-				];
-		}
+    // Get list of unique other members that this person has been on camp with
+    public function getFellowsAttribute()
+    {
+        $events = $this->events()->where('type', 'kamp')->where('datum_eind', '<', date('Y-m-d'))->get();
+        $fellow_ids = [];
+        foreach ($events as $event) {
+            $fellow_ids = array_merge($fellow_ids, $event->members()->pluck('id')->toArray());
+        }
+        $fellow_ids = array_unique($fellow_ids);
+        if (($key = array_search($this->id, $fellow_ids)) !== false) {
+            unset($fellow_ids[$key]);
+        }
+        $fellows = \App\Member::whereIn('id', $fellow_ids)->orderBy('voornaam')->get();
+        return $fellows;
+    }
 
-		return $data;
-	}
+    public function hasRole($title)
+    {
+        $user = $this->user()->first();
+        return $user ? $user->hasRole($title) : false;
+    }
 
-	// Get list of unique other members that this person has been on camp with
-	public function getFellowsAttribute()
-	{
-		$events = $this->events()->where('type', 'kamp')->where('datum_eind', '<', date('Y-m-d'))->get();
-		$fellow_ids = [];
-		foreach ($events as $event) {
-			$fellow_ids = array_merge($fellow_ids, $event->members()->pluck('id')->toArray());
-		}
-		$fellow_ids = array_unique($fellow_ids);
-		if (($key = array_search($this->id, $fellow_ids)) !== false) {
-			unset($fellow_ids[$key]);
-		}
-		$fellows = \App\Member::whereIn('id', $fellow_ids)->orderBy('voornaam')->get();
-		return $fellows;
-	}
+    public function getAnderwijsEmail()
+    {
+        return [
+            "email" => $this->email_anderwijs,
+            "name" => $this->volnaam
+        ];
+    }
 
-	public function hasRole($title)
-	{
-		$user = $this->user()->first();
-		return $user ? $user->hasRole($title) : false;
-	}
+    public function isUser(User $user)
+    {
+        return $this->user->id === $user->id;
+    }
 
-	public function getAnderwijsEmail()
-	{
-		return [
-			"email" => $this->email_anderwijs,
-			"name" => $this->volnaam
-		];
-	}
-
-	public function isUser(User $user)
-	{
-		return $this->user->id === $user->id;
-	}
-
-	public function formSkillsAttribute($value)
-	{
-		return $this->skills()->pluck('id');
-	}
+    public function formSkillsAttribute($value)
+    {
+        return $this->skills()->pluck('id');
+    }
 }

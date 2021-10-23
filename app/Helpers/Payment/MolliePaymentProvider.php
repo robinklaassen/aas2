@@ -2,14 +2,11 @@
 
 namespace App\Helpers\Payment;
 
-use \Mockery;
-use App\Helpers\Payment\PaymentProvider;
-use App\Helpers\Payment\PaymentInterface;
 use Illuminate\Support\Facades\App;
+use Mockery;
 
 class MolliePaymentProvider implements PaymentProvider
 {
-
     protected $mollie;
     protected $isTesting = false;
 
@@ -41,17 +38,17 @@ class MolliePaymentProvider implements PaymentProvider
     public function process(PaymentInterface $payment)
     {
         $keyString = implode('/', $payment->getKeys());
-        $p = $this->api()->payments->create(array(
-            "amount"      => [
+        $p = $this->api()->payments->create([
+            "amount" => [
                 "currency" => $payment->getCurrency(),
                 "value" => number_format($payment->getTotalAmount(), 2, '.', '')
             ],
             "description" => $payment->getDescription(),
-            "metadata"    => $payment->getMetadata(),
-            "webhookUrl"  => $this->webhookUrl(),
+            "metadata" => $payment->getMetadata(),
+            "webhookUrl" => $this->webhookUrl(),
             "redirectUrl" => url("iDeal-response/{$keyString}"),
-            "method" =>  \Mollie\Api\Types\PaymentMethod::IDEAL
-        ));
+            "method" => \Mollie\Api\Types\PaymentMethod::IDEAL
+        ]);
 
         return redirect($p->getCheckoutUrl());
     }

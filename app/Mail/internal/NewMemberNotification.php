@@ -2,11 +2,11 @@
 
 namespace App\Mail\internal;
 
+use App\Event;
+use App\Member;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use App\Member;
-use App\Event;
 use Illuminate\Support\Facades\Config;
 
 class NewMemberNotification extends Mailable

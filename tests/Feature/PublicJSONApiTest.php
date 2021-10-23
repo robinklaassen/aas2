@@ -7,7 +7,6 @@ use Tests\TestCase;
 
 class PublicJSONApiTest extends TestCase
 {
-
     private $kampDataFragment = [
         'naam' => 'Nieuwjaarskamp',
         'weekdag_start' => 'Maandag',
@@ -33,7 +32,7 @@ class PublicJSONApiTest extends TestCase
 
     /**
      * Test the calendar API for participants
-     * 
+     *
      * @return void
      */
     public function testPartCal()
@@ -46,7 +45,7 @@ class PublicJSONApiTest extends TestCase
 
     /**
      * Test the calendar API for members
-     * 
+     *
      * @return void
      */
     public function testFullCal()

@@ -4,8 +4,8 @@ namespace Updater\Listeners;
 
 use Updater\Services\CommandExecutor\ExecutorInterface;
 
-class ArtisanPostUpdateListener {
-
+class ArtisanPostUpdateListener
+{
     private ExecutorInterface $artisanExecutor;
 
     public function __construct(ExecutorInterface $artisanExecutor)

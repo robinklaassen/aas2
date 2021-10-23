@@ -9,8 +9,11 @@ class ExecutorException extends \RuntimeException
         return new self(
             sprintf(
                 'Command "%s" failed, got resultCode %d, with output %s',
-                $cmd, $resultCode, '\n' . $stdErr
-            ));
+                $cmd,
+                $resultCode,
+                '\n' . $stdErr
+            )
+        );
     }
 
     public static function artisanResult(string $cmd, int $resultCode): self

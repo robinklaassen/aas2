@@ -6,7 +6,7 @@ use Carbon\Carbon;
 
 class DateHelper
 {
-    const FORMAT = 'd-m-Y';
+    public const FORMAT = 'd-m-Y';
     public static function Format($date)
     {
         if ($date instanceof Carbon) {

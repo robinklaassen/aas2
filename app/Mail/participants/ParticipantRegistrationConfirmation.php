@@ -2,12 +2,12 @@
 
 namespace App\Mail\participants;
 
+use App\Event;
+use App\EventPackage;
+use App\Participant;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use App\Participant;
-use App\Event;
-use App\EventPackage;
 use Illuminate\Support\Facades\Config;
 
 class ParticipantRegistrationConfirmation extends Mailable

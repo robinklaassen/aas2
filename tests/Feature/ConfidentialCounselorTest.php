@@ -3,16 +3,17 @@
 namespace Tests\Unit;
 
 use App\User;
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Tests\TestCase;
 
 class EventTest extends TestCase
 {
     use DatabaseTransactions;
 
-    const CONF_USER_ID = 11;
+    public const CONF_USER_ID = 11;
 
-    public function testPhoneIsVisibleForMembers() {
+    public function testPhoneIsVisibleForMembers()
+    {
 
         // dkrijgsman a normal member
         $user = User::findOrFail(4);
@@ -24,10 +25,10 @@ class EventTest extends TestCase
             ->assertSee("0611211211")
             ->assertSee("siep@anderwijs.nl")
             ->assertDontSee("siep@heeljong.nl");
-
     }
 
-    public function testPhoneIsNotVisibleForParticipants() {
+    public function testPhoneIsNotVisibleForParticipants()
+    {
 
         // henk: a participant
         $user = User::findOrFail(12);
@@ -38,9 +39,5 @@ class EventTest extends TestCase
             ->assertStatus(403);
 
         // dd($resp->getContent());
-
-        
     }
-
-
 }

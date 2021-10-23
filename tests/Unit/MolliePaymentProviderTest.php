@@ -2,12 +2,12 @@
 
 namespace Tests\Unit;
 
-use Tests\TestCase;
-use \Mockery;
+use App\Event;
 use App\Facades\Mollie;
 use App\Helpers\Payment\PaymentInterface;
-use App\Event;
 use App\Participant;
+use Mockery;
+use Tests\TestCase;
 
 class TestPaymentPayment implements PaymentInterface
 {
@@ -39,7 +39,6 @@ class TestPaymentPayment implements PaymentInterface
 
 class MolliePaymentProviderTest extends TestCase
 {
-
     private $payment;
     private $event;
     private $participant;
@@ -71,9 +70,8 @@ class MolliePaymentProviderTest extends TestCase
                 && $arg["webhookUrl"] == url('iDeal-webhook')
                 && $arg["redirectUrl"] == url('iDeal-response/test/42')
                 && $arg["method"] == \Mollie\Api\Types\PaymentMethod::IDEAL;
-        }))->andReturns(new class
-        {
-            function getCheckoutUrl()
+        }))->andReturns(new class() {
+            public function getCheckoutUrl()
             {
                 return "testUrl";
             }

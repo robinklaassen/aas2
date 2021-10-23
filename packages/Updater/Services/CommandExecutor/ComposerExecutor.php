@@ -2,11 +2,6 @@
 
 namespace Updater\Services\CommandExecutor;
 
-use Illuminate\Support\Facades\Artisan;
-use Updater\Errors\ExecutorException;
-use Updater\OutputAggregator\OutputRecorderInterface;
-use Updater\Services\DateTimeProviderInterface;
-
 class ComposerExecutor extends ShellExecutor
 {
     private string $composer;

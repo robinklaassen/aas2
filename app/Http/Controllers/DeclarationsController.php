@@ -3,20 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Data\FileData;
-use App\Http\Requests\BulkDeclarationsRequest;
 use App\Declaration;
+use App\Http\Requests\BulkDeclarationsRequest;
 use App\Member;
-use App\Http\Controllers\Controller;
 use App\Services\DeclarationService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
-class DeclarationsController extends Controller {
-    const BASE_DIR = "uploads/declarations/";
+class DeclarationsController extends Controller
+{
+    public const BASE_DIR = "uploads/declarations/";
 
     /** @var DeclarationService */
     private $declarationService;
-    public function __construct(DeclarationService $declarationService)	{
+    public function __construct(DeclarationService $declarationService)
+    {
         $this->declarationService = $declarationService;
 
         $this->authorizeResource(Declaration::class, 'declaration');
@@ -55,7 +56,7 @@ class DeclarationsController extends Controller {
      */
     public function store(Request $request)
     {
-        /** @var Member */
+        /** @var Member $member */
         $member = \Auth::user()->profile;
         $data = $request->except("image");
 
@@ -83,7 +84,7 @@ class DeclarationsController extends Controller {
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int  $declaration
      * @return Response
      */
     public function edit(Declaration $declaration)
@@ -95,7 +96,7 @@ class DeclarationsController extends Controller {
     /**
      * Update the specified resource in storage.
      *
-     * @param  int  $id
+     * @param  int  $declaration
      * @return Response
      */
     public function update(Declaration $declaration, Request $request)
@@ -123,7 +124,7 @@ class DeclarationsController extends Controller {
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int  $declaration
      * @return Response
      */
     public function delete(Declaration $declaration)
@@ -155,7 +156,7 @@ class DeclarationsController extends Controller {
     public function bulkStore(BulkDeclarationsRequest $request)
     {
         $this->authorize('create', Declaration::class);
-        /** @var Member */
+        /** @var Member $member */
         $member = \Auth::user()->profile;
 
         $dataRows = $request->input('data.*');
@@ -172,7 +173,8 @@ class DeclarationsController extends Controller {
         }
 
         $request->session()->flash(
-            'flash_message', 'De declaraties zijn opgeslagen!'
+            'flash_message',
+            'De declaraties zijn opgeslagen!'
         );
 
         return response()->json(["status" => "success"]);

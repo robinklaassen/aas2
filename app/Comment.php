@@ -2,8 +2,8 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
 use App\Scopes\CommentScope;
+use Illuminate\Database\Eloquent\Model;
 
 class Comment extends Model
 {
@@ -49,7 +49,8 @@ class Comment extends Model
         return $this->belongsTo('App\User');
     }
 
-    public function scopePublic($query) {
+    public function scopePublic($query)
+    {
         return $query->where('is_secret', false);
     }
 

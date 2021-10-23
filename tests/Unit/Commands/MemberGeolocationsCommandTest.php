@@ -2,9 +2,9 @@
 
 namespace Tests\Unit\Commands;
 
-use Tests\TestCase;
 use App\Jobs\UpdateMemberGeolocation;
 use Illuminate\Support\Facades\Artisan;
+use Tests\TestCase;
 
 class MemberGeolocationsCommandTest extends TestCase
 {

@@ -2,14 +2,13 @@
 
 namespace Tests\Unit;
 
-use Tests\TestCase;
-use App\Helpers\Payment\EventPayment;
 use App\Event;
+use App\Helpers\Payment\EventPayment;
 use App\Participant;
+use Tests\TestCase;
 
 class EventPaymentTest extends TestCase
 {
-
     private $payment;
     private $event;
     private $participant;
@@ -32,7 +31,6 @@ class EventPaymentTest extends TestCase
      */
     public function testEventPaymentMetadata()
     {
-
         $meta = $this->payment->getMetadata();
 
         $this->assertEquals($this->participant->id, $meta["participant_id"]);
@@ -45,7 +43,7 @@ class EventPaymentTest extends TestCase
     }
 
     /**
-     * Tests if the keys call 
+     * Tests if the keys call
      */
     public function testEventPaymentKeys()
     {
@@ -65,7 +63,6 @@ class EventPaymentTest extends TestCase
      */
     public function testEventPaymentDescription()
     {
-
         $this->assertStringContainsString($this->event->code, $this->payment->getDescription());
         $this->assertStringContainsString($this->participant->voornaam, $this->payment->getDescription());
         $this->assertStringContainsString($this->participant->achternaam, $this->payment->getDescription());

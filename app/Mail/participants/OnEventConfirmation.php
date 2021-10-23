@@ -2,13 +2,12 @@
 
 namespace App\Mail\participants;
 
+use App\Event;
+use App\Participant;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use App\Event;
 use Illuminate\Support\Facades\Config;
-use App\Participant;
 
 class OnEventConfirmation extends Mailable
 {
@@ -32,7 +31,7 @@ class OnEventConfirmation extends Mailable
     }
 
     public function build()
-    {        
+    {
         $subject = sprintf('%s Bevestiging van aanmelding', Config::get('mail.subject_prefix.external'));
 
         return $this->view('emails.participants.onEventConfirmation')

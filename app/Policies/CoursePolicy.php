@@ -89,7 +89,6 @@ class CoursePolicy
      */
     public function forceDelete(User $user, Course $course)
     {
-
         return $user->hasCapability("courses::delete");
     }
 }

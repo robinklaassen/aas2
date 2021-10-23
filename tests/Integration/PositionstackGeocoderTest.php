@@ -2,13 +2,13 @@
 
 namespace Tests\Integration;
 
-use Tests\TestCase;
 use App\Services\Geocoder\PositionstackGeocoder;
+use Tests\TestCase;
 
-class PositionstackGeocoderTest extends TestCase {
-
-    public function testGeocode() {
-
+class PositionstackGeocoderTest extends TestCase
+{
+    public function testGeocode()
+    {
         $geocoder = new PositionstackGeocoder();
         
         $test_address = 'Putterweg 2, 3886 PC Garderen';  // IJssalon IJstijd Garderen, altijd goed!

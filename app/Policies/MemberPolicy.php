@@ -101,11 +101,13 @@ class MemberPolicy
         return $user->hasCapability("members::old::show");
     }
 
-    public function showPhone(User $user, Member $member) {
+    public function showPhone(User $user, Member $member)
+    {
         return $this->showPrivate($user, $member) || $member->hasRole("counselor");
     }
 
-    public function showBirthday(User $user, Member $member) {
+    public function showBirthday(User $user, Member $member)
+    {
         return $this->showPrivate($user, $member) || $member->publish_birthday;
     }
 
@@ -221,7 +223,7 @@ class MemberPolicy
 
     public function onEvent(User $user, Member $member)
     {
-        return $user->can("addMember", \App\Event::class) ||  $this->ifSelf("members::info::edit::self", $user, $member);
+        return $user->can("addMember", \App\Event::class) || $this->ifSelf("members::info::edit::self", $user, $member);
     }
 
     private function ifSelf(string $capability, User $user, Member $member): bool

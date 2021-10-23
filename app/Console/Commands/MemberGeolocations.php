@@ -2,10 +2,9 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use App\Member;
 use App\Jobs\UpdateMemberGeolocation;
-
+use App\Member;
+use Illuminate\Console\Command;
 
 class MemberGeolocations extends Command
 {

@@ -2,13 +2,12 @@
 
 namespace App\Mail\internal;
 
+use App\Course;
+use App\Event;
+use App\Member;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use App\Member;
-use App\Event;
-use App\Course;
 use Illuminate\Support\Facades\Config;
 
 class CoverageChangedNotification extends Mailable

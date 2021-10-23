@@ -32,25 +32,25 @@ class DeclarationPolicy
 
     public function view(User $user, Declaration $declaration)
     {
-        return $user->hasCapability('declarations::show') 
+        return $user->hasCapability('declarations::show')
             || (
-                $user->hasCapability('declarations::self') 
-                && $user->isMember() 
+                $user->hasCapability('declarations::self')
+                && $user->isMember()
                 && $user->profile->id === $declaration->member_id
             );
     }
 
     public function create(User $user)
     {
-        return $user->hasCapability('declarations::create'); 
+        return $user->hasCapability('declarations::create');
     }
 
     public function update(User $user, Declaration $declaration)
     {
-        return $user->hasCapability('declarations::edit') 
+        return $user->hasCapability('declarations::edit')
             || (
-                $user->hasCapability('declarations::self') 
-                && $user->isMember() 
+                $user->hasCapability('declarations::self')
+                && $user->isMember()
                 && $user->profile === $declaration->member
                 && !$declaration->isClosed
             );
@@ -58,10 +58,10 @@ class DeclarationPolicy
 
     public function delete(User $user, Declaration $declaration)
     {
-        return $user->hasCapability('declarations::delete') 
+        return $user->hasCapability('declarations::delete')
             || (
-                $user->hasCapability('declarations::self') 
-                && $user->isMember() 
+                $user->hasCapability('declarations::self')
+                && $user->isMember()
                 && $user->profile->id === $declaration->member_id
                 && !$declaration->isClosed
             );

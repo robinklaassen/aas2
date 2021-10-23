@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateDeclarationsTable extends Migration
 {
@@ -25,8 +25,8 @@ class CreateDeclarationsTable extends Migration
             $table->timestamps();
 
             $table->foreign('member_id')
-					->references('id')
-					->on('members')
+                    ->references('id')
+                    ->on('members')
                     ->onDelete('cascade');
         });
     }

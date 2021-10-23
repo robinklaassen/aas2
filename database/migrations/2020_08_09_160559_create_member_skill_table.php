@@ -14,7 +14,6 @@ class CreateMemberSkillTable extends Migration
     public function up()
     {
         Schema::create('member_skill', function (Blueprint $table) {
-
             $table->integer('member_id')->unsigned();
             $table->integer('skill_id')->unsigned();
             $table->timestamps();

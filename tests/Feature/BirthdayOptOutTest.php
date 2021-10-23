@@ -3,12 +3,9 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
-use Symfony\Component\DomCrawler\Crawler;
-use Sunra\PhpSimple\HtmlDomParser;
 
 class BirthdayOptOutTest extends TestCase
 {
-
     private $member;
 
     protected function setUp(): void

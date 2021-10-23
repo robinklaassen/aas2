@@ -15,7 +15,7 @@ class SetLastLoginDate
     public function handle(LoginEvent $event)
     {
         $user = $event->user;
-        $user->last_login = new \DateTime;
+        $user->last_login = new \DateTime();
         $user->save();
     }
 }

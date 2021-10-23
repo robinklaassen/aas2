@@ -2,7 +2,7 @@
 
 namespace App\Data;
 
-class FileData 
+class FileData
 {
     /** @var string */
     public $originalFilepath;

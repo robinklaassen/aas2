@@ -2,8 +2,8 @@
 
 use App\Helpers\CapabilityHelper;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class AddAnonymizeFieldsAndCapabilities extends Migration
 {
@@ -24,7 +24,6 @@ class AddAnonymizeFieldsAndCapabilities extends Migration
         Schema::table('participants', function (Blueprint $table) {
             $table->timestamp('anonymized_at')->nullable();
         });
-
     }
 
     /**

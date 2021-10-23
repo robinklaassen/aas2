@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use DB;
 use App\Action;
+use DB;
+use Illuminate\Database\Seeder;
 
 class ActionTableSeeder extends Seeder
 {

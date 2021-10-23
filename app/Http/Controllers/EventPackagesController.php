@@ -46,7 +46,7 @@ class EventPackagesController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\EventPackage  $package
+     * @param  \App\EventPackage  $eventPackage
      * @return \Illuminate\Http\Response
      */
     public function show(EventPackage $eventPackage)
@@ -83,7 +83,7 @@ class EventPackagesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int  $eventPackage
      * @return Response
      */
     public function delete(EventPackage $eventPackage)

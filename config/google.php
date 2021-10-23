@@ -2,14 +2,14 @@
 
 return [
 
-	/*
-	|--------------------------------------------------------------------------
-	| Google Analytics / Ads tags
-	|--------------------------------------------------------------------------
-	|
-	| These tags are used to track site usage and register specific conversions.
-	|
-	*/
+    /*
+    |--------------------------------------------------------------------------
+    | Google Analytics / Ads tags
+    |--------------------------------------------------------------------------
+    |
+    | These tags are used to track site usage and register specific conversions.
+    |
+    */
 
     'site_tag' => env('GOOGLE_SITE_TAG', null),
 

@@ -14,7 +14,6 @@ use Illuminate\Support\Collection;
 use Mockery;
 use Tests\TestCase;
 
-
 /**
  * Technically not a unit test because of `test_it_gets_participants_to_anonymize` hitting the database
  * But splitting this up was too much effort and code duplication for now
@@ -76,7 +75,7 @@ class AnonymizeParticipantTest extends TestCase
 
         $this->subject->anonymize($participant);
 
-        foreach($fieldsToAnonymize as $field) {
+        foreach ($fieldsToAnonymize as $field) {
             self::assertNotEquals($participant->$field, $data[$field]);
         }
         self::assertNotNull($participant->anonymized_at);
@@ -91,7 +90,7 @@ class AnonymizeParticipantTest extends TestCase
 
         $result = $this->subject->getParticipantsToAnonymize(new \DateTimeImmutable('2020-12-12T00:00:00Z'));
 
-        $lastItem = $result[count($result) -1];
+        $lastItem = $result[count($result) - 1];
         self::assertEquals($participant->id, $lastItem->id);
     }
 
@@ -106,7 +105,7 @@ class AnonymizeParticipantTest extends TestCase
 
         $result = $this->subject->getParticipantsToAnonymize(new \DateTimeImmutable('2020-12-12T00:00:00Z'));
 
-        $lastItem = $result[count($result) -1] ?? null;
+        $lastItem = $result[count($result) - 1] ?? null;
         self::assertNotEquals($participant->id, $lastItem !== null ? $lastItem->id : null);
     }
 

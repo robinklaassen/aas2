@@ -2,12 +2,12 @@
 
 namespace App\Policies;
 
-use App\User;
 use App\Event;
 use App\Member;
 use App\Participant;
-use Illuminate\Auth\Access\HandlesAuthorization;
+use App\User;
 use Carbon\Carbon;
+use Illuminate\Auth\Access\HandlesAuthorization;
 
 class EventPolicy
 {

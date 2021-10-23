@@ -2,9 +2,9 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use DB;
 use App\Review;
+use DB;
+use Illuminate\Database\Seeder;
 
 class MemberReviewPivotSeeder extends Seeder
 {

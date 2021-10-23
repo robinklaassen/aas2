@@ -6,7 +6,6 @@ use Updater\Services\CommandExecutor\ExecutorInterface;
 
 class ComposerPostUpdateListener
 {
-
     private ExecutorInterface $composerExecutor;
 
     public function __construct(ExecutorInterface $composerExecutor)

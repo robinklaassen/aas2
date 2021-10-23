@@ -3,14 +3,14 @@
 namespace Tests\Feature;
 
 use App\Event;
-use App\User;
-use App\Participant;
 use App\Facades\Mollie;
-use Tests\TestCase;
+use App\Mail\participants\IDealConfirmation;
+use App\Participant;
+use App\User;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\participants\IDealConfirmation;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Tests\TestCase;
 
 class FakePaymentMetadata
 {
@@ -18,7 +18,7 @@ class FakePaymentMetadata
     public $camp_id;
     public $participant_id;
 
-    function __construct(Event $evt, Participant $part)
+    public function __construct(Event $evt, Participant $part)
     {
         $this->camp_id = $evt->id;
         $this->participant_id = $part->id;
@@ -27,12 +27,12 @@ class FakePaymentMetadata
 class FakeEventPayment
 {
     public $metadata;
-    function __construct(Event $evt, Participant $part)
+    public function __construct(Event $evt, Participant $part)
     {
         $this->metadata = new FakePaymentMetadata($evt, $part);
     }
 
-    function isPaid()
+    public function isPaid()
     {
         return true;
     }
@@ -42,7 +42,6 @@ class FakeEventPayment
 
 class IDealResponseTest extends TestCase
 {
-
     use DatabaseTransactions;
 
     public $event;

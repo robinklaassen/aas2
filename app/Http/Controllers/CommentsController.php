@@ -8,8 +8,6 @@ use Illuminate\Http\Request;
 
 class CommentsController extends Controller
 {
-
-
     public function __construct()
     {
         $this->authorizeResource(Comment::class, 'comment');
@@ -43,7 +41,6 @@ class CommentsController extends Controller
 
     public function store(CommentRequest $request)
     {
-
         $model = $request->get("entity_type");
         $entity = $model::findOrFail($request->get("entity_id"));
 

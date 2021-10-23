@@ -2,10 +2,10 @@
 
 namespace Tests\Unit\Listeners;
 
-use Tests\TestCase;
-use App\Member;
 use App\Jobs\UpdateMemberGeolocation;
+use App\Member;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Tests\TestCase;
 
 class QueueMemberGeolocationTest extends TestCase
 {
