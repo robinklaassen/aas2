@@ -30,8 +30,8 @@ class CourseCoverageHelper
         $memberLevels = $members->pluck('pivot.klas')->flatMap(fn ($v) => array_fill(0, 3, $v))->sortDesc();
         $participantLevels = $participants->pluck('klas')->sortDesc();
 
-        foreach ($memberLevels->zip($participantLevels) as $arr) {
-            if ($arr[0] < $arr[1])
+        foreach ($memberLevels->zip($participantLevels) as [$ml, $pl]) {
+            if ($ml < $pl)
                 return 'badlevel';
         }
 
