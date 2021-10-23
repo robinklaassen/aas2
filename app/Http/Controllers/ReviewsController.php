@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Event;
-use App\Http\Requests\ReviewRequest;
 use App\Review;
+use App\Http\Requests\ReviewRequest;
 use Carbon\Carbon;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 
 class ReviewsController extends Controller
 {

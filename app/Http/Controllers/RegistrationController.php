@@ -24,10 +24,6 @@ use Illuminate\Support\Facades\Mail;
 class RegistrationController extends Controller
 {
 
-	public function __construct()
-	{
-	}
-
 	# Member registration form
 	public function registerMember()
 	{

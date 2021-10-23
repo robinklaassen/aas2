@@ -4,9 +4,9 @@ namespace Tests\Unit\Helpers;
 
 use App\Course;
 use App\Event;
-use App\Helpers\CourseCoverageHelper;
 use App\Member;
 use App\Participant;
+use App\Helpers\CourseCoverageHelper;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
