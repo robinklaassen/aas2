@@ -12,7 +12,7 @@ use App\Helpers\CourseCoverageHelper;
 use App\Http\Requests\EventRequest;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Events\EditEventMemberRequest;
-use App\Services\ReviewChartService;
+use App\Services\Chart\ChartServiceInterface;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -503,7 +503,7 @@ class EventsController extends Controller
 	}
 
 	# Show review results
-	public function reviews(Event $event)
+	public function reviews(Event $event, ChartServiceInterface $chartService)
 	{
 		$this->authorize("viewReviewResults", $event);
 
@@ -516,8 +516,8 @@ class EventsController extends Controller
 			'kamplengte'
 		]);
 
-		$questions->map(function ($question) use ($event) {
-			ReviewChartService::create($event, $question);
+		$questions->map(function ($question) use ($event, $chartService) {
+			$chartService->prepareEventReviewChart($event, $question);
 		});
 
 		return view('events.reviews', compact('event'));

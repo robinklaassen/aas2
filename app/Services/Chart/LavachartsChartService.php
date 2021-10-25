@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace App\Services;
+namespace App\Services\Chart;
 
 use App\Event;
 use App\Member;
 use Illuminate\Support\Facades\DB;
 use Khill\Lavacharts\Laravel\LavachartsFacade as Lava;
 
-class ReviewChartService
+class LavachartsChartService implements ChartServiceInterface
 {
 
-    const ANSWER_OPTIONS = [
+    private const ANSWER_OPTIONS = [
         'bs-mening' => [
             1 => 'Te weinig',
             2 => 'Voldoende',
@@ -91,7 +91,7 @@ class ReviewChartService
         ]
     ];
 
-    const BAR_CHART_OPTIONS = [
+    private const BAR_CHART_OPTIONS = [
         'width' => '100%',
         'height' => '250',
         'chartArea' => [
@@ -111,8 +111,7 @@ class ReviewChartService
         ]
     ];
 
-    # Function to create a bar chart for review results using LavaCharts
-    public static function create(Event $event, string $question, ?Member $member = null): void
+    public function prepareEventReviewChart(Event $event, string $question, ?Member $member = null): void
     {
         $dt = Lava::DataTable();
         $dt->addStringColumn('Optie');
@@ -124,7 +123,7 @@ class ReviewChartService
             ->groupBy($question)
             ->pluck('total', $question)->toArray();
 
-        foreach (ReviewChartService::ANSWER_OPTIONS[$question] as $n => $t) {
+        foreach (self::ANSWER_OPTIONS[$question] as $n => $t) {
             if (array_key_exists($n, $q)) {
                 $dt->addRow([$t, $q[$n]]);
             } else {
@@ -132,6 +131,6 @@ class ReviewChartService
             }
         }
 
-        Lava::BarChart($question, $dt, ReviewChartService::BAR_CHART_OPTIONS);
+        Lava::BarChart($question, $dt, self::BAR_CHART_OPTIONS);
     }
 }

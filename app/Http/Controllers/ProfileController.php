@@ -12,7 +12,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\MemberRequest;
 use App\Http\Requests\ParticipantRequest;
 use App\Helpers\Payment\EventPayment;
-use App\Services\ReviewChartService;
+use App\Services\Chart\ChartServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\DB;
@@ -456,7 +456,7 @@ class ProfileController extends Controller
 	}
 
 	# Show reviews of specified camp
-	public function reviews(Request $request, $event_id)
+	public function reviews(Request $request, $event_id, ChartServiceInterface $chartService)
 	{
 		$member = $request->user()->profile;
 		$event = Event::findOrFail($event_id);
@@ -468,8 +468,8 @@ class ProfileController extends Controller
 			'tevreden'
 		]);
 
-		$questions->map(function ($question) use ($event, $member) {
-			ReviewChartService::create($event, $question, $member);
+		$questions->map(function ($question) use ($event, $member, $chartService) {
+			$chartService->prepareEventReviewChart($event, $question, $member);
 		});
 
 		return view('profile.reviews', compact('event', 'member'));

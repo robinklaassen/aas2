@@ -6,7 +6,7 @@ use App\Location;
 use App\Event;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use App\Services\ReviewChartService;
+use App\Services\Chart\ChartServiceInterface;
 
 class LocationsController extends Controller
 {
@@ -109,7 +109,7 @@ class LocationsController extends Controller
 	}
 
 	# Enqueteresultaten
-	public function reviews(Location $location, Event $event)
+	public function reviews(Location $location, Event $event, ChartServiceInterface $chartService)
 	{
 		$this->authorize("viewReviewResults", $event);
 		
@@ -119,8 +119,8 @@ class LocationsController extends Controller
 			'kh-geheel'
 		]);
 
-		$questions->map(function ($question) use ($event) {
-			ReviewChartService::create($event, $question);
+		$questions->map(function ($question) use ($event, $chartService) {
+			$chartService->prepareEventReviewChart($event, $question);
 		});
 
 		return view('locations.reviews', compact('location', 'event'));
