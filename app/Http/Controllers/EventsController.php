@@ -337,7 +337,7 @@ class EventsController extends Controller
 		$courses = Course::orderBy('naam')->get();
 		$coverageInfo = $courses->map(fn ($c) => [
 			'naam' => $c->naam,
-			'participants' => $c->participantsOnCamp($event),
+			'participants' => $c->participantsOnCamp($event, $onlyPlacedParticipants),
 			'members' => $c->members()->onEvent($event)->orderBy('voornaam')->get(),
 			'status' => $courseCoverageHelper->getStatus($event, $c, $onlyPlacedParticipants)
 		]);
