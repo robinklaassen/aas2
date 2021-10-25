@@ -323,7 +323,7 @@ class EventsController extends Controller
 	}
 
 	# Check course coverage (vakdekking)
-	public function check(Event $event, string $type)
+	public function check(Event $event, string $type = 'all', CourseCoverageHelper $courseCoverageHelper)
 	{
 		$this->authorize("subjectCheck", $event);
 
@@ -337,14 +337,9 @@ class EventsController extends Controller
 		$courses = Course::orderBy('naam')->get();
 		$coverageInfo = $courses->map(fn ($c) => [
 			'naam' => $c->naam,
-			'participants' => DB::table('course_event_participant')
-								->where('event_id', $event->id)
-								->where('course_id', $c->id)
-								->join('participants', 'course_event_participant.participant_id', '=', 'participants.id')
-								->orderBy('voornaam')
-								->get(),
+			'participants' => $c->participantsOnCamp($event),
 			'members' => $c->members()->onEvent($event)->orderBy('voornaam')->get(),
-			'status' => CourseCoverageHelper::getStatus($event, $c, $onlyPlacedParticipants)
+			'status' => $courseCoverageHelper->getStatus($event, $c, $onlyPlacedParticipants)
 		]);
 
 		return view('events.check', compact('event', 'type', 'coverageInfo'));

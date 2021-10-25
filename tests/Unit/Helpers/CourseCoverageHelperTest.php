@@ -15,6 +15,7 @@ class CourseCoverageHelperTest extends TestCase
 {
     use DatabaseTransactions;
 
+    private CourseCoverageHelper $courseCoverageHelper;
     private Event $camp;
     private Course $course;
     private Member $member;
@@ -23,6 +24,8 @@ class CourseCoverageHelperTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        
+        $this->courseCoverageHelper = new CourseCoverageHelper();
         $this->camp = Event::findOrFail(8);  // Meikamp 2016, empty by default 
         $this->course = Course::findOrFail(1);  // Nederlands
         $this->member = Member::findOrFail(10);  // Siep de Jong, no camps or courses
@@ -39,24 +42,24 @@ class CourseCoverageHelperTest extends TestCase
             'participant_id' => $this->participant->id
         ]);
     }
-    
+
     public function testCoverageOk()
     {
-        $this->assertEquals('ok', CourseCoverageHelper::getStatus($this->camp, $this->course));
+        $this->assertEquals('ok', $this->courseCoverageHelper->getStatus($this->camp, $this->course));
     }
 
     public function testCoverageBadQuota()
     {
         $this->camp->members()->detach($this->member->id);
-        $this->assertEquals('badquota', CourseCoverageHelper::getStatus($this->camp, $this->course));
+        $this->assertEquals('badquota', $this->courseCoverageHelper->getStatus($this->camp, $this->course));
     }
 
     public function testCoverageBadLevel()
     {
         $this->member->courses()->updateExistingPivot($this->course->id, ['klas' => 2]);
-        $this->assertEquals('badlevel', CourseCoverageHelper::getStatus($this->camp, $this->course));
+        $this->assertEquals('badlevel', $this->courseCoverageHelper->getStatus($this->camp, $this->course));
 
         // Also test unplaced option, if participant is unplaced there is no problem
-        $this->assertEquals('ok', CourseCoverageHelper::getStatus($this->camp, $this->course, true));
+        $this->assertEquals('ok', $this->courseCoverageHelper->getStatus($this->camp, $this->course, true));
     }
 }

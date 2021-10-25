@@ -28,11 +28,13 @@ class ProfileController extends Controller
 
 	private $membersController;
 	private $participantsController;
+	private $courseCoverageHelper;
 
-	public function __construct(MembersController $membersController, ParticipantsController $participantsController)
+	public function __construct(MembersController $membersController, ParticipantsController $participantsController, CourseCoverageHelper $courseCoverageHelper)
 	{
 		$this->membersController = $membersController;
 		$this->participantsController = $participantsController;
+		$this->courseCoverageHelper = $courseCoverageHelper;
 	}
 
 	# Helper function to determine controller to pass request to, based on authenticated user
@@ -142,7 +144,7 @@ class ProfileController extends Controller
 		$camp = $member->getNextCamp();
 
 		if ($camp !== null) {
-			$statusBefore = CourseCoverageHelper::getStatus($camp, $course);
+			$statusBefore = $this->courseCoverageHelper->getStatus($camp, $course);
 		}
 
 		$status = $member->courses()->sync([$course_id], false);
@@ -155,7 +157,7 @@ class ProfileController extends Controller
 				// If so, check if this change makes or breaks the course coverage
 				$courseLevelTo = $request->input('klas');
 				$member->courses()->updateExistingPivot($course_id, ['klas' => $courseLevelTo]);
-				$statusAfter = CourseCoverageHelper::getStatus($camp, $course);
+				$statusAfter = $this->courseCoverageHelper->getStatus($camp, $course);
 
 				// If coverage status changes, send email to camp committe
 				if ($statusBefore != $statusAfter) {
@@ -204,10 +206,10 @@ class ProfileController extends Controller
 		$camp = $member->getNextCamp();
 		if ($camp !== null) {
 			// If so, check if this change makes or breaks the course coverage
-			$statusBefore = CourseCoverageHelper::getStatus($camp, $course);
+			$statusBefore = $this->courseCoverageHelper->getStatus($camp, $course);
 			$courseLevelTo = $request->input('klas');
 			$member->courses()->updateExistingPivot($course_id, ['klas' => $courseLevelTo]);
-			$statusAfter = CourseCoverageHelper::getStatus($camp, $course);
+			$statusAfter = $this->courseCoverageHelper->getStatus($camp, $course);
 
 			// If coverage status changes, send email to camp committe
 			if ($statusBefore != $statusAfter) {
@@ -253,10 +255,10 @@ class ProfileController extends Controller
 		$camp = $member->getNextCamp();
 		if ($camp !== null) {
 			// If so, check if this change makes or breaks the course coverage
-			$statusBefore = CourseCoverageHelper::getStatus($camp, $course);
+			$statusBefore = $this->courseCoverageHelper->getStatus($camp, $course);
 			$courseLevelTo = 0;
 			$member->courses()->detach($course_id);
-			$statusAfter = CourseCoverageHelper::getStatus($camp, $course);
+			$statusAfter = $this->courseCoverageHelper->getStatus($camp, $course);
 
 			// If coverage status changes, send email to camp committe
 			if ($statusBefore != $statusAfter) {
