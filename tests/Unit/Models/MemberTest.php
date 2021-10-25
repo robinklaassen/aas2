@@ -25,12 +25,12 @@ class MemberTest extends TestCase
     public function testGetNextCampReturnsEvent()
     {
         $this->member->events()->sync([$this->camp->id]);
-        $nextCamp = $this->member->getNextCamp();
+        $nextCamp = $this->member->getNextFutureCamp();
         $this->assertEquals($this->camp->id, $nextCamp->id);
     }
 
     public function testGetNextCampReturnsNull()
     {
-        $this->assertNull($this->member->getNextCamp());
+        $this->assertNull($this->member->getNextFutureCamp());
     }
 }

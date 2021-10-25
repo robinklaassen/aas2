@@ -365,8 +365,7 @@ class Member extends Model
 		return $this->skills()->pluck('id');
 	}
 
-	# Return first future camp that this member goes on, or null
-	public function getNextCamp(): ?Event
+	public function getNextFutureCamp(): ?Event
 	{
 		return $this->events()
 			->where('type', 'kamp')
@@ -375,7 +374,6 @@ class Member extends Model
 			->first();
 	}
 
-	# Query scope to filter members on a specific event
 	public function scopeOnEvent($query, Event $event)
 	{
 		return $query->whereHas('events', function ($q) use ($event) {

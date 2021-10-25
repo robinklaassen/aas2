@@ -38,8 +38,7 @@ class ProfileController extends Controller
 	}
 
 	# Helper function to determine controller to pass request to, based on authenticated user
-	// TODO would love to type hint the output but union types are only supported from PHP 8.0 onward
-	private function getController(Request $request)
+	private function getController(Request $request): Controller
 	{
 		if ($request->user()->isMember()) {
 			return $this->membersController;
@@ -203,7 +202,7 @@ class ProfileController extends Controller
 
 		// TODO put below code into event listener
 		// Check if member goes on camp in near future
-		$camp = $member->getNextCamp();
+		$camp = $member->getNextFutureCamp();
 		if ($camp !== null) {
 			// If so, check if this change makes or breaks the course coverage
 			$statusBefore = $this->courseCoverageHelper->getStatus($camp, $course);
