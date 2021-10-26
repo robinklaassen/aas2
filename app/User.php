@@ -9,6 +9,7 @@ use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract
 {
@@ -58,7 +59,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function roles()
     {
-        return $this->belongsToMany('App\Role', 'user_role');
+        return $this->belongsToMany(Role::class, 'user_role');
     }
 
     public function hasRole($tag)
@@ -95,12 +96,12 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function isMember()
     {
-        return $this->profile_type === "App\Member";
+        return $this->profile_type === Member::class;
     }
 
     public function isParticipant()
     {
-        return $this->profile_type === "App\Participant";
+        return $this->profile_type === Participant::class;
     }
 
     public function getVolnaamAttribute()

@@ -4,11 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Event;
 use App\Exports\ParticipantsExport;
-use App\Http\Requests;
 use App\Http\Requests\AnonymizeParticipantRequest;
+use App\Http\Requests\ParticipantRequest;
 use App\Participant;
 use App\Services\Anonymize\AnonymizeParticipantInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
 
 class ParticipantsController extends Controller
@@ -35,6 +36,8 @@ class ParticipantsController extends Controller
         return view('participants.index', compact('participants'));
     }
 
+    // TODO creating and storing new participants from here is never used -- we have a registration page... consider removing
+
     /**
      * Show the form for creating a new resource.
      *
@@ -51,7 +54,7 @@ class ParticipantsController extends Controller
      *
      * @return Response
      */
-    public function store(Requests\ParticipantRequest $request)
+    public function store(ParticipantRequest $request)
     {
         Participant::create($request->all());
         return redirect('participants')->with([
@@ -63,15 +66,14 @@ class ParticipantsController extends Controller
      * Display the specified resource.
      *
      */
-    public function show(\App\Participant $participant)
+    public function show(Participant $participant, string $viewType = 'admin')
     {
-        $viewType = 'admin';
         // Make a 'courses on camp' array
         $courseOnCamp = [];
         foreach ($participant->events as $event) {
             $courseOnCamp[$event->id] = [];
         }
-        $result = \DB::table('course_event_participant')
+        $result = DB::table('course_event_participant')
             ->where('participant_id', '=', $participant->id)
             ->join('courses', 'course_event_participant.course_id', '=', 'courses.id')
             ->orderBy('courses.naam')
@@ -89,9 +91,8 @@ class ParticipantsController extends Controller
      * @param  int  $participant
      * @return Response
      */
-    public function edit(Participant $participant)
+    public function edit(Participant $participant, string $viewType = 'admin')
     {
-        $viewType = 'admin';
         return view('participants.edit', compact('participant', 'viewType'));
     }
 
@@ -101,11 +102,11 @@ class ParticipantsController extends Controller
      * @param  int  $participant
      * @return Response
      */
-    public function update(Participant $participant, Requests\ParticipantRequest $request)
+    public function update(Participant $participant, ParticipantRequest $request, string $successMessage = null)
     {
         $participant->update($request->all());
         return redirect('participants/' . $participant->id)->with([
-            'flash_message' => 'De deelnemer is bewerkt!'
+            'flash_message' => $successMessage ?? 'De deelnemer is bewerkt!'
         ]);
     }
 
@@ -115,7 +116,6 @@ class ParticipantsController extends Controller
      * @param  int  $participant
      * @return Response
      */
-
     public function delete(Participant $participant)
     {
         $this->authorize("delete", $participant);
@@ -142,13 +142,12 @@ class ParticipantsController extends Controller
     public function onEventSave(Participant $participant, Request $request)
     {
         $this->authorize("onEvent", $participant);
-        // Sync 'event_participant' pivot table
         $status = $participant->events()->sync([$request->selected_event], false);
         if ($status['attached'] != []) {
             // Insert courses
             foreach (array_unique($request->vak) as $key => $course_id) {
                 if ($course_id) {
-                    \DB::table('course_event_participant')->insert(
+                    DB::table('course_event_participant')->insert(
                         ['course_id' => $course_id, 'event_id' => $request->selected_event, 'participant_id' => $participant->id, 'info' => $request->vakinfo[$key]]
                     );
                 }
@@ -164,7 +163,7 @@ class ParticipantsController extends Controller
     public function editEvent(Participant $participant, Event $event)
     {
         $this->authorize("editParticipant", [$event, $participant]);
-        $result = \DB::table('course_event_participant')->select('course_id', 'info')->whereParticipantIdAndEventId($participant->id, $event->id)->get();
+        $result = DB::table('course_event_participant')->select('course_id', 'info')->whereParticipantIdAndEventId($participant->id, $event->id)->get();
         $retrieved_courses = [];
         foreach ($result as $row) {
             $retrieved_courses[] = ['id' => $row->course_id, 'info' => $row->info];
@@ -176,13 +175,14 @@ class ParticipantsController extends Controller
     public function editEventSave(Participant $participant, Event $event, Request $request)
     {
         $this->authorize("editParticipant", [$event, $participant]);
+
         // Delete all current courses
-        \DB::table('course_event_participant')->whereParticipantIdAndEventId($participant->id, $event->id)->delete();
+        DB::table('course_event_participant')->whereParticipantIdAndEventId($participant->id, $event->id)->delete();
 
         // Insert new courses
         foreach (array_unique($request->vak) as $key => $course_id) {
             if ($course_id) {
-                \DB::table('course_event_participant')->insert(
+                DB::table('course_event_participant')->insert(
                     ['course_id' => $course_id, 'event_id' => $event->id, 'participant_id' => $participant->id, 'info' => $request->vakinfo[$key]]
                 );
             }
@@ -200,60 +200,6 @@ class ParticipantsController extends Controller
         abort(403);
 
         return Excel::download(new ParticipantsExport(), date('Y-m-d') . ' AAS Deelnemers.xlsx');
-    }
-
-    # Show all last years participants on a Google Map
-    public function map()
-    {
-        $this->authorize("viewAny", Participant::class);
-        // Create necessary dates
-        $now = new \DateTime('now');
-        $nowf = $now->format('Y-m-d');
-        $yearago = $now->modify('-1 year')->format('Y-m-d');
-
-        // Get all relevant camps
-        $camps = \App\Event::where('type', 'kamp')->where('datum_eind', '>', $yearago)->where('datum_eind', '<', $nowf)->get();
-
-        // Get participant id's and make list of camp names
-        $pids = [];
-        $campnames = [];
-        foreach ($camps as $camp) {
-            $pids = array_merge($pids, $camp->participants()->pluck('id')->toArray());
-            $campnames[] = $camp->naam . ' ' . $camp->datum_start->format('Y');
-        }
-
-        // Get number of camps per participant id
-        $pidfreq = array_count_values($pids);
-        ksort($pidfreq);
-        $amount = count($pidfreq);
-
-        // Create participant data for map
-        foreach ($pidfreq as $pid => $freq) {
-            $p = Participant::find($pid);
-
-            $markerURL = 'http://maps.google.com/mapfiles/ms/icons/';
-            switch ($freq) {
-                case 1:
-                    $markerURL .= 'red-dot.png';
-                    break;
-                case 2:
-                    $markerURL .= 'green-dot.png';
-                    break;
-                default:
-                    $markerURL .= 'blue-dot.png';
-                    break;
-            }
-
-            $participantData[] = [
-                'address' => $p->adres . ', ' . $p->plaats,
-                'name' => str_replace('  ', ' ', $p->voornaam . ' ' . $p->tussenvoegsel . ' ' . $p->achternaam),
-                'markerURL' => $markerURL
-            ];
-        }
-
-        $participantJSON = json_encode($participantData);
-
-        return view('participants.map', compact('campnames', 'amount', 'participantJSON'));
     }
 
     public function anonymize()

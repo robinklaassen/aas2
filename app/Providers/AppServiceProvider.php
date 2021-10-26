@@ -8,6 +8,8 @@ use App\Services\Anonymize\AnonymizeGeneratorInterface;
 use App\Services\Anonymize\AnonymizeParticipant;
 use App\Services\Anonymize\AnonymizeParticipantInterface;
 use App\Services\Anonymize\NameGeneratorInterface;
+use App\Services\Chart\ChartServiceInterface;
+use App\Services\Chart\LavachartsChartService;
 use App\Services\Geocoder\GeocoderInterface;
 use App\Services\Geocoder\PositionstackGeocoder;
 use App\Services\ObjectManager\EloquentObjectManager;
@@ -86,5 +88,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->when(AnonymizeGenerator::class)->needs(NameGeneratorInterface::class)->give(AnimalNameGenerator::class);
         $this->app->bind(ObjectManagerInterface::class, EloquentObjectManager::class);
         $this->app->bind(GeocoderInterface::class, PositionstackGeocoder::class);
+        $this->app->bind(ChartServiceInterface::class, LavachartsChartService::class);
     }
 }

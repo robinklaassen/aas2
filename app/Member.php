@@ -3,6 +3,7 @@
 namespace App;
 
 use App\Events\MemberUpdated;
+use Carbon\Carbon;
 use Collective\Html\Eloquent\FormAccessible;
 use Grimzy\LaravelMysqlSpatial\Eloquent\SpatialTrait;
 use Illuminate\Database\Eloquent\Model;
@@ -17,10 +18,10 @@ class Member extends Model
     protected $dates = ['created_at', 'updated_at', 'geboortedatum'];
 
     protected $spatialFields = ['geolocatie'];
-    
+
     // Number of points needed for every level in the points system
     public const RANK_POINTS = [0, 3, 10, 20, 35, 50, 70, 100];
-    
+
     protected $dispatchesEvents = [
         'updated' => MemberUpdated::class
     ];
@@ -192,7 +193,7 @@ class Member extends Model
         if ($this->is_maxed_rank) {
             return 100;
         }
-        
+
         $current = $this->points;
         $start = $this::RANK_POINTS[$this->rank];
         $end = $this::RANK_POINTS[$this->rank + 1];
@@ -336,7 +337,7 @@ class Member extends Model
         if (($key = array_search($this->id, $fellow_ids)) !== false) {
             unset($fellow_ids[$key]);
         }
-        $fellows = \App\Member::whereIn('id', $fellow_ids)->orderBy('voornaam')->get();
+        $fellows = Member::whereIn('id', $fellow_ids)->orderBy('voornaam')->get();
         return $fellows;
     }
 
@@ -362,5 +363,21 @@ class Member extends Model
     public function formSkillsAttribute($value)
     {
         return $this->skills()->pluck('id');
+    }
+
+    public function getNextFutureCamp(): ?Event
+    {
+        return $this->events()
+            ->where('type', 'kamp')
+            ->where('datum_start', '>', Carbon::now())
+            ->orderBy('datum_start')
+            ->first();
+    }
+
+    public function scopeOnEvent($query, Event $event)
+    {
+        return $query->whereHas('events', function ($q) use ($event) {
+            $q->where('id', $event->id);
+        });
     }
 }
