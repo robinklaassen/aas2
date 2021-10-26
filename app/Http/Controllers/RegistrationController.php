@@ -37,7 +37,7 @@ class RegistrationController extends Controller
         $camp_options = [];
         $camp_full = [];
         foreach ($camps as $camp) {
-            $camp_options[$camp->id] = $camp->naam . ' ' . substr($camp->datum_start, 0, 4) . ' te ' . $camp->location->plaats . ' (' . $camp->datum_voordag->format('d-m-Y') . ')';
+            $camp_options[$camp->id] = $camp->naam . ' ' . substr((string) $camp->datum_start, 0, 4) . ' te ' . $camp->location->plaats . ' (' . $camp->datum_voordag->format('d-m-Y') . ')';
             if ($camp->vol) {
                 $camp_options[$camp->id] .= ' - VOL';
                 $camp_full[$camp->id] = 1;

@@ -181,7 +181,7 @@ class ParticipantRegistrationTest extends TestCase
                     $descr = $arg->getDescription();
 
                     return $arg->getCurrency() === 'EUR'
-                        && $arg->getTotalAmount() === $this->package->price
+                        && $arg->getTotalAmount() === (float) $this->package->price
                         && $contains($this->event->code, $descr)
                         && $contains($this->package->code, $descr)
                         && $contains($this->data['voornaam'], $descr)

@@ -46,7 +46,7 @@ class EventPaymentReport implements FromArray, WithHeadings
 
             // Date of payment is not Carbon :(
             $x = $p->pivot->datum_betaling;
-            $betaling = substr($x, 8, 2) . '-' . substr($x, 5, 2) . '-' . substr($x, 0, 4);
+            $betaling = substr((string) $x, 8, 2) . '-' . substr((string) $x, 5, 2) . '-' . substr($x, 0, 4);
 
             // Declaration of income only when asked for
             //dd($p->inkomensverklaring->year);

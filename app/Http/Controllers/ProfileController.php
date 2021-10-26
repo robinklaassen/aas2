@@ -361,7 +361,7 @@ class ProfileController extends Controller
             // Attach courses (with information)
             $givenCourses = [];
             foreach (array_unique($request->vak) as $key => $course_id) {
-                if ($course_id !== 0) {
+                if ($course_id !== '0') {
                     DB::table('course_event_participant')->insert(
                         [
                             'course_id' => $course_id,
@@ -405,7 +405,7 @@ class ProfileController extends Controller
             ));
 
             // If they want to pay with iDeal, set up the payment now
-            if ($iDeal === '1' && $toPay > 0) {
+            if ((string) $iDeal === '1' && $toPay > 0) {
                 return Mollie::process($payment);
             }
             // Return to profile

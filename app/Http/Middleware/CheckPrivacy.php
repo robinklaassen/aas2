@@ -17,7 +17,7 @@ class CheckPrivacy
      */
     public function handle($request, Closure $next)
     {
-        $isPrivacyRoute = strpos($request->route()->getName(), 'privacy') !== false;
+        $isPrivacyRoute = strpos($request->route()->getName() ?? '', 'privacy') !== false;
 
         if (! $isPrivacyRoute && Auth::user() && Auth::user()->privacy === null) {
             return redirect()->route('show-accept-privacy', [

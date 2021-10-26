@@ -396,7 +396,7 @@ class PagesController extends Controller
         $data['maleFemaleRatio'][] = ['Jaar', 'Leiding', 'Deelnemers'];
         foreach ($num_members as $k => $v) {
             if ($num_members[$k] !== 0 && $num_participants[$k] !== 0) {
-                $year = substr($k, 0, 2) . '-' . substr($k, 2, 2);
+                $year = substr((string) $k, 0, 2) . '-' . substr((string) $k, 2, 2);
                 $data['membGrowth'][] = [$year, $num_members[$k], count(array_unique($member_ids[$k])), $num_members_new[$k]];
                 $data['partGrowth'][] = [$year, $num_participants[$k], count(array_unique($participant_ids[$k])), $num_participants_new[$k]];
                 $data['percNew'][] = [$year, round(($num_members_new[$k] / $num_members[$k]) * 100, 1), round(($num_participants_new[$k] / $num_participants[$k]) * 100, 1)];
@@ -448,7 +448,7 @@ class PagesController extends Controller
         $data['aveNumTrainings'][] = ['Jaar', 'Aantal'];
         foreach ($member_ids as $k => $v) {
             if ($v !== []) {
-                $year = substr($k, 0, 2) . '-' . substr($k, 2, 2);
+                $year = substr((string) $k, 0, 2) . '-' . substr((string) $k, 2, 2);
                 $data['trainerGrowth'][] = [$year, $num_trainers[$k], count(array_unique($member_ids[$k])), $num_trainers_new[$k]];
                 $data['aveNumTrainings'][] = [$year, round(count($v) / count(array_unique($v)), 2)];
             }

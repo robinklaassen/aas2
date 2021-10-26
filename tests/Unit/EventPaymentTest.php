@@ -77,7 +77,7 @@ class EventPaymentTest extends TestCase
      */
     public function testEventPaymentPrice()
     {
-        $this->assertSame($this->event->prijs, $this->payment->getTotalAmount());
+        $this->assertSame((float) $this->event->prijs, $this->payment->getTotalAmount());
     }
 
     /**

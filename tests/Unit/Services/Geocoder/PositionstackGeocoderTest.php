@@ -35,8 +35,8 @@ class PositionstackGeocoderTest extends TestCase
 
         $geo = $this->geocoder->geocode('some address');
 
-        $this->assertSame(14, $geo->latitude);
-        $this->assertSame(73, $geo->longitude);
+        $this->assertSame(14.0, $geo->latitude);
+        $this->assertSame(73.0, $geo->longitude);
     }
 
     public function testGeocodeFailedRequestThrowsException()

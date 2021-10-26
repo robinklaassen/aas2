@@ -202,7 +202,7 @@ class Member extends Model
         $start = $this::RANK_POINTS[$this->rank];
         $end = $this::RANK_POINTS[$this->rank + 1];
 
-        return round(($current - $start) / ($end - $start) * 100);
+        return (int) round(($current - $start) / ($end - $start) * 100);
     }
 
     // Custom getter for a list of all actions and their points

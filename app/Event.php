@@ -81,7 +81,7 @@ class Event extends Model
 
     public function getFullTitleAttribute()
     {
-        return $this->naam . ' ' . substr($this->datum_start, 0, 4) .
+        return $this->naam . ' ' . substr((string) $this->datum_start, 0, 4) .
             ' te ' . $this->location->plaats . ' (' . $this->datum_start->format('d-m-Y') . ')' . ($this->vol ? ' - VOL' : '');
     }
 
@@ -100,7 +100,7 @@ class Event extends Model
     {
         $startYear = $this->datum_start->subMonths(9)->year;
         $endYear = $startYear + 1;
-        return substr($startYear, -2) . '-' . substr($endYear, -2);
+        return substr((string) $startYear, -2) . '-' . substr((string) $endYear, -2);
     }
 
     /**

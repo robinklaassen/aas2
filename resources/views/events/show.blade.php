@@ -346,7 +346,7 @@
 				@can("viewParticipantsAdvanced", $event)
 				<td>
 					@unless ($participant->pivot->datum_betaling == '0000-00-00')
-					{{ substr($participant->pivot->datum_betaling,0,4) .'-'.substr($participant->pivot->datum_betaling,5,2).'-'.substr($participant->pivot->datum_betaling,8,2) }}
+					{{ substr((string)$participant->pivot->datum_betaling,0,4) .'-'.substr((string)$participant->pivot->datum_betaling,5,2).'-'.substr((string)$participant->pivot->datum_betaling,8,2) }}
 					@else
 					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" data-toggle="tooltip"
 						title="Deze deelnemer heeft nog niet betaald!"></span>

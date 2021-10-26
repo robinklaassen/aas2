@@ -76,7 +76,6 @@ class ParticipantProfileOnCampTest extends TestCase
                     };
 
                     $descr = $arg->getDescription();
-                    // dd($descr);
                     return $contains($this->event->code, $descr)
                         && $contains($this->user->profile->voornaam, $descr)
                         && $contains($this->user->profile->achternaam, $descr);
