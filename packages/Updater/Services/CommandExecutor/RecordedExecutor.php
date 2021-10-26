@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Updater\Services\CommandExecutor;
 
 use Updater\OutputAggregator\OutputRecorderInterface;
@@ -7,6 +9,7 @@ use Updater\OutputAggregator\OutputRecorderInterface;
 class RecordedExecutor implements ExecutorInterface
 {
     private OutputRecorderInterface $outputRecorder;
+
     private ExecutorInterface $decoratedExecutor;
 
     public function __construct(ExecutorInterface $decoratedExecutor, OutputRecorderInterface $outputRecorder)

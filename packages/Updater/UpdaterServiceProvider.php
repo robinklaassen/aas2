@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Updater;
 
 use Illuminate\Foundation\Application;
@@ -92,10 +94,10 @@ class UpdaterServiceProvider extends ServiceProvider
             'artisan' => ArtisanExecutor::class,
         ];
         foreach ($executors as $key => $concrete) {
-            $this->app->bind("executor.$key", $concrete);
-            $this->app->bind("executor.recorded.$key", function (Application $app) use ($key) {
+            $this->app->bind("executor.${key}", $concrete);
+            $this->app->bind("executor.recorded.${key}", function (Application $app) use ($key) {
                 return new RecordedExecutor(
-                    $app->make("executor.$key"),
+                    $app->make("executor.${key}"),
                     $app->make(OutputRecorderInterface::class),
                 );
             });

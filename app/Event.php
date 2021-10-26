@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App;
 
 use Carbon\Carbon;
@@ -11,18 +13,18 @@ class Event extends Model
         'kamp' => 'Kamp',
         'training' => 'Training',
         'overig' => 'Overig',
-        'online' => 'Online'
+        'online' => 'Online',
     ];
 
     // Descriptions of the camp types (used in reviews)
     public const CAMP_DESCRIPTIONS = [
-        "herfst" => "Herfstkamp (weekend in de herfstvakantie)",
-        "winter" => "Winterkamp (halve week voor Kerst of na Oud en Nieuw)",
-        "voorjaar" => "Voorjaarskamp (weekend in de voorjaarsvakantie)",
-        "paas" => "Paaskamp (lang weekend met Pasen)",
-        "mei" => "Meikamp (week in de meivakantie, vlak voor de eindexamens)",
-        "hemelvaart" => "Hemelvaartskamp (lang weekend met Hemelvaart, vlak voor de laatste toetsweek van niet-eindexamenklassen)",
-        "zomer" => "Zomerkamp (week in de zomervakantie)"
+        'herfst' => 'Herfstkamp (weekend in de herfstvakantie)',
+        'winter' => 'Winterkamp (halve week voor Kerst of na Oud en Nieuw)',
+        'voorjaar' => 'Voorjaarskamp (weekend in de voorjaarsvakantie)',
+        'paas' => 'Paaskamp (lang weekend met Pasen)',
+        'mei' => 'Meikamp (week in de meivakantie, vlak voor de eindexamens)',
+        'hemelvaart' => 'Hemelvaartskamp (lang weekend met Hemelvaart, vlak voor de laatste toetsweek van niet-eindexamenklassen)',
+        'zomer' => 'Zomerkamp (week in de zomervakantie)',
     ];
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
@@ -45,7 +47,6 @@ class Event extends Model
             ->withPivot(['package_id', 'geplaatst', 'datum_betaling']);
     }
 
-
     // A camp belongs to one location
     public function location()
     {
@@ -66,11 +67,11 @@ class Event extends Model
     // Get average rating for this camp
     public function getAverageRatingAttribute()
     {
-        if (!$this->has("reviews")) {
+        if (! $this->has('reviews')) {
             return null;
         }
 
-        return round($this->reviews()->pluck("cijfer")->avg(), 1);
+        return round($this->reviews()->pluck('cijfer')->avg(), 1);
     }
 
     public function hasUser(User $user)

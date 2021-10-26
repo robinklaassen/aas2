@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
 use App\User;
@@ -17,8 +19,6 @@ class MemberTest extends TestCase
 
     /**
      * Test the members index page
-     *
-     * @return void
      */
     public function testIndex()
     {
@@ -31,8 +31,6 @@ class MemberTest extends TestCase
 
     /**
      * Test the show member page
-     *
-     * @return void
      */
     public function testShow()
     {

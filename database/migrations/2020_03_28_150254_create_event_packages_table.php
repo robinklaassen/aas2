@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -9,8 +11,6 @@ class CreateEventPackagesTable extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
     public function up()
     {
@@ -24,9 +24,8 @@ class CreateEventPackagesTable extends Migration
             $table->timestamps();
         });
 
-
         Schema::table('event_participant', function (Blueprint $table) {
-            $table->integer("package_id")->unsigned()->nullable();
+            $table->integer('package_id')->unsigned()->nullable();
 
             $table->foreign('package_id')
                 ->references('id')
@@ -39,38 +38,36 @@ class CreateEventPackagesTable extends Migration
             $table->text('package_type', ['online-tutoring', 'other'])->nullable();
         });
 
-        DB::table("event_packages")->insert([
+        DB::table('event_packages')->insert([
             [
                 'code' => '2UUR',
                 'title' => '2 uur',
                 'description' => '2 uur digitaal bijles',
-                'price' => 15
+                'price' => 15,
             ], [
                 'code' => '5UUR',
                 'title' => '5 uur',
                 'description' => '5 uur digitaal bijles',
-                'price' => 35
+                'price' => 35,
             ], [
                 'code' => '10UUR',
                 'title' => '10 uur',
                 'description' => '10 uur digitaal bijles',
-                'price' => 65
-            ]
+                'price' => 65,
+            ],
         ]);
     }
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down()
     {
         Schema::dropIfExists('event_packages');
 
         Schema::table('event_participant', function (Blueprint $table) {
-            $table->dropForeign("package_id");
-            $table->dropColumn("package_id");
+            $table->dropForeign('package_id');
+            $table->dropColumn('package_id');
         });
     }
 }

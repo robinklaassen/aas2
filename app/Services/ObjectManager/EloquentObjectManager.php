@@ -15,7 +15,7 @@ class EloquentObjectManager implements ObjectManagerInterface
 {
     public function save($object)
     {
-        if (!$object instanceof Model) {
+        if (! $object instanceof Model) {
             throw new UnexpectedInstance(Model::class, $object);
         }
 
@@ -24,7 +24,7 @@ class EloquentObjectManager implements ObjectManagerInterface
 
     public function forceDelete($object)
     {
-        if (!$object instanceof Model) {
+        if (! $object instanceof Model) {
             throw new UnexpectedInstance(Model::class, $object);
         }
 

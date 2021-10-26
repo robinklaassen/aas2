@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Exports;
 
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -18,7 +20,7 @@ class EventNightRegisterSheetParticipants implements FromCollection, WithHeading
     public function headings(): array
     {
         return [
-            'Voornaam', 'Tussenvoegsel', 'Achternaam', 'Geboortedatum', 'Adres', 'Postcode', 'Plaats'
+            'Voornaam', 'Tussenvoegsel', 'Achternaam', 'Geboortedatum', 'Adres', 'Postcode', 'Plaats',
         ];
     }
 
@@ -27,7 +29,6 @@ class EventNightRegisterSheetParticipants implements FromCollection, WithHeading
         $headerLowercase = array_map('strtolower', $this->headings());
         return $this->event->participants()->orderBy('voornaam')->get($headerLowercase);
     }
-
 
     public function title(): string
     {

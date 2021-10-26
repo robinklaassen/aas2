@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Updater\Services\SourceControl;
 
 use Updater\Services\CommandExecutor\ExecutorInterface;
@@ -7,6 +9,7 @@ use Updater\Services\CommandExecutor\ExecutorInterface;
 class GitSourceControlService implements SourceControlServiceInterface
 {
     private ExecutorInterface $shellExecutor;
+
     private ExecutorInterface $recordedShellExecutor;
 
     public function __construct(

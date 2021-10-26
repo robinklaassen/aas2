@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 use Monolog\Handler\NullHandler;
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Default Log Channel
@@ -71,5 +72,4 @@ return [
             'path' => storage_path('logs/laravel.log'),
         ],
     ],
-
 ];

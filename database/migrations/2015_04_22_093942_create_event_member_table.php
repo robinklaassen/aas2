@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
@@ -7,8 +9,6 @@ class CreateEventMemberTable extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
     public function up()
     {
@@ -19,23 +19,21 @@ class CreateEventMemberTable extends Migration
             $table->boolean('wissel')->default(0);
             $table->date('wissel_datum_start')->nullable();
             $table->date('wissel_datum_eind')->nullable();
-            
+
             $table->foreign('event_id')
-                    ->references('id')
-                    ->on('events')
-                    ->onDelete('cascade');
-                    
+                ->references('id')
+                ->on('events')
+                ->onDelete('cascade');
+
             $table->foreign('member_id')
-                    ->references('id')
-                    ->on('members')
-                    ->onDelete('cascade');
+                ->references('id')
+                ->on('members')
+                ->onDelete('cascade');
         });
     }
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down()
     {

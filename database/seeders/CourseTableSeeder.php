@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
 use App\Course;
@@ -10,31 +12,29 @@ class CourseTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
     public function run()
     {
         DB::table('courses')->delete();
-        
+
         Course::create([
             'naam' => 'Nederlands',
-            'code' => 'Ne'
+            'code' => 'Ne',
         ]);
-        
+
         Course::create([
             'naam' => 'Engels',
-            'code' => 'En'
+            'code' => 'En',
         ]);
-        
+
         Course::create([
             'naam' => 'Natuurkunde',
-            'code' => 'Na'
+            'code' => 'Na',
         ]);
-        
+
         Course::create([
             'naam' => 'Wiskunde',
-            'code' => 'Wi'
+            'code' => 'Wi',
         ]);
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Mail\participants;
 
 use App\Event;
@@ -12,14 +14,22 @@ use Illuminate\Support\Facades\Config;
 
 class ParticipantRegistrationConfirmation extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+
+    use SerializesModels;
 
     public $package;
+
     public $participant;
+
     public $event;
+
     public $givenCourses;
+
     public $password;
+
     public $toPay;
+
     public $iDeal;
 
     public function __construct(Participant $participant, Event $event, ?EventPackage $package, $givenCourses, $password, $toPay, $iDeal)
@@ -39,7 +49,7 @@ class ParticipantRegistrationConfirmation extends Mailable
 
         return $this->view('emails.participants.registrationConfirmation')
             ->to([$this->participant->getParentEmail()])
-            ->from([Config::get("mail.addresses.kantoor")])
+            ->from([Config::get('mail.addresses.kantoor')])
             ->subject($subject);
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http;
 
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
@@ -16,7 +18,7 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
-        \App\Http\Middleware\TrustProxies::class
+        \App\Http\Middleware\TrustProxies::class,
     ];
 
     /**
@@ -32,7 +34,7 @@ class Kernel extends HttpKernel
         'cors' => \App\Http\Middleware\CORS::class,
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
-        'privacy' => \App\Http\Middleware\CheckPrivacy::class
+        'privacy' => \App\Http\Middleware\CheckPrivacy::class,
     ];
 
     protected $middlewareGroups = [

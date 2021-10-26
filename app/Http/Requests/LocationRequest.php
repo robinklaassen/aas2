@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
 class LocationRequest extends Request
@@ -26,7 +28,7 @@ class LocationRequest extends Request
             'adres' => 'required',
             'postcode' => 'required',
             'plaats' => 'required',
-            'email' => 'sometimes|email'
+            'email' => 'sometimes|email',
         ];
     }
 }

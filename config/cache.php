@@ -1,7 +1,8 @@
 <?php
 
-return [
+declare(strict_types=1);
 
+return [
     /*
     |--------------------------------------------------------------------------
     | Default Cache Store
@@ -29,11 +30,11 @@ return [
     'stores' => [
 
         'apc' => [
-            'driver' => 'apc'
+            'driver' => 'apc',
         ],
 
         'array' => [
-            'driver' => 'array'
+            'driver' => 'array',
         ],
 
         'database' => [
@@ -51,7 +52,9 @@ return [
             'driver' => 'memcached',
             'servers' => [
                 [
-                    'host' => '127.0.0.1', 'port' => 11211, 'weight' => 100
+                    'host' => '127.0.0.1',
+                    'port' => 11211,
+                    'weight' => 100,
                 ],
             ],
         ],
@@ -75,5 +78,4 @@ return [
     */
 
     'prefix' => 'laravel',
-
 ];

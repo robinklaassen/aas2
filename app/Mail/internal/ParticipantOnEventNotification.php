@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Mail\internal;
 
 use App\Event;
@@ -11,9 +13,12 @@ use Illuminate\Support\Facades\Config;
 
 class ParticipantOnEventNotification extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+
+    use SerializesModels;
 
     public $participant;
+
     public $event;
 
     public function __construct(Participant $participant, Event $event)
@@ -28,7 +33,7 @@ class ParticipantOnEventNotification extends Mailable
 
         return $this->view('emails.internal.participantOnEventNotification')
             ->subject($subject)
-            ->to([Config::get("mail.addresses.kantoor")])
-            ->from([Config::get("mail.addresses.aas")]);
+            ->to([Config::get('mail.addresses.kantoor')])
+            ->from([Config::get('mail.addresses.aas')]);
     }
 }

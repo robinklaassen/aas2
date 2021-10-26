@@ -24,10 +24,10 @@ class PositionstackGeocoder implements GeocoderInterface
                 'access_key' => config('positionstack.api_key'),
                 'query' => $address,
                 'country' => $country,
-                'limit' => 1
+                'limit' => 1,
             ]);
         } catch (ConnectionException $e) {
-            throw new GeocoderException("HTTP connection timeout during geocoding.");
+            throw new GeocoderException('HTTP connection timeout during geocoding.');
         }
 
         if ($response->failed()) {
@@ -35,8 +35,8 @@ class PositionstackGeocoder implements GeocoderInterface
         }
 
         $responseData = $response->json()['data'];
-        if (!$responseData) {  // empty array when geolocation cannot be found
-            throw new GeocoderException("No geolocation match found for address '$address'.");
+        if (! $responseData) {  // empty array when geolocation cannot be found
+            throw new GeocoderException("No geolocation match found for address '${address}'.");
         }
 
         $match = $responseData[0];

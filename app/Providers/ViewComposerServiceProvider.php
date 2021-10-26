@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
@@ -8,8 +10,6 @@ class ViewComposerServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
-     *
-     * @return void
      */
     public function boot()
     {
@@ -19,11 +19,11 @@ class ViewComposerServiceProvider extends ServiceProvider
                 0 => 'Meer dan € 3400',
                 1 => 'Tussen € 2200 en € 3400',
                 2 => 'Tussen € 1300 en € 2200',
-                3 => 'Minder dan € 1300'
+                3 => 'Minder dan € 1300',
             ];
             $view->with('income', $income);
         });
-        
+
         // Composer for the create/edit event form (includes possible locations and 'streeftal')
         view()->composer('events.form', function ($view) {
             $locations = \App\Location::all();
@@ -33,12 +33,12 @@ class ViewComposerServiceProvider extends ServiceProvider
             }
             asort($loc_list);
             $ops = [];
-            for ($i = 5;$i <= 8;$i++) {
+            for ($i = 5; $i <= 8; $i++) {
                 $ops[$i] = $i . ' / ' . ($i - 1) * 3;
             }
             $view->with('locations', $loc_list)->with('streeftal_options', $ops);
         });
-        
+
         // Composer for the create/edit action form (includes possible members)
         view()->composer('actions.form', function ($view) {
             $members = \App\Member::orderBy('voornaam')->get();
@@ -48,7 +48,7 @@ class ViewComposerServiceProvider extends ServiceProvider
             }
             $view->with('members', $member_list);
         });
-        
+
         // Composer for the 'send member on event' form (includes all events sorted antichronologically)
         view()->composer('members.onEvent', function ($view) {
             $events = \App\Event::orderBy('datum_start', 'desc')->get();
@@ -58,7 +58,7 @@ class ViewComposerServiceProvider extends ServiceProvider
             }
             $view->with('event_options', $event_options);
         });
-        
+
         // Composer for the 'send participant on event' form (includes camps sorted antichronologically)
         view()->composer('participants.onEvent', function ($view) {
             $events = \App\Event::where('type', 'kamp')->orderBy('datum_start', 'desc')->get();
@@ -68,34 +68,40 @@ class ViewComposerServiceProvider extends ServiceProvider
             }
             $view->with('event_options', $event_options);
         });
-        
+
         // Composer for the 'add course' form (includes all courses sorted alphabetically)
         view()->composer('members.addCourse', function ($view) {
             $course_options = \App\Course::orderBy('naam')->pluck('naam', 'id')->toArray();
             $view->with('course_options', $course_options);
         });
-        
+
         // Composer for the 'participants.onEvent' form (includes all courses sorted alphabetically)
         view()->composer('participants.onEvent', function ($view) {
             $course_options = \App\Course::orderBy('naam')->pluck('naam', 'id')->toArray();
-            $course_options = [0 => '-geen vak-'] + $course_options;
+            $course_options = [
+                0 => '-geen vak-',
+            ] + $course_options;
             $view->with('course_options', $course_options);
         });
-        
+
         // Composer for the 'participants.editEvent' form (includes all courses sorted alphabetically)
         view()->composer('participants.editEvent', function ($view) {
             $course_options = \App\Course::orderBy('naam')->pluck('naam', 'id')->toArray();
-            $course_options = [0 => '-geen vak-'] + $course_options;
+            $course_options = [
+                0 => '-geen vak-',
+            ] + $course_options;
             $view->with('course_options', $course_options);
         });
-        
+
         // Composer for the 'events.editParticipant' form (includes all courses sorted alphabetically)
         view()->composer('events.editParticipant', function ($view) {
             $course_options = \App\Course::orderBy('naam')->pluck('naam', 'id')->toArray();
-            $course_options = [0 => '-geen vak-'] + $course_options;
+            $course_options = [
+                0 => '-geen vak-',
+            ] + $course_options;
             $view->with('course_options', $course_options);
         });
-        
+
         // Composer for the 'member show', includes rank borders
         view()->composer('members.show', function ($view) {
             $ranks = [0, 3, 10, 20, 35, 50, 70, 100];
@@ -105,8 +111,6 @@ class ViewComposerServiceProvider extends ServiceProvider
 
     /**
      * Register the application services.
-     *
-     * @return void
      */
     public function register()
     {

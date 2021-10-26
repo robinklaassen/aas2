@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App;
 
 use Illuminate\Database\Eloquent\Builder;
@@ -11,17 +13,19 @@ class Participant extends Model
         0 => 'Meer dan € 3400 (geen korting)',
         1 => 'Tussen € 2200 en € 3400 (korting: 15%)',
         2 => 'Tussen € 1300 en € 2200 (korting: 30%)',
-        3 => 'Minder dan € 1300 (korting: 50%)'
+        3 => 'Minder dan € 1300 (korting: 50%)',
     ];
+
     public const INCOME_DISCOUNT_TABLE = [
         0 => 1.0,
         1 => 0.85,
         2 => 0.7,
-        3 => 0.5
+        3 => 0.5,
     ];
+
     public const INFORMATION_CHANNEL_DESCRIPTION_TABLE = [
-        "postal-and-email" => "Post en e-mail",
-        "only-email" => "Alleen e-mail"
+        'postal-and-email' => 'Post en e-mail',
+        'only-email' => 'Alleen e-mail',
     ];
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
@@ -55,8 +59,8 @@ class Participant extends Model
     public function getParentEmail()
     {
         return [
-            "email" => $this->email_ouder,
-            "name" => $this->parentName,
+            'email' => $this->email_ouder,
+            'name' => $this->parentName,
         ];
     }
 

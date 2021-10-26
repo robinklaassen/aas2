@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Updater\Services\CommandExecutor;
 
@@ -11,9 +12,9 @@ class ShellExecutor implements ExecutorInterface
     {
         $line = $cmd . ' ' . implode(' ', $args);
         $descriptorspec = [
-           0 => ["pipe", "r"],
-           1 => ["pipe", "w"],
-           2 => ["pipe", "w"],
+            0 => ['pipe', 'r'],
+            1 => ['pipe', 'w'],
+            2 => ['pipe', 'w'],
         ];
         $process = proc_open($line, $descriptorspec, $pipes, base_path());
         if (is_resource($process)) {

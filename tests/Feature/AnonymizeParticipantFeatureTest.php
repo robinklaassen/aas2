@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
 use App\Participant;
@@ -10,7 +12,10 @@ use Tests\TestCase;
 class AnonymizeParticipantFeatureTest extends TestCase
 {
     use DatabaseTransactions;
-    /** @var Participant */
+
+    /**
+     * @var Participant
+     */
     private $participant;
 
     protected function setUp(): void
@@ -19,7 +24,7 @@ class AnonymizeParticipantFeatureTest extends TestCase
         $this->participant = Participant::find(5);
     }
 
-    public function test_it_is_not_accessible_for_members()
+    public function testItIsNotAccessibleForMembers()
     {
         $user = User::findOrFail(4); // Jon
         $this->actingAs($user)->get(action('ParticipantsController@anonymize'))
@@ -29,7 +34,7 @@ class AnonymizeParticipantFeatureTest extends TestCase
             ->assertDontSee('Anonimiseren');
     }
 
-    public function test_it_is_not_accessible_for_participants()
+    public function testItIsNotAccessibleForParticipants()
     {
         $user = User::findOrFail(13); // jan
         $this->actingAs($user)->get(action('ParticipantsController@anonymize'))
@@ -39,7 +44,7 @@ class AnonymizeParticipantFeatureTest extends TestCase
             ->assertDontSee('Anonimiseren');
     }
 
-    public function test_it_is_accessible_for_board()
+    public function testItIsAccessibleForBoard()
     {
         $user = User::findOrFail(1); // Ranonkeltje
         $this->actingAs($user)->get(action('ParticipantsController@anonymize'))
@@ -49,7 +54,7 @@ class AnonymizeParticipantFeatureTest extends TestCase
             ->assertSee('Anonimiseren');
     }
 
-    public function test_it_is_accessible_for_kantoorci()
+    public function testItIsAccessibleForKantoorci()
     {
         $user = User::findOrFail(2); // Jon
         $this->actingAs($user)->get(action('ParticipantsController@anonymize'))
@@ -59,7 +64,7 @@ class AnonymizeParticipantFeatureTest extends TestCase
             ->assertSee('Anonimiseren');
     }
 
-    public function test_it_shows_people_to_anonomyze()
+    public function testItShowsPeopleToAnonomyze()
     {
         $user = User::findOrFail(1); // Ranonkeltje
         $this->actingAs($user)->get(action('ParticipantsController@anonymize'))
@@ -68,11 +73,11 @@ class AnonymizeParticipantFeatureTest extends TestCase
             ->assertDontSee('Annabelle');
     }
 
-    public function test_it_confirms_people_to_anonymize()
+    public function testItConfirmsPeopleToAnonymize()
     {
         $user = User::findOrFail(1); // Ranonkeltje
         $this->actingAs($user)->get(action('ParticipantsController@anonymizeConfirm', [
-            'participant' => [5]
+            'participant' => [5],
         ]))
             ->assertStatus(200)
             ->assertSee('Jan Janssen')
@@ -80,18 +85,18 @@ class AnonymizeParticipantFeatureTest extends TestCase
             ;
 
         $this->actingAs($user)->get(action('ParticipantsController@anonymizeConfirm', [
-            'participant' => [1]
+            'participant' => [1],
         ]))
             ->assertStatus(200)
             ->assertSee('Jaap')
             ->assertDontSee('Jan');
     }
 
-    public function test_it_anonymizes()
+    public function testItAnonymizes()
     {
         $user = User::findOrFail(1); // Ranonkeltje
         $this->actingAs($user)->post(action('ParticipantsController@anonymizeConfirm'), [
-            'participant' => [5]
+            'participant' => [5],
         ])
             ->assertStatus(302)
             ->assertRedirect(action('ParticipantsController@index'))

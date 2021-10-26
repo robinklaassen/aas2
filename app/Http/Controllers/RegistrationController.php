@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Course;
@@ -22,7 +24,7 @@ use Illuminate\Support\Facades\Mail;
 
 class RegistrationController extends Controller
 {
-    # Member registration form
+    // Member registration form
     public function registerMember()
     {
         // List of future camps that are not full
@@ -46,43 +48,47 @@ class RegistrationController extends Controller
 
         // List of courses
         $course_options = Course::orderBy('naam')->pluck('naam', 'id')->toArray();
-        $course_options = [0 => '-kies vak-'] + $course_options;
+        $course_options = [
+            0 => '-kies vak-',
+        ] + $course_options;
 
         // List of 'hoe bij Anderwijs' options (without 'anders, namelijk'!)
         $hoebij_options = [
-            "Via bekenden",
-            "Google advertentie",
-            "Google zoekmachine",
-            "Facebook",
-            "Informatiemarkt",
-            "Supermarktadvertentie",
-            "Poster",
-            "Nieuwsbrief school"
+            'Via bekenden',
+            'Google advertentie',
+            'Google zoekmachine',
+            'Facebook',
+            'Informatiemarkt',
+            'Supermarktadvertentie',
+            'Poster',
+            'Nieuwsbrief school',
         ];
 
         return view('registration.member', compact('camp_options', 'camp_full', 'course_options', 'hoebij_options'));
     }
 
-    # Member registration handler
+    // Member registration handler
     public function storeMember(Requests\MemberRequest $request)
     {
         // Validation specific for registration (one time)
         $this->validate($request, [
             'vog' => 'required',
-            'privacy' => 'required'
+            'privacy' => 'required',
         ]);
 
         // Process 'hoebij' options to one string
         $hb = $request->hoebij;
 
-        $k = array_search("0", $hb);
+        $k = array_search('0', $hb, true);
         if ($k !== false) {
             $hb[$k] = $request->hoebij_anders;
         }
 
-        $hb_string = implode(", ", $hb);
+        $hb_string = implode(', ', $hb);
 
-        $request->merge(['hoebij' => $hb_string]);
+        $request->merge([
+            'hoebij' => $hb_string,
+        ]);
 
         // Store member in database
         $member = Member::create($request->except('selected_camp', 'vak0', 'vak1', 'vak2', 'vak3', 'vak4', 'vak5', 'vak6', 'vak7', 'klas0', 'klas1', 'klas2', 'klas3', 'klas4', 'klas5', 'klas6', 'klas7', 'hoebij_anders', 'vog', 'privacy'));
@@ -97,10 +103,15 @@ class RegistrationController extends Controller
         $levelInput = [$request->klas0, $request->klas1, $request->klas2, $request->klas3, $request->klas4, $request->klas5, $request->klas6, $request->klas7];
 
         foreach (array_unique($courseInput) as $i => $course) {
-            if ($course !== null && $course != '0') {
+            if ($course !== null && $course !== '0') {
                 $member->courses()->sync([$course], false);
-                $member->courses()->updateExistingPivot($course, ['klas' => $levelInput[$i]]);
-                $givenCourses[] = ['naam' => Course::find($course)->naam, 'klas' => $levelInput[$i]];
+                $member->courses()->updateExistingPivot($course, [
+                    'klas' => $levelInput[$i],
+                ]);
+                $givenCourses[] = [
+                    'naam' => Course::find($course)->naam,
+                    'klas' => $levelInput[$i],
+                ];
             }
         }
 
@@ -123,7 +134,7 @@ class RegistrationController extends Controller
         $user->privacy = Carbon::now();
         $member->user()->save($user);
 
-        $roles = Role::whereIn("tag", ["member"])->get();
+        $roles = Role::whereIn('tag', ['member'])->get();
         $user->roles()->sync($roles);
 
         $camp = Event::findOrFail($request->selected_camp);
@@ -150,33 +161,37 @@ class RegistrationController extends Controller
         return view('registration.memberStored');
     }
 
-    # Participant registration form
+    // Participant registration form
     public function registerParticipant()
     {
         $camps = Event::public()->open()->participantEvent()->orderBy('datum_start')->get();
 
         // List of courses
         $course_options = Course::orderBy('naam')->pluck('naam', 'id')->toArray();
-        $course_options = [0 => '-kies vak-'] + $course_options;
+        $course_options = [
+            0 => '-kies vak-',
+        ] + $course_options;
 
         $package_type_per_camp = $camps->where('package_type', '!=', null)->mapWithKeys(function ($item) {
-            return [$item['id'] => $item['package_type']];
+            return [
+                $item['id'] => $item['package_type'],
+            ];
         });
 
         $packages = \App\EventPackage::all()->groupBy('type');
 
         // List of 'hoe bij Anderwijs' options (without 'anders, namelijk'!)
         $hoebij_options = [
-            "Familielid is eerder meegeweest",
-            "Via bekenden",
-            "Google zoekmachine",
-            "Facebook (via vrienden)",
-            "Facebook advertentie",
-            "Bijlesvergelijker",
-            "Online advertentie",
-            "Poster",
-            "Nieuwsbrief school",
-            "Krant"
+            'Familielid is eerder meegeweest',
+            'Via bekenden',
+            'Google zoekmachine',
+            'Facebook (via vrienden)',
+            'Facebook advertentie',
+            'Bijlesvergelijker',
+            'Online advertentie',
+            'Poster',
+            'Nieuwsbrief school',
+            'Krant',
         ];
 
         // Scramble the options!
@@ -185,14 +200,14 @@ class RegistrationController extends Controller
         return view('registration.participant', compact('camps', 'course_options', 'hoebij_options', 'packages', 'package_type_per_camp'));
     }
 
-    # Participant registration handler
+    // Participant registration handler
     public function storeParticipant(Requests\NewParticipantRequest $request)
     {
         // Validation done in Request\NewParticipantRequest
         // Additional one-time validation items here
         $this->validate($request, [
             'voorwaarden' => 'required',
-            'privacy' => 'required'
+            'privacy' => 'required',
         ]);
 
         $package = \App\EventPackage::find($request->selected_package);
@@ -201,7 +216,7 @@ class RegistrationController extends Controller
         // Check given package for camp
         if ($camp['package_type'] !== null && ($package === null || $package['type'] !== $camp['package_type'])) {
             return back()->with([
-                'flash_error' => 'Er dient een pakket geselecteerd te worden voor dit kamp'
+                'flash_error' => 'Er dient een pakket geselecteerd te worden voor dit kamp',
             ]);
         } elseif ($camp['package_type'] === null) {
             // remove any given package if the camp doesn't accept packages
@@ -211,20 +226,24 @@ class RegistrationController extends Controller
         // Process 'hoebij' options to one string
         $hb = $request->hoebij;
 
-        $k = array_search("0", $hb);
+        $k = array_search('0', $hb, true);
         if ($k !== false) {
             $hb[$k] = $request->hoebij_anders;
         }
 
-        $hb_string = implode(", ", $hb);
+        $hb_string = implode(', ', $hb);
 
-        $request->merge(['hoebij' => $hb_string]);
+        $request->merge([
+            'hoebij' => $hb_string,
+        ]);
 
         // Store participant in database
         $participant = Participant::create($request->except('selected_package', 'selected_camp', 'vak0', 'vak1', 'vak2', 'vak3', 'vak4', 'vak5', 'vakinfo0', 'vakinfo1', 'vakinfo2', 'vakinfo3', 'vakinfo4', 'vakinfo5', 'iDeal', 'hoebij_anders', 'voorwaarden', 'privacy'));
 
         // Attach to camp
-        $participant->events()->attach($request->selected_camp, ["package_id" => $package === null ? null : $package->id]);
+        $participant->events()->attach($request->selected_camp, [
+            'package_id' => $package === null ? null : $package->id,
+        ]);
 
         // Attach courses (with information)
         $givenCourses = [];
@@ -233,11 +252,19 @@ class RegistrationController extends Controller
         $courseInfo = [$request->vakinfo0, $request->vakinfo1,  $request->vakinfo2, $request->vakinfo3, $request->vakinfo4, $request->vakinfo5];
 
         foreach (array_unique($courseInput) as $key => $course_id) {
-            if ($course_id != 0) {
+            if ($course_id !== 0) {
                 DB::table('course_event_participant')->insert(
-                    ['course_id' => $course_id, 'event_id' => $request->selected_camp, 'participant_id' => $participant->id, 'info' => $courseInfo[$key]]
+                    [
+                        'course_id' => $course_id,
+                        'event_id' => $request->selected_camp,
+                        'participant_id' => $participant->id,
+                        'info' => $courseInfo[$key],
+                    ]
                 );
-                $givenCourses[] = ['naam' => Course::find($course_id)->naam, 'info' => $courseInfo[$key]];
+                $givenCourses[] = [
+                    'naam' => Course::find($course_id)->naam,
+                    'info' => $courseInfo[$key],
+                ];
             }
         }
 
@@ -261,7 +288,7 @@ class RegistrationController extends Controller
         $user->privacy = Carbon::now();
         $participant->user()->save($user);
 
-        $roles = Role::whereIn("tag", ["participant"])->get();
+        $roles = Role::whereIn('tag', ['participant'])->get();
         $user->roles()->sync($roles);
 
         // Income table
@@ -296,11 +323,10 @@ class RegistrationController extends Controller
         );
 
         // If they want to pay with iDeal, set up the payment now
-        if ($iDeal == '1' && $toPay > 0) {
+        if ($iDeal === '1' && $toPay > 0) {
             return Mollie::process($payment);
-        } else {
-            // Return closing view
-            return view('registration.participantStored', compact('participant', 'camp', 'toPay', 'incomeTable', 'package'));
         }
+        // Return closing view
+        return view('registration.participantStored', compact('participant', 'camp', 'toPay', 'incomeTable', 'package'));
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Mail\internal;
 
 use App\Event;
@@ -11,9 +13,12 @@ use Illuminate\Support\Facades\Config;
 
 class MemberOnEventNotification extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+
+    use SerializesModels;
 
     public $event;
+
     public $member;
 
     public function __construct(Member $member, Event $event)
@@ -25,10 +30,10 @@ class MemberOnEventNotification extends Mailable
     public function build()
     {
         $subject = sprintf('%s Lid op kamp', Config::get('mail.subject_prefix.internal'));
-        
+
         return $this->view('emails.internal.memberOnEventNotification')
-            ->from([Config::get("mail.addresses.aas")])
-            ->to([Config::get("mail.addresses.kamp")])
+            ->from([Config::get('mail.addresses.aas')])
+            ->to([Config::get('mail.addresses.kamp')])
             ->subject($subject);
     }
 }

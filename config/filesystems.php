@@ -1,7 +1,8 @@
 <?php
 
-return [
+declare(strict_types=1);
 
+return [
     /*
     |--------------------------------------------------------------------------
     | Default Filesystem Disk
@@ -48,8 +49,7 @@ return [
             'root' => storage_path() . '/app',
         ],
 
-        
+
 
     ],
-
 ];

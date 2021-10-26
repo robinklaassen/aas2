@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
 use Tests\TestCase;
@@ -8,8 +10,6 @@ class BasicTest extends TestCase
 {
     /**
      * A basic feature test example.
-     *
-     * @return void
      */
     public function testExample()
     {

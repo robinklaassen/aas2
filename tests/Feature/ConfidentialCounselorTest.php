@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit;
 
 use App\User;
@@ -20,11 +22,11 @@ class EventTest extends TestCase
 
         // normal members see the phone number, the anderwijs email but not the private email
         $this->actingAs($user)
-            ->get("/members/" . EventTest::CONF_USER_ID)
+            ->get('/members/' . self::CONF_USER_ID)
             ->assertStatus(200)
-            ->assertSee("0611211211")
-            ->assertSee("siep@anderwijs.nl")
-            ->assertDontSee("siep@heeljong.nl");
+            ->assertSee('0611211211')
+            ->assertSee('siep@anderwijs.nl')
+            ->assertDontSee('siep@heeljong.nl');
     }
 
     public function testPhoneIsNotVisibleForParticipants()
@@ -35,7 +37,7 @@ class EventTest extends TestCase
 
         // members should not see the member at all
         $resp = $this->actingAs($user)
-            ->get("/members/" . EventTest::CONF_USER_ID)
+            ->get('/members/' . self::CONF_USER_ID)
             ->assertStatus(403);
 
         // dd($resp->getContent());

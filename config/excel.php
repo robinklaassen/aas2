@@ -1,9 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 use Maatwebsite\Excel\Excel;
 
 return [
-
     'exports' => [
 
         /*

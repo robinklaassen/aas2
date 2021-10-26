@@ -1,7 +1,8 @@
 <?php
 
-return [
+declare(strict_types=1);
 
+return [
     /*
     |--------------------------------------------------------------------------
     | Password Reminder Language Lines
@@ -13,10 +14,9 @@ return [
     |
     */
 
-    "password" => "Wachtwoorden moeten tenminste zes karakters bevatten gelijk zijn aan de bevestiging.",
-    "user" => "Er is geen gebruiker met dat emailadres.",
-    "token" => "Deze token is ongeldig.",
-    "sent" => "De link voor wachtwoordreset is gemaild!",
-    "reset" => "Je wachtwoord is gereset!",
-
+    'password' => 'Wachtwoorden moeten tenminste zes karakters bevatten gelijk zijn aan de bevestiging.',
+    'user' => 'Er is geen gebruiker met dat emailadres.',
+    'token' => 'Deze token is ongeldig.',
+    'sent' => 'De link voor wachtwoordreset is gemaild!',
+    'reset' => 'Je wachtwoord is gereset!',
 ];

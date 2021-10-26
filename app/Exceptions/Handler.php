@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
@@ -13,7 +15,7 @@ class Handler extends ExceptionHandler
      * @var array
      */
     protected $dontReport = [
-        'Symfony\Component\HttpKernel\Exception\HttpException'
+        'Symfony\Component\HttpKernel\Exception\HttpException',
     ];
 
     /**
@@ -22,7 +24,6 @@ class Handler extends ExceptionHandler
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
      * @param  \Exception  $e
-     * @return void
      */
     public function report(Throwable $e)
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Data;
 
 use Grimzy\LaravelMysqlSpatial\Types\Point;
@@ -10,8 +12,9 @@ use Grimzy\LaravelMysqlSpatial\Types\Point;
 class Geolocation
 {
     public float $latitude;
+
     public float $longitude;
-    
+
     public function __construct(float $latitude, float $longitude)
     {
         $this->latitude = $latitude;

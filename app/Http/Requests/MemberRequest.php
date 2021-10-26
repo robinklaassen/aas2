@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
 class MemberRequest extends Request
@@ -34,7 +36,7 @@ class MemberRequest extends Request
             'studie' => 'required',
             'afgestudeerd' => 'required|boolean',
             'email_anderwijs' => 'nullable|email',
-            'hoebij' => 'required'
+            'hoebij' => 'required',
         ];
     }
 }

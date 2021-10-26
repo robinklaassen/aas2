@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Helpers;
 
 use App\Course;
@@ -9,7 +11,9 @@ class CourseCoverageHelper
 {
     // Return types for the getStatus method
     public const STATUS_BAD_QUOTA = 'badquota';
+
     public const STATUS_BAD_LEVEL = 'badlevel';
+
     public const STATUS_OK = 'ok';
 
     // During tutoring on camps there is a default maximum number of participants per member

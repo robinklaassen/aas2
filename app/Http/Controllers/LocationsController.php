@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Event;
@@ -44,7 +46,7 @@ class LocationsController extends Controller
     {
         Location::create($request->all());
         return redirect('locations')->with([
-            'flash_message' => 'De locatie is aangemaakt!'
+            'flash_message' => 'De locatie is aangemaakt!',
         ]);
     }
 
@@ -81,7 +83,7 @@ class LocationsController extends Controller
     {
         $location->update($request->all());
         return redirect('locations/' . $location->id)->with([
-            'flash_message' => 'De locatie is bewerkt!'
+            'flash_message' => 'De locatie is bewerkt!',
         ]);
     }
 
@@ -91,10 +93,9 @@ class LocationsController extends Controller
      * @param  int  $location
      * @return Response
      */
-
     public function delete(Location $location)
     {
-        $this->authorize("delete", $location);
+        $this->authorize('delete', $location);
         return view('locations.delete', compact('location'));
     }
 
@@ -102,19 +103,19 @@ class LocationsController extends Controller
     {
         $location->delete();
         return redirect('locations')->with([
-            'flash_message' => 'De locatie is verwijderd!'
+            'flash_message' => 'De locatie is verwijderd!',
         ]);
     }
 
-    # Enqueteresultaten
+    // Enqueteresultaten
     public function reviews(Location $location, Event $event, ChartServiceInterface $chartService)
     {
-        $this->authorize("viewReviewResults", $event);
-        
+        $this->authorize('viewReviewResults', $event);
+
         $questions = collect([
             'kh-slaap',
             'kh-bijspijker',
-            'kh-geheel'
+            'kh-geheel',
         ]);
 
         $questions->map(function ($question) use ($event, $chartService) {

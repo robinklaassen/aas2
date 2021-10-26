@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -19,8 +21,6 @@ class EventTest extends TestCase
 
     /**
      * Test the events index page
-     *
-     * @return void
      */
     public function testIndex()
     {
@@ -33,8 +33,6 @@ class EventTest extends TestCase
 
     /**
      * Test the show event page
-     *
-     * @return void
      */
     public function testShow()
     {
@@ -52,7 +50,7 @@ class EventTest extends TestCase
             ->actingAs($this->user)
             ->get('/events/1/export')
             ->assertStatus(200)
-            ->assertHeader("Content-Type", "application/pdf");
+            ->assertHeader('Content-Type', 'application/pdf');
     }
 
     public function testCreate()
@@ -72,7 +70,7 @@ class EventTest extends TestCase
             'prijs' => 0,
             'vol' => 0,
             'streeftal' => '5',
-            'beschrijving' => 'Test!'
+            'beschrijving' => 'Test!',
         ];
 
         $this

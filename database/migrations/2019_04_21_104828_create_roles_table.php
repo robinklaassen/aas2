@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
@@ -8,8 +10,6 @@ class CreateRolesTable extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
     public function up()
     {
@@ -20,31 +20,31 @@ class CreateRolesTable extends Migration
             $table->unique('tag');
         });
 
-
         $roles = [
-            ["Aasbaas", "aasbaas"],
-            ["Bestuurslid", "board"],
-            ["Voorzitter", "president"],
-            ["Penningmeester", "treasurer"],
-            ["Kampcommissie", "kampci"],
-            ["Kantoorcommissie", "kantoorci"],
-            ["Promocommissie", "promoci"],
-            ["Trainingscommissie", "trainerci"],
-            ["Trainer", "trainer"],
-            ["Normaal lid", "member"],
-            ["Deelnemer", "participant"]
+            ['Aasbaas', 'aasbaas'],
+            ['Bestuurslid', 'board'],
+            ['Voorzitter', 'president'],
+            ['Penningmeester', 'treasurer'],
+            ['Kampcommissie', 'kampci'],
+            ['Kantoorcommissie', 'kantoorci'],
+            ['Promocommissie', 'promoci'],
+            ['Trainingscommissie', 'trainerci'],
+            ['Trainer', 'trainer'],
+            ['Normaal lid', 'member'],
+            ['Deelnemer', 'participant'],
         ];
         $all = array_map(function ($i) {
-            return ["title" => $i[0], "tag" => $i[1]];
+            return [
+                'title' => $i[0],
+                'tag' => $i[1],
+            ];
         }, $roles);
 
-        DB::table("roles")->insert($all);
+        DB::table('roles')->insert($all);
     }
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down()
     {

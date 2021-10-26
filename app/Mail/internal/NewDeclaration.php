@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Mail\internal;
 
 use App\Member;
@@ -10,12 +12,18 @@ use Illuminate\Support\Facades\Config;
 
 class NewDeclaration extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+
+    use SerializesModels;
 
     public $member;
+
     public $formFilePath;
+
     public $inputData;
+
     public $totalAmount;
+
     public $fileNames;
 
     public function __construct(

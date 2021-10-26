@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
 use App\Member;
@@ -10,8 +12,6 @@ class MemberTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
     public function run()
     {
@@ -112,7 +112,7 @@ class MemberTableSeeder extends Seeder
             'ranonkeltje' => '0',
             'vog' => '1',
             'ervaren_trainer' => '1',
-            'opmerkingen' => 'Ik ben doof aan één kant en slechtziend aan de andere.'
+            'opmerkingen' => 'Ik ben doof aan één kant en slechtziend aan de andere.',
         ]);
 
         Member::create([
@@ -136,7 +136,7 @@ class MemberTableSeeder extends Seeder
             'ranonkeltje' => '1',
             'vog' => '1',
             'ervaren_trainer' => '0',
-            'opmerkingen' => 'Ben goed met geld enzo. Penningmeester.'
+            'opmerkingen' => 'Ben goed met geld enzo. Penningmeester.',
         ]);
 
         Member::create([
@@ -160,7 +160,7 @@ class MemberTableSeeder extends Seeder
             'ranonkeltje' => '1',
             'vog' => '1',
             'ervaren_trainer' => '1',
-            'opmerkingen' => 'Kamp-ci.'
+            'opmerkingen' => 'Kamp-ci.',
         ]);
 
         Member::create([
@@ -184,7 +184,7 @@ class MemberTableSeeder extends Seeder
             'ranonkeltje' => '0',
             'vog' => '0',
             'ervaren_trainer' => '0',
-            'opmerkingen' => 'Aasbaas.'
+            'opmerkingen' => 'Aasbaas.',
         ]);
 
         Member::create([
@@ -208,7 +208,7 @@ class MemberTableSeeder extends Seeder
             'ranonkeltje' => '0',
             'vog' => '0',
             'ervaren_trainer' => '0',
-            'opmerkingen' => 'promo-ci.'
+            'opmerkingen' => 'promo-ci.',
         ]);
 
         Member::create([
@@ -232,7 +232,7 @@ class MemberTableSeeder extends Seeder
             'ranonkeltje' => '0',
             'vog' => '0',
             'ervaren_trainer' => '0',
-            'opmerkingen' => 'kantoor-ci.'
+            'opmerkingen' => 'kantoor-ci.',
         ]);
 
         Member::create([
@@ -256,9 +256,9 @@ class MemberTableSeeder extends Seeder
             'ranonkeltje' => '2',
             'vog' => '0',
             'ervaren_trainer' => '0',
-            'opmerkingen' => 'ranonkeltje redacteur.'
+            'opmerkingen' => 'ranonkeltje redacteur.',
         ]);
-        
+
         Member::create([
             'voornaam' => 'Jaap',
             'tussenvoegsel' => '',
@@ -280,7 +280,7 @@ class MemberTableSeeder extends Seeder
             'ranonkeltje' => '2',
             'vog' => '0',
             'ervaren_trainer' => '0',
-            'opmerkingen' => 'Vertrouwens persson.'
+            'opmerkingen' => 'Vertrouwens persson.',
         ]);
     }
 }

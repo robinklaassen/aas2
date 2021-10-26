@@ -14,10 +14,12 @@ use Illuminate\Support\Collection;
 class AnonymizeParticipant implements AnonymizeParticipantInterface
 {
     public const YEAR_NO_CAMP = 8;
+
     /**
      * @var AnonymizeGeneratorInterface
      */
     private $generator;
+
     /**
      * @var ObjectManagerInterface
      */
@@ -31,7 +33,9 @@ class AnonymizeParticipant implements AnonymizeParticipantInterface
         $this->objectManager = $objectManager;
     }
 
-    /** @return Collection<Participant> */
+    /**
+     * @return Collection<Participant>
+     */
     public function getParticipantsToAnonymize(DateTimeImmutable $currentTime): Collection
     {
         $inactiveBoundary = (new Carbon($currentTime))->subYears(self::YEAR_NO_CAMP);
@@ -40,7 +44,7 @@ class AnonymizeParticipant implements AnonymizeParticipantInterface
             ->leftJoin('event_participant', 'participants.id', '=', 'event_participant.participant_id')
             ->leftJoin('events', function ($query) {
                 $query->on('events.id', '=', 'event_participant.event_id')
-                        ->whereRaw('events.id IN (
+                    ->whereRaw('events.id IN (
                             select MIN(e2.id) 
                               from events as e2 
                               join event_participant ep2 on e2.id = ep2.event_id 
@@ -81,11 +85,11 @@ class AnonymizeParticipant implements AnonymizeParticipantInterface
         $participant->mag_gemaild = false;
         $participant->inkomen = 0;
         $participant->inkomensverklaring = false;
-        $participant->school = "";
+        $participant->school = '';
         // keep niveau
         $participant->klas = 0;
         // keep hoebij
-        $participant->opmerkingen = "Geanonimiseerd";
+        $participant->opmerkingen = 'Geanonimiseerd';
         $participant->anonymized_at = new DateTimeImmutable();
 
         foreach ($participant->comments as $comment) {

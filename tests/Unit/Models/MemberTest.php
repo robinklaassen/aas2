@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit\Models;
 
 use App\Event;
@@ -12,6 +14,7 @@ class MemberTest extends TestCase
     use DatabaseTransactions;
 
     private $member;
+
     private $camp;
 
     protected function setUp(): void
@@ -25,7 +28,7 @@ class MemberTest extends TestCase
     {
         $this->member->events()->sync([$this->camp->id]);
         $nextCamp = $this->member->getNextFutureCamp();
-        $this->assertEquals($this->camp->id, $nextCamp->id);
+        $this->assertSame($this->camp->id, $nextCamp->id);
     }
 
     public function testGetNextCampReturnsNull()

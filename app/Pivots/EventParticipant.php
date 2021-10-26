@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Pivots;
 
 use Illuminate\Database\Eloquent\Relations\Pivot;
@@ -7,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 class EventParticipant extends Pivot
 {
     protected $guarded = ['created_at', 'updated_at'];
+
     public function participant()
     {
         return $this->belongsTo("App\Participant");

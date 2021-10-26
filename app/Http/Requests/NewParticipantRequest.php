@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
 class NewParticipantRequest extends Request
@@ -38,7 +40,7 @@ class NewParticipantRequest extends Request
             'niveau' => 'required',
             'klas' => 'required',
             'inkomen' => 'required',
-            'hoebij' => 'required'
+            'hoebij' => 'required',
             //'voorwaarden' => 'required',
             //'privacy' => 'required'
         ];

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Mail\internal;
 
 use App\Course;
@@ -12,19 +14,24 @@ use Illuminate\Support\Facades\Config;
 
 class CoverageChangedNotification extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+
+    use SerializesModels;
 
     public $member;
+
     public $event;
+
     public $course;
+
     public $courseLevelFrom;
+
     public $courseLevelTo;
+
     public $statusAfter;
 
     /**
      * Create a new message instance.
-     *
-     * @return void
      */
     public function __construct(
         Member $member,
@@ -50,7 +57,7 @@ class CoverageChangedNotification extends Mailable
     public function build()
     {
         $subject = sprintf('%s Vakdekking gewijzigd', Config::get('mail.subject_prefix.internal'));
-        
+
         return $this->view('emails.internal.coverageChangedNotification')
             ->subject($subject)
             ->from([Config::get('mail.addresses.aas')])

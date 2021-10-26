@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
 class AnonymizeParticipantRequest extends Request
@@ -23,7 +25,7 @@ class AnonymizeParticipantRequest extends Request
     {
         return [
             'participant' => 'required|array',
-            'participant.*' => 'required|integer'
+            'participant.*' => 'required|integer',
         ];
     }
 }

@@ -1,7 +1,8 @@
 <?php
 
-return [
+declare(strict_types=1);
 
+return [
     /*
     |--------------------------------------------------------------------------
     | Google Analytics / Ads tags
@@ -16,5 +17,4 @@ return [
     'conversion_new_member' => env('GOOGLE_CONVERSION_NEW_MEMBER', null),
 
     'conversion_new_participant' => env('GOOGLE_CONVERSION_NEW_PARTICIPANT', null),
-
 ];

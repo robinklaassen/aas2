@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
 use App\Participant;
@@ -10,8 +12,6 @@ class ParticipantTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
     public function run()
     {
@@ -62,7 +62,6 @@ class ParticipantTableSeeder extends Seeder
             'opmerkingen' => 'Enorm veel zin in kamp.',
         ]);
 
-
         Participant::create([
             'voornaam' => 'Iris',
             'tussenvoegsel' => '',
@@ -85,7 +84,6 @@ class ParticipantTableSeeder extends Seeder
             'hoebij' => 'Anders',
             'opmerkingen' => 'Geen zin in kamp.',
         ]);
-
 
         Participant::create([
             'voornaam' => 'Henk',

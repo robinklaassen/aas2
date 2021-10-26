@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Course;
@@ -19,7 +21,7 @@ class MembersController extends Controller
         $this->authorizeResource(Member::class, 'member');
     }
 
-    # Index page
+    // Index page
     public function index()
     {
         $current_members = Member::orderBy('voornaam', 'asc')->whereIn('soort', ['normaal', 'aspirant', 'info'])->get();
@@ -27,7 +29,7 @@ class MembersController extends Controller
         return view('members.index', compact('current_members', 'former_members'));
     }
 
-    # Member details page
+    // Member details page
     public function show(Member $member, string $viewType = 'admin')
     {
         return view('members.show', compact('member', 'viewType'));
@@ -35,32 +37,32 @@ class MembersController extends Controller
 
     // TODO creating and storing new members from here is never used -- we have a registration page... consider removing
 
-    # Create new member
+    // Create new member
     public function create()
     {
         $viewType = 'admin';
         return view('members.create', compact('viewType'));
     }
 
-    # Store new member
+    // Store new member
     public function store(MemberRequest $request)
     {
-        Member::create($request->except("roles"));
+        Member::create($request->except('roles'));
         return redirect('members')->with([
-            'flash_message' => 'Het lid is aangemaakt!'
+            'flash_message' => 'Het lid is aangemaakt!',
         ]);
     }
 
-    # Edit member form
+    // Edit member form
     public function edit(Member $member, string $viewType = 'admin')
     {
         return view('members.edit', compact('member', 'viewType'));
     }
 
-    # Update member in DB
+    // Update member in DB
     public function update(Member $member, MemberRequest $request, string $successMessage = null)
     {
-        $member->update($request->except(["skills", "roles"]));
+        $member->update($request->except(['skills', 'roles']));
 
         // Update skills
         $skills = $request->input('skills') ?? []; // this is an array with ids of existing skills (as strings!) and string tags of new skills
@@ -75,122 +77,126 @@ class MembersController extends Controller
         // Update roles
         $user = $member->user()->first();
         if ($user) {
-            $user->roles()->sync($request->input("roles"));
+            $user->roles()->sync($request->input('roles'));
         }
 
         return redirect('members/' . $member->id)->with([
-            'flash_message' => $successMessage ?? 'Het lid is bewerkt!'
+            'flash_message' => $successMessage ?? 'Het lid is bewerkt!',
         ]);
     }
 
-    # Delete confirmation
+    // Delete confirmation
     public function delete(Member $member)
     {
-        $this->authorize("delete", $member);
+        $this->authorize('delete', $member);
         return view('members.delete', compact('member'));
     }
 
-    # Remove member from database
+    // Remove member from database
     public function destroy(Member $member)
     {
         $member->user()->delete();
         $member->delete();
         return redirect('members')->with([
-            'flash_message' => 'Het lid is verwijderd!'
+            'flash_message' => 'Het lid is verwijderd!',
         ]);
     }
 
-    # Send member on event (form)
+    // Send member on event (form)
     public function onEvent(Member $member)
     {
-        $this->authorize("onEvent", $member);
+        $this->authorize('onEvent', $member);
         return view('members.onEvent', compact('member'));
     }
 
-    # Send member on event (update database)
+    // Send member on event (update database)
     public function onEventSave(Request $request, Member $member)
     {
-        $this->authorize("onEvent", $member);
+        $this->authorize('onEvent', $member);
         // Should not be attached if the member has already been sent on this event! That's why we use sync instead of attach, without detaching (second parameter false)
         $status = $member->events()->sync([$request->input('selected_event')], false);
-        $message = ($status['attached'] == []) ? 'Het lid is reeds op dit evenement gestuurd!' : 'Het lid is op evenement gestuurd!';
+        $message = ($status['attached'] === []) ? 'Het lid is reeds op dit evenement gestuurd!' : 'Het lid is op evenement gestuurd!';
         return redirect('members/' . $member->id)->with([
-            'flash_message' => $message
+            'flash_message' => $message,
         ]);
     }
 
-    # Add course for this member (form)
+    // Add course for this member (form)
     public function addCourse(Member $member)
     {
-        $this->authorize("editPractical", $member);
+        $this->authorize('editPractical', $member);
         $viewType = 'admin';
         return view('members.addCourse', compact('member', 'viewType'));
     }
 
-    # Add course for this member (update database)
+    // Add course for this member (update database)
     public function addCourseSave(Request $request, Member $member)
     {
-        $this->authorize("editPractical", $member);
+        $this->authorize('editPractical', $member);
         $status = $member->courses()->sync([$request->input('selected_course')], false);
-        if ($status['attached'] == []) {
+        if ($status['attached'] === []) {
             $message = 'Vak reeds toegevoegd!';
         } else {
-            $member->courses()->updateExistingPivot($request->input('selected_course'), ['klas' => $request->input('klas')]);
+            $member->courses()->updateExistingPivot($request->input('selected_course'), [
+                'klas' => $request->input('klas'),
+            ]);
             $message = 'Vak toegevoegd!';
         }
         return redirect('members/' . $member->id)->with([
-            'flash_message' => $message
+            'flash_message' => $message,
         ]);
     }
 
-    # Edit course for this member (form)
+    // Edit course for this member (form)
     public function editCourse(Member $member, $course_id)
     {
-        $this->authorize("editPractical", $member);
+        $this->authorize('editPractical', $member);
         $course = $member->courses->find($course_id);
         $viewType = 'admin';
         return view('members.editCourse', compact('member', 'course', 'viewType'));
     }
 
-    # Edit course for this member (update database)
+    // Edit course for this member (update database)
     public function editCourseSave(Request $request, Member $member, $course_id)
     {
-        $this->authorize("editPractical", $member);
-        $member->courses()->updateExistingPivot($course_id, ['klas' => $request->input('klas')]);
+        $this->authorize('editPractical', $member);
+        $member->courses()->updateExistingPivot($course_id, [
+            'klas' => $request->input('klas'),
+        ]);
         return redirect('members/' . $member->id)->with([
-            'flash_message' => 'Het vak is bewerkt!'
+            'flash_message' => 'Het vak is bewerkt!',
         ]);
     }
 
-    # Remove (detach) a course from this member (form)
+    // Remove (detach) a course from this member (form)
     public function removeCourseConfirm(Member $member, $course_id)
     {
-        $this->authorize("editPractical", $member);
+        $this->authorize('editPractical', $member);
         $course = Course::findOrFail($course_id);
         $viewType = 'admin';
         return view('members.removeCourse', compact('member', 'course', 'viewType'));
     }
 
-    # Remove (detach) a course from this member (update database)
+    // Remove (detach) a course from this member (update database)
     public function removeCourse(Member $member, $course_id)
     {
-        $this->authorize("editPractical", $member);
+        $this->authorize('editPractical', $member);
         $member->courses()->detach($course_id);
         return redirect('members/' . $member->id)->with([
-            'flash_message' => 'Het vak is van dit lid verwijderd!'
+            'flash_message' => 'Het vak is van dit lid verwijderd!',
         ]);
     }
 
-    # Export all members to Excel
+    // Export all members to Excel
     public function export()
     {
         return Excel::download(new MembersExport(), date('Y-m-d') . ' AAS leden.xlsx');
     }
 
-    # Show all members on a Google Map
+    // Show all members on a Google Map
     public function map()
     {
-        $this->authorize("viewAny", Member::class);
+        $this->authorize('viewAny', Member::class);
         $members = Member::where('soort', '<>', 'oud')->whereNotNull('geolocatie')->get();
 
         $markers = $members
@@ -199,19 +205,19 @@ class MembersController extends Controller
                     'latlng' => [$m->geolocatie->getLat(), $m->geolocatie->getLng()],
                     'name' => $m->volnaam,
                     'type' => $m->soort,
-                    'link' => "<a href='" . url('members', $m->id) . "'>$m->volnaam</a>",
+                    'link' => "<a href='" . url('members', $m->id) . "'>{$m->volnaam}</a>",
                 ]
             )->values();
 
         return view('members.map', compact('markers'));
     }
 
-    # Search members by coverage
+    // Search members by coverage
     // TODO method is quite long, refactor into model/service
     public function search(Request $request)
     {
-        $this->authorize("viewAny", Member::class);
-        $this->authorize("showPracticalAny", Member::class);
+        $this->authorize('viewAny', Member::class);
+        $this->authorize('showPracticalAny', Member::class);
 
         /** @var User $user */
         $user = $request->user();
@@ -223,7 +229,7 @@ class MembersController extends Controller
         $courseCodes = Course::pluck('code', 'id')->toArray();
 
         $allMembers = Member::where('soort', '<>', 'oud');
-        if ($user->can("showAdministrativeAny", Member::class)) {
+        if ($user->can('showAdministrativeAny', Member::class)) {
             $allMembers = $allMembers->where('vog', '>=', $vog);
         }
         $allMembers = $allMembers->orderBy('voornaam')->get();
@@ -235,7 +241,7 @@ class MembersController extends Controller
             $status = true;
 
             foreach ($courses as $course_id) {
-                if ($member->courses->find($course_id) == null) {
+                if ($member->courses->find($course_id) === null) {
                     $status = false;
                 } else {
                     $level[$member->id][$course_id] = $member->courses->find($course_id)->pivot->klas;
@@ -250,17 +256,17 @@ class MembersController extends Controller
         return view('members.search', compact('courseList', 'courseCodes', 'courses', 'vog', 'members', 'level'));
     }
 
-    # Search members by skills
+    // Search members by skills
     public function searchSkills(Request $request)
     {
-        $this->authorize("viewAny", Member::class);
+        $this->authorize('viewAny', Member::class);
 
         $skills = $request->input('skills', []);
         $require_how = $request->input('require_how', 'any');
 
         $all_skills = Skill::pluck('tag', 'id')->toArray();
 
-        $num_matches = ($require_how == 'all') ? count($skills) : 1;
+        $num_matches = ($require_how === 'all') ? count($skills) : 1;
         $members = Member::whereHas('skills', function (Builder $query) use ($skills) {
             $query->whereIn('id', $skills);
         }, '>=', $num_matches)->get();

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App;
 
 use App\Events\MemberUpdated;
@@ -11,7 +13,12 @@ use Illuminate\Support\Arr;
 
 class Member extends Model
 {
-    use FormAccessible, SpatialTrait;
+    use FormAccessible;
+
+    use SpatialTrait;
+
+    // Number of points needed for every level in the points system
+    public const RANK_POINTS = [0, 3, 10, 20, 35, 50, 70, 100];
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
@@ -19,11 +26,8 @@ class Member extends Model
 
     protected $spatialFields = ['geolocatie'];
 
-    // Number of points needed for every level in the points system
-    public const RANK_POINTS = [0, 3, 10, 20, 35, 50, 70, 100];
-
     protected $dispatchesEvents = [
-        'updated' => MemberUpdated::class
+        'updated' => MemberUpdated::class,
     ];
 
     // Full name
@@ -124,7 +128,7 @@ class Member extends Model
         $ulist = array_unique($list);
 
         // Filter K and N to 1
-        if (in_array('K', $ulist) && in_array('N', $ulist)) {
+        if (in_array('K', $ulist, true) && in_array('N', $ulist, true)) {
             $ulist = array_diff($ulist, ['K']);
         }
 
@@ -175,7 +179,7 @@ class Member extends Model
 
     public function getIsMaxedRankAttribute(): bool
     {
-        return $this->rank == array_key_last($this::RANK_POINTS);
+        return $this->rank === array_key_last($this::RANK_POINTS);
     }
 
     public function getPointsToNextRankAttribute(): int
@@ -223,7 +227,7 @@ class Member extends Model
                 $name .= ' (w)';
             }
 
-            if ($event->type == 'training') {
+            if ($event->type === 'training') {
                 $points = 2;
             } elseif ($event->pivot->wissel) {
                 $points = 1;
@@ -234,7 +238,7 @@ class Member extends Model
             $data[] = [
                 'date' => $event->datum_start,
                 'name' => $name,
-                'points' => $points
+                'points' => $points,
             ];
         }
 
@@ -245,7 +249,7 @@ class Member extends Model
             $data[] = [
                 'date' => $action->date,
                 'name' => $action->description,
-                'points' => $action->points
+                'points' => $action->points,
             ];
         }
 
@@ -258,7 +262,7 @@ class Member extends Model
             $data[] = [
                 'date' => null,
                 'name' => 'Straight flush',
-                'points' => 3
+                'points' => 3,
             ];
         }
 
@@ -296,9 +300,9 @@ class Member extends Model
 
         switch ($result) {
             case 'e':
-                if ($lastEvent->type == 'training') {
+                if ($lastEvent->type === 'training') {
                     $points = 2;
-                } elseif ($lastEvent->pivot->wissel == 0) {
+                } elseif ($lastEvent->pivot->wissel === 0) {
                     $points = 3;
                 } else {
                     $points = 1;
@@ -306,19 +310,19 @@ class Member extends Model
 
                 $data = [
                     'name' => $lastEvent->naam . ' ' . $lastEvent->datum_eind->format('Y'),
-                    'points' => $points
+                    'points' => $points,
                 ];
                 break;
             case 'a':
                 $data = [
                     'name' => $lastAction->description,
-                    'points' => $lastAction->points
+                    'points' => $lastAction->points,
                 ];
                 break;
             default:
                 $data = [
                     'name' => '-',
-                    'points' => 0
+                    'points' => 0,
                 ];
         }
 
@@ -334,10 +338,12 @@ class Member extends Model
             $fellow_ids = array_merge($fellow_ids, $event->members()->pluck('id')->toArray());
         }
         $fellow_ids = array_unique($fellow_ids);
-        if (($key = array_search($this->id, $fellow_ids)) !== false) {
+
+        $key = array_search($this->id, $fellow_ids, true);
+        if ($key !== false) {
             unset($fellow_ids[$key]);
         }
-        $fellows = Member::whereIn('id', $fellow_ids)->orderBy('voornaam')->get();
+        $fellows = self::whereIn('id', $fellow_ids)->orderBy('voornaam')->get();
         return $fellows;
     }
 
@@ -350,8 +356,8 @@ class Member extends Model
     public function getAnderwijsEmail()
     {
         return [
-            "email" => $this->email_anderwijs,
-            "name" => $this->volnaam
+            'email' => $this->email_anderwijs,
+            'name' => $this->volnaam,
         ];
     }
 

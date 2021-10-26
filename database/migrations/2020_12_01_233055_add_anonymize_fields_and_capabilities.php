@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Helpers\CapabilityHelper;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -9,8 +11,6 @@ class AddAnonymizeFieldsAndCapabilities extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
     public function up()
     {
@@ -28,13 +28,11 @@ class AddAnonymizeFieldsAndCapabilities extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down()
     {
         CapabilityHelper::delete([
-            'participants::anonymize'
+            'participants::anonymize',
         ]);
 
         Schema::table('participants', function (Blueprint $table) {

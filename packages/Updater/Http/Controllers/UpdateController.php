@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Updater\Http\Controllers;
 
 use Illuminate\Http\Request;
@@ -29,14 +31,14 @@ class UpdateController extends Controller
         return response()->json([
             'took' => time() - $start,
             'output' => $this->updaterService->getUpdateOutput(),
-            'current' => $this->updaterService->currentVersion()
+            'current' => $this->updaterService->currentVersion(),
         ]);
     }
 
     public function version()
     {
         return response()->json([
-            'current' => $this->updaterService->currentVersion()
+            'current' => $this->updaterService->currentVersion(),
         ]);
     }
 }

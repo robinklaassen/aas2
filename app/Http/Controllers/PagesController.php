@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Event;
@@ -15,17 +17,17 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
-# The PagesController is for static pages that do not fall under any other type of controller, like members or events.
+// The PagesController is for static pages that do not fall under any other type of controller, like members or events.
 class PagesController extends Controller
 {
     public function __construct()
     {
     }
 
-    # Homepage
+    // Homepage
     public function home()
     {
-        if (Auth::user()->profile_type == "App\Member") {
+        if (Auth::user()->profile_type === "App\Member") {
             // Member homepage
 
             // Today's birthdays
@@ -41,7 +43,7 @@ class PagesController extends Controller
                 $member = \App\Member::find($id);
                 $member->leeftijd = date('Y') - $member->geboortedatum->year;
                 $member->ikjarig = false;
-                if (Auth::user()->profile->id == $id) {
+                if (Auth::user()->profile->id === $id) {
                     $member->ikjarig = true;
                 }
                 $today[$k] = $member;
@@ -59,8 +61,8 @@ class PagesController extends Controller
                 $streef_L = $camp->streeftal;
                 $streef_D = ($streef_L - 1) * 3;
 
-                # Hack for 'double camp' event (Winterkampen 2017-2018)
-                if ($id == 129) {
+                // Hack for 'double camp' event (Winterkampen 2017-2018)
+                if ($id === 129) {
                     $streef_L = 12;
                     $streef_D = 28;
                 }
@@ -81,27 +83,26 @@ class PagesController extends Controller
             }
 
             return view('pages.home-member', compact('today', 'thermo'));
-        } else {
-            // Participant homepage
-
-            // Birthday check!
-            $bday = Auth::user()->profile->geboortedatum;
-            $congrats = ($bday->isBirthday()) ? 1 : 0;
-
-            return view('pages.home-participant', compact('congrats'));
         }
+        // Participant homepage
+
+        // Birthday check!
+        $bday = Auth::user()->profile->geboortedatum;
+        $congrats = ($bday->isBirthday()) ? 1 : 0;
+
+        return view('pages.home-participant', compact('congrats'));
     }
 
-    # Info page
+    // Info page
     public function info()
     {
         return view('pages.info');
     }
 
-    # Useful lists
+    // Useful lists
     public function lists()
     {
-        if (!\Auth::user()->hasRole("member")) {
+        if (! \Auth::user()->hasRole('member')) {
             abort(403, 'Onvoldoende rechten om lijsten in te zien');
         }
 
@@ -112,7 +113,7 @@ class PagesController extends Controller
         $types = [
             'kamp' => 'kampen',
             'training' => 'trainingen',
-            'overig' => 'overige activiteiten'
+            'overig' => 'overige activiteiten',
         ];
         foreach ($types as $type => $typename) {
             $most = DB::table('event_member')
@@ -125,7 +126,7 @@ class PagesController extends Controller
             $highest_count = $most[0]->count;
             $mosts = $most
                 ->filter(function ($el) use ($highest_count) {
-                    return $el->count == $highest_count;
+                    return $el->count === $highest_count;
                 });
 
             $members = [];
@@ -135,7 +136,7 @@ class PagesController extends Controller
             $string = '';
             $stats['most'][$type] = [
                 'count' => $highest_count,
-                'members' => $members
+                'members' => $members,
             ];
         }
 
@@ -185,7 +186,7 @@ class PagesController extends Controller
             $dag = $datum->day;
             $maand = $datum->month;
 
-            $vandaag = ($dag == date('d') && $maand == date('m')) ? 1 : 0;
+            $vandaag = ($dag === date('d') && $maand === date('m')) ? 1 : 0;
             $leeftijd = $datum->age;
 
             $birthdayList[] = [
@@ -195,7 +196,7 @@ class PagesController extends Controller
                 'dag' => $dag,
                 'maand' => $maand,
                 'vandaag' => $vandaag,
-                'leeftijd' => $leeftijd
+                'leeftijd' => $leeftijd,
             ];
         }
 
@@ -216,18 +217,18 @@ class PagesController extends Controller
             9 => 'september',
             10 => 'oktober',
             11 => 'november',
-            12 => 'december'
+            12 => 'december',
         ];
 
         // Leden en deelnemers zonder gekoppelde kampen
         $membersWithoutEvents = \App\Member::where('soort', '<>', 'oud')->orderBy('created_at')->get()->filter(function ($member) {
-            return $member->events->count() == 0;
+            return $member->events->count() === 0;
         });
 
         $oldMembers = \App\Member::where('soort', 'oud')->orderBy('created_at')->get();
 
         $participantsWithoutCamps = \App\Participant::orderBy('created_at')->get()->filter(function ($part) {
-            return $part->events->count() == 0;
+            return $part->events->count() === 0;
         });
 
         // Mailadressen voor een deelnemermailing (bijv. bij kortingsacties)
@@ -235,19 +236,19 @@ class PagesController extends Controller
         $participantMailingList = \App\Participant::where('mag_gemaild', 1)->where('geboortedatum', '>', $startDate->toDateString())->get();
 
         $inschrijvingen_deelnemers = DB::table('event_participant')
-            ->join("participants", 'event_participant.participant_id', '=', 'participants.id')
-            ->join("events", 'event_participant.event_id', '=', 'events.id')
-            ->where("event_participant.created_at", ">", Db::raw("DATE_SUB(NOW(), interval 1 year)"))
+            ->join('participants', 'event_participant.participant_id', '=', 'participants.id')
+            ->join('events', 'event_participant.event_id', '=', 'events.id')
+            ->where('event_participant.created_at', '>', Db::raw('DATE_SUB(NOW(), interval 1 year)'))
             ->select([
-                "event_participant.participant_id",
-                "event_participant.event_id",
-                "event_participant.created_at as kamp_aanmeld_datum",
-                "events.naam as kamp_naam",
-                "participants.voornaam",
-                "participants.achternaam",
-                "participants.tussenvoegsel",
-                "participants.hoebij",
-                DB::raw("
+                'event_participant.participant_id',
+                'event_participant.event_id',
+                'event_participant.created_at as kamp_aanmeld_datum',
+                'events.naam as kamp_naam',
+                'participants.voornaam',
+                'participants.achternaam',
+                'participants.tussenvoegsel',
+                'participants.hoebij',
+                DB::raw('
 					case when not exists (
 						select * 
 						  from event_participant _ep 
@@ -259,13 +260,12 @@ class PagesController extends Controller
 						) 
 						then true
 						else false 
-					end as is_nieuw")
+					end as is_nieuw'),
             ])
-            ->orderByDesc("event_participant.created_at")->get();
+            ->orderByDesc('event_participant.created_at')->get();
 
-        $nieuwe_leiding = Member::where("members.created_at", ">", Carbon::now()->subYear())
-            ->orderByDesc("members.created_at")->get();
-
+        $nieuwe_leiding = Member::where('members.created_at', '>', Carbon::now()->subYear())
+            ->orderByDesc('members.created_at')->get();
 
         return view('pages.lists', compact(
             'stats',
@@ -288,18 +288,18 @@ class PagesController extends Controller
         ));
     }
 
-    # Analytical graphs
+    // Analytical graphs
     public function graphs()
     {
-        if (!\Auth::user()->hasRole("member")) {
+        if (! \Auth::user()->hasRole('member')) {
             abort(403, 'Onvoldoende rechten om grafieken in te zien');
         }
 
         // Determine end date for graph range; from 1st of August we include the current Anderwijs year
         $maxYear = Carbon::now()->addMonths(5)->year - 1;
 
-        $minDate = "2009-09-01";
-        $maxDate = $maxYear . "-08-31";
+        $minDate = '2009-09-01';
+        $maxDate = $maxYear . '-08-31';
 
         $avg_days_before_event = DB::select(
             DB::raw("
@@ -345,7 +345,7 @@ class PagesController extends Controller
             $m_n = 0;
             foreach ($camp->members as $member) {
                 $num = $member->events()->where('type', 'kamp')->where('datum_eind', '<', $camp->datum_start)->count();
-                if ($num == 0) {
+                if ($num === 0) {
                     $m_n++;
                 }
             }
@@ -354,7 +354,7 @@ class PagesController extends Controller
             $p_n = 0;
             foreach ($camp->participants as $participant) {
                 $num = $participant->events()->where('datum_eind', '<', $camp->datum_start)->count();
-                if ($num == 0) {
+                if ($num === 0) {
                     $p_n++;
                 }
             }
@@ -370,7 +370,7 @@ class PagesController extends Controller
                 $num_participants_female[$year] += $p_f;
                 $member_ids[$year] = array_merge($member_ids[$year], $mids);
                 $participant_ids[$year] = array_merge($participant_ids[$year], $pids);
-                $num_camps[$year] += 1;
+                ++$num_camps[$year];
             } else {
                 $num_members[$year] = $m;
                 $num_members_new[$year] = $m_n;
@@ -395,7 +395,7 @@ class PagesController extends Controller
         $data['aveNumPerCamp'][] = ['Jaar', 'Leiding', 'Deelnemers'];
         $data['maleFemaleRatio'][] = ['Jaar', 'Leiding', 'Deelnemers'];
         foreach ($num_members as $k => $v) {
-            if ($num_members[$k] != 0 && $num_participants[$k] != 0) {
+            if ($num_members[$k] !== 0 && $num_participants[$k] !== 0) {
                 $year = substr($k, 0, 2) . '-' . substr($k, 2, 2);
                 $data['membGrowth'][] = [$year, $num_members[$k], count(array_unique($member_ids[$k])), $num_members_new[$k]];
                 $data['partGrowth'][] = [$year, $num_participants[$k], count(array_unique($participant_ids[$k])), $num_participants_new[$k]];
@@ -428,7 +428,7 @@ class PagesController extends Controller
             $t_n = 0;
             foreach ($training->members as $member) {
                 $num = $member->events()->where('type', 'training')->where('datum_eind', '<', $training->datum_start)->count();
-                if ($num == 0) {
+                if ($num === 0) {
                     $t_n++;
                 }
             }
@@ -447,7 +447,7 @@ class PagesController extends Controller
         $data['trainerGrowth'][] = ['Jaar', 'Totaal', 'Uniek', 'Nieuw'];
         $data['aveNumTrainings'][] = ['Jaar', 'Aantal'];
         foreach ($member_ids as $k => $v) {
-            if ($v != []) {
+            if ($v !== []) {
                 $year = substr($k, 0, 2) . '-' . substr($k, 2, 2);
                 $data['trainerGrowth'][] = [$year, $num_trainers[$k], count(array_unique($member_ids[$k])), $num_trainers_new[$k]];
                 $data['aveNumTrainings'][] = [$year, round(count($v) / count(array_unique($v)), 2)];
@@ -478,8 +478,8 @@ class PagesController extends Controller
             $data_series[] = [$graphStart, $p];
 
             for ($i = $graphStart; $i <= 0; $i++) {
-                if (in_array($i, $daysArray)) {
-                    $p = $p + count(array_keys($daysArray, $i));
+                if (in_array($i, $daysArray, true)) {
+                    $p = $p + count(array_keys($daysArray, $i, true));
                     $data_series[] = [$i, $p];
                 }
             }
@@ -496,14 +496,14 @@ class PagesController extends Controller
                 'name' => $camp->naam . ' ' . $camp->datum_start->format('Y'),
                 'step' => 'left',
                 'marker' => [
-                    'enabled' => false
+                    'enabled' => false,
                 ],
                 'states' => [
                     'hover' => [
-                        'lineWidth' => 4
-                    ]
+                        'lineWidth' => 4,
+                    ],
                 ],
-                'data' => $data_series
+                'data' => $data_series,
             ];
         }
 
@@ -516,7 +516,7 @@ class PagesController extends Controller
         foreach (array_count_values($reviews_flat) as $option => $count) {
             $camp_prefs[] = [
                 'option' => $option,
-                'votes' => $count
+                'votes' => $count,
             ];
         }
 
@@ -543,7 +543,7 @@ class PagesController extends Controller
 			"),
             [
                 $newUserStart,
-                $newUserStart
+                $newUserStart,
             ]
         );
 
@@ -552,7 +552,7 @@ class PagesController extends Controller
             $new_users_per_source[$row->source] = $new_users_per_source[$row->source] ?? [
                 'source' => $row->source,
                 'participants' => 0,
-                'members' => 0
+                'members' => 0,
             ];
             $new_users_per_source[$row->source][$row->type] = $row->amount;
         }
@@ -601,19 +601,19 @@ class PagesController extends Controller
         );
     }
 
-    # Exposes upcoming events as JSON for website integration
+    // Exposes upcoming events as JSON for website integration
     public function cal($type)
     {
         $data = [];
 
-        if ($type == 'part') {
+        if ($type === 'part') {
             // Only coming camps, for participants and their parents
             $events = \App\Event::whereIn('type', ['kamp', 'online'])
                 ->where('datum_eind', '>=', date('Y-m-d'))
                 ->public()
                 ->orderBy('datum_start', 'asc')
                 ->get();
-        } elseif ($type == 'full') {
+        } elseif ($type === 'full') {
             // All coming events, for members
             $events = \App\Event::where('datum_eind', '>=', date('Y-m-d'))
                 ->orderBy('datum_start', 'asc')
@@ -644,7 +644,7 @@ class PagesController extends Controller
 
             // Add '(VOL)' to camp name if camp is full
             $naam = $event->naam;
-            if ($type == 'part' && $event->vol) {
+            if ($type === 'part' && $event->vol) {
                 $naam .= ' (VOL)';
             }
             if ($event->cancelled) {
@@ -652,40 +652,40 @@ class PagesController extends Controller
             }
 
             if ($event->prijs === null) {
-                $prijs_html = "<td>Prijs</td><td>Wordt nog vastgesteld</td>";
+                $prijs_html = '<td>Prijs</td><td>Wordt nog vastgesteld</td>';
             } elseif ($event->prijs === 0) {
-                $prijs_html = "";
+                $prijs_html = '';
             } elseif ($event->prijs > 0) {
                 $prijs_html = "<td style='white-space: nowrap;'>Prijs<br />
                     - 15&percnt; korting<br/>
                     - 30&percnt; korting<br/>
                     - 50&percnt; korting</td><td>";
                 $prijs_html .= implode('', array_map(function (float $disc) use ($event) {
-                    return "&euro; " . EventPayment::calculate_price($event->prijs, $disc) . "<br/>";
+                    return '&euro; ' . EventPayment::calculate_price($event->prijs, $disc) . '<br/>';
                 }, Participant::INCOME_DISCOUNT_TABLE));
-                $prijs_html .= "</td>";
+                $prijs_html .= '</td>';
             }
 
             // Create a string with Google Maps hyperlink for the members agenda
             $adres = $event->location->adres;
             $plaats = $event->location->plaats;
-            if ($plaats === "Onbekend") {
+            if ($plaats === 'Onbekend') {
                 $kamphuis_link = $plaats;
             } else {
-                $string = str_replace(" ", "+", $adres . " " . $plaats);
-                $kamphuis_link = "<a href='https://www.google.com/maps?q=" . $string . "' target='_blank'>" . $plaats . "</a>";
+                $string = str_replace(' ', '+', $adres . ' ' . $plaats);
+                $kamphuis_link = "<a href='https://www.google.com/maps?q=" . $string . "' target='_blank'>" . $plaats . '</a>';
             }
 
             // Weekday table
             $weekdays = [
-                "",
-                "Maandag",
-                "Dinsdag",
-                "Woensdag",
-                "Donderdag",
-                "Vrijdag",
-                "Zaterdag",
-                "Zondag"
+                '',
+                'Maandag',
+                'Dinsdag',
+                'Woensdag',
+                'Donderdag',
+                'Vrijdag',
+                'Zaterdag',
+                'Zondag',
             ];
 
             // Create data array to return
@@ -693,9 +693,9 @@ class PagesController extends Controller
                 'id' => $k,
                 'naam' => $naam,
                 'code' => $event->code,
-                'voordag_tekst' => ($event->type == 'kamp') ? 'Voordag:<br/>' : null,
-                'datum_voordag' => ($event->type == 'kamp') ? DateHelper::Format($event->datum_voordag) . '<br/>' : null,
-                'tijd_voordag' => ($event->type == 'kamp') ?
+                'voordag_tekst' => ($event->type === 'kamp') ? 'Voordag:<br/>' : null,
+                'datum_voordag' => ($event->type === 'kamp') ? DateHelper::Format($event->datum_voordag) . '<br/>' : null,
+                'tijd_voordag' => ($event->type === 'kamp') ?
                     '&nbsp;<br/>' : null,
                 'weekdag_start' => $weekdays[$event->datum_start->format('N')],
                 'datum_start' => DateHelper::Format($event->datum_start),
@@ -713,7 +713,7 @@ class PagesController extends Controller
                 'kamphuis_mapslink' => $kamphuis_link,
                 'prijs' => $prijs_html,
                 'beschrijving' => $event->beschrijving,
-                'kleur' => $color
+                'kleur' => $color,
             ];
             $k++;
         }
@@ -721,25 +721,25 @@ class PagesController extends Controller
         return response()->json($data);
     }
 
-    # Exposes information about one camp (by ID) for website integration
+    // Exposes information about one camp (by ID) for website integration
     public function campInfo($camp_id)
     {
         $camp = Event::find($camp_id);
 
-        if ($camp->type != 'kamp') {
+        if ($camp->type !== 'kamp') {
             return null;
         }
 
         $data = [
             'id' => $camp->id,
             'naam' => $camp->naam,
-            'prijs' => $camp->prijs
+            'prijs' => $camp->prijs,
         ];
 
         return response()->json($data);
     }
 
-    # Expose list of all previous camps as report, for website integration
+    // Expose list of all previous camps as report, for website integration
     public function campsReport()
     {
         $camps = Event::where('type', 'kamp')
@@ -754,7 +754,7 @@ class PagesController extends Controller
             $aantal_leiding_wissel = $c->members()->where('wissel', 1)->count();
             $leiding_string = (string) $aantal_leiding_vol;
             if ($aantal_leiding_wissel > 0) {
-                $leiding_string .= " + " . $aantal_leiding_wissel;
+                $leiding_string .= ' + ' . $aantal_leiding_wissel;
             }
 
             $data[] = [
@@ -767,35 +767,35 @@ class PagesController extends Controller
                 'aantal_leiding_vol' => $c->members()->where('wissel', 0)->count(),
                 'aantal_leiding_wissel' => $c->members()->where('wissel', 1)->count(),
                 'aantal_leiding_string' => $leiding_string,
-                'aantal_deelnemers' => $c->participants()->where('geplaatst', 1)->count()
+                'aantal_deelnemers' => $c->participants()->where('geplaatst', 1)->count(),
             ];
         }
 
         return response()->json($data);
     }
 
-    # Referrer page for registrations
+    // Referrer page for registrations
     public function referrer()
     {
         return view('pages.referrer');
     }
 
-    # Place for scripting
+    // Place for scripting
     public function runScript()
     {
-        echo "Average rating per reviewer: " . round(\App\Review::pluck("cijfer")->avg(), 2) . " out of " . \App\Review::pluck("id")->count() . " total reviews";
+        echo 'Average rating per reviewer: ' . round(\App\Review::pluck('cijfer')->avg(), 2) . ' out of ' . \App\Review::pluck('id')->count() . ' total reviews';
 
-        echo "<br/><br/>";
+        echo '<br/><br/>';
 
-        echo "Average camp ratings:<br/><br/>";
+        echo 'Average camp ratings:<br/><br/>';
 
-        foreach (Event::where("type", "kamp")->orderBy("datum_start")->has("reviews")->get() as $event) {
-            echo $event->naam . " " . $event->datum_start->year . " - " . $event->averageRating . "<br/>";
+        foreach (Event::where('type', 'kamp')->orderBy('datum_start')->has('reviews')->get() as $event) {
+            echo $event->naam . ' ' . $event->datum_start->year . ' - ' . $event->averageRating . '<br/>';
         }
 
-        echo "<br/><br/>";
+        echo '<br/><br/>';
 
-        echo "Members with most participants on camp<br/><br/>";
+        echo 'Members with most participants on camp<br/><br/>';
 
         $rank = [];
         $rank_unique = [];
@@ -810,19 +810,19 @@ class PagesController extends Controller
         arsort($rank);
         arsort($rank_unique);
 
-        echo "Cumulative<br/>";
+        echo 'Cumulative<br/>';
         foreach ($rank as $m => $v) {
-            echo $m . ": " . $v . "<br/>";
+            echo $m . ': ' . $v . '<br/>';
         }
-        echo "<br/>";
-        echo "Unique<br/>";
+        echo '<br/>';
+        echo 'Unique<br/>';
         foreach ($rank_unique as $m => $v) {
-            echo $m . ": " . $v . "<br/>";
+            echo $m . ': ' . $v . '<br/>';
         }
 
-        echo "<br/><br/>";
+        echo '<br/><br/>';
 
-        echo "Most other unique members on camp" . "<br/><br/>";
+        echo 'Most other unique members on camp' . '<br/><br/>';
         $res = [];
         $res2 = [];
 
@@ -834,58 +834,59 @@ class PagesController extends Controller
                 $fellow_ids = array_merge($fellow_ids, $event->members()->pluck('id')->toArray());
             }
             $fellow_ids = array_unique($fellow_ids);
-            if (($key = array_search($member->id, $fellow_ids)) !== false) {
+
+            $key = array_search($member->id, $fellow_ids, true);
+            if ($key !== false) {
                 unset($fellow_ids[$key]);
             }
 
             $res[$member->volnaam] = count($fellow_ids);
-            #echo $member->volnaam . ": " . count($fellow_ids) . "<br/>";
-            if ($events->count() != 0) {
+            //echo $member->volnaam . ": " . count($fellow_ids) . "<br/>";
+            if ($events->count() !== 0) {
                 $res2[$member->volnaam] = count($fellow_ids) / $events->count();
             } else {
-                $res2[$member->volnaam] = "-";
+                $res2[$member->volnaam] = '-';
             }
         }
 
         arsort($res);
         foreach ($res as $m => $v) {
-            echo $m . ": " . $v . "<br/>";
+            echo $m . ': ' . $v . '<br/>';
         }
 
-        echo "<br/><br/>";
-        echo "And now normalized per camp" . "<br/><br/>";
+        echo '<br/><br/>';
+        echo 'And now normalized per camp' . '<br/><br/>';
 
         arsort($res2);
         foreach ($res2 as $m => $v) {
-            echo $m . ": " . round($v, 2) . "<br/>";
+            echo $m . ': ' . round($v, 2) . '<br/>';
         }
     }
 
-
     public function showPrivacyStatement(Request $request)
     {
-        return view("pages.privacy-statement");
+        return view('pages.privacy-statement');
     }
 
     public function showAcceptPrivacyStatement(Request $request)
     {
         $user = Auth::user();
         $showForm = true;
-        return view("pages.privacy-statement", compact("user", "showForm"));
+        return view('pages.privacy-statement', compact('user', 'showForm'));
     }
 
     public function storePrivacyStatement(Request $request)
     {
-        $privacyAccepted = $request->input("privacyAccepted") === "1";
-        if (!$privacyAccepted) {
-            return redirect("accept-privacy")->with([
-                "flash_error" => "De privacyvoorwaarden dienen geaccepteerd te worden om verder te kunnen."
+        $privacyAccepted = $request->input('privacyAccepted') === '1';
+        if (! $privacyAccepted) {
+            return redirect('accept-privacy')->with([
+                'flash_error' => 'De privacyvoorwaarden dienen geaccepteerd te worden om verder te kunnen.',
             ]);
         }
 
         $user = Auth::user();
         $user->privacy = Carbon::now();
         $user->save();
-        return redirect("home");
+        return redirect('home');
     }
 }

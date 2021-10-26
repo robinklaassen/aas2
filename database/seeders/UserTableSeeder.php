@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
 use App\Member;
@@ -13,8 +15,6 @@ class UserTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
     public function run()
     {
@@ -30,7 +30,7 @@ class UserTableSeeder extends Seeder
         $user->save();
         $user->privacy = '2018-06-01';
         $member->user()->save($user);
-        $roles = Role::whereIn("tag", ["aasbaas", "president", "board", "member", "treasurer"])->get();
+        $roles = Role::whereIn('tag', ['aasbaas', 'president', 'board', 'member', 'treasurer'])->get();
         $user->roles()->sync($roles);
 
         $member = Member::find(2);
@@ -42,7 +42,7 @@ class UserTableSeeder extends Seeder
         $user->is_admin = 1;
         $user->privacy = '2018-06-01';
         $member->user()->save($user);
-        $roles = Role::whereIn("tag", ["kantoorci", "member"])->get();
+        $roles = Role::whereIn('tag', ['kantoorci', 'member'])->get();
         $user->roles()->sync($roles);
 
         $participant = Participant::find(2);
@@ -52,7 +52,7 @@ class UserTableSeeder extends Seeder
         $user->is_admin = 0;
         $participant->user()->save($user);
 
-        $roles = Role::whereIn("tag", ["participant"])->get();
+        $roles = Role::whereIn('tag', ['participant'])->get();
         $user->roles()->sync($roles);
 
         $member = Member::find(3);
@@ -63,9 +63,8 @@ class UserTableSeeder extends Seeder
         $user->privacy = '2018-06-01';
         $member->user()->save($user);
 
-        $roles = Role::whereIn("tag", ["member"])->get();
+        $roles = Role::whereIn('tag', ['member'])->get();
         $user->roles()->sync($roles);
-
 
         $member = Member::find(5);
         $user = new User();
@@ -75,9 +74,8 @@ class UserTableSeeder extends Seeder
         $user->privacy = '2018-06-01';
         $member->user()->save($user);
 
-        $roles = Role::whereIn("tag", ["member", "treasurer", "board"])->get();
+        $roles = Role::whereIn('tag', ['member', 'treasurer', 'board'])->get();
         $user->roles()->sync($roles);
-
 
         $member = Member::find(6);
         $user = new User();
@@ -87,9 +85,8 @@ class UserTableSeeder extends Seeder
         $user->privacy = '2018-06-01';
         $member->user()->save($user);
 
-        $roles = Role::whereIn("tag", ["member", "kampci"])->get();
+        $roles = Role::whereIn('tag', ['member', 'kampci'])->get();
         $user->roles()->sync($roles);
-
 
         $member = Member::find(7);
         $user = new User();
@@ -99,9 +96,8 @@ class UserTableSeeder extends Seeder
         $user->privacy = '2018-06-01';
         $member->user()->save($user);
 
-        $roles = Role::whereIn("tag", ["member", "aasbaas"])->get();
+        $roles = Role::whereIn('tag', ['member', 'aasbaas'])->get();
         $user->roles()->sync($roles);
-
 
         $member = Member::find(8);
         $user = new User();
@@ -111,7 +107,7 @@ class UserTableSeeder extends Seeder
         $user->privacy = '2018-06-01';
         $member->user()->save($user);
 
-        $roles = Role::whereIn("tag", ["member", "promoci"])->get();
+        $roles = Role::whereIn('tag', ['member', 'promoci'])->get();
         $user->roles()->sync($roles);
 
         $member = Member::find(9);
@@ -122,7 +118,7 @@ class UserTableSeeder extends Seeder
         $user->privacy = '2018-06-01';
         $member->user()->save($user);
 
-        $roles = Role::whereIn("tag", ["member", "kantoorci"])->get();
+        $roles = Role::whereIn('tag', ['member', 'kantoorci'])->get();
         $user->roles()->sync($roles);
 
         $member = Member::find(10);
@@ -133,7 +129,7 @@ class UserTableSeeder extends Seeder
         $user->privacy = '2018-06-01';
         $member->user()->save($user);
 
-        $roles = Role::whereIn("tag", ["member", "ranonkeltje"])->get();
+        $roles = Role::whereIn('tag', ['member', 'ranonkeltje'])->get();
         $user->roles()->sync($roles);
 
         $member = Member::find(11);
@@ -144,9 +140,8 @@ class UserTableSeeder extends Seeder
         $user->privacy = '2018-06-01';
         $member->user()->save($user);
 
-        $roles = Role::whereIn("tag", ["member", "counselor"])->get();
+        $roles = Role::whereIn('tag', ['member', 'counselor'])->get();
         $user->roles()->sync($roles);
-
 
         $participant = Participant::find(4);
         $user = new User();
@@ -156,7 +151,7 @@ class UserTableSeeder extends Seeder
         $user->privacy = '2018-06-01';
         $participant->user()->save($user);
 
-        $roles = Role::whereIn("tag", ["participant"])->get();
+        $roles = Role::whereIn('tag', ['participant'])->get();
         $user->roles()->sync($roles);
 
         $participant = Participant::find(5);
@@ -167,7 +162,7 @@ class UserTableSeeder extends Seeder
         $user->privacy = '2018-06-01';
         $participant->user()->save($user);
 
-        $roles = Role::whereIn("tag", ["participant"])->get();
+        $roles = Role::whereIn('tag', ['participant'])->get();
         $user->roles()->sync($roles);
     }
 }

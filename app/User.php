@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App;
 
 use Illuminate\Auth\Authenticatable;
@@ -13,19 +15,13 @@ use Illuminate\Support\Carbon;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract
 {
-    use Authenticatable, CanResetPassword, Notifiable, Authorizable;
+    use Authenticatable;
 
-    /**
-     * Generates a new password for users
-     * Excludes lookalike characters: O 0 o, i I L l, V v W w, s S 5
-     */
-    public static function generatePassword(): string
-    {
-        $chars = "abcdefghjklmnpqrtuxyzABCDEFGHJKMNPQRTUXYZ2346789";
-        $password = substr(str_shuffle($chars), 0, 10);
+    use CanResetPassword;
 
-        return $password;
-    }
+    use Notifiable;
+
+    use Authorizable;
 
     /**
      * The database table used by the model.
@@ -51,7 +47,19 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      */
     protected $hidden = ['password', 'remember_token'];
 
-    # Polymorphic relation to either member or participant profile
+    /**
+     * Generates a new password for users
+     * Excludes lookalike characters: O 0 o, i I L l, V v W w, s S 5
+     */
+    public static function generatePassword(): string
+    {
+        $chars = 'abcdefghjklmnpqrtuxyzABCDEFGHJKMNPQRTUXYZ2346789';
+        $password = substr(str_shuffle($chars), 0, 10);
+
+        return $password;
+    }
+
+    // Polymorphic relation to either member or participant profile
     public function profile()
     {
         return $this->morphTo();
@@ -64,26 +72,26 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function hasRole($tag)
     {
-        return $this->roles()->where("tag", "=", $tag)->count() > 0;
+        return $this->roles()->where('tag', '=', $tag)->count() > 0;
     }
 
     public function public_roles()
     {
-        return $this->roles()->whereNotIn("tag", Role::HIDDEN_ROLES);
+        return $this->roles()->whereNotIn('tag', Role::HIDDEN_ROLES);
     }
 
     public function hasAnyRole($roles)
     {
-        return $this->roles()->whereIn("tag", $roles)->count() > 0;
+        return $this->roles()->whereIn('tag', $roles)->count() > 0;
     }
 
     public function capabilities()
     {
         $roles = $this->roles()->pluck('id');
 
-        return Capability::whereHas("roles", function ($q) use ($roles) {
+        return Capability::whereHas('roles', function ($q) use ($roles) {
             $q->whereIn(
-                "id",
+                'id',
                 $roles
             );
         })->get();
@@ -91,7 +99,7 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function hasCapability($name)
     {
-        return $this->capabilities()->pluck("name")->contains($name);
+        return $this->capabilities()->pluck('name')->contains($name);
     }
 
     public function isMember()
@@ -106,11 +114,10 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
 
     public function getVolnaamAttribute()
     {
-        if ($this->id != 0) {
+        if ($this->id !== 0) {
             return $this->profile->volnaam;
-        } else {
-            return "-system-";
         }
+        return '-system-';
     }
 
     public function getPrivacyAcceptedAttribute()

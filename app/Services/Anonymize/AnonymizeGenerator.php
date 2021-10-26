@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services\Anonymize;
 
 class AnonymizeGenerator implements AnonymizeGeneratorInterface
@@ -13,7 +15,7 @@ class AnonymizeGenerator implements AnonymizeGeneratorInterface
 
     public function firstname(): string
     {
-        return "Anonieme";
+        return 'Anonieme';
     }
 
     public function surnamePrefix(): ?string
@@ -28,31 +30,31 @@ class AnonymizeGenerator implements AnonymizeGeneratorInterface
 
     public function birthdate(): string
     {
-        return "1900-01-01";
+        return '1900-01-01';
     }
 
     public function address(): string
     {
-        return "";
+        return '';
     }
 
     public function zipcode(): string
     {
-        return "";
+        return '';
     }
 
     public function telephone(): string
     {
-        return "";
+        return '';
     }
 
     public function email(): string
     {
-        return "";
+        return '';
     }
 
     public function city(): string
     {
-        return "";
+        return '';
     }
 }

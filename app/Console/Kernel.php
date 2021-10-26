@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console;
 
 use App\Console\Commands\MemberGeolocations;
@@ -10,8 +12,6 @@ class Kernel extends ConsoleKernel
 {
     /**
      * Register the commands for the application.
-     *
-     * @return void
      */
     protected function commands()
     {
@@ -20,9 +20,6 @@ class Kernel extends ConsoleKernel
 
     /**
      * Define the application's command schedule.
-     *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
-     * @return void
      */
     protected function schedule(Schedule $schedule)
     {

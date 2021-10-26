@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
 class EventRequest extends Request
@@ -31,7 +33,7 @@ class EventRequest extends Request
             'prijs' => 'sometimes|nullable|numeric',
             'location_id' => 'required',
             'tijd_start' => 'required|regex:/\d{2}:\d{2}/',
-            'tijd_eind' => 'required|regex:/\d{2}:\d{2}/'
+            'tijd_eind' => 'required|regex:/\d{2}:\d{2}/',
         ];
     }
 }

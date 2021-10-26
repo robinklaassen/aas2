@@ -1,7 +1,8 @@
 <?php
 
-return [
+declare(strict_types=1);
 
+return [
     /*
     |--------------------------------------------------------------------------
     | PDO Fetch Style
@@ -65,8 +66,8 @@ return [
             'prefix' => '',
             'strict' => true,
             'modes' => [
-                'NO_AUTO_VALUE_ON_ZERO'
-            ]
+                'NO_AUTO_VALUE_ON_ZERO',
+            ],
         ],
 
         'pgsql' => [
@@ -126,5 +127,4 @@ return [
         ],
 
     ],
-
 ];

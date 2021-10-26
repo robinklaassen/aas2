@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Mail\participants;
 
 use App\Event;
@@ -11,10 +13,14 @@ use Illuminate\Support\Facades\Config;
 
 class IDealConfirmation extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+
+    use SerializesModels;
 
     public $participant;
+
     public $event;
+
     public $type;
 
     public function __construct(Participant $participant, Event $event, $type)
@@ -29,7 +35,7 @@ class IDealConfirmation extends Mailable
         $subject = sprintf('%s Betaling via iDeal ontvangen', Config::get('mail.subject_prefix.external'));
 
         return $this->view('emails.participants.iDealConfirmation')
-            ->from(Config::get("mail.addresses.kantoor"))
+            ->from(Config::get('mail.addresses.kantoor'))
             ->to([$this->participant->getParentEmail()])
             ->subject($subject);
     }

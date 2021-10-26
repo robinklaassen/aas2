@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Updater\OutputAggregator;
 
 use Updater\Services\DateTimeProviderInterface;
@@ -7,6 +9,7 @@ use Updater\Services\DateTimeProviderInterface;
 class InternalOutputRecorder implements OutputRecorderInterface
 {
     private $lines = [];
+
     private DateTimeProviderInterface $dateTimeProvider;
 
     public function __construct(
@@ -19,7 +22,7 @@ class InternalOutputRecorder implements OutputRecorderInterface
     {
         $this->lines[] = [
             'datetime' => $this->dateTimeProvider->now(),
-            'message' => $message
+            'message' => $message,
         ];
     }
 

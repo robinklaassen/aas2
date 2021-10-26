@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Providers;
 
 use App\Events\MemberUpdated;
@@ -20,15 +22,12 @@ class EventServiceProvider extends ServiceProvider
             SetLastLoginDate::class,
         ],
         MemberUpdated::class => [
-            QueueMemberGeolocation::class
-        ]
+            QueueMemberGeolocation::class,
+        ],
     ];
 
     /**
      * Register any other events for your application.
-     *
-     * @param  \Illuminate\Contracts\Events\Dispatcher  $events
-     * @return void
      */
     public function boot()
     {

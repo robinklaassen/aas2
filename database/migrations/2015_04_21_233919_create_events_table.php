@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
@@ -7,8 +9,6 @@ class CreateEventsTable extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
     public function up()
     {
@@ -30,18 +30,16 @@ class CreateEventsTable extends Migration
             $table->text('beschrijving')->nullable();
             $table->text('opmerkingen')->nullable();
             $table->timestamps();
-            
+
             $table->foreign('location_id')
-                    ->references('id')
-                    ->on('locations')
-                    ->onDelete('set null');
+                ->references('id')
+                ->on('locations')
+                ->onDelete('set null');
         });
     }
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down()
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
 class ActionRequest extends Request
@@ -25,7 +27,7 @@ class ActionRequest extends Request
             'date' => 'date|required',
             'member_id' => 'required',
             'description' => 'required',
-            'points' => 'required|min:1'
+            'points' => 'required|min:1',
         ];
     }
 }

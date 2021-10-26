@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Mail\members;
 
 use App\Event;
@@ -11,9 +13,12 @@ use Illuminate\Support\Facades\Config;
 
 class OnEventConfirmation extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+
+    use SerializesModels;
 
     public $member;
+
     public $event;
 
     public function __construct(Member $member, Event $event)
@@ -28,7 +33,7 @@ class OnEventConfirmation extends Mailable
 
         return $this->view('emails.members.onEventConfirmation')
             ->subject($subject)
-            ->from([Config::get("mail.addresses.kamp")])
+            ->from([Config::get('mail.addresses.kamp')])
             ->to($this->member->email_anderwijs, $this->member->volnaam);
     }
 }

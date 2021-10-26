@@ -1,7 +1,8 @@
 <?php
 
-return [
+declare(strict_types=1);
 
+return [
     /*
     |--------------------------------------------------------------------------
     | Application Debug Mode
@@ -112,9 +113,7 @@ return [
 
     'providers' => [
 
-        /*
-         * Laravel Framework Service Providers...
-         */
+        // Laravel Framework Service Providers...
         'Illuminate\Foundation\Providers\ArtisanServiceProvider',
         'Illuminate\Auth\AuthServiceProvider',
         'Illuminate\Bus\BusServiceProvider',
@@ -145,15 +144,13 @@ return [
 
         \Updater\UpdaterServiceProvider::class,
 
-        /*
-         * Application Service Providers...
-         */
+        // Application Service Providers...
         'App\Providers\AppServiceProvider',
         'App\Providers\BusServiceProvider',
         'App\Providers\ConfigServiceProvider',
         'App\Providers\EventServiceProvider',
         'App\Providers\RouteServiceProvider',
-        'App\Providers\ViewComposerServiceProvider'
+        'App\Providers\ViewComposerServiceProvider',
 
     ],
 
@@ -208,7 +205,6 @@ return [
         'Lava' => 'Khill\Lavacharts\Laravel\LavachartsFacade',
         'Arr' => 'Illuminate\Support\Arr',
         'Str' => 'Illuminate\Support\Str',
-        'Date' => App\Helpers\DateHelper::class
+        'Date' => App\Helpers\DateHelper::class,
     ],
-
 ];

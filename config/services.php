@@ -1,7 +1,8 @@
 <?php
 
-return [
+declare(strict_types=1);
 
+return [
     /*
     |--------------------------------------------------------------------------
     | Third Party Services
@@ -33,5 +34,4 @@ return [
         'model' => 'App\User',
         'secret' => '',
     ],
-
 ];

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Services;
 
 use App\Data\FileData;
@@ -11,14 +13,16 @@ use League\Flysystem\Filesystem;
 
 class DeclarationService
 {
-    private const BASE_DIR = "uploads/declarations/";
+    private const BASE_DIR = 'uploads/declarations/';
 
-    /** @var Filesystem */
+    /**
+     * @var Filesystem
+     */
     private $storage;
-    
+
     public function __construct()
     {
-        $this->storage = Storage::disk("local");
+        $this->storage = Storage::disk('local');
     }
 
     public function store(Member $member, ?UploadedFile $file): ?FileData
@@ -34,7 +38,7 @@ class DeclarationService
             $file
         );
         $filedata->mimeType = $file->getClientMimeType();
-        
+
         $this->storage->putFileAs(
             dirname($filedata->filepath),
             $file,
@@ -48,8 +52,11 @@ class DeclarationService
     {
         $file = $this->storage->get($declaration->filename);
         $type = $this->storage->mimeType($declaration->filename);
-        
-        return [ "file" => $file, "type" => $type ];
+
+        return [
+            'file' => $file,
+            'type' => $type,
+        ];
     }
 
     public function deleteFile(string $path)

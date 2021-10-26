@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Exports;
 
 use Maatwebsite\Excel\Concerns\Exportable;
@@ -9,6 +11,7 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 class EventPaymentReport implements FromArray, WithHeadings
 {
     use Exportable;
+
     protected $event;
 
     public function __construct(\App\Event $event)
@@ -47,8 +50,8 @@ class EventPaymentReport implements FromArray, WithHeadings
 
             // Declaration of income only when asked for
             //dd($p->inkomensverklaring->year);
-            $i = ($p->inkomensverklaring != null) ? $p->inkomensverklaring->format('d-m-Y') : null;
-            if ($p->inkomen == 0) {
+            $i = ($p->inkomensverklaring !== null) ? $p->inkomensverklaring->format('d-m-Y') : null;
+            if ($p->inkomen === 0) {
                 $i = 'x';
             }
 
@@ -59,7 +62,7 @@ class EventPaymentReport implements FromArray, WithHeadings
                 $betaling,
                 $i,
                 null,
-                null
+                null,
             ];
         }
 
@@ -74,7 +77,7 @@ class EventPaymentReport implements FromArray, WithHeadings
             'Betaling',
             'Inkomensverklaring',
             'Correct',
-            'Opmerking'
+            'Opmerking',
         ];
     }
 }

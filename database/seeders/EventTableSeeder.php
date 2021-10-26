@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
 use App\Event;
@@ -10,8 +12,6 @@ class EventTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
     public function run()
     {
@@ -30,7 +30,7 @@ class EventTableSeeder extends Seeder
             'prijs' => 400,
             'streeftal' => 8,
             'vol' => '1',
-            'beschrijving' => 'Ga mee op kamp!'
+            'beschrijving' => 'Ga mee op kamp!',
         ]);
 
         Event::create([
@@ -42,7 +42,7 @@ class EventTableSeeder extends Seeder
             'datum_eind' => '2015-08-08',
             'location_id' => 2,
             'prijs' => 350,
-            'openbaar' => '0'
+            'openbaar' => '0',
         ]);
 
         Event::create([
@@ -51,7 +51,7 @@ class EventTableSeeder extends Seeder
             'type' => 'training',
             'datum_start' => '2015-04-24',
             'datum_eind' => '2015-04-26',
-            'location_id' => 2
+            'location_id' => 2,
         ]);
 
         Event::create([
@@ -60,9 +60,8 @@ class EventTableSeeder extends Seeder
             'type' => 'overig',
             'datum_start' => '2015-06-12',
             'datum_eind' => '2015-06-14',
-            'location_id' => 1
+            'location_id' => 1,
         ]);
-
 
         Event::create([
             'naam' => 'Nieuwjaarskamp',
@@ -74,7 +73,7 @@ class EventTableSeeder extends Seeder
             'location_id' => 2,
             'prijs' => 500,
             'streeftal' => 10,
-            'openbaar' => '1'
+            'openbaar' => '1',
         ]);
 
         Event::create([
@@ -83,7 +82,7 @@ class EventTableSeeder extends Seeder
             'type' => 'training',
             'datum_start' => '2089-12-17',
             'datum_eind' => '2089-12-18',
-            'location_id' => 1
+            'location_id' => 1,
         ]);
 
         Event::create([
@@ -112,7 +111,7 @@ class EventTableSeeder extends Seeder
             'prijs' => 420,
             'streeftal' => 8,
             'vol' => '1',
-            'beschrijving' => 'Ga mee op kamp!'
+            'beschrijving' => 'Ga mee op kamp!',
         ]);
 
         Event::create([
@@ -128,7 +127,7 @@ class EventTableSeeder extends Seeder
             'prijs' => 450,
             'streeftal' => 8,
             'vol' => '1',
-            'beschrijving' => 'Ga mee op kamp!'
+            'beschrijving' => 'Ga mee op kamp!',
         ]);
 
         Event::create([
@@ -144,7 +143,7 @@ class EventTableSeeder extends Seeder
             'prijs' => 550,
             'streeftal' => 8,
             'vol' => '1',
-            'beschrijving' => 'Ga mee op kamp!'
+            'beschrijving' => 'Ga mee op kamp!',
         ]);
 
         Event::create([
@@ -156,7 +155,7 @@ class EventTableSeeder extends Seeder
             'datum_eind' => '2016-08-08',
             'location_id' => 2,
             'prijs' => 520,
-            'openbaar' => '0'
+            'openbaar' => '0',
         ]);
 
         Event::create([
@@ -168,9 +167,8 @@ class EventTableSeeder extends Seeder
             'datum_eind' => '2016-08-08',
             'location_id' => 2,
             'prijs' => 520,
-            'openbaar' => '0'
+            'openbaar' => '0',
         ]);
-
 
         Event::create([
             'naam' => 'Yee-Oldy-kamp',
@@ -185,7 +183,7 @@ class EventTableSeeder extends Seeder
             'prijs' => 400,
             'streeftal' => 8,
             'vol' => '1',
-            'beschrijving' => 'Ga mee op kamp!'
+            'beschrijving' => 'Ga mee op kamp!',
         ]);
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Event;
@@ -10,10 +12,10 @@ use App\Participant;
 use Illuminate\Http\Request;
 use Mail;
 
-# The iDealController is for the Mollie API iDeal webhook and response routes
+// The iDealController is for the Mollie API iDeal webhook and response routes
 class iDealController extends Controller
 {
-    # iDeal webhook
+    // iDeal webhook
     public function webhook(Request $request)
     {
 
@@ -27,7 +29,9 @@ class iDealController extends Controller
 
         if ($payment->isPaid()) {
             // Update payment status with today's date
-            $participant->events()->updateExistingPivot($camp_id, ['datum_betaling' => date('Y-m-d')]);
+            $participant->events()->updateExistingPivot($camp_id, [
+                'datum_betaling' => date('Y-m-d'),
+            ]);
 
             // Send (yet another) confirmation email to parents
 
@@ -41,11 +45,11 @@ class iDealController extends Controller
         }
     }
 
-    # iDeal response page
+    // iDeal response page
     public function response(Participant $participant, Event $event)
     {
         $camp = $participant->events()->whereId($event->id)->first();
-        $status = ($camp->pivot->datum_betaling == '0000-00-00') ? 'failed' : 'ok';
+        $status = ($camp->pivot->datum_betaling === '0000-00-00') ? 'failed' : 'ok';
 
         return view('registration.iDealResponse', compact('status', 'participant'));
     }

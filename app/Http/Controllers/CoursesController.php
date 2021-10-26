@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Course;
@@ -49,7 +51,7 @@ class CoursesController extends Controller
     {
         Course::create($request->all());
         return redirect('courses')->with([
-            'flash_message' => 'Het vak is aangemaakt!'
+            'flash_message' => 'Het vak is aangemaakt!',
         ]);
     }
 
@@ -85,7 +87,7 @@ class CoursesController extends Controller
     {
         $course->update($request->all());
         return redirect('courses/' . $course->id)->with([
-            'flash_message' => 'Het vak is bewerkt!'
+            'flash_message' => 'Het vak is bewerkt!',
         ]);
     }
 
@@ -97,7 +99,7 @@ class CoursesController extends Controller
      */
     public function delete(Course $course)
     {
-        $this->authorize("courses::delete", $course);
+        $this->authorize('courses::delete', $course);
         return view('courses.delete', compact('course'));
     }
 
@@ -105,7 +107,7 @@ class CoursesController extends Controller
     {
         $course->delete();
         return redirect('courses')->with([
-            'flash_message' => 'Het vak is verwijderd!'
+            'flash_message' => 'Het vak is verwijderd!',
         ]);
     }
 }

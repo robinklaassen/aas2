@@ -10,7 +10,9 @@ use Illuminate\Support\Collection;
 
 interface AnonymizeParticipantInterface
 {
-    /** @return Participant[] */
+    /**
+     * @return Participant[]
+     */
     public function getParticipantsToAnonymize(DateTimeImmutable $dateTime): Collection;
 
     public function anonymize(Participant $participant): void;

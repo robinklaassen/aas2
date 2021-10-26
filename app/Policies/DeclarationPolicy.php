@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Policies;
 
 use App\Declaration;
@@ -52,7 +54,7 @@ class DeclarationPolicy
                 $user->hasCapability('declarations::self')
                 && $user->isMember()
                 && $user->profile === $declaration->member
-                && !$declaration->isClosed
+                && ! $declaration->isClosed
             );
     }
 
@@ -63,7 +65,7 @@ class DeclarationPolicy
                 $user->hasCapability('declarations::self')
                 && $user->isMember()
                 && $user->profile->id === $declaration->member_id
-                && !$declaration->isClosed
+                && ! $declaration->isClosed
             );
     }
 }

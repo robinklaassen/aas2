@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
 use Tests\TestCase;
@@ -16,8 +18,6 @@ class ParticipantTest extends TestCase
 
     /**
      * Test the participants index page
-     *
-     * @return void
      */
     public function testIndex()
     {
@@ -30,8 +30,6 @@ class ParticipantTest extends TestCase
 
     /**
      * Test the show participant page for an unauthorized (normal member)
-     *
-     * @return void
      */
     public function testShowUnauthorized()
     {
@@ -43,8 +41,6 @@ class ParticipantTest extends TestCase
 
     /**
      * Test the show participant page
-     *
-     * @return void
      */
     public function testShow()
     {

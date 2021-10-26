@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Events;
 
 use App\Member;
@@ -10,14 +12,16 @@ use Illuminate\Queue\SerializesModels;
 
 class MemberUpdated
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable;
+
+    use InteractsWithSockets;
+
+    use SerializesModels;
 
     public $member;
 
     /**
      * Create a new event instance.
-     *
-     * @return void
      */
     public function __construct(Member $member)
     {

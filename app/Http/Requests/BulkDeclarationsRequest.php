@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
 class BulkDeclarationsRequest extends Request
@@ -23,14 +25,14 @@ class BulkDeclarationsRequest extends Request
             'data.*.amount' => 'Bedrag',
             'data.*.date' => 'Datum',
             'data.*.declaration_type' => 'Type',
-            'data.*.file' => 'Bestand'
+            'data.*.file' => 'Bestand',
         ];
     }
 
     public function messages()
     {
         return [
-            'data.required' => 'Er moet wel iets ingevuld worden'
+            'data.required' => 'Er moet wel iets ingevuld worden',
         ];
     }
 }

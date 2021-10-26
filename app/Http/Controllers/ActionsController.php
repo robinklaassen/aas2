@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Action;
@@ -50,7 +52,7 @@ class ActionsController extends Controller
     {
         Action::create($request->all());
         return redirect('actions')->with([
-            'flash_message' => 'De actie is aangemaakt!'
+            'flash_message' => 'De actie is aangemaakt!',
         ]);
     }
 
@@ -86,7 +88,7 @@ class ActionsController extends Controller
     {
         $action->update($request->all());
         return redirect('actions')->with([
-            'flash_message' => 'De actie is bewerkt!'
+            'flash_message' => 'De actie is bewerkt!',
         ]);
     }
 
@@ -98,7 +100,7 @@ class ActionsController extends Controller
      */
     public function delete(Action $action)
     {
-        $this->authorize("delete", $action);
+        $this->authorize('delete', $action);
         return view('actions.delete', compact('action'));
     }
 
@@ -106,7 +108,7 @@ class ActionsController extends Controller
     {
         $action->delete();
         return redirect('actions')->with([
-            'flash_message' => 'De actie is verwijderd!'
+            'flash_message' => 'De actie is verwijderd!',
         ]);
     }
 }

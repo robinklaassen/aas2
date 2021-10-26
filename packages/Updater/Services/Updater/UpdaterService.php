@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Updater\Services\Updater;
 
 use Updater\Events\PostUpdateEvent;
@@ -11,9 +13,13 @@ use Updater\Services\SourceControl\SourceControlServiceInterface;
 class UpdaterService implements UpdaterServiceInterface
 {
     private SourceControlServiceInterface $controlService;
+
     private OutputRecorderInterface $outputRecorder;
+
     private ExecutorInterface $artisanExecutor;
+
     private string $remote;
+
     private string $branch;
 
     public function __construct(
@@ -42,6 +48,14 @@ class UpdaterService implements UpdaterServiceInterface
         return $this->controlService->currentVersion();
     }
 
+    public function getUpdateOutput(): array
+    {
+        return array_map(
+            fn ($line) => sprintf('[%s]: %s', $line['datetime']->format('c'), $line['message']),
+            $this->outputRecorder->getLines()
+        );
+    }
+
     protected function preUpdate()
     {
         $this->artisanExecutor->execute('down');
@@ -52,13 +66,5 @@ class UpdaterService implements UpdaterServiceInterface
     {
         PostUpdateEvent::dispatch();
         $this->artisanExecutor->execute('up');
-    }
-
-    public function getUpdateOutput(): array
-    {
-        return array_map(
-            fn ($line) => sprintf('[%s]: %s', $line['datetime']->format('c'), $line['message']),
-            $this->outputRecorder->getLines()
-        );
     }
 }

@@ -1,7 +1,8 @@
 <?php
 
-return [
+declare(strict_types=1);
 
+return [
     /*
     |--------------------------------------------------------------------------
     | Default Queue Driver
@@ -86,7 +87,7 @@ return [
     */
 
     'failed' => [
-        'database' => 'mysql', 'table' => 'failed_jobs',
+        'database' => 'mysql',
+        'table' => 'failed_jobs',
     ],
-
 ];

@@ -15,79 +15,79 @@ class LavachartsChartService implements ChartServiceInterface
         'bs-mening' => [
             1 => 'Te weinig',
             2 => 'Voldoende',
-            3 => 'Te veel'
+            3 => 'Te veel',
         ],
         'bs-tevreden' => [
             1 => 'Erg ontevreden',
             2 => 'Een beetje ontevreden',
             3 => 'Een beetje tevreden',
-            4 => 'Erg tevreden'
+            4 => 'Erg tevreden',
         ],
         'bs-manier' => [
             0 => 'Nee',
-            1 => 'Ja'
+            1 => 'Ja',
         ],
         'bs-thema' => [
             0 => 'Nee',
-            1 => 'Ja'
+            1 => 'Ja',
         ],
         'slaaptijd' => [
             1 => 'Veel te weinig',
             2 => 'Weinig',
             3 => 'Genoeg',
-            4 => 'Meer dan genoeg'
+            4 => 'Meer dan genoeg',
         ],
         'kamplengte' => [
             1 => 'Veel te kort',
             2 => 'Te kort',
             3 => 'Precies goed',
             4 => 'Te lang',
-            5 => 'Veel te lang'
+            5 => 'Veel te lang',
         ],
         'kh-slaap' => [
             1 => 'Slecht',
             2 => 'Onvoldoende',
             3 => 'Voldoende',
-            4 => 'Goed'
+            4 => 'Goed',
         ],
         'kh-bijspijker' => [
             1 => 'Slecht',
             2 => 'Onvoldoende',
             3 => 'Voldoende',
-            4 => 'Goed'
+            4 => 'Goed',
         ],
         'kh-geheel' => [
             1 => 'Slecht',
             2 => 'Onvoldoende',
             3 => 'Voldoende',
-            4 => 'Goed'
+            4 => 'Goed',
         ],
         'stof' => [
             1 => 'Zeer slecht',
             2 => 'Slecht',
             3 => 'Gewoon',
             4 => 'Goed',
-            5 => 'Zeer goed'
+            5 => 'Zeer goed',
         ],
         'aandacht' => [
             1 => 'Te weinig',
             2 => 'Weinig',
             3 => 'Voldoende',
-            4 => 'Veel'
+            4 => 'Veel',
         ],
         'mening' => [
             1 => 'Zeer vervelend',
             2 => 'Vervelend',
             3 => 'Gewoon',
             4 => 'Prettig',
-            5 => 'Zeer prettig'
+            5 => 'Zeer prettig',
         ],
         'tevreden' => [
             1 => 'Erg ontevreden',
             2 => 'Een beetje ontevreden',
             3 => 'Een beetje tevreden',
-            4 => 'Erg tevreden'
-        ]
+            4 => 'Erg tevreden',
+        ],
     ];
 
     private const BAR_CHART_OPTIONS = [
@@ -96,18 +96,18 @@ class LavachartsChartService implements ChartServiceInterface
         'chartArea' => [
             'top' => 25,
             'left' => '25%',
-            'width' => '70%'
+            'width' => '70%',
         ],
         'fontSize' => 14,
         'hAxis' => [
             'minValue' => 0,
             'gridlines' => [
-                'count' => -1
-            ]
+                'count' => -1,
+            ],
         ],
         'legend' => [
-            'position' => 'none'
-        ]
+            'position' => 'none',
+        ],
     ];
 
     public function prepareEventReviewChart(Event $event, string $question, ?Member $member = null): void

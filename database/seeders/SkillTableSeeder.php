@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
 use App\Skill;
@@ -10,8 +12,6 @@ class SkillTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
     public function run()
     {
@@ -21,7 +21,7 @@ class SkillTableSeeder extends Seeder
 
         foreach ($seeded_skills as $skill) {
             Skill::create([
-                'tag' => $skill
+                'tag' => $skill,
             ]);
         }
     }

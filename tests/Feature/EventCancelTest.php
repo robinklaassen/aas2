@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
 use App\User;
@@ -13,10 +15,12 @@ class EventCancelTest extends TestCase
     public function testKampcieCanCancelEvents()
     {
         $user = User::findOrFail(6); // kampci
-        
+
         $this->actingAs($user)
             ->followingRedirects()
-            ->patch('events/1', ['cancelled' => '1'])
+            ->patch('events/1', [
+                'cancelled' => '1',
+            ])
             ->assertStatus(200);
     }
 
@@ -26,7 +30,9 @@ class EventCancelTest extends TestCase
 
         $this->actingAs($user)
             ->followingRedirects()
-            ->patch('events/1', ['cancelled' => '1'])
+            ->patch('events/1', [
+                'cancelled' => '1',
+            ])
             ->assertStatus(403);
     }
 }

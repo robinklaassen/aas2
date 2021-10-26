@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Updater\Listeners;
 
 use Updater\Services\CommandExecutor\ExecutorInterface;

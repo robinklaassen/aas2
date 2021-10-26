@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
 class ParticipantRequest extends Request
@@ -39,7 +41,7 @@ class ParticipantRequest extends Request
             'klas' => 'sometimes',
             'inkomen' => 'sometimes',
             'hoebij' => 'sometimes',
-            'information_channel' => 'when_then_different:only-email,email_deelnemer,email_ouder'
+            'information_channel' => 'when_then_different:only-email,email_deelnemer,email_ouder',
             //'voorwaarden' => 'required',
             //'privacy' => 'required'
         ];
@@ -48,7 +50,7 @@ class ParticipantRequest extends Request
     public function messages()
     {
         return [
-            "information_channel.when_then_different" => "Om informatie enkel via email te ontvangen moeten twee verschillende mailadressen opgegeven worden, voor de ouder en de deelnemer."
+            'information_channel.when_then_different' => 'Om informatie enkel via email te ontvangen moeten twee verschillende mailadressen opgegeven worden, voor de ouder en de deelnemer.',
         ];
     }
 }

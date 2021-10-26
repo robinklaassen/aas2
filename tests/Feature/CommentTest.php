@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit;
 
 use App\Comment;
@@ -27,7 +29,7 @@ class CommentTest extends TestCase
         $user = User::findOrFail(4);
 
         $random = Str::random(40);
-        $text = "Testing " . $random;
+        $text = 'Testing ' . $random;
 
         $comment = new Comment();
         $comment->user_id = 1;
@@ -37,15 +39,15 @@ class CommentTest extends TestCase
         $user->profile->comments()->save($comment);
 
         $this->actingAs($user)
-            ->get("/profile")
+            ->get('/profile')
             ->assertDontSee($comment->text);
 
         $this->assertDatabaseMissing(
             'comments',
             [
-                "text" => $text,
-                "entity_type" => "App\\Member",
-                "entity_id" => "1"
+                'text' => $text,
+                'entity_type' => 'App\\Member',
+                'entity_id' => '1',
             ]
         );
     }
@@ -56,7 +58,7 @@ class CommentTest extends TestCase
         $comment = new Comment();
 
         $random = Str::random(40);
-        $text = "Testing " . $random;
+        $text = 'Testing ' . $random;
 
         $comment->user_id = 1;
         $comment->text = $text;
@@ -65,10 +67,9 @@ class CommentTest extends TestCase
         $user->profile->comments()->save($comment);
 
         $this->actingAs($user)
-            ->get("/profile")
+            ->get('/profile')
             ->assertDontSee($text);
     }
-
 
     public function testAdminSeesSecretComment()
     {
@@ -76,7 +77,7 @@ class CommentTest extends TestCase
 
         $comment = new Comment();
         $random = Str::random(40);
-        $text = "Testing " . $random;
+        $text = 'Testing ' . $random;
 
         $comment->user_id = 1;
         $comment->text = $text;
@@ -85,80 +86,80 @@ class CommentTest extends TestCase
         $user->profile->comments()->save($comment);
 
         $this->actingAs(User::findOrFail(1))
-            ->get("/members/2")
+            ->get('/members/2')
             ->assertSee($text);
     }
 
     public function testCreateSecretCommentAsNonSuperAdminNotAllowed()
     {
         $random = Str::random(40);
-        $text = "Testing " . $random;
+        $text = 'Testing ' . $random;
         $this->actingAs(User::findOrFail(2))
             ->post(
-                "/comments?entity_type=App%5CMember&entity_id=2&origin=profile",
+                '/comments?entity_type=App%5CMember&entity_id=2&origin=profile',
                 [
-                    "text" => $text,
-                    "is_secret" => true
+                    'text' => $text,
+                    'is_secret' => true,
                 ]
             )->assertStatus(403);
 
         $this->assertDatabaseMissing('comments', [
-            "is_secret" => true,
-            "text" => $text,
-            "user_id" => 2,
-            "entity_type" => "App\Member",
-            "entity_id" => 2
+            'is_secret' => true,
+            'text' => $text,
+            'user_id' => 2,
+            'entity_type' => "App\Member",
+            'entity_id' => 2,
         ]);
     }
 
     public function testCreateSecretCommentAsAdmin()
     {
         $random = Str::random(40);
-        $text = "Testing " . $random;
+        $text = 'Testing ' . $random;
         $this->actingAs(User::findOrFail(1))
             ->post(
-                "/comments?entity_type=App%5CLocation&entity_id=2&origin=profile",
+                '/comments?entity_type=App%5CLocation&entity_id=2&origin=profile',
                 [
-                    "text" => $text,
-                    "is_secret" => true
+                    'text' => $text,
+                    'is_secret' => true,
                 ]
             )->assertRedirect('/profile');
 
         $this->assertDatabaseHas('comments', [
-            "is_secret" => true,
-            "text" => $text,
-            "user_id" => 1,
-            "entity_type" => "App\Location",
-            "entity_id" => 2
+            'is_secret' => true,
+            'text' => $text,
+            'user_id' => 1,
+            'entity_type' => "App\Location",
+            'entity_id' => 2,
         ]);
     }
 
     public function testCreateCommentAsUser()
     {
         $random = Str::random(40);
-        $text = "Testing " . $random;
+        $text = 'Testing ' . $random;
         $this->actingAs(User::findOrFail(2))
             ->post(
                 '/comments?entity_type=App%5CEvent&entity_id=1&origin=event%2F2',
                 [
-                    "text" => $text,
-                    "is_secret" => false
+                    'text' => $text,
+                    'is_secret' => false,
                 ]
             )->assertRedirect('/event/2');
 
         $this->assertDatabaseHas('comments', [
-            "is_secret" => false,
-            "text" => $text,
-            "user_id" => 2,
-            "entity_type" => "App\\Event",
-            "entity_id" => 1
+            'is_secret' => false,
+            'text' => $text,
+            'user_id' => 2,
+            'entity_type' => 'App\\Event',
+            'entity_id' => 1,
         ]);
     }
 
     public function testDeleteOwnComment()
     {
         $comment = Comment::where([
-            "user_id" => 2
+            'user_id' => 2,
         ])->first();
 
         $this->actingAs(User::findOrFail(2))
@@ -166,14 +167,15 @@ class CommentTest extends TestCase
                 "/comments/{$comment->id}?origin=profile"
             )->assertRedirect('/profile');
 
-        $this->assertDatabaseMissing("comments", ["id" => $comment->id]);
+        $this->assertDatabaseMissing('comments', [
+            'id' => $comment->id,
+        ]);
     }
-
 
     public function testDeleteOthersCommentNotAllowed()
     {
         $comment = Comment::where([
-            "user_id" => 1
+            'user_id' => 1,
         ])->first();
 
         $resp = $this->actingAs(User::findOrFail(2))
@@ -181,13 +183,15 @@ class CommentTest extends TestCase
                 "/comments/{$comment->id}?origin=profile"
             )->assertStatus(403);
 
-        $this->assertDatabaseHas("comments", ["id" => $comment->id]);
+        $this->assertDatabaseHas('comments', [
+            'id' => $comment->id,
+        ]);
     }
 
     public function testDeleteOthersCommentAsAdmin()
     {
         $comment = Comment::where([
-            "user_id" => 2
+            'user_id' => 2,
         ])->first();
 
         $this->actingAs(User::findOrFail(1))
@@ -195,89 +199,105 @@ class CommentTest extends TestCase
                 "/comments/{$comment->id}?origin=profile"
             )->assertRedirect('/profile');
 
-        $this->assertDatabaseMissing("comments", ["id" => $comment->id]);
+        $this->assertDatabaseMissing('comments', [
+            'id' => $comment->id,
+        ]);
     }
 
     public function testEditOwnComment()
     {
         $comment = Comment::where([
-            "user_id" => 2
+            'user_id' => 2,
         ])->first();
 
         $random = Str::random(40);
-        $text = "Testing " . $random;
+        $text = 'Testing ' . $random;
         $this->actingAs(User::findOrFail(2))
             ->patch(
                 "/comments/{$comment->id}?origin=profile",
                 [
-                    "text" => $text
+                    'text' => $text,
                 ]
             )->assertRedirect('/profile');
 
-        $this->assertDatabaseHas("comments", ["id" => $comment->id, "text" => $text]);
+        $this->assertDatabaseHas('comments', [
+            'id' => $comment->id,
+            'text' => $text,
+        ]);
     }
 
     public function testEditOthersCommentNotAllowed()
     {
         $comment = Comment::where([
-            "user_id" => 2
+            'user_id' => 2,
         ])->first();
 
         $random = Str::random(40);
-        $text = "Testing " . $random;
+        $text = 'Testing ' . $random;
         $this->actingAs(User::findOrFail(1))
             ->patch(
                 "/comments/{$comment->id}?origin=profile",
                 [
-                    "text" => $text
+                    'text' => $text,
                 ]
             )->assertStatus(403);
 
-        $this->assertDatabaseMissing("comments", ["id" => $comment->id, "text" => $text]);
+        $this->assertDatabaseMissing('comments', [
+            'id' => $comment->id,
+            'text' => $text,
+        ]);
     }
-
 
     public function testEditCommentToSecretNotAllowed()
     {
         $comment = Comment::where([
-            "user_id" => 2,
-            "is_secret" => false
+            'user_id' => 2,
+            'is_secret' => false,
         ])->first();
 
         $random = Str::random(40);
-        $text = "Testing " . $random;
+        $text = 'Testing ' . $random;
         $this->actingAs(User::findOrFail(2))
             ->patch(
                 "/comments/{$comment->id}?origin=profile",
                 [
-                    "text" => $text,
-                    "is_secret" => true
+                    'text' => $text,
+                    'is_secret' => true,
                 ]
             )->assertStatus(403);
 
-        $this->assertDatabaseMissing("comments", ["id" => $comment->id, "text" => $text]);
-        $this->assertDatabaseHas("comments", ["id" => $comment->id, "is_secret" => false]);
+        $this->assertDatabaseMissing('comments', [
+            'id' => $comment->id,
+            'text' => $text,
+        ]);
+        $this->assertDatabaseHas('comments', [
+            'id' => $comment->id,
+            'is_secret' => false,
+        ]);
     }
-
 
     public function testEditCommentToSecretAsAdmin()
     {
         $comment = Comment::where([
-            "user_id" => 1,
-            "is_secret" => false
+            'user_id' => 1,
+            'is_secret' => false,
         ])->first();
 
         $random = Str::random(40);
-        $text = "Testing " . $random;
+        $text = 'Testing ' . $random;
         $this->actingAs(User::findOrFail(1))
             ->patch(
                 "/comments/{$comment->id}?origin=profile",
                 [
-                    "text" => $text,
-                    "is_secret" => true
+                    'text' => $text,
+                    'is_secret' => true,
                 ]
             )->assertRedirect('/profile');
 
-        $this->assertDatabaseHas("comments", ["id" => $comment->id, "is_secret" => true, "text" => $text]);
+        $this->assertDatabaseHas('comments', [
+            'id' => $comment->id,
+            'is_secret' => true,
+            'text' => $text,
+        ]);
     }
 }

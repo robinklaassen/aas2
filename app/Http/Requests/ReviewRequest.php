@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Requests;
 
 use App\Member;
@@ -32,15 +34,15 @@ class ReviewRequest extends Request
             'allerleukst' => 'required',
             'allervervelendst' => 'required',
             'cijfer' => 'required|numeric',
-            'nogeens' => 'required'
+            'nogeens' => 'required',
         ];
 
         foreach ($this->input('leden', []) as $memberId) {
             $rules = array_merge($rules, [
-                "stof-$memberId" => 'required',
-                "aandacht-$memberId" => 'required',
-                "mening-$memberId" => 'required',
-                "tevreden-$memberId" => 'required'
+                "stof-${memberId}" => 'required',
+                "aandacht-${memberId}" => 'required',
+                "mening-${memberId}" => 'required',
+                "tevreden-${memberId}" => 'required',
             ]);
         }
 
@@ -68,16 +70,16 @@ class ReviewRequest extends Request
             'allerleukst.required' => 'Geef aan wat het allerleukste van dit kamp was.',
             'allervervelendst.required' => 'Geef aan wat het allervervelendst van dit kamp was.',
             'cijfer.required' => 'Geef een cijfer voor dit kamp.',
-            'nogeens.required' => 'Geef aan of je nog eens op kamp zou willen.'
+            'nogeens.required' => 'Geef aan of je nog eens op kamp zou willen.',
         ];
 
         foreach ($this->input('leden', []) as $memberId) {
             $naam = Member::findOrFail($memberId)->voornaam;
             $messages = array_merge($messages, [
-                "stof-$memberId.required" => "Geef aan hoe $naam de stof uitlegt.",
-                "aandacht-$memberId.required" => "Geef aan hoeveel aandacht je van $naam kreeg.",
-                "mening-$memberId.required" => "Geef je mening over het bijgespijkerd worden door $naam.",
-                "tevreden-$memberId.required" => "Geef aan of je tevreden bent over wat je met $naam hebt bereikt."
+                "stof-${memberId}.required" => "Geef aan hoe ${naam} de stof uitlegt.",
+                "aandacht-${memberId}.required" => "Geef aan hoeveel aandacht je van ${naam} kreeg.",
+                "mening-${memberId}.required" => "Geef je mening over het bijgespijkerd worden door ${naam}.",
+                "tevreden-${memberId}.required" => "Geef aan of je tevreden bent over wat je met ${naam} hebt bereikt.",
             ]);
         }
 

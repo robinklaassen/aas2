@@ -1,7 +1,8 @@
 <?php
 
-return [
+declare(strict_types=1);
 
+return [
     /*
     |--------------------------------------------------------------------------
     | Mail Driver
@@ -54,7 +55,10 @@ return [
     |
     */
 
-    'from' => ['address' => 'aas@anderwijs.nl', 'name' => 'Anderwijs - AAS'],
+    'from' => [
+        'address' => 'aas@anderwijs.nl',
+        'name' => 'Anderwijs - AAS',
+    ],
 
     /*
     |--------------------------------------------------------------------------
@@ -128,21 +132,20 @@ return [
 
     'addresses' => [
         'aas' => [
-            "email" => "aas@anderwijs.nl",
-            "name" => "Anderwijs - AAS"
+            'email' => 'aas@anderwijs.nl',
+            'name' => 'Anderwijs - AAS',
         ],
         'kantoor' => [
-            "email" => "kantoor@anderwijs.nl",
-            "name" => "Kantoorcommissie Anderwijs"
+            'email' => 'kantoor@anderwijs.nl',
+            'name' => 'Kantoorcommissie Anderwijs',
         ],
-        "kamp" => [
-            "email" => "kamp@anderwijs.nl",
-            "name" => "Kampcommissie Anderwijs"
+        'kamp' => [
+            'email' => 'kamp@anderwijs.nl',
+            'name' => 'Kampcommissie Anderwijs',
         ],
-        "penningmeester" => [
-            "email" => 'penningmeester@anderwijs.nl',
-            "name" => 'Penningmeester Anderwijs'
-        ]
-    ]
-
+        'penningmeester' => [
+            'email' => 'penningmeester@anderwijs.nl',
+            'name' => 'Penningmeester Anderwijs',
+        ],
+    ],
 ];

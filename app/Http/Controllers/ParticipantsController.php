@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Event;
@@ -58,13 +60,12 @@ class ParticipantsController extends Controller
     {
         Participant::create($request->all());
         return redirect('participants')->with([
-            'flash_message' => 'De deelnemer is aangemaakt!'
+            'flash_message' => 'De deelnemer is aangemaakt!',
         ]);
     }
 
     /**
      * Display the specified resource.
-     *
      */
     public function show(Participant $participant, string $viewType = 'admin')
     {
@@ -79,7 +80,11 @@ class ParticipantsController extends Controller
             ->orderBy('courses.naam')
             ->get();
         foreach ($result as $row) {
-            $courseOnCamp[$row->event_id][] = ['id' => $row->course_id, 'naam' => $row->naam, 'code' => $row->code];
+            $courseOnCamp[$row->event_id][] = [
+                'id' => $row->course_id,
+                'naam' => $row->naam,
+                'code' => $row->code,
+            ];
         }
 
         return view('participants.show', compact('participant', 'viewType', 'courseOnCamp'));
@@ -106,7 +111,7 @@ class ParticipantsController extends Controller
     {
         $participant->update($request->all());
         return redirect('participants/' . $participant->id)->with([
-            'flash_message' => $successMessage ?? 'De deelnemer is bewerkt!'
+            'flash_message' => $successMessage ?? 'De deelnemer is bewerkt!',
         ]);
     }
 
@@ -118,7 +123,7 @@ class ParticipantsController extends Controller
      */
     public function delete(Participant $participant)
     {
-        $this->authorize("delete", $participant);
+        $this->authorize('delete', $participant);
         return view('participants.delete', compact('participant'));
     }
 
@@ -127,54 +132,62 @@ class ParticipantsController extends Controller
         $participant->user()->delete();
         $participant->delete();
         return redirect('participants')->with([
-            'flash_message' => 'De deelnemer is verwijderd!'
+            'flash_message' => 'De deelnemer is verwijderd!',
         ]);
     }
 
-    # Send participant on event (form)
+    // Send participant on event (form)
     public function onEvent(Participant $participant)
     {
-        $this->authorize("onEvent", $participant);
+        $this->authorize('onEvent', $participant);
         return view('participants.onEvent', compact('participant'));
     }
 
-    # Send participant on event (update database)
+    // Send participant on event (update database)
     public function onEventSave(Participant $participant, Request $request)
     {
-        $this->authorize("onEvent", $participant);
+        $this->authorize('onEvent', $participant);
         $status = $participant->events()->sync([$request->selected_event], false);
-        if ($status['attached'] != []) {
+        if ($status['attached'] !== []) {
             // Insert courses
             foreach (array_unique($request->vak) as $key => $course_id) {
                 if ($course_id) {
                     DB::table('course_event_participant')->insert(
-                        ['course_id' => $course_id, 'event_id' => $request->selected_event, 'participant_id' => $participant->id, 'info' => $request->vakinfo[$key]]
+                        [
+                            'course_id' => $course_id,
+                            'event_id' => $request->selected_event,
+                            'participant_id' => $participant->id,
+                            'info' => $request->vakinfo[$key],
+                        ]
                     );
                 }
             }
         }
-        $message = ($status['attached'] == []) ? 'De deelnemer is reeds op dit evenement gestuurd!' : 'De deelnemer is op evenement gestuurd!';
+        $message = ($status['attached'] === []) ? 'De deelnemer is reeds op dit evenement gestuurd!' : 'De deelnemer is op evenement gestuurd!';
         return redirect('participants/' . $participant->id)->with([
-            'flash_message' => $message
+            'flash_message' => $message,
         ]);
     }
 
-    # Edit participant on event (form)
+    // Edit participant on event (form)
     public function editEvent(Participant $participant, Event $event)
     {
-        $this->authorize("editParticipant", [$event, $participant]);
+        $this->authorize('editParticipant', [$event, $participant]);
         $result = DB::table('course_event_participant')->select('course_id', 'info')->whereParticipantIdAndEventId($participant->id, $event->id)->get();
         $retrieved_courses = [];
         foreach ($result as $row) {
-            $retrieved_courses[] = ['id' => $row->course_id, 'info' => $row->info];
+            $retrieved_courses[] = [
+                'id' => $row->course_id,
+                'info' => $row->info,
+            ];
         }
         return view('participants.editEvent', compact('participant', 'event', 'retrieved_courses'));
     }
 
-    # Edit participant on event (update database)
+    // Edit participant on event (update database)
     public function editEventSave(Participant $participant, Event $event, Request $request)
     {
-        $this->authorize("editParticipant", [$event, $participant]);
+        $this->authorize('editParticipant', [$event, $participant]);
 
         // Delete all current courses
         DB::table('course_event_participant')->whereParticipantIdAndEventId($participant->id, $event->id)->delete();
@@ -183,17 +196,22 @@ class ParticipantsController extends Controller
         foreach (array_unique($request->vak) as $key => $course_id) {
             if ($course_id) {
                 DB::table('course_event_participant')->insert(
-                    ['course_id' => $course_id, 'event_id' => $event->id, 'participant_id' => $participant->id, 'info' => $request->vakinfo[$key]]
+                    [
+                        'course_id' => $course_id,
+                        'event_id' => $event->id,
+                        'participant_id' => $participant->id,
+                        'info' => $request->vakinfo[$key],
+                    ]
                 );
             }
         }
 
         return redirect('participants/' . $participant->id)->with([
-            'flash_message' => 'De vakken voor dit kamp zijn bewerkt!'
+            'flash_message' => 'De vakken voor dit kamp zijn bewerkt!',
         ]);
     }
 
-    # Export all participants to Excel
+    // Export all participants to Excel
     public function export()
     {
         // 20200301, this exports holds all information for partcipants, lets first be clear for whom this export is.
@@ -208,6 +226,7 @@ class ParticipantsController extends Controller
         $participants = $this->anonymizeParticipant->getParticipantsToAnonymize(new \DateTimeImmutable());
         return view('participants.anonymize', compact('participants'));
     }
+
     public function anonymizeConfirm(AnonymizeParticipantRequest $request)
     {
         $this->authorize('anonymize', Participant::class);
@@ -224,7 +243,7 @@ class ParticipantsController extends Controller
         }
 
         return redirect(action('ParticipantsController@index'))->with([
-            'flash_message' => count($participants) . ' geanonimiseerd'
+            'flash_message' => count($participants) . ' geanonimiseerd',
         ]);
     }
 }

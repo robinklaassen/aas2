@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
 use Tests\TestCase;
@@ -16,8 +18,6 @@ class BirthdayOptOutTest extends TestCase
 
     /**
      * Test the birthday list
-     *
-     * @return void
      */
     public function testBirthdayList()
     {
@@ -29,8 +29,6 @@ class BirthdayOptOutTest extends TestCase
 
     /**
      * Test the Google Calendar export
-     *
-     * @return void
      */
     public function testGoogleCalendarAsMember()
     {
@@ -43,8 +41,6 @@ class BirthdayOptOutTest extends TestCase
 
     /**
      * Test the Google Calendar export
-     *
-     * @return void
      */
     public function testGoogleCalendarPublic()
     {

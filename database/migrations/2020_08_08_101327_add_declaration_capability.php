@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Helpers\CapabilityHelper;
 use Illuminate\Database\Migrations\Migration;
 
@@ -7,8 +9,6 @@ class AddDeclarationCapability extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
     public function up()
     {
@@ -17,7 +17,7 @@ class AddDeclarationCapability extends Migration
             'Declaraties - Eigen beheren',
             'member'
         );
-        
+
         CapabilityHelper::new(
             'declarations::create',
             'Declaraties - Aanmaken',
@@ -49,8 +49,6 @@ class AddDeclarationCapability extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down()
     {
@@ -60,7 +58,7 @@ class AddDeclarationCapability extends Migration
             'declarations::show',
             'declarations::delete',
             'declarations::edit',
-            'declarations::process'
+            'declarations::process',
         ]);
     }
 }

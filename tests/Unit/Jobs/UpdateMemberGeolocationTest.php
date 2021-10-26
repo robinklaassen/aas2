@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit\Jobs;
 
 use App\Data\Geolocation;
@@ -33,7 +35,7 @@ class UpdateMemberGeolocationTest extends TestCase
 
         $member->refresh();
 
-        $this->assertEquals(10.0, $member->geolocatie->getLat());
-        $this->assertEquals(20.0, $member->geolocatie->getLng());
+        $this->assertSame(10.0, $member->geolocatie->getLat());
+        $this->assertSame(20.0, $member->geolocatie->getLng());
     }
 }
