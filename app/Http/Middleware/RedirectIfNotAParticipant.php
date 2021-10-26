@@ -5,12 +5,12 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 
-class RedirectIfNotAMember
+class RedirectIfNotAParticipant
 {
 
 	public function handle(Request $request, Closure $next)
 	{
-		if (!$request->user()->isMember()) {
+		if (!$request->user()->isParticipant()) {
 			return redirect('/profile');
 		}
 

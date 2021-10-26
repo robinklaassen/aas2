@@ -2,16 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Course;
 use App\Event;
 use App\Member;
 use App\Participant;
-use App\Http\Requests;
-use App\Http\Controllers\Controller;
 use App\Exports\EventNightRegisterReport;
 use App\Exports\EventPaymentReport;
-use Maatwebsite\Excel\Facades\Excel;
-use Illuminate\Http\Request;
+use App\Helpers\CourseCoverageHelper;
+use App\Http\Requests\EventRequest;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Events\EditEventMemberRequest;
+use App\Services\Chart\ChartServiceInterface;
+use Barryvdh\DomPDF\Facade as PDF;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 class EventsController extends Controller
 {
@@ -51,7 +56,7 @@ class EventsController extends Controller
 	 *
 	 * @return Response
 	 */
-	public function store(Requests\EventRequest $request)
+	public function store(EventRequest $request)
 	{
 		Event::create($request->all());
 		return redirect('events')->with([
@@ -65,13 +70,13 @@ class EventsController extends Controller
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function show(Event $event)
+	public function show(Request $request, Event $event)
 	{
 
 		// Obtain participant course information
 		$participantCourseString = array();
 		foreach ($event->participants->all() as $p) {
-			$result = \DB::table('course_event_participant')
+			$result = DB::table('course_event_participant')
 				->where('event_id', $event->id)
 				->where('participant_id', $p->id)
 				->join('courses', 'course_event_participant.course_id', '=', 'courses.id')
@@ -94,7 +99,7 @@ class EventsController extends Controller
 		}
 
 		// Check number of participants to show
-		if (\Auth::user()->can("viewParticipantsAdvanced", $event)) {
+		if ($request->user()->can("viewParticipantsAdvanced", $event)) {
 			$numberOfParticipants = $event->participants->count();
 		} else {
 			$numberOfParticipants = $event->participants()->wherePivot('geplaatst', 1)->count();
@@ -121,7 +126,7 @@ class EventsController extends Controller
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function update(Event $event, Requests\EventRequest $request)
+	public function update(Event $event, EventRequest $request)
 	{
 		$this->authorize("update", $event);
 
@@ -203,7 +208,7 @@ class EventsController extends Controller
 
 		$participant = $event->participants->find($participant->id);
 
-		$result = \DB::table('course_event_participant')->select('course_id', 'info')->whereParticipantIdAndEventId($participant->id, $event->id)->get();
+		$result = DB::table('course_event_participant')->select('course_id', 'info')->whereParticipantIdAndEventId($participant->id, $event->id)->get();
 		$retrieved_courses = [];
 		foreach ($result as $row) {
 			$retrieved_courses[] = ['id' => $row->course_id, 'info' => $row->info];
@@ -220,12 +225,12 @@ class EventsController extends Controller
 		$event->participants()->updateExistingPivot($participant->id, ['datum_betaling' => $request->datum_betaling, 'geplaatst' => $request->geplaatst]);
 
 		// Delete all current courses
-		\DB::table('course_event_participant')->whereParticipantIdAndEventId($participant->id, $event->id)->delete();
+		DB::table('course_event_participant')->whereParticipantIdAndEventId($participant->id, $event->id)->delete();
 
 		// Insert new courses
 		foreach (array_unique($request->vak) as $key => $course_id) {
 			if ($course_id) {
-				\DB::table('course_event_participant')->insert(
+				DB::table('course_event_participant')->insert(
 					['course_id' => $course_id, 'event_id' => $event->id, 'participant_id' => $participant->id, 'info' => $request->vakinfo[$key]]
 				);
 			}
@@ -248,7 +253,7 @@ class EventsController extends Controller
 		$this->authorize("removeParticipant", [$event, $participant]);
 
 		$event->participants()->detach($participant->id);
-		\DB::table('course_event_participant')->where('event_id', $event->id)->where('participant_id', $participant->id)->delete();
+		DB::table('course_event_participant')->where('event_id', $event->id)->where('participant_id', $participant->id)->delete();
 		return redirect('events/' . $event->id)->with([
 			'flash_message' => 'De deelnemer is van dit evenement verwijderd!'
 		]);
@@ -274,7 +279,7 @@ class EventsController extends Controller
 		}
 
 		// Construct course array
-		$result = \DB::table('course_event_participant')
+		$result = DB::table('course_event_participant')
 			->where('event_id', '=', $event->id)
 			->join('courses', 'course_event_participant.course_id', '=', 'courses.id')
 			->orderBy('courses.naam')
@@ -313,12 +318,12 @@ class EventsController extends Controller
 		}
 
 		// Generate and output PDF
-		$pdf = \PDF::loadView('events.export', compact('event', 'participants', 'num_participants_placed', 'participantCourses', 'stats', 'age_freq'))->setPaper('a4')->setWarnings(true);
+		$pdf = PDF::loadView('events.export', compact('event', 'participants', 'num_participants_placed', 'participantCourses', 'stats', 'age_freq'))->setPaper('a4')->setWarnings(true);
 		return $pdf->stream();
 	}
 
 	# Check course coverage (vakdekking)
-	public function check(Event $event, $type)
+	public function check(Event $event, string $type = 'all', CourseCoverageHelper $courseCoverageHelper)
 	{
 		$this->authorize("subjectCheck", $event);
 
@@ -327,90 +332,21 @@ class EventsController extends Controller
 			return redirect('events');
 		}
 
-		$courses = \App\Course::orderBy('naam')->get();
-		$memberIDs = $event->members->pluck('id')->toArray();
+		$onlyPlacedParticipants = $type == 'placed';
 
-		// Loop through all courses
-		foreach ($courses as $course) {
-			// Obtain members that have this course
-			$result = \DB::table('course_member')
-				->whereIn('member_id', $memberIDs)
-				->where('course_id', $course->id)
-				->join('members', 'course_member.member_id', '=', 'members.id')
-				->select('members.voornaam', 'course_member.klas')
-				->orderBy('members.voornaam')
-				->get();
+		$courses = Course::orderBy('naam')->get();
+		$coverageInfo = $courses->map(fn ($c) => [
+			'naam' => $c->naam,
+			'participants' => $c->participantsOnCamp($event, $onlyPlacedParticipants),
+			'members' => $c->members()->onEvent($event)->orderBy('voornaam')->get(),
+			'status' => $courseCoverageHelper->getStatus($event, $c, $onlyPlacedParticipants)
+		]);
 
-			$numbers[$course->id]['m'] = count($result);
-			$tooltips[$course->id]['m'] = '';
-			$levels['m'] = [];
-			foreach ($result as $row) {
-				$tooltips[$course->id]['m'] .= $row->voornaam . ' (' . $row->klas . ')<br/>';
-				$levels['m'][] = $row->klas;
-			}
-
-
-			// Obtain participants that have this course
-			$result = \DB::table('course_event_participant')
-				->where('event_id', $event->id)
-				->where('course_id', $course->id)
-				->join('participants', 'course_event_participant.participant_id', '=', 'participants.id')
-				->select('participants.id', 'participants.voornaam', 'participants.klas')
-				->orderBy('participants.voornaam')
-				->get();
-
-			// Filter out unplaced participants, if requested
-			if ($type == 'placed') {
-				$unplaced = $event->participants()->where('geplaatst', 0)->get()->pluck('id');
-				$result = $result->filter(function ($participant) use ($unplaced) {
-					return !$unplaced->contains($participant->id);
-				});
-			}
-
-			$numbers[$course->id]['p'] = count($result);
-			$tooltips[$course->id]['p'] = '';
-			$levels['p'] = [];
-			foreach ($result as $row) {
-				$tooltips[$course->id]['p'] .= $row->voornaam . ' (' . $row->klas . ')<br/>';
-				$levels['p'][] = $row->klas;
-			}
-
-			// Now determine the status of this course...
-			$status[$course->id] = 'ok';
-
-			// Start by checking if just the number of members is sufficient
-			if (3 * $numbers[$course->id]['m'] < $numbers[$course->id]['p']) {
-				$status[$course->id] = 'badquota';
-			} else {
-				// If the number of members is sufficient, then check if their levels are
-
-				// Create 'triple-array' for member levels
-				$m = [];
-				foreach ($levels['m'] as $val) {
-					$m[] = $val;
-					$m[] = $val;
-					$m[] = $val;
-				}
-
-				$p = $levels['p'];
-
-				// Sort both arrays from high to low
-				rsort($m, SORT_NUMERIC);
-				rsort($p, SORT_NUMERIC);
-
-				// Compare element-wise
-				foreach ($p as $key => $value) {
-					if ($value > $m[$key]) {
-						$status[$course->id] = 'badlevel';
-					}
-				}
-			}
-		}
-
-		return view('events.check', compact('type', 'event', 'courses', 'numbers', 'tooltips', 'status'));
+		return view('events.check', compact('event', 'type', 'coverageInfo'));
 	}
 
 	# Calculate camp budget
+	// TODO method is not up to date anymore with current calculations, check if still used, otherwise remove
 	public function budget(Event $event)
 	{
 		$this->authorize("budget", $event);
@@ -567,67 +503,22 @@ class EventsController extends Controller
 	}
 
 	# Show review results
-	public function reviews(Event $event)
+	public function reviews(Event $event, ChartServiceInterface $chartService)
 	{
-
 		$this->authorize("viewReviewResults", $event);
-		// // Auth: either have to be admin or have gone on this camp as a member
-		// if (!(\Auth::user()->is_admin)) {
 
-		// 	$is_member = (\Auth::user()->profile_type == "App\Member");
-		// 	$on_camp = \Auth::user()->profile->events->contains("id", $event->id);
+		$questions = collect([
+			'bs-mening',
+			'bs-tevreden',
+			'bs-manier',
+			'bs-thema',
+			'slaaptijd',
+			'kamplengte'
+		]);
 
-		// 	if (!($is_member && $on_camp)) {
-		// 		return redirect()->back();
-		// 	}
-		// }
-
-		// Repeatedly set options and create charts using a helper function based on LavaCharts
-
-		$options = [
-			1 => 'Te weinig',
-			2 => 'Voldoende',
-			3 => 'Te veel'
-		];
-
-		createReviewChart($event, 'bs-mening', $options);
-
-		$options = [
-			1 => 'Erg ontevreden',
-			2 => 'Een beetje ontevreden',
-			3 => 'Een beetje tevreden',
-			4 => 'Erg tevreden'
-		];
-
-		createReviewChart($event, 'bs-tevreden', $options);
-
-		$options = [
-			0 => 'Nee',
-			1 => 'Ja'
-		];
-
-		createReviewChart($event, 'bs-manier', $options);
-
-		createReviewChart($event, 'bs-thema', $options);
-
-		$options = [
-			1 => 'Veel te weinig',
-			2 => 'Weinig',
-			3 => 'Genoeg',
-			4 => 'Meer dan genoeg'
-		];
-
-		createReviewChart($event, 'slaaptijd', $options);
-
-		$options = [
-			1 => 'Veel te kort',
-			2 => 'Te kort',
-			3 => 'Precies goed',
-			4 => 'Te lang',
-			5 => 'Veel te lang'
-		];
-
-		createReviewChart($event, 'kamplengte', $options);
+		$questions->map(function ($question) use ($event, $chartService) {
+			$chartService->prepareEventReviewChart($event, $question);
+		});
 
 		return view('events.reviews', compact('event'));
 	}
@@ -649,7 +540,7 @@ class EventsController extends Controller
 		foreach (['event_participant', 'course_event_participant'] as $table) {
 			$query = "UPDATE " . $table . " SET event_id = " . $request->destination . " WHERE event_id = " . $event->id . " AND participant_id = " . $participant_id;
 
-			\DB::statement($query);
+			DB::statement($query);
 		}
 
 		return redirect('events')->with([

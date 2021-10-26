@@ -107,7 +107,7 @@ class ParticipantTableSeeder extends Seeder
 			'inkomen' => 2,
 			'school' => 'Vreemans College',
 			'niveau' => 'HAVO',
-			'klas' => 1,
+			'klas' => 4,
 			'hoebij' => 'Zusje',
 			'opmerkingen' => 'Enorm veel zin in kamp.',
 		]);

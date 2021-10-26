@@ -5,27 +5,24 @@ namespace App\Http\Controllers;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use App\Course;
+use App\Event;
 use App\Member;
 use App\Participant;
-use App\Event;
-use App\Course;
-use Mail;
-use App\Mail\participants\ParticipantRegistrationConfirmation;
-use App\Mail\internal\NewParticipantNotification;
-use App\Helpers\Payment\EventPayment;
-use App\Facades\Mollie;
-use App\Mail\internal\NewMemberNotification;
-use App\Mail\members\MemberRegistrationConfirmation;
 use App\Role;
 use App\User;
+use App\Facades\Mollie;
+use App\Helpers\Payment\EventPayment;
+use App\Mail\internal\NewMemberNotification;
+use App\Mail\internal\NewParticipantNotification;
+use App\Mail\members\MemberRegistrationConfirmation;
+use App\Mail\participants\ParticipantRegistrationConfirmation;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class RegistrationController extends Controller
 {
-
-	public function __construct()
-	{
-	}
 
 	# Member registration form
 	public function registerMember()
@@ -112,7 +109,7 @@ class RegistrationController extends Controller
 		// Create username
 		$thename = strtolower(substr($member->voornaam, 0, 1) . str_replace(' ', '', $member->achternaam));
 		$username = $thename;
-		$nameList = \DB::table('users')->pluck('username');
+		$nameList = DB::table('users')->pluck('username');
 		$i = 0;
 		while ($nameList->contains($username)) {
 			$i++;
@@ -239,7 +236,7 @@ class RegistrationController extends Controller
 
 		foreach (array_unique($courseInput) as $key => $course_id) {
 			if ($course_id != 0) {
-				\DB::table('course_event_participant')->insert(
+				DB::table('course_event_participant')->insert(
 					['course_id' => $course_id, 'event_id' => $request->selected_camp, 'participant_id' => $participant->id, 'info' => $courseInfo[$key]]
 				);
 				$givenCourses[] = ['naam' => Course::find($course_id)->naam, 'info' => $courseInfo[$key]];
@@ -249,7 +246,7 @@ class RegistrationController extends Controller
 		// Create username
 		$thename = strtolower(substr($participant->voornaam, 0, 1) . str_replace(' ', '', $participant->achternaam));
 		$username = $thename;
-		$nameList = \DB::table('users')->pluck('username');
+		$nameList = DB::table('users')->pluck('username');
 		$i = 0;
 		while ($nameList->contains($username)) {
 			$i++;
