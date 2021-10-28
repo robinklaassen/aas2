@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Events\FinishedEvent;
 use App\Pivots\EventParticipant;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -36,7 +37,10 @@ class Event extends Model
     // A camp belongs to many members
     public function members()
     {
-        return $this->belongsToMany(Member::class)->withTimestamps()->withPivot('wissel')->withPivot('wissel_datum_start')->withPivot('wissel_datum_eind');
+        return $this->belongsToMany(Member::class)->withTimestamps()
+            ->withPivot('wissel')
+            ->withPivot('wissel_datum_start')
+            ->withPivot('wissel_datum_eind');
     }
 
     // A camp belongs to many participants
@@ -152,5 +156,16 @@ class Event extends Model
     public function scopeNotCancelled($query)
     {
         return $query->where('cancelled_at', null);
+    }
+
+    public function finalize()
+    {
+        if ($this->finalized_at !== null) {
+            return;
+        }
+
+        FinishedEvent::dispatch($this);
+        $this->finalized_at = Carbon::now();
+        $this->save();
     }
 }
