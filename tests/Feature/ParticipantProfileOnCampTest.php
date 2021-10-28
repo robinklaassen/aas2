@@ -1,45 +1,48 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
-use Mockery;
-use Tests\TestCase;
-use App\User;
-use App\Helpers\Payment\MolliePaymentProvider;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 use App\Event;
 use App\EventPackage;
 use App\Helpers\Payment\EventPayment;
+use App\Helpers\Payment\MolliePaymentProvider;
+use App\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\WithoutMiddleware;
+use Illuminate\Support\Facades\Mail;
+use Mockery;
+use Tests\TestCase;
 
 class ParticipantProfileOnCampTest extends TestCase
 {
     use WithoutMiddleware;
+
     use DatabaseTransactions;
 
     protected $data = [
-        "selected_camp" => 5,
-        "vak" => [3, 1],
-        "vakinfo" => ["Daarom", "Ich sprechen keine niederlandisch"],
-        "iDeal" => 0
+        'selected_camp' => 5,
+        'vak' => [3, 1],
+        'vakinfo' => ['Daarom', 'Ich sprechen keine niederlandisch'],
+        'iDeal' => 0,
     ];
+
     protected $event;
+
     protected $user;
+
     protected $package;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->event = Event::findOrFail($this->data["selected_camp"]);
+        $this->event = Event::findOrFail($this->data['selected_camp']);
         $this->user = User::findOrFail(3); // Annabelle, we zijn niets zonder jou, Annabelle!
     }
 
     /**
      * Tests to send a participant on camp from the profile page without iDeal
-     *
-     * @return void
      */
     public function testOnCampWithoutIDeal()
     {
@@ -49,18 +52,16 @@ class ParticipantProfileOnCampTest extends TestCase
             $mock->shouldNotReceive('process');
         }));
 
-        $this->data["iDeal"] = 0;
-        $response = $this->actingAs($this->user)->put(action("ProfileController@onCampSave"), $this->data);
+        $this->data['iDeal'] = 0;
+        $response = $this->actingAs($this->user)->put(action('ProfileController@onCampSave'), $this->data);
 
         $response->assertStatus(302);
         $response->assertRedirect(action('ProfileController@show'));
-        $response->assertSessionHas("flash_message", 'Uw kind is aangemeld voor kamp!');
+        $response->assertSessionHas('flash_message', 'Uw kind is aangemeld voor kamp!');
     }
 
     /**
      * Tests to send a participant on camp from the profile page with iDeal
-     *
-     * @return void
      */
     public function testOnCampWithIDeal()
     {
@@ -70,32 +71,30 @@ class ParticipantProfileOnCampTest extends TestCase
             $mock->shouldReceive('process')
                 ->once()
                 ->with(Mockery::on(function (EventPayment $arg) {
-
                     $contains = function ($needle, $haystack) {
                         return strpos($haystack, $needle) !== false;
                     };
 
                     $descr = $arg->getDescription();
-                    // dd($descr);
                     return $contains($this->event->code, $descr)
                         && $contains($this->user->profile->voornaam, $descr)
                         && $contains($this->user->profile->achternaam, $descr);
                 }))
-                ->andReturns(redirect("https://mollie-backend"));
+                ->andReturns(redirect('https://mollie-backend'));
         }));
 
-        $this->data["iDeal"] = 1;
+        $this->data['iDeal'] = 1;
 
-        $response = $this->actingAs($this->user)->put(action("ProfileController@onCampSave"), $this->data);
+        $response = $this->actingAs($this->user)->put(action('ProfileController@onCampSave'), $this->data);
 
         $response->assertStatus(302);
-        $response->assertRedirect("https://mollie-backend");
+        $response->assertRedirect('https://mollie-backend');
 
         $this->assertDatabaseHas(
             'event_participant',
             [
-                "event_id" => 5,
-                "participant_id" => $this->user->profile->id
+                'event_id' => 5,
+                'participant_id' => $this->user->profile->id,
             ]
         );
     }
@@ -109,13 +108,12 @@ class ParticipantProfileOnCampTest extends TestCase
         $this->package = EventPackage::findOrFail(2);
         $this->data['selected_camp'] = $this->event->id;
         $this->data['selected_package'] = $this->package->id;
-        $this->data["iDeal"] = "1";
+        $this->data['iDeal'] = '1';
 
         $this->instance(MolliePaymentProvider::class, Mockery::mock(MolliePaymentProvider::class, function ($mock) {
             $mock->shouldReceive('process')
                 ->once()
                 ->with(Mockery::on(function (EventPayment $arg) {
-
                     $contains = function ($needle, $haystack) {
                         return strpos($haystack, $needle) !== false;
                     };
@@ -127,20 +125,20 @@ class ParticipantProfileOnCampTest extends TestCase
                         && $contains($this->user->profile->voornaam, $descr)
                         && $contains($this->user->profile->achternaam, $descr);
                 }))
-                ->andReturns(redirect("https://mollie-backend"));
+                ->andReturns(redirect('https://mollie-backend'));
         }));
 
-        $response = $this->actingAs($this->user)->put(action("ProfileController@onCampSave"), $this->data);
+        $response = $this->actingAs($this->user)->put(action('ProfileController@onCampSave'), $this->data);
 
         $response->assertStatus(302);
-        $response->assertRedirect("https://mollie-backend");
+        $response->assertRedirect('https://mollie-backend');
 
         $this->assertDatabaseHas(
             'event_participant',
             [
-                "event_id" => $this->event->id,
-                "participant_id" => $this->user->profile->id,
-                "package_id" => $this->package->id
+                'event_id' => $this->event->id,
+                'participant_id' => $this->user->profile->id,
+                'package_id' => $this->package->id,
             ]
         );
     }

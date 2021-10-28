@@ -1,15 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit\Services;
 
-use Tests\TestCase;
-use App\Services\Geocoder\PositionstackGeocoder;
 use App\Exceptions\GeocoderException;
+use App\Services\Geocoder\PositionstackGeocoder;
 use Illuminate\Support\Facades\Http;
+use Tests\TestCase;
 
 class PositionstackGeocoderTest extends TestCase
 {
-
     private $geocoder;
 
     protected function setUp(): void
@@ -19,27 +20,26 @@ class PositionstackGeocoderTest extends TestCase
         $this->geocoder = new PositionstackGeocoder();
     }
 
-    public function test_geocode_returns_geolocation()
+    public function testGeocodeReturnsGeolocation()
     {
-
         $fakeBody = [
             'data' => [
                 [
                     'latitude' => 14,
-                    'longitude' => 73
-                ]
-            ]
+                    'longitude' => 73,
+                ],
+            ],
         ];
 
         Http::fake(Http::response(json_encode($fakeBody)));
 
         $geo = $this->geocoder->geocode('some address');
 
-        $this->assertEquals(14, $geo->latitude);
-        $this->assertEquals(73, $geo->longitude);
+        $this->assertSame(14.0, $geo->latitude);
+        $this->assertSame(73.0, $geo->longitude);
     }
 
-    public function test_geocode_failed_request_throws_exception()
+    public function testGeocodeFailedRequestThrowsException()
     {
         Http::fake(Http::response(null, 500));
 
@@ -47,10 +47,10 @@ class PositionstackGeocoderTest extends TestCase
         $this->geocoder->geocode('some address');
     }
 
-    public function test_geocode_no_match_throws_exception()
+    public function testGeocodeNoMatchThrowsException()
     {
         $fakeBody = [
-            'data' => []
+            'data' => [],
         ];
 
         Http::fake(Http::response(json_encode($fakeBody)));

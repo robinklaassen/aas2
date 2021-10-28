@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Mail\members;
 
 use App\Member;
@@ -10,10 +12,14 @@ use Illuminate\Support\Facades\Config;
 
 class NewUserMember extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+
+    use SerializesModels;
 
     public $member;
+
     public $username;
+
     public $password;
 
     public function __construct(Member $member, $username, $password)
@@ -26,7 +32,7 @@ class NewUserMember extends Mailable
     public function build()
     {
         return $this->view('emails.members.newUserMember')
-            ->from([Config::get("mail.addresses.kamp")])
+            ->from([Config::get('mail.addresses.kamp')])
             ->to($this->member->email, $this->member->volnaam)
             ->subject('ANDERWIJS - Gebruikersaccount aangemaakt');
     }

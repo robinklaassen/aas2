@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit\Services\Anonymize;
 
 use App\Comment;
@@ -14,7 +16,6 @@ use Illuminate\Support\Collection;
 use Mockery;
 use Tests\TestCase;
 
-
 /**
  * Technically not a unit test because of `test_it_gets_participants_to_anonymize` hitting the database
  * But splitting this up was too much effort and code duplication for now
@@ -27,10 +28,12 @@ class AnonymizeParticipantTest extends TestCase
      * @var ObjectManagerInterface|Mockery\LegacyMockInterface|Mockery\MockInterface
      */
     private $objectManager;
+
     /**
      * @var AnonymizeGeneratorInterface|Mockery\LegacyMockInterface|Mockery\MockInterface
      */
     private $generator;
+
     /**
      * @var AnonymizeParticipant
      */
@@ -45,7 +48,7 @@ class AnonymizeParticipantTest extends TestCase
         $this->subject = new AnonymizeParticipant($this->generator, $this->objectManager);
     }
 
-    public function test_it_anonymizes()
+    public function testItAnonymizes()
     {
         $data = $this->fakeParticipantData();
 
@@ -76,56 +79,61 @@ class AnonymizeParticipantTest extends TestCase
 
         $this->subject->anonymize($participant);
 
-        foreach($fieldsToAnonymize as $field) {
-            self::assertNotEquals($participant->$field, $data[$field]);
+        foreach ($fieldsToAnonymize as $field) {
+            self::assertNotSame($participant->{$field}, $data[$field]);
         }
         self::assertNotNull($participant->anonymized_at);
     }
 
-    public function test_it_gets_participants_to_anonymize()
+    public function testItGetsParticipantsToAnonymize()
     {
         $participant = new Participant();
         $participant->fill($this->fakeParticipantData());
         $participant->save();
-        $participant->events()->attach(13, ['datum_betaling' => '2009-12-01', 'geplaatst' => 1]);
+        $participant->events()->attach(13, [
+            'datum_betaling' => '2009-12-01',
+            'geplaatst' => 1,
+        ]);
 
         $result = $this->subject->getParticipantsToAnonymize(new \DateTimeImmutable('2020-12-12T00:00:00Z'));
 
-        $lastItem = $result[count($result) -1];
-        self::assertEquals($participant->id, $lastItem->id);
+        $lastItem = $result[count($result) - 1];
+        self::assertSame($participant->id, $lastItem->id);
     }
 
-
-    public function test_it_gets_participant_to_anonymize()
+    public function testItGetsParticipantToAnonymize()
     {
         $participant = new Participant();
         $participant->fill($this->fakeParticipantData());
         $participant->anonymized_at = new \DateTimeImmutable();
         $participant->save();
-        $participant->events()->attach(13, ['datum_betaling' => '2009-12-01', 'geplaatst' => 1]);
+        $participant->events()->attach(13, [
+            'datum_betaling' => '2009-12-01',
+            'geplaatst' => 1,
+        ]);
 
         $result = $this->subject->getParticipantsToAnonymize(new \DateTimeImmutable('2020-12-12T00:00:00Z'));
 
-        $lastItem = $result[count($result) -1] ?? null;
-        self::assertNotEquals($participant->id, $lastItem !== null ? $lastItem->id : null);
+        $lastItem = $result[count($result) - 1] ?? null;
+        self::assertNotSame($participant->id, $lastItem !== null ? $lastItem->id : null);
     }
 
     private function fakeParticipantData(): array
     {
         return [
-            "voornaam" => "piet",
-            "achternaam" => "henk",
-            "geboortedatum" => new Carbon("2010-01-01"),
-            "postcode" => "1111BC",
-            "adres" => "teststraat",
-            "telefoon_deelnemer" => "0612345678",
-            "telefoon_ouder_vast" => "0612345678",
-            "telefoon_ouder_mobiel" => "0612345678",
-            "email_deelnemer" => "test@test.nl",
-            "email_ouder" => "test@test.nl",
-            "inkomen" => "2",
-            "school" => "Test school",
-            "opmerkingen" => "Test school",
+            'voornaam' => 'piet',
+            'achternaam' => 'henk',
+            'geboortedatum' => new Carbon('2010-01-01'),
+            'postcode' => '1111BC',
+            'adres' => 'teststraat',
+            'telefoon_deelnemer' => '0612345678',
+            'telefoon_ouder_vast' => '0612345678',
+            'telefoon_ouder_mobiel' => '0612345678',
+            'email_deelnemer' => 'test@test.nl',
+            'email_ouder' => 'test@test.nl',
+            'inkomen' => '2',
+            'school' => 'Test school',
+            'opmerkingen' => 'Test school',
         ];
     }
 }

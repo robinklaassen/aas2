@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Mail\members;
 
 use App\Event;
@@ -11,11 +13,16 @@ use Illuminate\Support\Facades\Config;
 
 class MemberRegistrationConfirmation extends Mailable
 {
-    use Queueable, SerializesModels;
+    use Queueable;
+
+    use SerializesModels;
 
     public $member;
+
     public $event;
+
     public $givenCourses;
+
     public $password;
 
     public function __construct(
@@ -33,8 +40,8 @@ class MemberRegistrationConfirmation extends Mailable
     public function build()
     {
         $subject = sprintf('%s Bevestiging van inschrijving', Config::get('mail.subject_prefix.external'));
-        
-        return $this->from([Config::get("mail.addresses.kamp")])
+
+        return $this->from([Config::get('mail.addresses.kamp')])
             ->to($this->member->email, $this->member->volnaam)
             ->subject($subject)
             ->view('emails.members.registrationConfirmation');

@@ -1,15 +1,15 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateDeclarationsTable extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
     public function up()
     {
@@ -25,16 +25,14 @@ class CreateDeclarationsTable extends Migration
             $table->timestamps();
 
             $table->foreign('member_id')
-					->references('id')
-					->on('members')
-                    ->onDelete('cascade');
+                ->references('id')
+                ->on('members')
+                ->onDelete('cascade');
         });
     }
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down()
     {

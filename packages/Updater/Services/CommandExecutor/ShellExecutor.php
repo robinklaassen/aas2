@@ -1,7 +1,9 @@
 <?php
 
+declare(strict_types=1);
 
 namespace Updater\Services\CommandExecutor;
+
 use Updater\Errors\ExecutorException;
 
 class ShellExecutor implements ExecutorInterface
@@ -9,11 +11,11 @@ class ShellExecutor implements ExecutorInterface
     public function execute(string $cmd, array $args = []): string
     {
         $line = $cmd . ' ' . implode(' ', $args);
-        $descriptorspec = array(
-           0 => array("pipe", "r"),
-           1 => array("pipe", "w"),
-           2 => array("pipe", "w"),
-        );
+        $descriptorspec = [
+            0 => ['pipe', 'r'],
+            1 => ['pipe', 'w'],
+            2 => ['pipe', 'w'],
+        ];
         $process = proc_open($line, $descriptorspec, $pipes, base_path());
         if (is_resource($process)) {
             fclose($pipes[0]);

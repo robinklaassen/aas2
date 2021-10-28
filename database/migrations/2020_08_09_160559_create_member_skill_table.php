@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -8,13 +10,10 @@ class CreateMemberSkillTable extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
     public function up()
     {
         Schema::create('member_skill', function (Blueprint $table) {
-
             $table->integer('member_id')->unsigned();
             $table->integer('skill_id')->unsigned();
             $table->timestamps();
@@ -33,8 +32,6 @@ class CreateMemberSkillTable extends Migration
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down()
     {

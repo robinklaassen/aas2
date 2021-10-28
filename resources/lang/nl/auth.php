@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     /*
     |--------------------------------------------------------------------------
@@ -12,6 +14,6 @@ return [
     |
     */
 
-    'failed'   => 'Deze combinatie van gebruikersnaam en wachtwoord is niet geldig.',
+    'failed' => 'Deze combinatie van gebruikersnaam en wachtwoord is niet geldig.',
     'throttle' => 'Te veel mislukte loginpogingen. Probeer het over :seconds seconden nogmaals.',
 ];

@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit\Listeners;
 
-use Tests\TestCase;
-use App\Member;
 use App\Jobs\UpdateMemberGeolocation;
+use App\Member;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Tests\TestCase;
 
 class QueueMemberGeolocationTest extends TestCase
 {
@@ -22,7 +24,7 @@ class QueueMemberGeolocationTest extends TestCase
     public function testAddressChangeDispatchesJob()
     {
         $this->expectsJobs(UpdateMemberGeolocation::class);
-        
+
         $this->member->plaats = 'Bla';
         $this->member->save();
     }

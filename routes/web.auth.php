@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Http\Middleware\RedirectIfNotAMember;
 use App\Http\Middleware\RedirectIfNotAParticipant;
 use Illuminate\Support\Facades\Route;
@@ -8,7 +10,7 @@ Route::get('home', 'PagesController@home');
 Route::get('info', 'PagesController@info');
 Route::get('run-script', 'PagesController@runScript');
 
-# Profile things
+// Profile things
 Route::get('profile', 'ProfileController@show');
 Route::post('profile', 'ProfileController@upload');
 Route::get('profile/edit', 'ProfileController@edit');
@@ -36,22 +38,22 @@ Route::middleware([RedirectIfNotAParticipant::class])->group(function () {
     Route::put('profile/edit-camp/{event}', 'ProfileController@editCampSave');
 });
 
-# Comments
-Route::get("comments/{comment}/delete", "CommentsController@delete");
-Route::delete("comments/{comment}", "CommentsController@destroy");
-Route::get("comments/{comment}/edit", "CommentsController@edit");
-Route::patch("comments/{comment}", "CommentsController@update");
-Route::get("comments/new", "CommentsController@create");
-Route::post("comments", "CommentsController@store");
+// Comments
+Route::get('comments/{comment}/delete', 'CommentsController@delete');
+Route::delete('comments/{comment}', 'CommentsController@destroy');
+Route::get('comments/{comment}/edit', 'CommentsController@edit');
+Route::patch('comments/{comment}', 'CommentsController@update');
+Route::get('comments/new', 'CommentsController@create');
+Route::post('comments', 'CommentsController@store');
 
-# Other
-Route::get("accept-privacy", "PagesController@showAcceptPrivacyStatement")->name("show-accept-privacy");
-Route::post("accept-privacy", "PagesController@storePrivacyStatement")->name("store-accept-privacy");
+// Other
+Route::get('accept-privacy', 'PagesController@showAcceptPrivacyStatement')->name('show-accept-privacy');
+Route::post('accept-privacy', 'PagesController@storePrivacyStatement')->name('store-accept-privacy');
 
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
-Route::get("roles/explain", "RolesController@explain")->name("roles.explain");
+Route::get('roles/explain', 'RolesController@explain')->name('roles.explain');
 
-# Declaration things
+// Declaration things
 Route::get(
     'declarations/files/{file}/delete',
     'DeclarationsController@fileDelete'
@@ -72,7 +74,7 @@ Route::get('declarations', 'DeclarationsController@index');
 Route::resource('event-packages', 'EventPackagesController');
 Route::get('event-packages/{eventPackage}/delete', 'EventPackagesController@delete');
 
-# Event things
+// Event things
 Route::resource('events', 'EventsController');
 Route::get('events/{event}/delete', 'EventsController@delete');
 Route::get(
@@ -120,7 +122,7 @@ Route::put('events/{event}/move-participant/{participant}', 'EventsController@mo
 Route::get('events/{event}/reviews', 'EventsController@reviews');
 Route::get('events/{event}', 'EventsController@show');
 
-# Member things
+// Member things
 Route::get('members/search', 'MembersController@search');
 Route::get('members/search-skills', 'MembersController@searchSkills');
 Route::get('members/export', 'MembersController@export');
@@ -152,15 +154,15 @@ Route::get('members/{member}/delete', 'MembersController@delete');
 Route::get('lists', 'PagesController@lists');
 Route::get('graphs', 'PagesController@graphs');
 
-# Action things
+// Action things
 Route::get('actions/{action}/delete', 'ActionsController@delete');
 Route::resource('actions', 'ActionsController');
 
-# Course things
+// Course things
 Route::get('courses/{course}/delete', 'CoursesController@delete');
 Route::resource('courses', 'CoursesController');
 
-# Declaration things
+// Declaration things
 Route::get(
     'declarations/process/{member}/{declarationType}',
     'DeclarationsController@confirmProcess'
@@ -168,12 +170,12 @@ Route::get(
 Route::post('declarations/process', 'DeclarationsController@process');
 Route::get('declarations/admin', 'DeclarationsController@admin');
 
-# Location things
+// Location things
 Route::get('locations/{location}/delete', 'LocationsController@delete');
 Route::get('locations/{location}/reviews/{events}', 'LocationsController@reviews');
 Route::resource('locations', 'LocationsController');
 
-# Participant things
+// Participant things
 Route::get(
     'participants/{participant}/on-event',
     'ParticipantsController@onEvent'
@@ -206,7 +208,7 @@ Route::post(
 Route::get('participants/export', 'ParticipantsController@export');
 Route::resource('participants', 'ParticipantsController');
 
-# User things
+// User things
 Route::get('users/{user}/admin', 'UsersController@admin');
 Route::put('users/{user}/admin', 'UsersController@adminSave');
 Route::get('users/{user}/password', 'UsersController@password');

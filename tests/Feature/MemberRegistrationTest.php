@@ -1,16 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Mail;
+use Tests\TestCase;
 
 class MemberRegistrationTest extends TestCase
 {
     use DatabaseTransactions;
 
-    /** @var (string|int|array) array */
+    /**
+     * @var (string|int|array) array
+     */
     private $postData = [
         'voornaam' => 'Berend',
         'tussenvoegsel' => 'van',
@@ -30,9 +34,11 @@ class MemberRegistrationTest extends TestCase
         'klas1' => 1,
         'hoebij' => ['je moeder', 'je vader'],
         'vog' => 1,
-        'privacy' => 1
+        'privacy' => 1,
     ];
+
     private $memberData;
+
     private $userData;
 
     protected function setUp(): void
@@ -45,18 +51,16 @@ class MemberRegistrationTest extends TestCase
         foreach ($keysToRemove as $key) {
             unset($this->memberData[$key]);
         }
-        $this->memberData['hoebij'] = implode(", ", $this->postData['hoebij']);
+        $this->memberData['hoebij'] = implode(', ', $this->postData['hoebij']);
 
         $this->userData = [
             'username' => 'bzuid',
-            'is_admin' => 0
+            'is_admin' => 0,
         ];
     }
 
     /**
      * Test that the member registration form opens correctly.
-     *
-     * @return void
      */
     public function testMemberRegistrationForm()
     {
@@ -71,7 +75,7 @@ class MemberRegistrationTest extends TestCase
     public function testMemberRegistrationHandler()
     {
         Mail::fake();
-        
+
         // POST and check status code
         $response = $this
             ->followingRedirects()
@@ -83,7 +87,7 @@ class MemberRegistrationTest extends TestCase
         $this->assertDatabaseHas('users', $this->userData);
         $this->assertDatabaseHas('event_member', [
             'member_id' => \App\Member::latest()->first()->id,
-            'event_id' => $this->postData['selected_camp']
+            'event_id' => $this->postData['selected_camp'],
         ]);
     }
 }

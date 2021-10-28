@@ -1,17 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit;
 
-use Tests\TestCase;
-use App\Helpers\Payment\EventPayment;
 use App\Event;
+use App\Helpers\Payment\EventPayment;
 use App\Participant;
+use Tests\TestCase;
 
 class EventPaymentTest extends TestCase
 {
-
     private $payment;
+
     private $event;
+
     private $participant;
 
     protected function setUp(): void
@@ -32,24 +35,23 @@ class EventPaymentTest extends TestCase
      */
     public function testEventPaymentMetadata()
     {
-
         $meta = $this->payment->getMetadata();
 
-        $this->assertEquals($this->participant->id, $meta["participant_id"]);
-        $this->assertEquals($this->event->id, $meta["camp_id"]);
-        $this->assertEquals("existing", $meta["type"]);
+        $this->assertSame($this->participant->id, $meta['participant_id']);
+        $this->assertSame($this->event->id, $meta['camp_id']);
+        $this->assertSame('existing', $meta['type']);
 
         $this->payment->existing(false);
         $meta = $this->payment->getMetadata();
-        $this->assertEquals("new", $meta["type"]);
+        $this->assertSame('new', $meta['type']);
     }
 
     /**
-     * Tests if the keys call 
+     * Tests if the keys call
      */
     public function testEventPaymentKeys()
     {
-        $this->assertEquals([$this->participant->id, $this->event->id], $this->payment->getKeys());
+        $this->assertSame([$this->participant->id, $this->event->id], $this->payment->getKeys());
     }
 
     /**
@@ -57,7 +59,7 @@ class EventPaymentTest extends TestCase
      */
     public function testEventPaymentCurrenct()
     {
-        $this->assertEquals("EUR", $this->payment->getCurrency());
+        $this->assertSame('EUR', $this->payment->getCurrency());
     }
 
     /**
@@ -65,7 +67,6 @@ class EventPaymentTest extends TestCase
      */
     public function testEventPaymentDescription()
     {
-
         $this->assertStringContainsString($this->event->code, $this->payment->getDescription());
         $this->assertStringContainsString($this->participant->voornaam, $this->payment->getDescription());
         $this->assertStringContainsString($this->participant->achternaam, $this->payment->getDescription());
@@ -76,7 +77,7 @@ class EventPaymentTest extends TestCase
      */
     public function testEventPaymentPrice()
     {
-        $this->assertEquals($this->event->prijs, $this->payment->getTotalAmount());
+        $this->assertSame((float) $this->event->prijs, $this->payment->getTotalAmount());
     }
 
     /**
@@ -86,6 +87,6 @@ class EventPaymentTest extends TestCase
     {
         $partWithDiscount = Participant::findOrFail(2);
         $this->payment->participant($partWithDiscount);
-        $this->assertEquals($this->event->prijs * $partWithDiscount->incomeBasedDiscount, $this->payment->getTotalAmount());
+        $this->assertSame($this->event->prijs * $partWithDiscount->incomeBasedDiscount, $this->payment->getTotalAmount());
     }
 }

@@ -1,29 +1,33 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Jobs;
 
-use App\Member;
 use App\Exceptions\GeocoderException;
+use App\Member;
 use App\Services\Geocoder\GeocoderInterface;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-
 class UpdateMemberGeolocation implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+
+    use InteractsWithQueue;
+
+    use Queueable;
+
+    use SerializesModels;
 
     private $member;
 
     /**
      * Create a new job instance.
-     *
-     * @return void
      */
     public function __construct(Member $member)
     {
@@ -32,8 +36,6 @@ class UpdateMemberGeolocation implements ShouldQueue
 
     /**
      * Execute the job.
-     *
-     * @return void
      */
     public function handle(GeocoderInterface $geocoder)
     {

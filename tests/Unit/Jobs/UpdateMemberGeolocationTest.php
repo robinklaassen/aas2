@@ -1,14 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Unit\Jobs;
 
-use Mockery;
-use Tests\TestCase;
-use App\Member;
 use App\Data\Geolocation;
 use App\Jobs\UpdateMemberGeolocation;
+use App\Member;
 use App\Services\Geocoder\GeocoderInterface;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Mockery;
+use Tests\TestCase;
 
 class UpdateMemberGeolocationTest extends TestCase
 {
@@ -33,7 +35,7 @@ class UpdateMemberGeolocationTest extends TestCase
 
         $member->refresh();
 
-        $this->assertEquals(10.0, $member->geolocatie->getLat());
-        $this->assertEquals(20.0, $member->geolocatie->getLng());
+        $this->assertSame(10.0, $member->geolocatie->getLat());
+        $this->assertSame(20.0, $member->geolocatie->getLng());
     }
 }

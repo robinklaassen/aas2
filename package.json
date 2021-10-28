@@ -7,7 +7,8 @@
         "watch-poll": "npm run watch -- --watch-poll",
         "hot": "cross-env NODE_ENV=development node_modules/webpack-dev-server/bin/webpack-dev-server.js --inline --hot --disable-host-check --config=node_modules/laravel-mix/setup/webpack.config.js",
         "prod": "npm run production",
-        "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --config=node_modules/laravel-mix/setup/webpack.config.js"
+        "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --config=node_modules/laravel-mix/setup/webpack.config.js",
+        "prepare": "husky install"
     },
     "devDependencies": {
         "@types/jquery": "^3.5.5",
@@ -17,12 +18,14 @@
         "cross-env": "^7.0.3",
         "datatables.net-bs": "^1.10.23",
         "datatables.net-responsive-bs": "^2.2.7",
+        "husky": "^7.0.4",
         "jquery": "^3.2",
         "laravel-mix": "^6.0.19",
         "laravel-mix-modernizr": "^1.0.2",
         "leaflet": "^1.7.1",
         "less": "^3.13.1",
         "less-loader": "^6.2.0",
+        "lint-staged": "^11.2.3",
         "moment": "^2.29.1",
         "node-sass": "^4.14.1",
         "object-path": ">=0.11.8",
@@ -39,5 +42,11 @@
         "vue-template-compiler": "^2.6.12",
         "webshim": "^1.16.0",
         "yarn-audit-fix": "^7.0.4"
+    },
+    "lint-staged": {
+        "*.php": [
+            "php vendor/bin/ecs check --fix --config=ecs.php",
+            "git add"
+        ]
     }
 }

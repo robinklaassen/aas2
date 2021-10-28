@@ -1,22 +1,28 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Data\FileData;
-use App\Http\Requests\BulkDeclarationsRequest;
 use App\Declaration;
+use App\Http\Requests\BulkDeclarationsRequest;
 use App\Member;
-use App\Http\Controllers\Controller;
 use App\Services\DeclarationService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
-class DeclarationsController extends Controller {
-    const BASE_DIR = "uploads/declarations/";
+class DeclarationsController extends Controller
+{
+    public const BASE_DIR = 'uploads/declarations/';
 
-    /** @var DeclarationService */
+    /**
+     * @var DeclarationService
+     */
     private $declarationService;
-    public function __construct(DeclarationService $declarationService)	{
+
+    public function __construct(DeclarationService $declarationService)
+    {
         $this->declarationService = $declarationService;
 
         $this->authorizeResource(Declaration::class, 'declaration');
@@ -55,19 +61,19 @@ class DeclarationsController extends Controller {
      */
     public function store(Request $request)
     {
-        /** @var Member */
+        /** @var Member $member */
         $member = \Auth::user()->profile;
-        $data = $request->except("image");
+        $data = $request->except('image');
 
-        $data["member_id"] = $member->id;
+        $data['member_id'] = $member->id;
 
-        $fileData = $this->declarationService->store($member, $image = $request->file("image"));
+        $fileData = $this->declarationService->store($member, $image = $request->file('image'));
         $this->applyFileData($data, $fileData);
 
         Declaration::create($data);
 
         return redirect('declarations')->with([
-            'flash_message' => 'De declaratie is opgeslagen!'
+            'flash_message' => 'De declaratie is opgeslagen!',
         ]);
     }
 
@@ -77,13 +83,15 @@ class DeclarationsController extends Controller {
 
         $data = $this->declarationService->getFileFor($declaration);
 
-        return response($data['file'], 200, [ 'Content-Type' => $data['type'] ]);
+        return response($data['file'], 200, [
+            'Content-Type' => $data['type'],
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int  $declaration
      * @return Response
      */
     public function edit(Declaration $declaration)
@@ -95,17 +103,17 @@ class DeclarationsController extends Controller {
     /**
      * Update the specified resource in storage.
      *
-     * @param  int  $id
+     * @param  int  $declaration
      * @return Response
      */
     public function update(Declaration $declaration, Request $request)
     {
         $oldFilePath = $declaration->filename;
-        $data = $request->except("image");
+        $data = $request->except('image');
 
         $filedata = $this->declarationService->store(
             $declaration->member,
-            $request->file("image")
+            $request->file('image')
         );
         $this->applyFileData($data, $filedata);
 
@@ -116,20 +124,20 @@ class DeclarationsController extends Controller {
         }
 
         return redirect('declarations')->with([
-            'flash_message' => 'De declaratie is bewerkt!'
+            'flash_message' => 'De declaratie is bewerkt!',
         ]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int  $declaration
      * @return Response
      */
     public function delete(Declaration $declaration)
     {
         $member = \Auth::user()->profile;
-        if ($member != $declaration->member) {
+        if ($member !== $declaration->member) {
             return redirect()->back();
         }
 
@@ -141,7 +149,7 @@ class DeclarationsController extends Controller {
         $this->declarationService->deleteFileFor($declaration);
         $declaration->delete();
         return redirect('declarations')->with([
-            'flash_message' => 'De declaratie is verwijderd!'
+            'flash_message' => 'De declaratie is verwijderd!',
         ]);
     }
 
@@ -155,12 +163,12 @@ class DeclarationsController extends Controller {
     public function bulkStore(BulkDeclarationsRequest $request)
     {
         $this->authorize('create', Declaration::class);
-        /** @var Member */
+        /** @var Member $member */
         $member = \Auth::user()->profile;
 
         $dataRows = $request->input('data.*');
         foreach ($dataRows as $key => $data) {
-            $data["member_id"] = $member->id;
+            $data['member_id'] = $member->id;
 
             $fileData = $this->declarationService->store(
                 $member,
@@ -172,18 +180,20 @@ class DeclarationsController extends Controller {
         }
 
         $request->session()->flash(
-            'flash_message', 'De declaraties zijn opgeslagen!'
+            'flash_message',
+            'De declaraties zijn opgeslagen!'
         );
 
-        return response()->json(["status" => "success"]);
+        return response()->json([
+            'status' => 'success',
+        ]);
     }
-
 
     public function admin()
     {
         $this->authorize('viewAll', Declaration::class);
         $openDeclarations = Declaration::query()
-            ->join("members", "member_id", "=", "members.id")
+            ->join('members', 'member_id', '=', 'members.id')
             ->whereNull('closed_at')
             ->selectRaw('SUM(amount) as amount, declaration_type, members.id, iban, voornaam, tussenvoegsel, achternaam')
             ->groupBy('declaration_type', 'members.id', 'iban', 'voornaam', 'tussenvoegsel', 'achternaam')
@@ -194,7 +204,7 @@ class DeclarationsController extends Controller {
         return view('declarations.admin', compact('openDeclarations', 'total_open'));
     }
 
-    # Confirmation of processing a members declarations
+    // Confirmation of processing a members declarations
     public function confirmProcess(Member $member, string $declarationType)
     {
         $this->authorize('process', Declaration::class);
@@ -207,24 +217,26 @@ class DeclarationsController extends Controller {
         return view('declarations.process', compact('member', 'declarations', 'total'));
     }
 
-    # Process all declarations of a given member
+    // Process all declarations of a given member
     public function process(Request $request)
     {
         $this->authorize('process', Declaration::class);
 
         Declaration::whereIn('id', $request->get('selected'))
-            ->update(['closed_at' => Carbon::now()]);
+            ->update([
+                'closed_at' => Carbon::now(),
+            ]);
 
         return redirect('declarations/admin')->with([
-            'flash_message' => 'De declaraties zijn verwerkt!'
+            'flash_message' => 'De declaraties zijn verwerkt!',
         ]);
     }
 
     private function applyFileData(array &$data, ?FileData $filedata)
     {
         if ($filedata) {
-            $data["original_filename"] = $filedata->originalFilepath;
-            $data["filename"] = $filedata->filepath;
+            $data['original_filename'] = $filedata->originalFilepath;
+            $data['filename'] = $filedata->filepath;
         }
     }
 }

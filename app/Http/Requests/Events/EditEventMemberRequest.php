@@ -16,5 +16,4 @@ final class EditEventMemberRequest extends FormRequest
             'wissel_datum_eind' => 'required_if:wissel,1|nullable|date|after:wissel_datum_start',
         ];
     }
-
 }

@@ -1,126 +1,132 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App;
 
-use Illuminate\Support\Carbon;
 use Illuminate\Auth\Authenticatable;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Auth\Passwords\CanResetPassword;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Carbon;
 
 class User extends Model implements AuthenticatableContract, CanResetPasswordContract
 {
+    use Authenticatable;
 
-	use Authenticatable, CanResetPassword, Notifiable, Authorizable;
+    use CanResetPassword;
 
-	/**
-	 * Generates a new password for users
-	 * Excludes lookalike characters: O 0 o, i I L l, V v W w, s S 5
-	 */
-	public static function generatePassword(): string
-	{
-		$chars = "abcdefghjklmnpqrtuxyzABCDEFGHJKMNPQRTUXYZ2346789";
-		$password = substr(str_shuffle($chars), 0, 10);
+    use Notifiable;
 
-		return $password;
-	}
+    use Authorizable;
 
-	/**
-	 * The database table used by the model.
-	 *
-	 * @var string
-	 */
-	protected $table = 'users';
+    /**
+     * The database table used by the model.
+     *
+     * @var string
+     */
+    protected $table = 'users';
 
-	// Add last login to Carbon dates
-	protected $dates = ['last_login'];
+    // Add last login to Carbon dates
+    protected $dates = ['last_login'];
 
-	/**
-	 * The attributes that are mass assignable.
-	 *
-	 * @var array
-	 */
-	protected $fillable = ['username', 'password', 'is_admin'];
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['username', 'password', 'is_admin'];
 
-	/**
-	 * The attributes excluded from the model's JSON form.
-	 *
-	 * @var array
-	 */
-	protected $hidden = ['password', 'remember_token'];
+    /**
+     * The attributes excluded from the model's JSON form.
+     *
+     * @var array
+     */
+    protected $hidden = ['password', 'remember_token'];
 
-	# Polymorphic relation to either member or participant profile
-	public function profile()
-	{
-		return $this->morphTo();
-	}
+    /**
+     * Generates a new password for users
+     * Excludes lookalike characters: O 0 o, i I L l, V v W w, s S 5
+     */
+    public static function generatePassword(): string
+    {
+        $chars = 'abcdefghjklmnpqrtuxyzABCDEFGHJKMNPQRTUXYZ2346789';
+        $password = substr(str_shuffle($chars), 0, 10);
 
-	public function roles()
-	{
-		return $this->belongsToMany(Role::class, 'user_role');
-	}
+        return $password;
+    }
 
-	public function hasRole($tag)
-	{
-		return $this->roles()->where("tag", "=", $tag)->count() > 0;
-	}
+    // Polymorphic relation to either member or participant profile
+    public function profile()
+    {
+        return $this->morphTo();
+    }
 
-	public function public_roles()
-	{
-		return $this->roles()->whereNotIn("tag", Role::HIDDEN_ROLES);
-	}
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'user_role');
+    }
 
-	public function hasAnyRole($roles)
-	{
-		return $this->roles()->whereIn("tag", $roles)->count() > 0;
-	}
+    public function hasRole($tag)
+    {
+        return $this->roles()->where('tag', '=', $tag)->count() > 0;
+    }
 
-	public function capabilities()
-	{
-		$roles = $this->roles()->pluck('id');
+    public function public_roles()
+    {
+        return $this->roles()->whereNotIn('tag', Role::HIDDEN_ROLES);
+    }
 
-		return Capability::whereHas("roles", function ($q) use ($roles) {
-			$q->whereIn(
-				"id",
-				$roles
-			);
-		})->get();
-	}
+    public function hasAnyRole($roles)
+    {
+        return $this->roles()->whereIn('tag', $roles)->count() > 0;
+    }
 
-	public function hasCapability($name)
-	{
-		return $this->capabilities()->pluck("name")->contains($name);
-	}
+    public function capabilities()
+    {
+        $roles = $this->roles()->pluck('id');
 
-	public function isMember()
-	{
-		return $this->profile_type === Member::class;
-	}
+        return Capability::whereHas('roles', function ($q) use ($roles) {
+            $q->whereIn(
+                'id',
+                $roles
+            );
+        })->get();
+    }
 
-	public function isParticipant()
-	{
-		return $this->profile_type === Participant::class;
-	}
+    public function hasCapability($name)
+    {
+        return $this->capabilities()->pluck('name')->contains($name);
+    }
 
-	public function getVolnaamAttribute()
-	{
-		if ($this->id != 0) {
-			return $this->profile->volnaam;
-		} else {
-			return "-system-";
-		}
-	}
+    public function isMember()
+    {
+        return $this->profile_type === Member::class;
+    }
 
-	public function getPrivacyAcceptedAttribute()
-	{
-		return $this->privacy !== null;
-	}
+    public function isParticipant()
+    {
+        return $this->profile_type === Participant::class;
+    }
 
-	public function setPrivacyAcceptedAttribute(bool $v)
-	{
-		$this->attributes['privacy'] = $v ? Carbon::now() : null;
-	}
+    public function getVolnaamAttribute()
+    {
+        if ($this->id !== 0) {
+            return $this->profile->volnaam;
+        }
+        return '-system-';
+    }
+
+    public function getPrivacyAcceptedAttribute()
+    {
+        return $this->privacy !== null;
+    }
+
+    public function setPrivacyAcceptedAttribute(bool $v)
+    {
+        $this->attributes['privacy'] = $v ? Carbon::now() : null;
+    }
 }

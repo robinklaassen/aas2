@@ -1,16 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Providers;
 
+use App\Helpers\Payment\MolliePaymentProvider;
 use Illuminate\Support\ServiceProvider;
-use \App\Helpers\Payment\MolliePaymentProvider;
 
 class MollieServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
-     *
-     * @return void
      */
     public function boot()
     {
@@ -19,13 +19,11 @@ class MollieServiceProvider extends ServiceProvider
 
     /**
      * Register the application services.
-     *
-     * @return void
      */
     public function register()
     {
         $this->app->bind('MolliePaymentProvider', function ($app) {
-            return new MolliePaymentProvider;
+            return new MolliePaymentProvider();
         });
     }
 }

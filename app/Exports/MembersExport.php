@@ -1,16 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Exports;
 
+use App\Member;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithTitle;
-use App\Member;
 
 class MembersExport implements FromCollection, WithTitle, WithHeadings
 {
-
     use Exportable;
 
     public function collection()

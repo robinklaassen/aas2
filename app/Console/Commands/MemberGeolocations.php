@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
-use App\Member;
 use App\Jobs\UpdateMemberGeolocation;
-
+use App\Member;
+use Illuminate\Console\Command;
 
 class MemberGeolocations extends Command
 {
@@ -25,8 +26,6 @@ class MemberGeolocations extends Command
 
     /**
      * Create a new command instance.
-     *
-     * @return void
      */
     public function __construct()
     {

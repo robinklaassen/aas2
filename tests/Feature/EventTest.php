@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
-use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Tests\TestCase;
 
 class EventTest extends TestCase
 {
@@ -19,8 +21,6 @@ class EventTest extends TestCase
 
     /**
      * Test the events index page
-     *
-     * @return void
      */
     public function testIndex()
     {
@@ -33,8 +33,6 @@ class EventTest extends TestCase
 
     /**
      * Test the show event page
-     *
-     * @return void
      */
     public function testShow()
     {
@@ -52,7 +50,7 @@ class EventTest extends TestCase
             ->actingAs($this->user)
             ->get('/events/1/export')
             ->assertStatus(200)
-            ->assertHeader("Content-Type", "application/pdf");
+            ->assertHeader('Content-Type', 'application/pdf');
     }
 
     public function testCreate()
@@ -72,7 +70,7 @@ class EventTest extends TestCase
             'prijs' => 0,
             'vol' => 0,
             'streeftal' => '5',
-            'beschrijving' => 'Test!'
+            'beschrijving' => 'Test!',
         ];
 
         $this
@@ -82,7 +80,7 @@ class EventTest extends TestCase
 
         $databaseData = $eventData;
         $databaseData['datum_voordag'] = null;
-        // database stores time differently 
+        // database stores time differently
         $databaseData['tijd_start'] = '12:00:00';
         $databaseData['tijd_eind'] = '12:00:00';
 

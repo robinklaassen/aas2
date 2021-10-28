@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use App\Role;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
@@ -8,13 +10,11 @@ class AddRolesToExistingUsers extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
     public function up()
     {
-        $part_role = Role::where("tag", "=", "participant")->firstOrFail();
-        $memb_role = Role::where("tag", "=", "member")->firstOrFail();
+        $part_role = Role::where('tag', '=', 'participant')->firstOrFail();
+        $memb_role = Role::where('tag', '=', 'member')->firstOrFail();
 
         $query = '
             insert into user_role (user_id , role_id, created_by, created_at)
@@ -24,23 +24,21 @@ class AddRolesToExistingUsers extends Migration
         ';
 
         DB::statement($query, [
-            "type" => "App\\Participant",
-            "role" => $part_role->id
+            'type' => 'App\\Participant',
+            'role' => $part_role->id,
         ]);
 
         DB::statement($query, [
-            "type" => "App\\Member",
-            "role" => $memb_role->id
+            'type' => 'App\\Member',
+            'role' => $memb_role->id,
         ]);
     }
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down()
     {
-        DB::statement("truncate table user_role");
+        DB::statement('truncate table user_role');
     }
 }

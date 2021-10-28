@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\EventPackage;
@@ -14,7 +16,7 @@ class EventPackagesController extends Controller
      */
     public function index()
     {
-        $eventPackagesGrouped = EventPackage::all()->groupBy("type");
+        $eventPackagesGrouped = EventPackage::all()->groupBy('type');
 
         return view('event-packages.index', compact('eventPackagesGrouped'));
     }
@@ -32,21 +34,19 @@ class EventPackagesController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         EventPackage::create($request->all());
         return redirect('event-packages')->with([
-            'flash_message' => 'Het pakket is aangemaakt!'
+            'flash_message' => 'Het pakket is aangemaakt!',
         ]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\EventPackage  $package
      * @return \Illuminate\Http\Response
      */
     public function show(EventPackage $eventPackage)
@@ -57,7 +57,6 @@ class EventPackagesController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\EventPackage  $eventPackage
      * @return \Illuminate\Http\Response
      */
     public function edit(EventPackage $eventPackage)
@@ -68,22 +67,20 @@ class EventPackagesController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\EventPackage  $eventPackage
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, EventPackage $eventPackage)
     {
         $eventPackage->update($request->all());
         return redirect('event-packages/' . $eventPackage->id)->with([
-            'flash_message' => 'Het pakket is bewerkt!'
+            'flash_message' => 'Het pakket is bewerkt!',
         ]);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int  $eventPackage
      * @return Response
      */
     public function delete(EventPackage $eventPackage)
@@ -94,14 +91,13 @@ class EventPackagesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\EventPackage  $eventPackage
      * @return \Illuminate\Http\Response
      */
     public function destroy(EventPackage $eventPackage)
     {
         $eventPackage->delete();
         return redirect('event-packages')->with([
-            'flash_message' => 'Het pakket is verwijderd!'
+            'flash_message' => 'Het pakket is verwijderd!',
         ]);
     }
 }

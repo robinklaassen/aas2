@@ -1,23 +1,22 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
+declare(strict_types=1);
+
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class Comments extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
     public function up()
     {
         Schema::create('comments', function (Blueprint $table) {
-
             $table->increments('id');
             $table->text('text');
-            $table->boolean("is_secret");
+            $table->boolean('is_secret');
             $table->string('entity_type');
             $table->integer('entity_id')->unsigned();
             $table->integer('user_id')->unsigned();
@@ -47,7 +46,7 @@ class Comments extends Migration
                 ) x
         ");
 
-        Schema::table("members", function ($table) {
+        Schema::table('members', function ($table) {
             $table->dropColumn('opmerkingen_admin');
             $table->dropColumn('opmerkingen_geheim');
         });
@@ -62,7 +61,7 @@ class Comments extends Migration
                 ) x
         ");
 
-        Schema::table("participants", function ($table) {
+        Schema::table('participants', function ($table) {
             $table->dropColumn('opmerkingen_admin');
         });
 
@@ -74,7 +73,7 @@ class Comments extends Migration
                   WHERE opmerkingen is not null
         ");
 
-        Schema::table("events", function ($table) {
+        Schema::table('events', function ($table) {
             $table->dropColumn('opmerkingen');
         });
 
@@ -85,21 +84,19 @@ class Comments extends Migration
                    FROM locations
                   WHERE opmerkingen is not null
         ");
-        Schema::table("locations", function ($table) {
+        Schema::table('locations', function ($table) {
             $table->dropColumn('opmerkingen');
         });
     }
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
     public function down()
     {
 
         // Return the member comments
-        Schema::table("members", function ($table) {
+        Schema::table('members', function ($table) {
             $table->string('opmerkingen_admin')->nullable();
             $table->string('opmerkingen_geheim')->nullable();
         });
@@ -111,7 +108,7 @@ class Comments extends Migration
         ");
 
         // Return the participant comments
-        Schema::table("participants", function ($table) {
+        Schema::table('participants', function ($table) {
             $table->string('opmerkingen_admin')->nullable();
         });
         DB::statement("
@@ -121,7 +118,7 @@ class Comments extends Migration
         ");
 
         // Return the event comments
-        Schema::table("events", function ($table) {
+        Schema::table('events', function ($table) {
             $table->string('opmerkingen')->nullable();
         });
         DB::statement("
@@ -131,7 +128,7 @@ class Comments extends Migration
         ");
 
         // Return the location comments
-        Schema::table("locations", function ($table) {
+        Schema::table('locations', function ($table) {
             $table->string('opmerkingen')->nullable();
         });
         DB::statement("
@@ -143,6 +140,6 @@ class Comments extends Migration
         Schema::dropIfExists('comments');
 
         // Remove the SYS user
-        DB::statement("DELETE FROM users WHERE id = 0");
+        DB::statement('DELETE FROM users WHERE id = 0');
     }
 }

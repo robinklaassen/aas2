@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
 use Tests\TestCase;
@@ -16,8 +18,6 @@ class PagesTest extends TestCase
 
     /**
      * Test the lists page
-     *
-     * @return void
      */
     public function testListsPage()
     {
@@ -29,8 +29,6 @@ class PagesTest extends TestCase
 
     /**
      * Test the graphs page
-     *
-     * @return void
      */
     public function testGraphsPage()
     {

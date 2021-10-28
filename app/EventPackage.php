@@ -1,14 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
 class EventPackage extends Model
 {
-    const TYPE_DESCRIPTIONS = [
-        "online-tutoring"   => "Online bijles",
-        "other"             => "Anders",
+    public const TYPE_DESCRIPTIONS = [
+        'online-tutoring' => 'Online bijles',
+        'other' => 'Anders',
     ];
 
     protected $guarded = ['id', 'created_at', 'updated_at'];

@@ -1,9 +1,11 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Facades;
 
-use Illuminate\Support\Facades\Facade;
 use App\Helpers\Payment\MolliePaymentProvider;
+use Illuminate\Support\Facades\Facade;
 
 class Mollie extends Facade
 {

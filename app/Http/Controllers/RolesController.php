@@ -6,7 +6,6 @@ namespace App\Http\Controllers;
 
 use App\Capability;
 use App\Role;
-use Illuminate\Http\Response;
 
 final class RolesController extends Controller
 {

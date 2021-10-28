@@ -1,18 +1,21 @@
-<?php namespace App\Http\Requests;
+<?php
 
-use App\Http\Requests\Request;
+declare(strict_types=1);
 
-class BulkDeclarationsRequest extends Request {
+namespace App\Http\Requests;
+
+class BulkDeclarationsRequest extends Request
+{
     public function rules()
-	{
-		return [
+    {
+        return [
             'data' => 'required|array',
-			'data.*.amount' => 'required|numeric|gt:0',
-			'data.*.date' => 'required|regex:/\d{4}-\d{2}-\d{2}/',
-			'data.*.declaration_type' => 'required|in:pay,gift,pay-biomeat',
-			'data.*.description' => 'required|string',
-			'data.*.file' => 'file',
-		];
+            'data.*.amount' => 'required|numeric|gt:0',
+            'data.*.date' => 'required|regex:/\d{4}-\d{2}-\d{2}/',
+            'data.*.declaration_type' => 'required|in:pay,gift,pay-biomeat',
+            'data.*.description' => 'required|string',
+            'data.*.file' => 'file',
+        ];
     }
 
     public function attributes()
@@ -22,14 +25,14 @@ class BulkDeclarationsRequest extends Request {
             'data.*.amount' => 'Bedrag',
             'data.*.date' => 'Datum',
             'data.*.declaration_type' => 'Type',
-            'data.*.file' => 'Bestand'
+            'data.*.file' => 'Bestand',
         ];
     }
 
     public function messages()
     {
         return [
-            'data.required' => 'Er moet wel iets ingevuld worden'
+            'data.required' => 'Er moet wel iets ingevuld worden',
         ];
     }
 }

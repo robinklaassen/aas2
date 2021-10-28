@@ -3,6 +3,24 @@ name: CI
 on: [push]
 
 jobs:
+  codestyle:
+    name: Code style
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 7.4
+
+      - name: Install composer dependencies
+        run: composer install --prefer-dist --ignore-platform-reqs
+
+      - name: Easy coding Standard
+        run: vendor/bin/ecs check --config=ecs.php --no-progress-bar
+
   tests:
     name: Tests ${{ matrix.php }}
     runs-on: ubuntu-latest

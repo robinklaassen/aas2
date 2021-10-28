@@ -1,17 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Database\Seeders;
 
-use Illuminate\Database\Seeder;
-use DB;
 use App\Review;
+use DB;
+use Illuminate\Database\Seeder;
 
 class ReviewTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
     public function run()
     {
@@ -46,7 +46,7 @@ class ReviewTableSeeder extends Seeder
             'nogeens' => 'Zeker, altijd',
             'kampkeuze' => 'mei, zomer',
             'tip' => 'Meer chocola',
-            'verder' => 'Ik besta niet echt'
+            'verder' => 'Ik besta niet echt',
         ]);
 
         Review::create([
@@ -78,7 +78,7 @@ class ReviewTableSeeder extends Seeder
             'nogeens' => 'Zeker, altijd',
             'kampkeuze' => 'herfst',
             'tip' => 'Meer belangrijke dingen doen',
-            'verder' => 'Doei'
+            'verder' => 'Doei',
         ]);
 
         Review::create([
@@ -110,7 +110,7 @@ class ReviewTableSeeder extends Seeder
             'nogeens' => 'Nope',
             'kampkeuze' => 'zomer, winter',
             'tip' => 'Minder bijles, meer eten',
-            'verder' => null
+            'verder' => null,
         ]);
     }
 }

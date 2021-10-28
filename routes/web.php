@@ -1,6 +1,7 @@
 <?php
 
-use App\Capability;
+declare(strict_types=1);
+
 
 /*
 |--------------------------------------------------------------------------
@@ -13,10 +14,10 @@ use App\Capability;
 */
 
 // Everybody
-Route::middleware([])->group(base_path("routes/web.public.php"));
+Route::middleware([])->group(base_path('routes/web.public.php'));
 
 // Only for non-authenticated users
-Route::middleware(['guest'])->group(base_path("routes/web.guest.php"));
+Route::middleware(['guest'])->group(base_path('routes/web.guest.php'));
 
 // user routes
-Route::middleware(['auth'])->group(base_path("routes/web.auth.php"));
+Route::middleware(['auth'])->group(base_path('routes/web.auth.php'));

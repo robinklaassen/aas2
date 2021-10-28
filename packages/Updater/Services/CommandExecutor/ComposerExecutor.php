@@ -1,11 +1,8 @@
 <?php
 
-namespace Updater\Services\CommandExecutor;
+declare(strict_types=1);
 
-use Illuminate\Support\Facades\Artisan;
-use Updater\Errors\ExecutorException;
-use Updater\OutputAggregator\OutputRecorderInterface;
-use Updater\Services\DateTimeProviderInterface;
+namespace Updater\Services\CommandExecutor;
 
 class ComposerExecutor extends ShellExecutor
 {

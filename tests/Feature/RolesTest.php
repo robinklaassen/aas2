@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Tests\Feature;
 
 use Tests\TestCase;
@@ -29,5 +31,4 @@ class RolesTest extends TestCase
             ->get('/roles/explain')
             ->assertStatus(302);
     }
-
 }

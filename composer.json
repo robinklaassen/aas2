@@ -33,7 +33,8 @@
     "mockery/mockery": "^1.2",
     "laravel/homestead": "^10.8",
     "barryvdh/laravel-debugbar": "^3.3",
-    "laravel/ui": "^3.0"
+    "laravel/ui": "^3.0",
+    "symplify/easy-coding-standard": "^9.4"
   },
   "autoload": {
     "psr-4": {
