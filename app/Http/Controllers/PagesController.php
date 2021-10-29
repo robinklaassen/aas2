@@ -313,7 +313,7 @@ class PagesController extends Controller
 					LEFT JOIN event_participant ep on ep.event_id = e.id
 					LEFT JOIN event_member em on em.event_id = e.id
 				   WHERE e.type in ('kamp')
-					 AND e.datum_start > '2014-09-01'
+					 AND e.datum_start > '2015-09-01'
 					GROUP BY e.id DESC
 					LIMIT 10
 				) s
