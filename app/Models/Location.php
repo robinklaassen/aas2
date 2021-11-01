@@ -13,11 +13,11 @@ class Location extends Model
     // A location has many events
     public function events()
     {
-        return $this->hasMany('App\Models\Event');
+        return $this->hasMany(Event::class);
     }
 
     public function comments()
     {
-        return $this->morphMany('App\Models\Comment', 'entity');
+        return $this->morphMany(Comment::class, 'entity');
     }
 }

@@ -56,49 +56,49 @@ class Member extends Model
     // A member belongs to many events
     public function events()
     {
-        return $this->belongsToMany('App\Models\Event')->withTimestamps()->withPivot('wissel')->withPivot('wissel_datum_start')->withPivot('wissel_datum_eind');
+        return $this->belongsToMany(Event::class)->withTimestamps()->withPivot('wissel')->withPivot('wissel_datum_start')->withPivot('wissel_datum_eind');
     }
 
     // A member belongs to many courses
     public function courses()
     {
-        return $this->belongsToMany('App\Models\Course')->withPivot('klas');
+        return $this->belongsToMany(Course::class)->withPivot('klas');
     }
 
     // A member belongs to many skills
     public function skills()
     {
-        return $this->belongsToMany('App\Models\Skill')->withTimestamps();
+        return $this->belongsToMany(Skill::class)->withTimestamps();
     }
 
     // A member can have one user account
     public function user()
     {
-        return $this->morphOne('App\Models\User', 'profile');
+        return $this->morphOne(User::class, 'profile');
     }
 
     // A Member can have comments
     public function comments()
     {
-        return $this->morphMany('App\Models\Comment', 'entity');
+        return $this->morphMany(Comment::class, 'entity');
     }
 
     // A member has many actions
     public function actions()
     {
-        return $this->hasMany('App\Models\Action');
+        return $this->hasMany(Action::class);
     }
 
     // A member has many declarations
     public function declarations()
     {
-        return $this->hasMany('App\Models\Declaration');
+        return $this->hasMany(Declaration::class);
     }
 
     // A member belongs to many reviews
     public function reviews()
     {
-        return $this->belongsToMany('App\Models\Review')
+        return $this->belongsToMany(Review::class)
             ->withPivot('stof')
             ->withPivot('aandacht')
             ->withPivot('mening')

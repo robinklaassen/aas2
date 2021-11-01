@@ -23,7 +23,7 @@ class Declaration extends Model
     // A declaration belongs to one member
     public function member()
     {
-        return $this->belongsTo('App\Models\Member');
+        return $this->belongsTo(Member::class);
     }
 
     public function getIsClosedAttribute(): bool

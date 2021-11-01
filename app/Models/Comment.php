@@ -17,12 +17,12 @@ class Comment extends Model
     public static function getEntityDescription($entityType, $entity)
     {
         switch ($entityType) {
-            case 'App\Models\Member':
-            case 'App\Models\Participant':
+            case Member::class:
+            case Participant::class:
                 return $entity->volnaam;
-            case 'App\Models\Location':
+            case Location::class:
                 return $entity->naam;
-            case 'App\Models\Event':
+            case Event::class:
                 return '(' . $entity->code . ')' . $entity->naam;
             default:
                 return 'Onbekende entity';
@@ -42,7 +42,7 @@ class Comment extends Model
 
     public function user()
     {
-        return $this->belongsTo('App\Models\User');
+        return $this->belongsTo(User::class);
     }
 
     public function scopePublic($query)

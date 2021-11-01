@@ -22,11 +22,11 @@ class Role extends Model
 
     public function users()
     {
-        return $this->belongsToMany('App\Models\User', 'user_role');
+        return $this->belongsToMany(User::class, 'user_role');
     }
 
     public function capabilities()
     {
-        return $this->belongsToMany('App\Models\Capability', 'role_capability');
+        return $this->belongsToMany(Capability::class, 'role_capability');
     }
 }

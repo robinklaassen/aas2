@@ -40,6 +40,6 @@ class Skill extends Model
     // A skill belongs to many members
     public function members()
     {
-        return $this->belongsToMany('App\Models\Member')->withTimestamps();
+        return $this->belongsToMany(Member::class)->withTimestamps();
     }
 }

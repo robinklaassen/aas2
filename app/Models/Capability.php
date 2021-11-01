@@ -24,6 +24,6 @@ class Capability extends Model
 
     public function roles()
     {
-        return $this->belongsToMany('App\Models\Role', 'role_capability');
+        return $this->belongsToMany(Role::class, 'role_capability');
     }
 }

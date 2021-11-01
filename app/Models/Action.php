@@ -17,6 +17,6 @@ class Action extends Model
 
     public function member()
     {
-        return $this->belongsTo('App\Models\Member');
+        return $this->belongsTo(Member::class);
     }
 }

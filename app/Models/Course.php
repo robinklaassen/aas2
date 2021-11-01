@@ -14,7 +14,7 @@ class Course extends Model
     // A course belongs to many members
     public function members()
     {
-        return $this->belongsToMany('App\Models\Member')->withPivot('klas');
+        return $this->belongsToMany(Member::class)->withPivot('klas');
     }
 
     // Get participants on a specific camp that have this course
