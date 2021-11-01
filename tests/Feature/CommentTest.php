@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Tests\Unit;
 
+use App\Http\Controllers\CommentsController;
 use App\Models\Comment;
+use App\Models\Event;
+use App\Models\Location;
 use App\Models\Member;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
@@ -20,7 +23,6 @@ class CommentTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        // CommentTest::clearDB();
         $this->member = Member::findOrFail(2);
     }
 
@@ -46,7 +48,7 @@ class CommentTest extends TestCase
             'comments',
             [
                 'text' => $text,
-                'entity_type' => 'App\\Models\\Member',
+                'entity_type' => Member::class,
                 'entity_id' => '1',
             ]
         );
@@ -96,7 +98,11 @@ class CommentTest extends TestCase
         $text = 'Testing ' . $random;
         $this->actingAs(User::findOrFail(2))
             ->post(
-                '/comments?entity_type=App%5CMember&entity_id=2&origin=profile',
+                action([CommentsController::class, 'store'], [
+                    'entity_type' => Member::class,
+                    'entity_id' => 2,
+                    'origin' => 'profile'
+                ]),
                 [
                     'text' => $text,
                     'is_secret' => true,
@@ -107,7 +113,7 @@ class CommentTest extends TestCase
             'is_secret' => true,
             'text' => $text,
             'user_id' => 2,
-            'entity_type' => "App\Member",
+            'entity_type' => Member::class,
             'entity_id' => 2,
         ]);
     }
@@ -118,7 +124,11 @@ class CommentTest extends TestCase
         $text = 'Testing ' . $random;
         $this->actingAs(User::findOrFail(1))
             ->post(
-                '/comments?entity_type=App%5CLocation&entity_id=2&origin=profile',
+                action([CommentsController::class, 'store'], [
+                    'entity_type' => Location::class,
+                    'entity_id' => 2,
+                    'origin' => 'profile'
+                ]),
                 [
                     'text' => $text,
                     'is_secret' => true,
@@ -129,7 +139,7 @@ class CommentTest extends TestCase
             'is_secret' => true,
             'text' => $text,
             'user_id' => 1,
-            'entity_type' => "App\Location",
+            'entity_type' => Location::class,
             'entity_id' => 2,
         ]);
     }
@@ -140,7 +150,11 @@ class CommentTest extends TestCase
         $text = 'Testing ' . $random;
         $this->actingAs(User::findOrFail(2))
             ->post(
-                '/comments?entity_type=App%5CEvent&entity_id=1&origin=event%2F2',
+                action([CommentsController::class, 'store'], [
+                    'entity_type' => Event::class,
+                    'entity_id' => 1,
+                    'origin' => 'event/2'
+                ]),
                 [
                     'text' => $text,
                     'is_secret' => false,
@@ -151,7 +165,7 @@ class CommentTest extends TestCase
             'is_secret' => false,
             'text' => $text,
             'user_id' => 2,
-            'entity_type' => 'App\\Models\\Event',
+            'entity_type' => Event::class,
             'entity_id' => 1,
         ]);
     }

@@ -46,12 +46,12 @@ class CommentsController extends Controller
         $model = $request->get('entity_type');
         $entity = $model::findOrFail($request->get('entity_id'));
 
-        if ($request->input('is_secret') && ! \Auth::user()->hasCapability('comments::edit::secret')) {
+        if ($request->input('is_secret') && ! $request->user()->hasCapability('comments::edit::secret')) {
             abort(403, 'Onvoldoende rechten om een geheime comment te plaatsen');
         }
 
         $comment = new Comment($request->all());
-        $comment->user_id = \Auth::user()->id;
+        $comment->user_id = $request->user()->id;
 
         $entity->comments()->save($comment);
 
