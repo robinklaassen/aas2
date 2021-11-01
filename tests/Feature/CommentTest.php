@@ -101,7 +101,7 @@ class CommentTest extends TestCase
                 action([CommentsController::class, 'store'], [
                     'entity_type' => Member::class,
                     'entity_id' => 2,
-                    'origin' => 'profile'
+                    'origin' => 'profile',
                 ]),
                 [
                     'text' => $text,
@@ -127,7 +127,7 @@ class CommentTest extends TestCase
                 action([CommentsController::class, 'store'], [
                     'entity_type' => Location::class,
                     'entity_id' => 2,
-                    'origin' => 'profile'
+                    'origin' => 'profile',
                 ]),
                 [
                     'text' => $text,
@@ -153,7 +153,7 @@ class CommentTest extends TestCase
                 action([CommentsController::class, 'store'], [
                     'entity_type' => Event::class,
                     'entity_id' => 1,
-                    'origin' => 'event/2'
+                    'origin' => 'event/2',
                 ]),
                 [
                     'text' => $text,
