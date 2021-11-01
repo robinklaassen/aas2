@@ -8,8 +8,8 @@ use App\Models\Member;
 use App\Models\Participant;
 use App\Models\Role;
 use App\Models\User;
-use DB;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class UserTableSeeder extends Seeder
 {
@@ -20,7 +20,7 @@ class UserTableSeeder extends Seeder
     {
         DB::table('users')->delete();
 
-        DB::statement("INSERT INTO users (id, username, password, profile_id, profile_type, is_admin) VALUES ('0', 'SYS', '', 0, 'App\\\\Member', true)");
+        DB::statement("INSERT INTO users (id, username, password, profile_id, profile_type, is_admin) VALUES ('0', 'SYS', '', 0, 'App\\\\Models\\\\Member', true)");
 
         $member = Member::find(1);
         $user = new User();
