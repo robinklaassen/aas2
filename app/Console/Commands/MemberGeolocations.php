@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Console\Commands;
 
 use App\Jobs\UpdateMemberGeolocation;
-use App\Member;
+use App\Models\Member;
 use Illuminate\Console\Command;
 
 class MemberGeolocations extends Command

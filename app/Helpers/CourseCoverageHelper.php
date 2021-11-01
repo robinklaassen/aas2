@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Helpers;
 
-use App\Course;
-use App\Event;
+use App\Models\Course;
+use App\Models\Event;
 
 class CourseCoverageHelper
 {

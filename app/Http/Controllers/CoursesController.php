@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Course;
 use App\Http\Requests;
+use App\Models\Course;
 
 class CoursesController extends Controller
 {

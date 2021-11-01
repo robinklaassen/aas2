@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace App\Policies;
 
-use App\Event;
-use App\Member;
-use App\Participant;
-use App\User;
+use App\Models\Event;
+use App\Models\Member;
+use App\Models\Participant;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Auth\Access\HandlesAuthorization;
 

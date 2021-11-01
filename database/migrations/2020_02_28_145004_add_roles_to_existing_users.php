@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-use App\Role;
+use App\Models\Role;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 
@@ -24,12 +24,12 @@ class AddRolesToExistingUsers extends Migration
         ';
 
         DB::statement($query, [
-            'type' => 'App\\Participant',
+            'type' => 'App\\Models\\Participant',
             'role' => $part_role->id,
         ]);
 
         DB::statement($query, [
-            'type' => 'App\\Member',
+            'type' => 'App\\Models\\Member',
             'role' => $memb_role->id,
         ]);
     }

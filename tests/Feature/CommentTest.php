@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Unit;
 
-use App\Comment;
-use App\Member;
-use App\User;
+use App\Models\Comment;
+use App\Models\Member;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Str;
 use Tests\TestCase;
@@ -46,7 +46,7 @@ class CommentTest extends TestCase
             'comments',
             [
                 'text' => $text,
-                'entity_type' => 'App\\Member',
+                'entity_type' => 'App\\Models\\Member',
                 'entity_id' => '1',
             ]
         );
@@ -151,7 +151,7 @@ class CommentTest extends TestCase
             'is_secret' => false,
             'text' => $text,
             'user_id' => 2,
-            'entity_type' => 'App\\Event',
+            'entity_type' => 'App\\Models\\Event',
             'entity_id' => 1,
         ]);
     }

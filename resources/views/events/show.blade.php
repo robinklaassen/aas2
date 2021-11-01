@@ -64,18 +64,18 @@
 			</tr>
 			<tr>
 				<td>Type</td>
-				<td>{{ (\App\Event::class)::TYPE_DESCRIPTIONS[$event->type] }}</td>
+				<td>{{ (\App\Models\Event::class)::TYPE_DESCRIPTIONS[$event->type] }}</td>
 			</tr>
 			@if($event->package_type != null)
 			<tr>
 				<td>Pakket types</td>
-				<td>{{ (\App\EventPackage::class)::TYPE_DESCRIPTIONS[$event->package_type] }}</td>
+				<td>{{ (\App\Models\EventPackage::class)::TYPE_DESCRIPTIONS[$event->package_type] }}</td>
 			</tr>
 			@endif
 			@endcan
 
 			@can("showBasic", $event)
-			@if (($event->type == 'kamp') && (\Auth::user()->profile_type != 'App\Participant'))
+			@if (($event->type == 'kamp') && (\Auth::user()->profile_type != 'App\Models\Participant'))
 			<tr>
 				<td>Start voordag(en)</td>
 				<td>{{ Date::Format($event->datum_voordag) }}</td>
@@ -212,7 +212,7 @@
 
 
 		@can("showAdvanced", $event)
-		@include('partials.comments', [ 'comments' => $event->comments, 'type' => 'App\Event', 'key' => $event->id ])
+		@include('partials.comments', [ 'comments' => $event->comments, 'type' => 'App\Models\Event', 'key' => $event->id ])
 		@endcan
 	</div>
 </div>
@@ -395,7 +395,7 @@
 		</table>
 	</div>
 
-	@can("showPrivateAny", \App\Participant::class)
+	@can("showPrivateAny", \App\Models\Participant::class)
 	<div role="tabpanel" class="tab-pane" id="addresses">
 		<table class="table table-hover" id="addressesTable">
 			<caption>

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -23,7 +23,7 @@ class Declaration extends Model
     // A declaration belongs to one member
     public function member()
     {
-        return $this->belongsTo('App\Member');
+        return $this->belongsTo('App\Models\Member');
     }
 
     public function getIsClosedAttribute(): bool

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
-use App\Event;
-use App\EventPackage;
 use App\Helpers\Payment\MolliePaymentProvider;
 use App\Helpers\Payment\PaymentInterface;
+use App\Models\Event;
+use App\Models\EventPackage;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Mail;

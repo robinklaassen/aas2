@@ -18,7 +18,7 @@
 </div>
 
 <div class="row">
-	@canany("editPrivate", \App\Participant::class, $participant)
+	@canany("editPrivate", \App\Models\Participant::class, $participant)
 	<div class="col-sm-4 form-group">
 		{!! Form::label('geboortedatum', 'Geboortedatum:') !!}
 		@if (isset($participant))
@@ -55,7 +55,7 @@
 	</div>
 </div>
 
-@canany("editPrivate", \App\Participant::class,  $participant)
+@canany("editPrivate", \App\Models\Participant::class,  $participant)
 <div class="row">
 	<div class="col-sm-4 form-group">
 		{!! Form::label('telefoon_ouder_vast', 'Telefoonnummer ouder (vast):') !!}
@@ -87,17 +87,17 @@
 
 	<div class="col-sm-4 form-group">
 		<label for="post">
-			Informatie ontvangen via 
+			Informatie ontvangen via
 			<span class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="tooltip" title="Informatie over deelname aan het kamp kunt u via email en post ontvangen.">
 		</label>
-		{!! Form::select('information_channel', \App\Participant::INFORMATION_CHANNEL_DESCRIPTION_TABLE, null, ['class' => 'form-control']) !!}
+		{!! Form::select('information_channel', \App\Models\Participant::INFORMATION_CHANNEL_DESCRIPTION_TABLE, null, ['class' => 'form-control']) !!}
 	</div>
 
 </div>
 @endcanany
 
 <div class="row">
-	@canany("editPractical",  \App\Participant::class, $participant)
+	@canany("editPractical",  \App\Models\Participant::class, $participant)
 	<div class="col-sm-4 form-group">
 		{!! Form::label('school', 'Naam school:') !!}
 		{!! Form::text('school', null, ['class' => 'form-control']) !!}
@@ -120,7 +120,7 @@
 	</div>
 </div>
 
-@canany("editFinance",  \App\Participant::class, $participant)
+@canany("editFinance",  \App\Models\Participant::class, $participant)
 <div class="row">
 	<div class="col-sm-4 form-group">
 		{!! Form::label('inkomen', 'Bruto maandinkomen:') !!}
@@ -129,7 +129,7 @@
 </div>
 @endcanany
 
-@canany("editPrivate", \App\Participant::class,  $participant)
+@canany("editPrivate", \App\Models\Participant::class,  $participant)
 <div class="form-group">
 	{!! Form::label('opmerkingen', 'Overige informatie:') !!}
 	{!! Form::textarea('opmerkingen', null, ['class' => 'form-control']) !!}
@@ -137,7 +137,7 @@
 @endcanany
 
 
-@canany("editAdministrative", \App\Participant::class,  $participant)
+@canany("editAdministrative", \App\Models\Participant::class,  $participant)
 <h3>Administratie</h3>
 <div class="row">
 	<div class="col-sm-5 form-group">
@@ -161,7 +161,7 @@
 			<span class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="tooltip" ></span>
 		</label>
 		{{-- {!! Form::select('mag_gemaild', [0 => "Nee", 1=> "Ja"], 0, ['class' => 'form-control']) !!} --}}
-		
+
 	</div>
 </div>
 

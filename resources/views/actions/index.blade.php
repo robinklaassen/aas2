@@ -14,7 +14,7 @@ Punten
 	</div>
 	<div class="col-sm-6">
 		<p class="text-right">
-			@can("create", \App\Action::class)
+			@can("create", \App\Models\Action::class)
 			<a class="btn btn-primary" type="button" href="{{ url('actions/create') }}" style="margin-top:21px;">
 				Nieuwe actie
 			</a>
@@ -127,7 +127,7 @@ Punten
 			{'orderable':false}
 		]
 	});
-	
+
 	$('#pointsTable').DataTable({
 		paging: false,
 		order: [[ 1, "desc" ]],

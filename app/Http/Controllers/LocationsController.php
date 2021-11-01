@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Event;
 use App\Http\Requests;
-use App\Location;
+use App\Models\Event;
+use App\Models\Location;
 use App\Services\Chart\ChartServiceInterface;
 
 class LocationsController extends Controller

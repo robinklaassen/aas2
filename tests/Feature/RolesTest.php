@@ -13,7 +13,7 @@ class RolesTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = \App\User::findOrFail(1);
+        $this->user = \App\Models\User::findOrFail(1);
     }
 
     public function testIndex()

@@ -26,7 +26,7 @@ class ViewComposerServiceProvider extends ServiceProvider
 
         // Composer for the create/edit event form (includes possible locations and 'streeftal')
         view()->composer('events.form', function ($view) {
-            $locations = \App\Location::all();
+            $locations = \App\Models\Location::all();
             $loc_list = [];
             foreach ($locations as $location) {
                 $loc_list[$location->id] = $location->plaats . ' (' . $location->naam . ')';
@@ -41,7 +41,7 @@ class ViewComposerServiceProvider extends ServiceProvider
 
         // Composer for the create/edit action form (includes possible members)
         view()->composer('actions.form', function ($view) {
-            $members = \App\Member::orderBy('voornaam')->get();
+            $members = \App\Models\Member::orderBy('voornaam')->get();
             $member_list = [];
             foreach ($members as $member) {
                 $member_list[$member->id] = $member->voornaam . ' ' . $member->tussenvoegsel . ' ' . $member->achternaam;
@@ -51,7 +51,7 @@ class ViewComposerServiceProvider extends ServiceProvider
 
         // Composer for the 'send member on event' form (includes all events sorted antichronologically)
         view()->composer('members.onEvent', function ($view) {
-            $events = \App\Event::orderBy('datum_start', 'desc')->get();
+            $events = \App\Models\Event::orderBy('datum_start', 'desc')->get();
             $event_options = [];
             foreach ($events as $event) {
                 $event_options[$event->id] = $event->naam . ' (' . $event->code . ')';
@@ -61,7 +61,7 @@ class ViewComposerServiceProvider extends ServiceProvider
 
         // Composer for the 'send participant on event' form (includes camps sorted antichronologically)
         view()->composer('participants.onEvent', function ($view) {
-            $events = \App\Event::where('type', 'kamp')->orderBy('datum_start', 'desc')->get();
+            $events = \App\Models\Event::where('type', 'kamp')->orderBy('datum_start', 'desc')->get();
             $event_options = [];
             foreach ($events as $event) {
                 $event_options[$event->id] = $event->naam . ' (' . $event->code . ')';
@@ -71,13 +71,13 @@ class ViewComposerServiceProvider extends ServiceProvider
 
         // Composer for the 'add course' form (includes all courses sorted alphabetically)
         view()->composer('members.addCourse', function ($view) {
-            $course_options = \App\Course::orderBy('naam')->pluck('naam', 'id')->toArray();
+            $course_options = \App\Models\Course::orderBy('naam')->pluck('naam', 'id')->toArray();
             $view->with('course_options', $course_options);
         });
 
         // Composer for the 'participants.onEvent' form (includes all courses sorted alphabetically)
         view()->composer('participants.onEvent', function ($view) {
-            $course_options = \App\Course::orderBy('naam')->pluck('naam', 'id')->toArray();
+            $course_options = \App\Models\Course::orderBy('naam')->pluck('naam', 'id')->toArray();
             $course_options = [
                 0 => '-geen vak-',
             ] + $course_options;
@@ -86,7 +86,7 @@ class ViewComposerServiceProvider extends ServiceProvider
 
         // Composer for the 'participants.editEvent' form (includes all courses sorted alphabetically)
         view()->composer('participants.editEvent', function ($view) {
-            $course_options = \App\Course::orderBy('naam')->pluck('naam', 'id')->toArray();
+            $course_options = \App\Models\Course::orderBy('naam')->pluck('naam', 'id')->toArray();
             $course_options = [
                 0 => '-geen vak-',
             ] + $course_options;
@@ -95,7 +95,7 @@ class ViewComposerServiceProvider extends ServiceProvider
 
         // Composer for the 'events.editParticipant' form (includes all courses sorted alphabetically)
         view()->composer('events.editParticipant', function ($view) {
-            $course_options = \App\Course::orderBy('naam')->pluck('naam', 'id')->toArray();
+            $course_options = \App\Models\Course::orderBy('naam')->pluck('naam', 'id')->toArray();
             $course_options = [
                 0 => '-geen vak-',
             ] + $course_options;

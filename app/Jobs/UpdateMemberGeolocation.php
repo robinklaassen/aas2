@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Jobs;
 
 use App\Exceptions\GeocoderException;
-use App\Member;
+use App\Models\Member;
 use App\Services\Geocoder\GeocoderInterface;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;

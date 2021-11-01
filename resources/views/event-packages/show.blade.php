@@ -41,7 +41,7 @@ Pakket {{ $eventPackage->code }}
             </tr>
             <tr>
 				<td>Type</td>
-				<td>{{ (\App\EventPackage::class)::TYPE_DESCRIPTIONS[$eventPackage->type] }}</td>
+				<td>{{ (\App\Models\EventPackage::class)::TYPE_DESCRIPTIONS[$eventPackage->type] }}</td>
 			</tr>
 			<tr>
 				<td>Prijs</td>

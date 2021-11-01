@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
-use App\Event;
 use App\Facades\Mollie;
 use App\Mail\participants\IDealConfirmation;
-use App\Participant;
-use App\User;
+use App\Models\Event;
+use App\Models\Participant;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;

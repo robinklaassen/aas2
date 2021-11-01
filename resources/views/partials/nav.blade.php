@@ -14,17 +14,17 @@
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
 
-						@can("viewAny", \App\Participant::class)
+						@can("viewAny", \App\Models\Participant::class)
 						<li class="{{ substr(Request::path(),0,12) == 'participants' ? 'active' : ''}}"><a href="{{ url('/participants') }}">Deelnemers</a></li>
 						@endcan
-						@can("viewAny", \App\Member::class)
+						@can("viewAny", \App\Models\Member::class)
 						<li class="{{ substr(Request::path(),0,7) == 'members' ? 'active' : ''}}"><a href="{{ url('/members') }}">Leden</a></li>
 						@endcan
-						@can("viewAny", \App\Event::class)
+						@can("viewAny", \App\Models\Event::class)
 						<li class="{{ substr(Request::path(),0,6) == 'events' ? 'active' : ''}}"><a href="{{ url('/events') }}">Evenementen</a></li>
 						@endcan
 
-						@can("viewOwn", \App\Declaration::class)
+						@can("viewOwn", \App\Models\Declaration::class)
 						<li class="{{ substr(Request::path(),0,5) == 'declaration' ? 'active' : ''}}">
 							<a href="{{ url('/declarations') }}">Declaraties</a>
 						</li>
@@ -34,7 +34,7 @@
 							<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Overig <span class="caret"></span></a>
 							<ul class="dropdown-menu">
 
-								@can("viewAny", \App\Location::class)
+								@can("viewAny", \App\Models\Location::class)
 									<li class="{{ substr(Request::path(),0,9) == 'locations' ? 'active' : ''}}"><a href="{{ url('/locations') }}">Locaties</a></li>
 								@endcan
 
@@ -52,11 +52,11 @@
 								<li class="{{ substr(Request::path(),0,5) == 'lists' ? 'active' : ''}}"><a href="{{ url('/lists') }}">Lijsten</a></li>
 								@endrole
 
-								@can("viewAny", \App\Course::class)
+								@can("viewAny", \App\Models\Course::class)
 									<li class="{{ substr(Request::path(),0,7) == 'courses' ? 'active' : ''}}"><a href="{{ url('/courses') }}">Vakken</a></li>
 								@endcan
 
-								@can("viewAny", \App\Action::class)
+								@can("viewAny", \App\Models\Action::class)
 									<li class="{{ substr(Request::path(),0,7) == 'actions' ? 'active' : ''}}"><a href="{{ url('/actions') }}">Punten</a></li>
 								@endcan
 

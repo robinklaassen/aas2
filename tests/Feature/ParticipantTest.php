@@ -13,7 +13,7 @@ class ParticipantTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = \App\User::findOrFail(1);
+        $this->user = \App\Models\User::findOrFail(1);
     }
 
     /**
@@ -34,7 +34,7 @@ class ParticipantTest extends TestCase
     public function testShowUnauthorized()
     {
         $response = $this
-            ->actingAs(\App\User::findOrFail(4)) // normal member
+            ->actingAs(\App\Models\User::findOrFail(4)) // normal member
             ->get('/participants/1')
             ->assertStatus(403);
     }
@@ -45,7 +45,7 @@ class ParticipantTest extends TestCase
     public function testShow()
     {
         $response = $this
-            ->actingAs(\App\User::findOrFail(6)) // kampci
+            ->actingAs(\App\Models\User::findOrFail(6)) // kampci
             ->get('/participants/1')
             ->assertStatus(200)
             ->assertSee('Elst', 'Meikamp')

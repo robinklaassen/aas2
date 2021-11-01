@@ -15,7 +15,7 @@
 	</div>
 	<div class="col-sm-6">
 		<p class="text-right">
-			@can("create", \App\Location::class)
+			@can("create", \App\Models\Location::class)
 			<a class="btn btn-primary" type="button" href="{{ url('locations/create') }}" style="margin-top:21px;">Nieuwe locatie</a>
 			@endcan
 		</p>
@@ -31,7 +31,7 @@
 			<tr>
 				<th>Naam</th>
 				<th>Plaats</th>
-				@can("viewAdvancedAny", \App\Location::class)
+				@can("viewAdvancedAny", \App\Models\Location::class)
 				<th>Telefoon</th>
 				<th>Email</th>
 				@endcan
@@ -40,14 +40,14 @@
 				<th><span data-toggle="tooltip" title="Overige evenementen">O</span></th>
 			</tr>
 		</thead>
-		
+
 		<tbody>
 			@foreach ($locations as $location)
 				@if ($location->events()->count() != 0)
 					<tr>
 						<td><a href="{{ url('/locations', $location->id) }}">{{ $location->naam }}</a></td>
 						<td>{{ $location->plaats }}</td>
-						@can("viewAdvancedAny", \App\Location::class)
+						@can("viewAdvancedAny", \App\Models\Location::class)
 						<td>{{ $location->telefoon }}</td>
 						<td><a href="mailto:{{ $location->email }}">{{ $location->email }}</a></td>
 						@endcan

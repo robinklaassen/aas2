@@ -14,7 +14,7 @@ Pakketten
 	</div>
 	<div class="col-sm-6">
 		<p class="text-right">
-			@can("create", \App\EventPackage::class)
+			@can("create", \App\Models\EventPackage::class)
 			<a class="btn btn-primary" type="button" href="{{ url('event-packages/create') }}" style="margin-top:21px;">
 				Nieuw Pakket
 			</a>
@@ -28,7 +28,7 @@ Pakketten
 <ul class="nav nav-tabs" role="tablist">
 	@foreach($eventPackagesGrouped as $key => $value)
 	<li role="presentation"><a href="#{{$key}}" aria-controls="{{$key}}" role="tab"
-			data-toggle="tab">{{(\App\EventPackage::class)::TYPE_DESCRIPTIONS[$key]}}</a></li>
+			data-toggle="tab">{{(\App\Models\EventPackage::class)::TYPE_DESCRIPTIONS[$key]}}</a></li>
 	@endforeach
 </ul>
 

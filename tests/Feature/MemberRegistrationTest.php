@@ -86,7 +86,7 @@ class MemberRegistrationTest extends TestCase
         $this->assertDatabaseHas('members', $this->memberData);
         $this->assertDatabaseHas('users', $this->userData);
         $this->assertDatabaseHas('event_member', [
-            'member_id' => \App\Member::latest()->first()->id,
+            'member_id' => \App\Models\Member::latest()->first()->id,
             'event_id' => $this->postData['selected_camp'],
         ]);
     }

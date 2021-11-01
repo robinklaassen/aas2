@@ -14,21 +14,21 @@ Leden
 	</div>
 	<div class="col-sm-6">
 		<p class="text-right">
-			@can("create", \App\Member::class)
+			@can("create", \App\Models\Member::class)
 			<a class="btn btn-primary" type="button" href="{{ url('members/create') }}" style="margin-top:21px;">Nieuw
 				lid</a>
 			@endcan
-			@can("showPracticalAny", \App\Member::class)
+			@can("showPracticalAny", \App\Models\Member::class)
 			<a class="btn btn-info" type="button" href="{{ url('members/search')}}" style="margin-top:21px;">Zoeken op
 				vakdekking</a>
 			@endcan
-			@can("viewAny", \App\Member::class)
+			@can("viewAny", \App\Models\Member::class)
 			<a class="btn btn-info" type="button" href="{{ url('members/search-skills')}}" style="margin-top:21px;">Zoeken op
 				vaardigheden</a>
 			<a class="btn btn-warning" type="button" href="{{ url('members/map') }}"
 			style="margin-top:21px;">Kaart</a>
 			@endcan
-			@can("showAdministrativeAny", \App\Member::class)
+			@can("showAdministrativeAny", \App\Models\Member::class)
 			<a class="btn btn-success" type="button" href="{{ url('members/export') }}"
 				style="margin-top:21px;">Exporteren</a>
 			@endcan
@@ -44,7 +44,7 @@ Leden
 	<ul class="nav nav-tabs" role="tablist">
 		<li role="presentation" class="active"><a href="#huidig" aria-controls="huidig" role="tab"
 				data-toggle="tab">Huidige leden</a></li>
-		@can("listOldMembers", \App\Member::class)
+		@can("listOldMembers", \App\Models\Member::class)
 		<li role="presentation"><a href="#oud" aria-controls="oud" role="tab" data-toggle="tab">Oud-leden</a></li>
 		@endcan
 	</ul>
@@ -60,13 +60,13 @@ Leden
 						<th></th>
 						<th data-orderable>Achternaam</th>
 						<th data-orderable>Woonplaats</th>
-						@can("showPracticalAny", \App\Member::class)
+						@can("showPracticalAny", \App\Models\Member::class)
 						<th data-orderable>Soort lid</th>
 						@endcan
-						@can("showAdministrativeAny", \App\Member::class)
+						@can("showAdministrativeAny", \App\Models\Member::class)
 						<th>VOG</th>
 						@endcan
-						@can("showPrivateAny", \App\Member::class)
+						@can("showPrivateAny", \App\Models\Member::class)
 						<th>Telefoon</th>
 						@endcan
 						<th>Email</th>
@@ -88,11 +88,11 @@ Leden
 						<td>{{ $member->achternaam }}</td>
 						<td>{{ $member->plaats }}</td>
 
-						@can("showPracticalAny", \App\Member::class)
+						@can("showPracticalAny", \App\Models\Member::class)
 						<td>{{ $member->soort }}</td>
 						@endcan
 
-						@can("showAdministrativeAny", \App\Member::class)
+						@can("showAdministrativeAny", \App\Models\Member::class)
 						<td>
 							@if ($member->vog)
 							<span style="display:none;">1</span>
@@ -103,7 +103,7 @@ Leden
 							@endif
 						</td>
 						@endcan
-						@can("showPrivateAny", \App\Member::class)
+						@can("showPrivateAny", \App\Models\Member::class)
 						<td>{{ $member->telefoon }}</td>
 						@endcan
 						<td><a href="mailto:{{ $member->email_anderwijs }}">{{ $member->email_anderwijs }}</a></td>
@@ -120,7 +120,7 @@ Leden
 			</table>
 		</div>
 
-		@can("listOldMembers", \App\Member::class)
+		@can("listOldMembers", \App\Models\Member::class)
 		<div role="tabpanel" class="tab-pane" id="oud">
 			<!-- Tabel oud-leden -->
 			<table class="table table-hover" id="oldMembersTable" data-page-length="25">
@@ -158,7 +158,7 @@ Leden
 @section('footer')
 <!-- These scripts load DataTables -->
 <script type="text/javascript">
-	
+
 	$( document ).ready(function() {
 		makeTableSortable("#currentMembersTable");
 		makeTableSortable("#oldMembersTable");

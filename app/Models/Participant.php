@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -72,7 +72,7 @@ class Participant extends Model
     // A participant belongs to many events
     public function events()
     {
-        return $this->belongsToMany('App\Event')
+        return $this->belongsToMany('App\Models\Event')
             ->using("App\Pivots\EventParticipant")
             ->withTimestamps()
             ->withPivot(['package_id', 'geplaatst', 'datum_betaling']);
@@ -81,12 +81,12 @@ class Participant extends Model
     // A participant can have one user account
     public function user()
     {
-        return $this->morphOne('App\User', 'profile');
+        return $this->morphOne('App\Models\User', 'profile');
     }
 
     public function comments()
     {
-        return $this->morphMany('App\Comment', 'entity');
+        return $this->morphMany('App\Models\Comment', 'entity');
     }
 
     public function getIncomeDescriptionAttribute()

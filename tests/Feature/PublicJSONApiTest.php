@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
-use App\Event;
+use App\Models\Event;
 use Tests\TestCase;
 
 class PublicJSONApiTest extends TestCase

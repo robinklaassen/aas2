@@ -14,7 +14,7 @@
 	</div>
 	<div class="col-sm-6">
 		<p class="text-right">
-			@can("create", \App\Event::class)
+			@can("create", \App\Models\Event::class)
 			<a class="btn btn-primary" type="button" href="{{ url('events/create') }}" style="margin-top:21px;">Nieuw evenement</a>
 			@endcan
 		</p>

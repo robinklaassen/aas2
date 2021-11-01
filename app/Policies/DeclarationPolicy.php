@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Policies;
 
-use App\Declaration;
-use App\User;
+use App\Models\Declaration;
+use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class DeclarationPolicy

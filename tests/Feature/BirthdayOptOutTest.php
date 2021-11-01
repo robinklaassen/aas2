@@ -13,7 +13,7 @@ class BirthdayOptOutTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->member = \App\Member::findOrFail(2);  // Jön Snow
+        $this->member = \App\Models\Member::findOrFail(2);  // Jön Snow
     }
 
     /**

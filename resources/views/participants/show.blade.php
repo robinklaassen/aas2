@@ -19,7 +19,7 @@ Mijn profiel
 	<div class="col-sm-6">
 		<p class="text-right">
 			@if ($viewType == 'profile')
-			
+
 			@can("update", $participant)
 			<a class="btn btn-primary" type="button" href="{{ url('/profile/edit') }}" style="margin-top:21px;">Bewerken</a>
 			@endcan
@@ -104,7 +104,7 @@ Mijn profiel
 			</tr>
 			<tr>
 				<td>
-					Informatie ontvangen via 
+					Informatie ontvangen via
 					<span class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="tooltip" title="Informatie over deelname aan het kamp kunt u via email en post ontvangen.">
 				</td>
 				<td>{{ $participant->information_channel_description }}</td>
@@ -189,7 +189,7 @@ Mijn profiel
 
 			<tr>
 				<td>
-					Mailings ontvangen 
+					Mailings ontvangen
 					<span class="glyphicon glyphicon-info-sign" aria-hidden="true" data-toggle="tooltip" title="Dit gaat alleen om nieuwsbrieven en kortingsacties. Bij deelname aan een kamp ontvangt u altijd mail."></span>
 				</td>
 				<td>{{ $participant->mag_gemaild ? "Ja" : "Nee" }}</td>
@@ -233,7 +233,7 @@ Mijn profiel
 
 		@can("showAdministrative", $participant)
 			<div>
-				@include('partials.comments', [ 'comments' => $participant->comments, 'type' => 'App\Participant', 'key' => $participant->id ])
+				@include('partials.comments', [ 'comments' => $participant->comments, 'type' => 'App\Models\Participant', 'key' => $participant->id ])
 			</div>
 		@endcan
 	</div>

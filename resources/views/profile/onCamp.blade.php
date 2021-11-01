@@ -20,18 +20,18 @@ Op kamp
 	<div class="col-sm-6">
 		<div class="well">
 			<strong>Let op! </strong>
-			@if (\Auth::user()->profile_type == 'App\Participant')
+			@if (\Auth::user()->profile_type == 'App\Models\Participant')
 			Zijn alle gegevens in uw profiel up-to-date? Met name voor het <strong>niveau</strong> en de
 			<strong>klas</strong> van de deelnemer is het erg belangrijk dat deze informatie klopt, omdat er anders
 			mogelijk geen volledige dekking is voor de vakken die u opgeeft. Ook uw <strong>bruto maandinkomen</strong>
 			is van belang voor correcte betalingsinformatie.
-			@elseif (\Auth::user()->profile_type == 'App\Member')
+			@elseif (\Auth::user()->profile_type == 'App\Models\Member')
 			Zijn alle gegevens in je profiel up-to-date?
 			@endif
 		</div>
 
 		<h3>Kamp</h3>
-		@if (\Auth::user()->profile_type == 'App\Participant')
+		@if (\Auth::user()->profile_type == 'App\Models\Participant')
 		<div class="well well-sm">
 			Gaat uw kind op zomerkamp? Geef dan bij klas het huidige schooljaar op, dus niet de klas waar uw kind
 			naartoe gaat. Let er ook op dat uw kind zelf schoolboeken moet meenemen!
@@ -47,7 +47,7 @@ Op kamp
 	</div>
 </div>
 
-@if (\Auth::user()->profile_type == 'App\Participant')
+@if (\Auth::user()->profile_type == 'App\Models\Participant')
 
 <div class="row">
 	<div class="col-sm-6" style="display: none" id="selected_package_container">

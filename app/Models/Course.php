@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -14,7 +14,7 @@ class Course extends Model
     // A course belongs to many members
     public function members()
     {
-        return $this->belongsToMany('App\Member')->withPivot('klas');
+        return $this->belongsToMany('App\Models\Member')->withPivot('klas');
     }
 
     // Get participants on a specific camp that have this course

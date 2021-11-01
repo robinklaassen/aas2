@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Mail\participants;
 
-use App\Participant;
+use App\Models\Participant;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;

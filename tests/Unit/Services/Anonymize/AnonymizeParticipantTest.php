@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Services\Anonymize;
 
-use App\Comment;
-use App\Participant;
+use App\Models\Comment;
+use App\Models\Participant;
+use App\Models\User;
 use App\Services\Anonymize\AnonymizeGeneratorInterface;
 use App\Services\Anonymize\AnonymizeParticipant;
 use App\Services\ObjectManager\ObjectManagerInterface;
-use App\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Collection;

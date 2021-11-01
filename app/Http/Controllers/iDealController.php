@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Event;
 use App\Facades\Mollie;
 use App\Mail\participants\IDealConfirmation;
-use App\Participant;
-
+use App\Models\Event;
+use App\Models\Participant;
 use Illuminate\Http\Request;
 use Mail;
 

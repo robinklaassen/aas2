@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Policies;
 
-use App\Participant;
-use App\User;
+use App\Models\Participant;
+use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class ParticipantPolicy
@@ -165,7 +165,7 @@ class ParticipantPolicy
 
     public function onEvent(User $user, Participant $participant)
     {
-        return $user->can('addParticipant', \App\Event::class) || $this->ifSelf('participants::info::edit::self', $user, $participant);
+        return $user->can('addParticipant', \App\Models\Event::class) || $this->ifSelf('participants::info::edit::self', $user, $participant);
     }
 
     public function anonymize(User $user)

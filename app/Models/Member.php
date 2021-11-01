@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App;
+namespace App\Models;
 
 use App\Events\MemberUpdated;
 use Carbon\Carbon;
@@ -56,49 +56,49 @@ class Member extends Model
     // A member belongs to many events
     public function events()
     {
-        return $this->belongsToMany('App\Event')->withTimestamps()->withPivot('wissel')->withPivot('wissel_datum_start')->withPivot('wissel_datum_eind');
+        return $this->belongsToMany('App\Models\Event')->withTimestamps()->withPivot('wissel')->withPivot('wissel_datum_start')->withPivot('wissel_datum_eind');
     }
 
     // A member belongs to many courses
     public function courses()
     {
-        return $this->belongsToMany('App\Course')->withPivot('klas');
+        return $this->belongsToMany('App\Models\Course')->withPivot('klas');
     }
 
     // A member belongs to many skills
     public function skills()
     {
-        return $this->belongsToMany('App\Skill')->withTimestamps();
+        return $this->belongsToMany('App\Models\Skill')->withTimestamps();
     }
 
     // A member can have one user account
     public function user()
     {
-        return $this->morphOne('App\User', 'profile');
+        return $this->morphOne('App\Models\User', 'profile');
     }
 
     // A Member can have comments
     public function comments()
     {
-        return $this->morphMany('App\Comment', 'entity');
+        return $this->morphMany('App\Models\Comment', 'entity');
     }
 
     // A member has many actions
     public function actions()
     {
-        return $this->hasMany('App\Action');
+        return $this->hasMany('App\Models\Action');
     }
 
     // A member has many declarations
     public function declarations()
     {
-        return $this->hasMany('App\Declaration');
+        return $this->hasMany('App\Models\Declaration');
     }
 
     // A member belongs to many reviews
     public function reviews()
     {
-        return $this->belongsToMany('App\Review')
+        return $this->belongsToMany('App\Models\Review')
             ->withPivot('stof')
             ->withPivot('aandacht')
             ->withPivot('mening')

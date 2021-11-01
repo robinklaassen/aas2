@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
-use App\Member;
+use App\Models\Member;
 
 class ReviewRequest extends Request
 {

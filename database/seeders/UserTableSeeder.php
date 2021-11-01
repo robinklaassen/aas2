@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
-use App\Member;
-use App\Participant;
-use App\Role;
-use App\User;
+use App\Models\Member;
+use App\Models\Participant;
+use App\Models\Role;
+use App\Models\User;
 use DB;
 use Illuminate\Database\Seeder;
 

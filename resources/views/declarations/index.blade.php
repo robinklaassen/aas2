@@ -14,10 +14,10 @@
 	</div>
 	<div class="col-sm-6">
 		<p class="text-right">
-			@can('viewAll', \App\Declaration::class)
+			@can('viewAll', \App\Models\Declaration::class)
 				<a class="btn btn-success" type="button" href="{{ url('declarations/admin') }}" style="margin-top:21px;">Penningmeester dashboard</a>
 			@endcan
-			@can('create', \App\Declaration::class)
+			@can('create', \App\Models\Declaration::class)
 				<a class="btn btn-primary" type="button" href="{{ url('declarations/create-bulk') }}" style="margin-top:21px;">Nieuwe declaratie</a>
 			@endcan
 		</p>

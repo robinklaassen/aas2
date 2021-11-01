@@ -13,7 +13,7 @@ class CourseCoverageCheckerTest extends TestCase
      */
     public function testCourseCoverageChecker()
     {
-        $user = \App\User::findOrFail(1);
+        $user = \App\Models\User::findOrFail(1);
 
         $response = $this
             ->actingAs($user)

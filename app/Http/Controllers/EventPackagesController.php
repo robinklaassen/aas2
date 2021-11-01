@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\EventPackage;
+use App\Models\EventPackage;
 use Illuminate\Http\Request;
 
 class EventPackagesController extends Controller

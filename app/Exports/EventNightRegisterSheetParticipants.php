@@ -12,7 +12,7 @@ class EventNightRegisterSheetParticipants implements FromCollection, WithHeading
 {
     protected $event;
 
-    public function __construct(\App\Event $event)
+    public function __construct(\App\Models\Event $event)
     {
         $this->event = $event;
     }

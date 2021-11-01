@@ -21,7 +21,7 @@ class LoginTest extends TestCase
             ])
             ->assertStatus(200);
 
-        $user = \App\User::findOrFail(1);
+        $user = \App\Models\User::findOrFail(1);
         $this->assertAuthenticatedAs($user);
     }
 }

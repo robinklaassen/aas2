@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services\Anonymize;
 
-use App\Participant;
+use App\Models\Participant;
 use DateTimeImmutable;
 use Illuminate\Support\Collection;
 

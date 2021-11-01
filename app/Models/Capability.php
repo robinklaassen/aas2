@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -24,6 +24,6 @@ class Capability extends Model
 
     public function roles()
     {
-        return $this->belongsToMany('App\Role', 'role_capability');
+        return $this->belongsToMany('App\Models\Role', 'role_capability');
     }
 }

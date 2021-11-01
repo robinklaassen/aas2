@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace App\Services;
 
 use App\Data\FileData;
-use App\Declaration;
-use App\Member;
+use App\Models\Declaration;
+use App\Models\Member;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use League\Flysystem\Filesystem;

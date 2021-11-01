@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Services\Chart;
 
-use App\Event;
-use App\Member;
+use App\Models\Event;
+use App\Models\Member;
 
 interface ChartServiceInterface
 {

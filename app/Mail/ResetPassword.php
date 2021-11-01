@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Mail;
 
-use App\User;
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
@@ -28,7 +28,7 @@ class ResetPassword extends Mailable
 
     public function build()
     {
-        $isMember = $this->user->profile_type === 'App\Member';
+        $isMember = $this->user->profile_type === 'App\Models\Member';
         $to = [
             'email' => $isMember ? $this->user->profile->email : $this->user->profile->email_ouder,
             'name' => $isMember ? $this->user->profile->volnaam : $this->user->profile->parentName,

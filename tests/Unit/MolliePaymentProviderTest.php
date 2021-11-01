@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Tests\Unit;
 
-use App\Event;
 use App\Facades\Mollie;
 use App\Helpers\Payment\PaymentInterface;
-use App\Participant;
+use App\Models\Event;
+use App\Models\Participant;
 use Mockery;
 use Tests\TestCase;
 

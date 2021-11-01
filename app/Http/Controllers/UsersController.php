@@ -6,8 +6,8 @@ namespace App\Http\Controllers;
 
 use App\Mail\members\NewUserMember;
 use App\Mail\participants\NewUserParticipant;
-use App\Role;
-use App\User;
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Mail;
 
@@ -25,8 +25,8 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $memberUsers = User::where('profile_type', 'App\Member')->where('id', '<>', 0)->get();
-        $participantUsers = User::where('profile_type', 'App\Participant')->get();
+        $memberUsers = User::where('profile_type', 'App\Models\Member')->where('id', '<>', 0)->get();
+        $participantUsers = User::where('profile_type', 'App\Models\Participant')->get();
         return view('users.index', compact('memberUsers', 'participantUsers'));
     }
 
@@ -37,9 +37,9 @@ class UsersController extends Controller
      */
     public function createForMember()
     {
-        $this->authorize('createMember', \App\User::class);
+        $this->authorize('createMember', \App\Models\User::class);
         $type = 'member';
-        $members = \App\Member::orderBy('voornaam')->whereNotIn('soort', ['oud'])->get();
+        $members = \App\Models\Member::orderBy('voornaam')->whereNotIn('soort', ['oud'])->get();
         $profile_options = [];
         foreach ($members as $member) {
             if (! $member->user()->count()) {
@@ -52,10 +52,10 @@ class UsersController extends Controller
 
     public function createForParticipant()
     {
-        $this->authorize('createParticipant', \App\User::class);
+        $this->authorize('createParticipant', \App\Models\User::class);
 
         $type = 'participant';
-        $participants = \App\Participant::orderBy('voornaam')->get();
+        $participants = \App\Models\Participant::orderBy('voornaam')->get();
         $profile_options = [];
         foreach ($participants as $participant) {
             if (! $participant->user()->count()) {
@@ -73,14 +73,14 @@ class UsersController extends Controller
      */
     public function storeForMember(Request $request)
     {
-        $this->authorize('createMember', \App\User::class);
+        $this->authorize('createMember', \App\Models\User::class);
 
         $this->validate($request, [
             'profile_id' => 'required',
             'is_admin' => 'required',
         ]);
 
-        $member = \App\Member::find($request->profile_id);
+        $member = \App\Models\Member::find($request->profile_id);
 
         // Check if user account for this member already exists!
         if ($member->user) {
@@ -102,7 +102,7 @@ class UsersController extends Controller
         $password = User::generatePassword();
 
         // Attach account
-        $user = new \App\User();
+        $user = new \App\Models\User();
         $user->username = $username;
         $user->password = bcrypt($password);
         $user->is_admin = $request->is_admin;
@@ -121,13 +121,13 @@ class UsersController extends Controller
 
     public function storeForParticipant(Request $request)
     {
-        $this->authorize('createParticipant', \App\User::class);
+        $this->authorize('createParticipant', \App\Models\User::class);
 
         $this->validate($request, [
             'profile_id' => 'required',
         ]);
 
-        $participant = \App\Participant::find($request->profile_id);
+        $participant = \App\Models\Participant::find($request->profile_id);
 
         // Check if user account for this participant already exists!
         if ($participant->user) {
@@ -149,7 +149,7 @@ class UsersController extends Controller
         $password = User::generatePassword();
 
         // Attach account
-        $user = new \App\User();
+        $user = new \App\Models\User();
         $user->username = $username;
         $user->password = bcrypt($password);
         $participant->user()->save($user);
@@ -196,7 +196,7 @@ class UsersController extends Controller
         $this->authorize('changeAdmin', $user);
 
         // Check if this user is member! (participants can never be admins)
-        if ($user->profile_type === 'App\Member') {
+        if ($user->profile_type === 'App\Models\Member') {
             $user->is_admin = \Request::input('is_admin');
             $user->save();
             return redirect('users')->with([

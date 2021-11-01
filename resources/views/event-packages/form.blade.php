@@ -1,6 +1,6 @@
 
 <div class="row">
-	
+
 	<div class="col-sm-6 form-group">
 		{!! Form::label('code', 'Code:') !!}
 		{!! Form::text('code', null, ['class' => 'form-control']) !!}
@@ -8,7 +8,7 @@
 
 	<div class="col-sm-6 form-group">
 		{!! Form::label('type', 'Type:') !!}
-		{!! Form::select('type', (\App\EventPackage::class)::TYPE_DESCRIPTIONS, null, ['class' => 'form-control']) !!}
+		{!! Form::select('type', (\App\Models\EventPackage::class)::TYPE_DESCRIPTIONS, null, ['class' => 'form-control']) !!}
 	</div>
 </div>
 <div class="row">

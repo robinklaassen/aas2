@@ -4,7 +4,7 @@
 		{!! Form::text('naam', null, ['class' => 'form-control']) !!}
 	</div>
 
-	@canany("editAdvanced", \App\Event::class, $event)
+	@canany("editAdvanced", \App\Models\Event::class, $event)
 	<div class="col-md-2 form-group">
 		{!! Form::label('code', 'Code:') !!}
 		{!! Form::text('code', null, ['class' => 'form-control']) !!}
@@ -16,7 +16,7 @@
 		{!! Form::select('location_id', $locations, null, ['class' => 'form-control']) !!}
 	</div>
 
-	@canany("editAdvanced", \App\Event::class, $event)
+	@canany("editAdvanced", \App\Models\Event::class, $event)
 	<div class="col-md-2 form-group">
 		{!! Form::label('openbaar', 'Openbaar', ['title' => 'Openbare evenementen worden gepubliceerd op de website.']) !!}<br />
 		{!! Form::hidden('openbaar', 1) !!}
@@ -64,11 +64,11 @@
 <div class="row">
 	<div class="col-md-2 form-group">
 		{!! Form::label('type', 'Type evenement:') !!}
-		{!! Form::select('type', (\App\Event::class)::TYPE_DESCRIPTIONS, null, ['class' => 'form-control']) !!}
+		{!! Form::select('type', (\App\Models\Event::class)::TYPE_DESCRIPTIONS, null, ['class' => 'form-control']) !!}
 	</div>
 	<div class="col-md-2 form-group">
 		{!! Form::label('package_type', 'Pakket types:') !!}
-		{!! Form::select('package_type', array_merge([null => "Geen"], (\App\EventPackage::class)::TYPE_DESCRIPTIONS),
+		{!! Form::select('package_type', array_merge([null => "Geen"], (\App\Models\EventPackage::class)::TYPE_DESCRIPTIONS),
 		null, ['class' => 'form-control']) !!}
 	</div>
 </div>
@@ -85,7 +85,7 @@
 		!!}
 	</div>
 
-	@canany("editAdvanced", \App\Event::class, $event)
+	@canany("editAdvanced", \App\Models\Event::class, $event)
 	<div class="col-md-4 form-group">
 		{!! Form::label('prijs', 'Kampprijs (zonder korting):') !!}
 		<div class="input-group">
@@ -107,7 +107,7 @@
 	</div>
 </div>
 
-@canany("editAdvanced", \App\Event::class, $event)
+@canany("editAdvanced", \App\Models\Event::class, $event)
 <div class="row">
 	<div class="col-md-12">
 		<p class="well">
@@ -118,7 +118,7 @@
 </div>
 @endcanany
 
-@canany("editAdvanced", \App\Event::class, $event)
+@canany("editAdvanced", \App\Models\Event::class, $event)
 <div class="form-group">
 	{!! Form::label('beschrijving', 'Beschrijving (website):') !!}
 	{!! Form::textarea('beschrijving', null, ['class' => 'form-control', 'rows' => '5']) !!}

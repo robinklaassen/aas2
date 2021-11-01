@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
-use App\Skill;
+use App\Models\Skill;
 use DB;
 use Illuminate\Database\Seeder;
 

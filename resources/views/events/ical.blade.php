@@ -12,7 +12,7 @@ DTEND;TZID=Europe/Amsterdam:{{$event->datum_eind->format("Ymd")}}T{{str_replace(
 LOCATION:{{$event->location->adres}}, {{$event->location->postcode}} {{$event->location->plaats}}
 END:VEVENT
 @endforeach
-@can("viewAny", \App\Member::class)
+@can("viewAny", \App\Models\Member::class)
 @foreach ($members as $member)
 BEGIN:VEVENT
 SUMMARY:Verjaardag {{$member->volnaam}}

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Database\Seeders;
 
-use App\Review;
+use App\Models\Review;
 use DB;
 use Illuminate\Database\Seeder;
 
