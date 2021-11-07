@@ -7,7 +7,14 @@ use Illuminate\Support\Facades\DB;
 
 class ChangeModelNamespaces extends Migration
 {
-    public const CHANGED_MODELS = [
+    public const CHANGED_USER_MODELS = [
+        'App\Member' => 'App\Models\Member',
+        'App\Participant' => 'App\Models\Participant',
+    ];
+
+    public const CHANGED_COMMENT_MODELS = [
+        'App\Event' => 'App\Models\Event',
+        'App\Location' => 'App\Models\Location',
         'App\Member' => 'App\Models\Member',
         'App\Participant' => 'App\Models\Participant',
     ];
@@ -17,9 +24,15 @@ class ChangeModelNamespaces extends Migration
      */
     public function up()
     {
-        foreach (self::CHANGED_MODELS as $old => $new) {
+        foreach (self::CHANGED_USER_MODELS as $old => $new) {
             DB::table('users')->where('profile_type', $old)->update([
                 'profile_type' => $new,
+            ]);
+        }
+
+        foreach (self::CHANGED_COMMENT_MODELS as $old => $new) {
+            DB::table('comments')->where('entity_type', $old)->update([
+                'entity_type' => $new,
             ]);
         }
     }
@@ -29,9 +42,15 @@ class ChangeModelNamespaces extends Migration
      */
     public function down()
     {
-        foreach (self::CHANGED_MODELS as $old => $new) {
+        foreach (self::CHANGED_USER_MODELS as $old => $new) {
             DB::table('users')->where('profile_type', $new)->update([
                 'profile_type' => $old,
+            ]);
+        }
+
+        foreach (self::CHANGED_COMMENT_MODELS as $old => $new) {
+            DB::table('comments')->where('entity_type', $new)->update([
+                'entity_type' => $old,
             ]);
         }
     }
