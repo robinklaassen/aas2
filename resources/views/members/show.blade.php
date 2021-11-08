@@ -517,7 +517,7 @@ Mijn profiel
 						</tr>
 					</thead>
 					<tbody>
-						@foreach ($member->actions as $item)
+						@foreach ($member->actions()->orderBy('date')->get() as $item)
 						<tr>
 							<td>{{ $item['date'] !== null ? $item['date']->format('d-m-Y') : '' }}</td>
 							<td>{{ $item['description'] }}</td>
