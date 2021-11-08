@@ -9,14 +9,14 @@ use Illuminate\Support\ServiceProvider;
 class AuthServiceProvider extends ServiceProvider
 {
     protected $policies = [
-        'App\Comment' => 'App\Policies\CommentPolicy',
-        'App\Event' => 'App\Policies\EventPolicy',
-        'App\Member' => 'App\Policies\MemberPolicy',
-        'App\Location' => 'App\Policies\LocationPolicy',
-        'App\Role' => 'App\Policies\RolePolicy',
-        'App\Course' => 'App\Policies\CoursePolicy',
-        'App\User' => 'App\Policies\UserPolicy',
-        'App\Declaration' => 'App\Policies\DeclarationPolicy',
+        'App\Models\Comment' => 'App\Policies\CommentPolicy',
+        'App\Models\Event' => 'App\Policies\EventPolicy',
+        'App\Models\Member' => 'App\Policies\MemberPolicy',
+        'App\Models\Location' => 'App\Policies\LocationPolicy',
+        'App\Models\Role' => 'App\Policies\RolePolicy',
+        'App\Models\Course' => 'App\Policies\CoursePolicy',
+        'App\Models\User' => 'App\Policies\UserPolicy',
+        'App\Models\Declaration' => 'App\Policies\DeclarationPolicy',
     ];
 
     public function boot()

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -22,11 +22,11 @@ class Role extends Model
 
     public function users()
     {
-        return $this->belongsToMany('App\User', 'user_role');
+        return $this->belongsToMany(User::class, 'user_role');
     }
 
     public function capabilities()
     {
-        return $this->belongsToMany('App\Capability', 'role_capability');
+        return $this->belongsToMany(Capability::class, 'role_capability');
     }
 }

@@ -23,7 +23,7 @@
 </div>
 
 <div class="row">
-	@canany("editAdvanced", \App\Location::class, $location)
+	@canany("editAdvanced", \App\Models\Location::class, $location)
 	<div class="col-sm-5 form-group">
 		{!! Form::label('beheerder', 'Beheerder:') !!}
 		{!! Form::text('beheerder', null, ['class' => 'form-control']) !!}
@@ -43,7 +43,7 @@
 	</div>
 
 
-	@canany("editAdvanced", \App\Location::class, $location)
+	@canany("editAdvanced", \App\Models\Location::class, $location)
 	<div class="col-sm-7 form-group">
 		{!! Form::label('email', 'Emailadres:') !!}
 		{!! Form::email('email', null, ['class' => 'form-control']) !!}
@@ -51,7 +51,7 @@
 	@endcanany
 </div>
 
-@canany("editAdvanced", \App\Location::class, $location)
+@canany("editAdvanced", \App\Models\Location::class, $location)
 <div class="form-group">
 	{!! Form::label('prijsinfo', 'Prijsinformatie:') !!}
 	{!! Form::textarea('prijsinfo', null, ['class' => 'form-control']) !!}

@@ -6,7 +6,7 @@ namespace Tests\Unit\Jobs;
 
 use App\Data\Geolocation;
 use App\Jobs\UpdateMemberGeolocation;
-use App\Member;
+use App\Models\Member;
 use App\Services\Geocoder\GeocoderInterface;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Mockery;

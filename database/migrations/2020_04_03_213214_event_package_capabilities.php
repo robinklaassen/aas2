@@ -2,8 +2,8 @@
 
 declare(strict_types=1);
 
-use App\Capability;
-use App\Role;
+use App\Models\Capability;
+use App\Models\Role;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
 

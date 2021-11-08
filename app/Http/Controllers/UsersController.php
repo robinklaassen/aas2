@@ -6,10 +6,13 @@ namespace App\Http\Controllers;
 
 use App\Mail\members\NewUserMember;
 use App\Mail\participants\NewUserParticipant;
-use App\Role;
-use App\User;
+use App\Models\Member;
+use App\Models\Participant;
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Http\Request;
-use Mail;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 
 class UsersController extends Controller
 {
@@ -25,8 +28,8 @@ class UsersController extends Controller
      */
     public function index()
     {
-        $memberUsers = User::where('profile_type', 'App\Member')->where('id', '<>', 0)->get();
-        $participantUsers = User::where('profile_type', 'App\Participant')->get();
+        $memberUsers = User::where('profile_type', Member::class)->where('id', '<>', 0)->get();
+        $participantUsers = User::where('profile_type', Participant::class)->get();
         return view('users.index', compact('memberUsers', 'participantUsers'));
     }
 
@@ -37,9 +40,9 @@ class UsersController extends Controller
      */
     public function createForMember()
     {
-        $this->authorize('createMember', \App\User::class);
+        $this->authorize('createMember', User::class);
         $type = 'member';
-        $members = \App\Member::orderBy('voornaam')->whereNotIn('soort', ['oud'])->get();
+        $members = Member::orderBy('voornaam')->whereNotIn('soort', ['oud'])->get();
         $profile_options = [];
         foreach ($members as $member) {
             if (! $member->user()->count()) {
@@ -52,10 +55,10 @@ class UsersController extends Controller
 
     public function createForParticipant()
     {
-        $this->authorize('createParticipant', \App\User::class);
+        $this->authorize('createParticipant', User::class);
 
         $type = 'participant';
-        $participants = \App\Participant::orderBy('voornaam')->get();
+        $participants = Participant::orderBy('voornaam')->get();
         $profile_options = [];
         foreach ($participants as $participant) {
             if (! $participant->user()->count()) {
@@ -73,14 +76,14 @@ class UsersController extends Controller
      */
     public function storeForMember(Request $request)
     {
-        $this->authorize('createMember', \App\User::class);
+        $this->authorize('createMember', User::class);
 
         $this->validate($request, [
             'profile_id' => 'required',
             'is_admin' => 'required',
         ]);
 
-        $member = \App\Member::find($request->profile_id);
+        $member = Member::find($request->profile_id);
 
         // Check if user account for this member already exists!
         if ($member->user) {
@@ -91,7 +94,7 @@ class UsersController extends Controller
         // Create username
         $thename = strtolower(substr($member->voornaam, 0, 1) . str_replace(' ', '', $member->achternaam));
         $username = $thename;
-        $nameList = \DB::table('users')->pluck('username');
+        $nameList = DB::table('users')->pluck('username');
         $i = 0;
         while ($nameList->contains($username)) {
             $i++;
@@ -102,7 +105,7 @@ class UsersController extends Controller
         $password = User::generatePassword();
 
         // Attach account
-        $user = new \App\User();
+        $user = new User();
         $user->username = $username;
         $user->password = bcrypt($password);
         $user->is_admin = $request->is_admin;
@@ -121,13 +124,13 @@ class UsersController extends Controller
 
     public function storeForParticipant(Request $request)
     {
-        $this->authorize('createParticipant', \App\User::class);
+        $this->authorize('createParticipant', User::class);
 
         $this->validate($request, [
             'profile_id' => 'required',
         ]);
 
-        $participant = \App\Participant::find($request->profile_id);
+        $participant = Participant::find($request->profile_id);
 
         // Check if user account for this participant already exists!
         if ($participant->user) {
@@ -138,7 +141,7 @@ class UsersController extends Controller
         // Create username
         $thename = strtolower(substr($participant->voornaam, 0, 1) . str_replace(' ', '', $participant->achternaam));
         $username = $thename;
-        $nameList = \DB::table('users')->pluck('username');
+        $nameList = DB::table('users')->pluck('username');
         $i = 0;
         while ($nameList->contains($username)) {
             $i++;
@@ -149,7 +152,7 @@ class UsersController extends Controller
         $password = User::generatePassword();
 
         // Attach account
-        $user = new \App\User();
+        $user = new User();
         $user->username = $username;
         $user->password = bcrypt($password);
         $participant->user()->save($user);
@@ -181,23 +184,23 @@ class UsersController extends Controller
     */
 
     // Grant or revoke admin access
-    public function admin(User $user)
+    public function admin(User $user, Request $request)
     {
         $this->authorize('changeAdmin', $user);
-        if (\Auth::user()->is_admin < 2) {
+        if ($request->user()->is_admin < 2) {
             return redirect('users');
         }
 
         return view('users.admin', compact('user'));
     }
 
-    public function adminSave(User $user)
+    public function adminSave(User $user, Request $request)
     {
         $this->authorize('changeAdmin', $user);
 
         // Check if this user is member! (participants can never be admins)
-        if ($user->profile_type === 'App\Member') {
-            $user->is_admin = \Request::input('is_admin');
+        if ($user->isMember()) {
+            $user->is_admin = $request->input('is_admin');
             $user->save();
             return redirect('users')->with([
                 'flash_message' => 'Admin-rechten gewijzigd!',
@@ -220,7 +223,7 @@ class UsersController extends Controller
             'password' => 'required|confirmed',
         ]);
 
-        $user->password = bcrypt(\Request::input('password'));
+        $user->password = bcrypt($request->input('password'));
         $user->save();
 
         return redirect('users')->with([

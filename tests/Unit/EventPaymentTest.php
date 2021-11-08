@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Unit;
 
-use App\Event;
 use App\Helpers\Payment\EventPayment;
-use App\Participant;
+use App\Models\Event;
+use App\Models\Participant;
 use Tests\TestCase;
 
 class EventPaymentTest extends TestCase

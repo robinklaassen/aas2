@@ -14,11 +14,11 @@
 	</div>
 	<div class="col-sm-6">
 		<p class="text-right">
-			@can("create", \App\Participant::class)
+			@can("create", \App\Models\Participant::class)
 			<a class="btn btn-primary" type="button" href="{{ url('participants/create') }}" style="margin-top:21px;">Nieuwe deelnemer</a>
 			@endcan
 
-			@can("anonymize", \App\Participant::class)
+			@can("anonymize", \App\Models\Participant::class)
 			<a class="btn btn-primary" type="button" href="{{ action('ParticipantsController@anonymize') }}" style="margin-top:21px;">Anonimiseren</a>
 			@endcan
 
@@ -38,7 +38,7 @@
 			<th>Achternaam</th>
 			<th>Woonplaats</th>
 			<th>Geboortedatum</th>
-			@can("showPrivateAny",  \App\Participant::class)
+			@can("showPrivateAny",  \App\Models\Participant::class)
 			<th>Email ouder</th>
 			<th>Email deelnemer</th>
 			@endcan
@@ -53,7 +53,7 @@
 				<td>{{ $participant->achternaam }}</td>
 				<td>{{ $participant->plaats }}</td>
 				<td>{{ $participant->geboortedatum->format('Y-m-d') }}</td>
-				@can("showPrivateAny",  \App\Participant::class)
+				@can("showPrivateAny",  \App\Models\Participant::class)
 				<td><a href="mailto:{{ $participant->email_ouder }}">{{ $participant->email_ouder }}</a></td>
 				<td><a href="mailto:{{ $participant->email_deelnemer }}">{{ $participant->email_deelnemer }}</a></td>
 				@endcan

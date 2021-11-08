@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Event;
 use App\Http\Requests\ReviewRequest;
-use App\Review;
+use App\Models\Event;
+use App\Models\Review;
 use Carbon\Carbon;
 
 class ReviewsController extends Controller

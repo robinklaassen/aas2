@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Course;
 use App\Exports\MembersExport;
 use App\Http\Requests\MemberRequest;
-use App\Member;
-use App\Skill;
-use App\User;
+use App\Models\Course;
+use App\Models\Member;
+use App\Models\Skill;
+use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;

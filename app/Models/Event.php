@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App;
+namespace App\Models;
 
+use App\Pivots\EventParticipant;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
@@ -35,14 +36,14 @@ class Event extends Model
     // A camp belongs to many members
     public function members()
     {
-        return $this->belongsToMany('App\Member')->withTimestamps()->withPivot('wissel')->withPivot('wissel_datum_start')->withPivot('wissel_datum_eind');
+        return $this->belongsToMany(Member::class)->withTimestamps()->withPivot('wissel')->withPivot('wissel_datum_start')->withPivot('wissel_datum_eind');
     }
 
     // A camp belongs to many participants
     public function participants()
     {
-        return $this->belongsToMany('App\Participant')
-            ->using('App\Pivots\EventParticipant')
+        return $this->belongsToMany(Participant::class)
+            ->using(EventParticipant::class)
             ->withTimestamps()
             ->withPivot(['package_id', 'geplaatst', 'datum_betaling']);
     }
@@ -50,18 +51,18 @@ class Event extends Model
     // A camp belongs to one location
     public function location()
     {
-        return $this->belongsTo('App\Location');
+        return $this->belongsTo(Location::class);
     }
 
     // A camp has many reviews
     public function reviews()
     {
-        return $this->hasMany('App\Review');
+        return $this->hasMany(Review::class);
     }
 
     public function comments()
     {
-        return $this->morphMany('App\Comment', 'entity');
+        return $this->morphMany(Comment::class, 'entity');
     }
 
     // Get average rating for this camp

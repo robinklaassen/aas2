@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Mail\internal;
 
-use App\Member;
+use App\Models\Member;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;

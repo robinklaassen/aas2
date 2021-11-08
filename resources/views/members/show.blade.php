@@ -385,8 +385,8 @@ Mijn profiel
 
 </div>
 
-@can("viewAny", \App\Comment::class)
-@include('partials.comments', [ 'comments' => $member->comments, 'type' => 'App\Member', 'key' => $member->id ])
+@can("viewAny", \App\Models\Comment::class)
+@include('partials.comments', [ 'comments' => $member->comments, 'type' => 'App\Models\Member', 'key' => $member->id ])
 @endif
 
 <hr />

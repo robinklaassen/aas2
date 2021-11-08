@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Helpers\Payment;
 
-use App\Event;
-use App\EventPackage;
-use App\Participant;
+use App\Models\Event;
+use App\Models\EventPackage;
+use App\Models\Participant;
 
 class EventPayment implements PaymentInterface
 {

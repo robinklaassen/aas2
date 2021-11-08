@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\User;
+use App\Models\User;
 use Illuminate\Contracts\Auth\Registrar as RegistrarContract;
 use Validator;
 

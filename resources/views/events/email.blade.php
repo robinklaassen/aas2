@@ -57,7 +57,7 @@
 	</div>
 
 <hr />
-@foreach((\App\Participant::class)::INFORMATION_CHANNEL_DESCRIPTION_TABLE as $key => $value)
+@foreach((\App\Models\Participant::class)::INFORMATION_CHANNEL_DESCRIPTION_TABLE as $key => $value)
 	<h2>{{$value}}</h2>
 
 	<h4>Deelnemers ({{ $emails['participants'][$key]['participants']->count() }})</h4>
@@ -69,7 +69,7 @@
 			implode(", ", $emails['participants'][$key]['participants']->toArray())
 		}}</pre>
 	</div>
-	
+
 	<h4>Ouders ({{ $emails['participants'][$key]['parents']->count() }})</h4>
 	<div class="list">
 		<div class="copy-btn">
@@ -79,7 +79,7 @@
 			implode(", ", $emails['participants'][$key]['parents']->toArray())
 		}}</pre>
 	</div>
-	
+
 
 @endforeach
 

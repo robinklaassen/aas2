@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -40,6 +40,6 @@ class Skill extends Model
     // A skill belongs to many members
     public function members()
     {
-        return $this->belongsToMany('App\Member')->withTimestamps();
+        return $this->belongsToMany(Member::class)->withTimestamps();
     }
 }

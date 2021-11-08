@@ -13,7 +13,7 @@ Lijsten
 <ul class="nav nav-tabs" role="tablist">
 	<li role="presentation" class="active"><a href="#stats" aria-controls="stats" role="tab"
 			data-toggle="tab">Statistieken</a></li>
-	@can("showFinanceAny", \App\Participant::class)
+	@can("showFinanceAny", \App\Models\Participant::class)
 	<li role="presentation"><a href="#onbetaald" aria-controls="onbetaald" role="tab" data-toggle="tab">Betalingen</a>
 	</li>
 	@endcan
@@ -27,16 +27,16 @@ Lijsten
 	</li>
 	@endrole
 
-	@can("showPrivateAny", \App\Participant::class)
+	@can("showPrivateAny", \App\Models\Participant::class)
 	<li role="presentation"><a href="#mailing" aria-controls="mailing" role="tab" data-toggle="tab">Mailing</a></li>
 	@endcan
 
-	@can("viewAny", \App\Member::class)
+	@can("viewAny", \App\Models\Member::class)
 	<li role="presentation"><a href="#aspirant" aria-controls="aspirant" role="tab" data-toggle="tab">Aspiranten</a>
 	</li>
 	@endcan
 
-	@can("showPrivateAny", \App\Member::class)
+	@can("showPrivateAny", \App\Models\Member::class)
 	<li role="presentation"><a href="#old-members" aria-controls="mailing" role="tab" data-toggle="tab">Oud-leden</a>
 	</li>
 	@endcan
@@ -56,12 +56,12 @@ Lijsten
 			data-toggle="tab">Nieuwe leiding</a></li>
 	@endrole
 
-	@can("showSpecialAny", \App\Member::class)
+	@can("showSpecialAny", \App\Models\Member::class)
 	<li role="presentation"><a href="#trainers" aria-controls="trainers" role="tab" data-toggle="tab">Ervaren
 			trainers</a></li>
 	@endcan
 
-	@can("viewAny", \App\Member::class)
+	@can("viewAny", \App\Models\Member::class)
 	<li role="presentation"><a href="#verjaardag" aria-controls="verjaardag" role="tab"
 			data-toggle="tab">Verjaardagen</a></li>
 	@endcan
@@ -98,7 +98,7 @@ Lijsten
 		</table>
 	</div>
 
-	@can("showFinanceAny", \App\Participant::class)
+	@can("showFinanceAny", \App\Models\Participant::class)
 	<div role="tabpanel" class="tab-pane" id="onbetaald">
 		<h3>Deelnemers die nog niet betaald hebben</h3>
 		@if ($unpaidList)
@@ -164,7 +164,7 @@ Lijsten
 		</p>
 
 		<div class="row">
-			@can("viewAny", \App\Member::class)
+			@can("viewAny", \App\Models\Member::class)
 			<div class="col-md-6">
 				<h3>Evenementloze leden<br /><small>Exclusief oud-leden</small></h3>
 				@if ($membersWithoutEvents->count())
@@ -192,7 +192,7 @@ Lijsten
 			</div>
 			@endcan
 
-			@can("viewAny", \App\Participant::class)
+			@can("viewAny", \App\Models\Participant::class)
 			<div class="col-md-6">
 				<h3>Kamploze deelnemers</h3>
 				@if ($participantsWithoutCamps->count())
@@ -223,7 +223,7 @@ Lijsten
 	</div>
 	@endrole
 
-	@can("showPrivateAny", \App\Participant::class)
+	@can("showPrivateAny", \App\Models\Participant::class)
 	<div role="tabpanel" class="tab-pane" id="mailing">
 		<h3>Mailing aan deelnemers</h3>
 		<p>{{ $participantMailingList->count() }} deelnemers jonger dan 19, die gemaild mogen worden.</p>
@@ -285,7 +285,7 @@ Lijsten
 	</div>
 	@endcan
 
-	@can("viewAny", \App\Member::class)
+	@can("viewAny", \App\Models\Member::class)
 	<div role="tabpanel" class="tab-pane" id="aspirant">
 		<h3>Aspirant-leden</h3>
 		<table class="table table-hover">
@@ -441,7 +441,7 @@ Lijsten
 	</div>
 	@endrole
 
-	@can("showSpecialAny", \App\Member::class)
+	@can("showSpecialAny", \App\Models\Member::class)
 	<div role="tabpanel" class="tab-pane" id="trainers">
 
 		<p>Geeft iemand aan niet meer te willen trainen? Haal dan het vinkje 'ervaren trainer' bij die persoon weg.</p>
@@ -509,7 +509,7 @@ Lijsten
 	</div>
 	@endcan
 
-	@can("viewAny", \App\Member::class)
+	@can("viewAny", \App\Models\Member::class)
 	<div role="tabpanel" class="tab-pane" id="verjaardag">
 		<h3>Verjaardagskalender</h3>
 		<p><i>Normale en aspirantleden</i></p>

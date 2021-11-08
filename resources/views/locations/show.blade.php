@@ -26,7 +26,7 @@
 </div>
 
 <hr />
-{{-- 
+{{--
 <div id="map-canvas" style="width:100%; height:300px; margin-bottom:10px;"></div> --}}
 
 <div class="row">
@@ -129,7 +129,7 @@
 </div>
 
 @can("viewAdvanced", $location)
-	@include('partials.comments', [ 'comments' => $location->comments, 'type' => 'App\Location', 'key' => $location->id ])
+	@include('partials.comments', [ 'comments' => $location->comments, 'type' => 'App\Models\Location', 'key' => $location->id ])
 @endif
 
 @endsection

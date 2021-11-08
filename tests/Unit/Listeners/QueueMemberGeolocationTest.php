@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Tests\Unit\Listeners;
 
 use App\Jobs\UpdateMemberGeolocation;
-use App\Member;
+use App\Models\Member;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 

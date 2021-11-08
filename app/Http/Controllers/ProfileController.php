@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Course;
-use App\Event;
-use App\EventPackage;
 use App\Facades\Mollie;
 use App\Helpers\CourseCoverageHelper;
 use App\Helpers\Payment\EventPayment;
@@ -18,7 +15,10 @@ use App\Mail\internal\ParticipantEditedEventCourseInformationNotification;
 use App\Mail\internal\ParticipantOnEventNotification;
 use App\Mail\members\OnEventConfirmation as MemberOnEventConfirmationMail;
 use App\Mail\participants\OnEventConfirmation as ParticipantOnEventConfirmationMail;
-use App\Member;
+use App\Models\Course;
+use App\Models\Event;
+use App\Models\EventPackage;
+use App\Models\Member;
 use App\Services\Chart\ChartServiceInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -371,7 +371,7 @@ class ProfileController extends Controller
                         ]
                     );
                     $givenCourses[] = [
-                        'naam' => \App\Course::find($course_id)->naam,
+                        'naam' => \App\Models\Course::find($course_id)->naam,
                         'info' => $request->vakinfo[$key],
                     ];
                 }

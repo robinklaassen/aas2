@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Course;
-use App\Event;
 use App\Exports\EventNightRegisterReport;
 use App\Exports\EventPaymentReport;
 use App\Helpers\CourseCoverageHelper;
 use App\Http\Requests\EventRequest;
 use App\Http\Requests\Events\EditEventMemberRequest;
-use App\Member;
-use App\Participant;
+use App\Models\Course;
+use App\Models\Event;
+use App\Models\Member;
+use App\Models\Participant;
 use App\Services\Chart\ChartServiceInterface;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
@@ -413,7 +413,7 @@ class EventsController extends Controller
             'participants' => [],
         ];
 
-        foreach ((\App\Participant::class)::INFORMATION_CHANNEL_DESCRIPTION_TABLE as $key => $value) {
+        foreach ((\App\Models\Participant::class)::INFORMATION_CHANNEL_DESCRIPTION_TABLE as $key => $value) {
             $part_by_channel = $event->participants()->orderBy('voornaam')->where('information_channel', '=', $key);
             $emails['participants'][$key] = [
                 'participants' => $part_by_channel->whereNotNull('email_deelnemer')->pluck('email_deelnemer'),

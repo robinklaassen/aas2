@@ -4,17 +4,15 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Event;
 use App\Helpers\DateHelper;
 use App\Helpers\Payment\EventPayment;
-use App\Member;
-use App\Participant;
-use App\Review;
+use App\Models\Event;
+use App\Models\Member;
+use App\Models\Participant;
+use App\Models\Review;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
-
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 // The PagesController is for static pages that do not fall under any other type of controller, like members or events.
@@ -25,13 +23,13 @@ class PagesController extends Controller
     }
 
     // Homepage
-    public function home()
+    public function home(Request $request)
     {
-        if (Auth::user()->profile_type === "App\Member") {
+        if ($request->user()->isMember()) {
             // Member homepage
 
             // Today's birthdays
-            $bdates = \App\Member::where('soort', '<>', 'oud')->where('publish_birthday', 1)->pluck('geboortedatum', 'id')->toArray();
+            $bdates = Member::where('soort', '<>', 'oud')->where('publish_birthday', 1)->pluck('geboortedatum', 'id')->toArray();
             $today = [];
             foreach ($bdates as $id => $date) {
                 if ($date->isBirthday()) {
@@ -40,17 +38,17 @@ class PagesController extends Controller
             }
 
             foreach ($today as $k => $id) {
-                $member = \App\Member::find($id);
+                $member = Member::find($id);
                 $member->leeftijd = date('Y') - $member->geboortedatum->year;
                 $member->ikjarig = false;
-                if (Auth::user()->profile->id === $id) {
+                if ($request->user()->profile->id === $id) {
                     $member->ikjarig = true;
                 }
                 $today[$k] = $member;
             }
 
             // Camp thermometer
-            $camps = \App\Event::ParticipantEvent()
+            $camps = Event::ParticipantEvent()
                 ->ongoing()
                 ->public()
                 ->orderBy('datum_start')
@@ -83,14 +81,15 @@ class PagesController extends Controller
             }
 
             return view('pages.home-member', compact('today', 'thermo'));
+        } elseif ($request->user()->isParticipant()) {
+            // Participant homepage
+
+            // Birthday check!
+            $bday = $request->user()->profile->geboortedatum;
+            $congrats = ($bday->isBirthday()) ? 1 : 0;
+
+            return view('pages.home-participant', compact('congrats'));
         }
-        // Participant homepage
-
-        // Birthday check!
-        $bday = Auth::user()->profile->geboortedatum;
-        $congrats = ($bday->isBirthday()) ? 1 : 0;
-
-        return view('pages.home-participant', compact('congrats'));
     }
 
     // Info page
@@ -100,9 +99,9 @@ class PagesController extends Controller
     }
 
     // Useful lists
-    public function lists()
+    public function lists(Request $request)
     {
-        if (! \Auth::user()->hasRole('member')) {
+        if (! $request->user()->hasRole('member')) {
             abort(403, 'Onvoldoende rechten om lijsten in te zien');
         }
 
@@ -131,7 +130,7 @@ class PagesController extends Controller
 
             $members = [];
             foreach ($mosts as $el) {
-                $members[] = \App\Member::findOrFail($el->member_id);
+                $members[] = Member::findOrFail($el->member_id);
             }
             $string = '';
             $stats['most'][$type] = [
@@ -158,12 +157,12 @@ class PagesController extends Controller
         $stats['num_reviews'] = Review::all()->count();
 
         // Ranonkeltje
-        $ranonkeltjePapier = \App\Member::whereIn('ranonkeltje', ['papier', 'beide'])->where('soort', '<>', 'oud')->orderBy('voornaam', 'asc')->get();
-        $ranonkeltjeDigitaal = \App\Member::whereIn('ranonkeltje', ['digitaal', 'beide'])->where('soort', '<>', 'oud')->orderBy('voornaam', 'asc')->get();
+        $ranonkeltjePapier = Member::whereIn('ranonkeltje', ['papier', 'beide'])->where('soort', '<>', 'oud')->orderBy('voornaam', 'asc')->get();
+        $ranonkeltjeDigitaal = Member::whereIn('ranonkeltje', ['digitaal', 'beide'])->where('soort', '<>', 'oud')->orderBy('voornaam', 'asc')->get();
 
         // Ervaren trainers
-        $trainerList = \App\Member::where('ervaren_trainer', 1)->where('soort', '<>', 'oud')->orderBy('voornaam', 'asc')->get();
-        $oldTrainerList = \App\Member::where('ervaren_trainer', 1)->where('soort', 'oud')->orderBy('voornaam', 'asc')->get();
+        $trainerList = Member::where('ervaren_trainer', 1)->where('soort', '<>', 'oud')->orderBy('voornaam', 'asc')->get();
+        $oldTrainerList = Member::where('ervaren_trainer', 1)->where('soort', 'oud')->orderBy('voornaam', 'asc')->get();
 
         // Niet betaalde deelnemers
         $unpaidList = DB::table('event_participant')
@@ -174,13 +173,13 @@ class PagesController extends Controller
             ->get();
 
         // Leden zonder KMG
-        $kmgList = \App\Member::where('kmg', 0)->orderBy('voornaam')->get();
+        $kmgList = Member::where('kmg', 0)->orderBy('voornaam')->get();
 
         // Aspiranten
-        $aspirantList = \App\Member::where('soort', 'aspirant')->orderBy('voornaam')->get();
+        $aspirantList = Member::where('soort', 'aspirant')->orderBy('voornaam')->get();
 
         // Verjaardagen
-        $members = \App\Member::whereIn('soort', ['normaal', 'aspirant'])->where('publish_birthday', 1)->get();
+        $members = Member::whereIn('soort', ['normaal', 'aspirant'])->where('publish_birthday', 1)->get();
         foreach ($members as $member) {
             $datum = $member->geboortedatum;
             $dag = $datum->day;
@@ -221,19 +220,19 @@ class PagesController extends Controller
         ];
 
         // Leden en deelnemers zonder gekoppelde kampen
-        $membersWithoutEvents = \App\Member::where('soort', '<>', 'oud')->orderBy('created_at')->get()->filter(function ($member) {
+        $membersWithoutEvents = Member::where('soort', '<>', 'oud')->orderBy('created_at')->get()->filter(function ($member) {
             return $member->events->count() === 0;
         });
 
-        $oldMembers = \App\Member::where('soort', 'oud')->orderBy('created_at')->get();
+        $oldMembers = Member::where('soort', 'oud')->orderBy('created_at')->get();
 
-        $participantsWithoutCamps = \App\Participant::orderBy('created_at')->get()->filter(function ($part) {
+        $participantsWithoutCamps = Participant::orderBy('created_at')->get()->filter(function ($part) {
             return $part->events->count() === 0;
         });
 
         // Mailadressen voor een deelnemermailing (bijv. bij kortingsacties)
         $startDate = Carbon::now()->subYears(19);
-        $participantMailingList = \App\Participant::where('mag_gemaild', 1)->where('geboortedatum', '>', $startDate->toDateString())->get();
+        $participantMailingList = Participant::where('mag_gemaild', 1)->where('geboortedatum', '>', $startDate->toDateString())->get();
 
         $inschrijvingen_deelnemers = DB::table('event_participant')
             ->join('participants', 'event_participant.participant_id', '=', 'participants.id')
@@ -289,9 +288,9 @@ class PagesController extends Controller
     }
 
     // Analytical graphs
-    public function graphs()
+    public function graphs(Request $request)
     {
-        if (! \Auth::user()->hasRole('member')) {
+        if (! $request->user()->hasRole('member')) {
             abort(403, 'Onvoldoende rechten om grafieken in te zien');
         }
 
@@ -323,7 +322,7 @@ class PagesController extends Controller
         );
 
         // Construct arrays with statistics per year (e.g. '1415')
-        $camps = \App\Event::where('type', 'kamp')
+        $camps = Event::where('type', 'kamp')
             ->where('datum_start', '<=', $maxDate)
             ->where('datum_start', '>=', $minDate)
             ->notCancelled()
@@ -411,7 +410,7 @@ class PagesController extends Controller
         }
 
         // Same round for trainings
-        $trainings = \App\Event::where('type', 'training')
+        $trainings = Event::where('type', 'training')
             ->where('datum_start', '>=', $minDate)
             ->where('datum_start', '<=', $maxDate)
             ->notCancelled()
@@ -457,7 +456,7 @@ class PagesController extends Controller
 
         // Analysis of participant registration
         $graphStart = -90;
-        $camps = \App\Event::where('type', 'kamp')->where('datum_start', '>', '2012-11-01')->orderBy('datum_start', 'asc')->get();
+        $camps = Event::where('type', 'kamp')->where('datum_start', '>', '2012-11-01')->orderBy('datum_start', 'asc')->get();
         $registration_series = [];
 
         foreach ($camps as $camp) {
@@ -509,7 +508,7 @@ class PagesController extends Controller
         }
 
         // Analysis of participants' preference for camp type (from reviews)
-        $reviews = \App\Review::whereNotNull('kampkeuze')->pluck('kampkeuze');
+        $reviews = Review::whereNotNull('kampkeuze')->pluck('kampkeuze');
         $prefs_review_count = $reviews->count();
         $reviews_flat = $reviews->flatten()->toArray();
 
@@ -609,14 +608,14 @@ class PagesController extends Controller
 
         if ($type === 'part') {
             // Only coming camps, for participants and their parents
-            $events = \App\Event::whereIn('type', ['kamp', 'online'])
+            $events = Event::whereIn('type', ['kamp', 'online'])
                 ->where('datum_eind', '>=', date('Y-m-d'))
                 ->public()
                 ->orderBy('datum_start', 'asc')
                 ->get();
         } elseif ($type === 'full') {
             // All coming events, for members
-            $events = \App\Event::where('datum_eind', '>=', date('Y-m-d'))
+            $events = Event::where('datum_eind', '>=', date('Y-m-d'))
                 ->orderBy('datum_start', 'asc')
                 ->public()
                 ->get();
@@ -784,7 +783,7 @@ class PagesController extends Controller
     // Place for scripting
     public function runScript()
     {
-        echo 'Average rating per reviewer: ' . round(\App\Review::pluck('cijfer')->avg(), 2) . ' out of ' . \App\Review::pluck('id')->count() . ' total reviews';
+        echo 'Average rating per reviewer: ' . round(\App\Models\Review::pluck('cijfer')->avg(), 2) . ' out of ' . \App\Models\Review::pluck('id')->count() . ' total reviews';
 
         echo '<br/><br/>';
 
@@ -800,7 +799,7 @@ class PagesController extends Controller
 
         $rank = [];
         $rank_unique = [];
-        foreach (\App\Member::where('soort', '<>', 'oud')->has('events')->get() as $member) {
+        foreach (\App\Models\Member::where('soort', '<>', 'oud')->has('events')->get() as $member) {
             $list = [];
             foreach ($member->events()->where('type', 'kamp')->get() as $event) {
                 $list = array_merge($list, $event->participants()->where('geplaatst', 1)->pluck('id')->toArray());
@@ -827,7 +826,7 @@ class PagesController extends Controller
         $res = [];
         $res2 = [];
 
-        foreach (\App\Member::where('soort', '<>', 'oud')->has('events')->get() as $member) {
+        foreach (\App\Models\Member::where('soort', '<>', 'oud')->has('events')->get() as $member) {
             // Who has this member been on camp with?
             $events = $member->events()->where('type', 'kamp')->where('datum_eind', '<', date('Y-m-d'))->get();
             $fellow_ids = [];
@@ -864,14 +863,14 @@ class PagesController extends Controller
         }
     }
 
-    public function showPrivacyStatement(Request $request)
+    public function showPrivacyStatement()
     {
         return view('pages.privacy-statement');
     }
 
     public function showAcceptPrivacyStatement(Request $request)
     {
-        $user = Auth::user();
+        $user = $request->user();
         $showForm = true;
         return view('pages.privacy-statement', compact('user', 'showForm'));
     }
@@ -885,7 +884,7 @@ class PagesController extends Controller
             ]);
         }
 
-        $user = Auth::user();
+        $user = $request->user();
         $user->privacy = Carbon::now();
         $user->save();
         return redirect('home');

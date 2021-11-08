@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Helpers;
 
-use App\Course;
-use App\Event;
 use App\Helpers\CourseCoverageHelper;
-use App\Member;
-use App\Participant;
+use App\Models\Course;
+use App\Models\Event;
+use App\Models\Member;
+use App\Models\Participant;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
 use Tests\TestCase;

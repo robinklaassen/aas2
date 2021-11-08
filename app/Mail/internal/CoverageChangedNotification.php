@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Mail\internal;
 
-use App\Course;
-use App\Event;
-use App\Member;
+use App\Models\Course;
+use App\Models\Event;
+use App\Models\Member;
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;

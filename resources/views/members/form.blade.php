@@ -17,7 +17,7 @@
 	</div>
 </div>
 
-@canany("editPrivate", \App\Member::class, $member)
+@canany("editPrivate", \App\Models\Member::class, $member)
 <div class="row">
 	<div class="col-sm-5 form-group">
 		{!! Form::label('geboortedatum', 'Geboortedatum:') !!}
@@ -49,7 +49,7 @@
 @endcanany
 
 <div class="row">
-	@canany("editPrivate", \App\Member::class, $member)
+	@canany("editPrivate", \App\Models\Member::class, $member)
 	<div class="col-sm-5 form-group">
 		{!! Form::label('adres', 'Adres:') !!}
 		{!! Form::text('adres', null, ['class' => 'form-control']) !!}
@@ -68,7 +68,7 @@
 </div>
 
 <div class="row">
-	@canany("editPrivate",\App\Member::class, $member)
+	@canany("editPrivate",\App\Models\Member::class, $member)
 	<div class="col-sm-5 form-group">
 		{!! Form::label('telefoon', 'Telefoonnummer:') !!}
 		{!! Form::text('telefoon', null, ['class' => 'form-control', 'maxlength' => 10, 'placeholder' => '10 cijfers'])
@@ -83,7 +83,7 @@
 </div>
 
 <div class="row">
-	@canany("editFinance", \App\Member::class, $member)
+	@canany("editFinance", \App\Models\Member::class, $member)
 	<div class="col-sm-5 form-group">
 		{!! Form::label('iban', 'Rekeningnummer (IBAN):') !!}
 		{!! Form::text('iban', null, ['class' => 'form-control']) !!}
@@ -98,7 +98,7 @@
 </div>
 
 <div class="row">
-	@canany("editPrivate", \App\Member::class, $member)
+	@canany("editPrivate", \App\Models\Member::class, $member)
 	<div class="col-sm-2 form-group">
 		{!! Form::label('eindexamen', 'Niveau eindexamen:') !!}
 		{!! Form::select('eindexamen', ['VMBO' => 'VMBO', 'HAVO' => 'HAVO', 'VWO' => 'VWO'], null, ['class' =>
@@ -131,12 +131,12 @@
 
 <div class="form-group">
 	{!! Form::label('skills', 'Vaardigheden & interesses') !!}
-	{!! Form::select('skills[]', \App\Skill::options(), null, ['class' => 'form-control', 'multiple' => 'multiple',
+	{!! Form::select('skills[]', \App\Models\Skill::options(), null, ['class' => 'form-control', 'multiple' => 'multiple',
 	'id' => 'skills'])
 	!!}
 </div>
 
-@canany("editPractical", \App\Member::class, $member)
+@canany("editPractical", \App\Models\Member::class, $member)
 <div class="form-group">
 	{!! Form::label('opmerkingen', 'Overige informatie:') !!}
 	{!! Form::textarea('opmerkingen', null, ['class' => 'form-control']) !!}
@@ -144,7 +144,7 @@
 @endcanany
 
 
-@canany("editAdministrative", \App\Member::class, $member)
+@canany("editAdministrative", \App\Models\Member::class, $member)
 <h3>Administratie</h3>
 
 <div class="row">
@@ -174,7 +174,7 @@
 		{!! Form::email('email_anderwijs', null, ['class' => 'form-control']) !!}
 	</div>
 
-	@canany("editSpecial", \App\Member::class, $member)
+	@canany("editSpecial", \App\Models\Member::class, $member)
 	<div class="col-sm-2 form-group">
 		{!! Form::label('ervaren_trainer', 'Ervaren trainer?') !!}<br />
 		{!! Form::hidden('ervaren_trainer', 0) !!}
@@ -191,14 +191,14 @@
 @endcanany
 
 @if(isset($member) && $member->user()->exists())
-@canany("editAdministrative", \App\Member::class, $member)
+@canany("editAdministrative", \App\Models\Member::class, $member)
 <div class="row">
 	<div class="form-group">
 		<div class="col-sm-3">
 			{!! Form::label('roles', 'Rollen:') !!}
 		</div>
 		<div class="col-sm-9">
-			@foreach (App\Role::all() as $role)
+			@foreach (\App\Models\Role::all() as $role)
 			<div class="form-check">
 				<label class="form-check-label">
 					{!! Form::checkbox('roles[]', $role->id, isset($member) ? $member->hasRole($role->tag) : false,

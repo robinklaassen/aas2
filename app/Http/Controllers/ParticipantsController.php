@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Event;
 use App\Exports\ParticipantsExport;
 use App\Http\Requests\AnonymizeParticipantRequest;
 use App\Http\Requests\ParticipantRequest;
-use App\Participant;
+use App\Models\Event;
+use App\Models\Participant;
 use App\Services\Anonymize\AnonymizeParticipantInterface;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

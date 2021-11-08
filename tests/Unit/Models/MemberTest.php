@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Unit\Models;
 
-use App\Event;
-use App\Member;
+use App\Models\Event;
+use App\Models\Member;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 

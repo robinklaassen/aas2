@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Data\FileData;
-use App\Declaration;
 use App\Http\Requests\BulkDeclarationsRequest;
-use App\Member;
+use App\Models\Declaration;
+use App\Models\Member;
 use App\Services\DeclarationService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;

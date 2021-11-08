@@ -27,8 +27,8 @@ class MemberProfileOnCampTest extends TestCase
     {
         parent::setUp();
 
-        $this->member = \App\Member::findOrFail($this->member_id);
-        $this->event = \App\Event::findOrFail($this->event_id);
+        $this->member = \App\Models\Member::findOrFail($this->member_id);
+        $this->event = \App\Models\Event::findOrFail($this->event_id);
     }
 
     /**

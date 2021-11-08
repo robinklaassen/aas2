@@ -28,7 +28,7 @@ Lid zoeken op vakdekking
 	</div>
 
 	<!--<input type="hidden" name="vog" value="0">-->
-	@can("showAdministrativeAny", \App\Member::class)
+	@can("showAdministrativeAny", \App\Models\Member::class)
 	<div class="checkbox" style="margin: 0 20px;">
 		<label>
 			<input type="checkbox" name="vog" id="vog" value="1" checked> Moet VOG hebben
@@ -49,7 +49,7 @@ Lid zoeken op vakdekking
 		<tr>
 			<th>Naam</th>
 			<th>Soort lid</th>
-			@can("showAdministrativeAny", \App\Member::class)
+			@can("showAdministrativeAny", \App\Models\Member::class)
 			<th>VOG</th>
 			@endcan
 			@foreach ($courses as $course_id)
@@ -62,7 +62,7 @@ Lid zoeken op vakdekking
 		<tr>
 			<td><a href="{{ url('/members', $member->id) }}">{{$member->volnaam}}</a></td>
 			<td>{{$member->soort}}</td>
-			@can("showAdministrativeAny", \App\Member::class)
+			@can("showAdministrativeAny", \App\Models\Member::class)
 			<td>
 				@if ($member->vog)
 				<span style="display:none;">1</span>

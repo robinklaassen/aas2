@@ -2,9 +2,8 @@
 
 declare(strict_types=1);
 
-namespace App;
+namespace App\Models;
 
-use App\Scopes\CommentScope;
 use Illuminate\Database\Eloquent\Model;
 
 class Comment extends Model
@@ -18,12 +17,12 @@ class Comment extends Model
     public static function getEntityDescription($entityType, $entity)
     {
         switch ($entityType) {
-            case 'App\Member':
-            case 'App\Participant':
+            case Member::class:
+            case Participant::class:
                 return $entity->volnaam;
-            case 'App\Location':
+            case Location::class:
                 return $entity->naam;
-            case 'App\Event':
+            case Event::class:
                 return '(' . $entity->code . ')' . $entity->naam;
             default:
                 return 'Onbekende entity';
@@ -43,7 +42,7 @@ class Comment extends Model
 
     public function user()
     {
-        return $this->belongsTo('App\User');
+        return $this->belongsTo(User::class);
     }
 
     public function scopePublic($query)

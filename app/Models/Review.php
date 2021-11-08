@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,7 +13,7 @@ class Review extends Model
     // A review has many members
     public function members()
     {
-        return $this->belongsToMany('App\Member')
+        return $this->belongsToMany(Member::class)
             ->withPivot('stof')
             ->withPivot('aandacht')
             ->withPivot('mening')
@@ -24,7 +24,7 @@ class Review extends Model
     // A review belongs to one event
     public function event()
     {
-        return $this->belongsTo('App\Event');
+        return $this->belongsTo(Event::class);
     }
 
     // Kampkeuze should be an array but is stored as a string

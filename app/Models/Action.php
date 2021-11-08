@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -17,6 +17,6 @@ class Action extends Model
 
     public function member()
     {
-        return $this->belongsTo('App\Member');
+        return $this->belongsTo(Member::class);
     }
 }

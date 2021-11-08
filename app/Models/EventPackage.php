@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App;
+namespace App\Models;
 
+use App\Pivots\EventParticipant;
 use Illuminate\Database\Eloquent\Model;
 
 class EventPackage extends Model
@@ -17,11 +18,11 @@ class EventPackage extends Model
 
     public function participants()
     {
-        return $this->belongsToMany('App\Participant')->using('App\Pivots\EventParticipant');
+        return $this->belongsToMany(Participant::class)->using(EventParticipant::class);
     }
 
     public function events()
     {
-        return $this->belongsToMany('App\Event')->using('App\Pivots\EventParticipant');
+        return $this->belongsToMany(Event::class)->using(EventParticipant::class);
     }
 }

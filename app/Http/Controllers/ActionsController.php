@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Action;
 use App\Http\Requests;
+use App\Models\Action;
 
 class ActionsController extends Controller
 {
@@ -24,7 +24,7 @@ class ActionsController extends Controller
         $actions = Action::orderBy('date')->get();
 
         $members = [];
-        foreach (\App\Member::orderBy('voornaam')->get() as $member) {
+        foreach (\App\Models\Member::orderBy('voornaam')->get() as $member) {
             if ($member->points > 0) {
                 $members[] = $member;
             }

@@ -14,11 +14,11 @@ Gebruikers
 	</div>
 	<div class="col-sm-6">
 		<p class="text-right">
-			@can("createMember", \App\User::class)
+			@can("createMember", \App\Models\User::class)
 			<a class="btn btn-primary" type="button" href="{{ url('users/create-for-member') }}"
 				style="margin-top:21px;">Nieuwe gebruiker (lid)</a>
 			@endcan
-			@can("createParticipant", \App\User::class)
+			@can("createParticipant", \App\Models\User::class)
 			<a class="btn btn-primary" type="button" href="{{ url('users/create-for-participant') }}"
 				style="margin-top:21px;">Nieuwe gebruiker (deelnemer)</a>
 			@endcan
@@ -159,7 +159,7 @@ Gebruikers
 			{'orderable':false}
 		]
 	});
-	
+
 	$('#deelnemersTable').DataTable({
 		paging: false,
 		order: [[ 0, "asc" ]],

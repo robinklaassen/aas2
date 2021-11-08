@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Helpers;
 
-use App\Capability;
-use App\Role;
+use App\Models\Capability;
+use App\Models\Role;
 
 class CapabilityHelper
 {

@@ -602,7 +602,7 @@
 				eens op kamp zou gaan, aan welk kamp / welke kampen zou je dan het liefst
 				deelnemen?<br /><small>Meerdere antwoorden mogelijk</small></h4>
 
-			@foreach (\App\Event::CAMP_DESCRIPTIONS as $k => $v)
+			@foreach (\App\Models\Event::CAMP_DESCRIPTIONS as $k => $v)
 			<label>
 				<input type="checkbox" id="kampkeuze-{{$k}}" name="kampkeuze[]" value="{{$k}}"
 					class="checkbox-kampkeuze"
@@ -646,7 +646,7 @@
 	<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.min.js"></script>
 	<script type="text/javascript">
-		$(document).ready(function() {		
+		$(document).ready(function() {
 		// Render member questions on selection
 		$(".checkbox-leden").change(function() {
 			$(".member-div").hide();
@@ -655,7 +655,7 @@
 				$("#member-"+member_id).show();
 			});
 		});
-		
+
 		// Run once to ensure proper viewing of old selection
 		$(".checkbox-leden").change();
 

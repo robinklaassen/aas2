@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Mail\ResetPassword;
-use App\User;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -32,9 +32,9 @@ class PasswordController extends Controller
         ]);
 
         // Find user profile, check birth date
-        $user = \App\User::where('username', '=', $request->username)->first();
+        $user = \App\Models\User::where('username', '=', $request->username)->first();
         $profile = $user->profile;
-        $type = ($user->profile_type === 'App\Member') ? 'member' : 'participant';
+        $type = ($user->profile_type === 'App\Models\Member') ? 'member' : 'participant';
 
         if ($request->geboortedatum !== $profile->geboortedatum->toDateString()) {
             // Redirect back to form

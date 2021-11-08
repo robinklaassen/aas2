@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
@@ -13,11 +13,11 @@ class Location extends Model
     // A location has many events
     public function events()
     {
-        return $this->hasMany('App\Event');
+        return $this->hasMany(Event::class);
     }
 
     public function comments()
     {
-        return $this->morphMany('App\Comment', 'entity');
+        return $this->morphMany(Comment::class, 'entity');
     }
 }

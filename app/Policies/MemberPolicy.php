@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Policies;
 
-use App\Member;
-use App\User;
+use App\Models\Member;
+use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class MemberPolicy
@@ -210,7 +210,7 @@ class MemberPolicy
 
     public function onEvent(User $user, Member $member)
     {
-        return $user->can('addMember', \App\Event::class) || $this->ifSelf('members::info::edit::self', $user, $member);
+        return $user->can('addMember', \App\Models\Event::class) || $this->ifSelf('members::info::edit::self', $user, $member);
     }
 
     private function ifSelf(string $capability, User $user, Member $member): bool

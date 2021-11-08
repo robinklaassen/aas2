@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Course;
-
-use App\Event;
 use App\Facades\Mollie;
 use App\Helpers\Payment\EventPayment;
 use App\Http\Requests;
@@ -14,10 +11,12 @@ use App\Mail\internal\NewMemberNotification;
 use App\Mail\internal\NewParticipantNotification;
 use App\Mail\members\MemberRegistrationConfirmation;
 use App\Mail\participants\ParticipantRegistrationConfirmation;
-use App\Member;
-use App\Participant;
-use App\Role;
-use App\User;
+use App\Models\Course;
+use App\Models\Event;
+use App\Models\Member;
+use App\Models\Participant;
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
@@ -128,7 +127,7 @@ class RegistrationController extends Controller
         $password = User::generatePassword();
 
         // Attach account
-        $user = new \App\User();
+        $user = new \App\Models\User();
         $user->username = $username;
         $user->password = bcrypt($password);
         $user->privacy = Carbon::now();
@@ -178,7 +177,7 @@ class RegistrationController extends Controller
             ];
         });
 
-        $packages = \App\EventPackage::all()->groupBy('type');
+        $packages = \App\Models\EventPackage::all()->groupBy('type');
 
         // List of 'hoe bij Anderwijs' options (without 'anders, namelijk'!)
         $hoebij_options = [
@@ -210,7 +209,7 @@ class RegistrationController extends Controller
             'privacy' => 'required',
         ]);
 
-        $package = \App\EventPackage::find($request->selected_package);
+        $package = \App\Models\EventPackage::find($request->selected_package);
         $camp = Event::findOrFail($request->selected_camp);
 
         // Check given package for camp
@@ -282,7 +281,7 @@ class RegistrationController extends Controller
         $password = User::generatePassword();
 
         // Attach account
-        $user = new \App\User();
+        $user = new \App\Models\User();
         $user->username = $username;
         $user->password = bcrypt($password);
         $user->privacy = Carbon::now();

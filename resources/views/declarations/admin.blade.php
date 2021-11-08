@@ -54,7 +54,7 @@
 								</td>
 								<td><a href="{{ url('/members', $declaration->member_id) }}">{{ $declaration->voornaam }} {{ $declaration->tussenvoegsel }} {{ $declaration->achternaam }}</a></td>
 								<td>
-									@can('process', \App\Declaration::class)
+									@can('process', \App\Models\Declaration::class)
 									<a href="{{ url('/declarations', ['process', $declaration->id, $declaration->declaration_type]) }}">
 										<span class="glyphicon glyphicon-check"></span>
 									</a>
@@ -86,7 +86,7 @@
 			</thead>
 
 			<tbody>
-				@foreach (App\Declaration::open()->get() as $declaration)
+				@foreach (\App\Models\Declaration::open()->get() as $declaration)
 					<tr>
 						<td>{{ $declaration->date->format('Y-m-d') }}</td>
 						<td>
@@ -128,7 +128,7 @@
 			</thead>
 
 			<tbody>
-				@foreach (App\Declaration::closed()->get() as $declaration)
+				@foreach (\App\Models\Declaration::closed()->get() as $declaration)
 					<tr>
 						<td>{{ $declaration->date->format('Y-m-d') }}</td>
 						<td>
