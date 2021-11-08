@@ -40,6 +40,16 @@ final class EventSingleActionApplicatorTest extends TestCase
         self::assertFalse($this->subject->shouldApply($input));
     }
 
+    public function testItShouldNotApplyForOtherEvent(): void
+    {
+        $input = EventActionInputFaker::create()
+            ->withEventType('overig')
+            ->withCancelledEvent()
+            ->build();
+
+        self::assertFalse($this->subject->shouldApply($input));
+    }
+
     public function testItShouldApply(): void
     {
         $input = EventActionInputFaker::create()
