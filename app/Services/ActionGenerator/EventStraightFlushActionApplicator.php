@@ -11,13 +11,17 @@ final class EventStraightFlushActionApplicator implements EventActionApplicator
 {
     public const STRAIGHT_FLUSH_CODE = 'straight_flush';
 
+    private const POINTS_STRAIGHT_FLUSH = 3;
+
+    private const REQUIRED_NUMBER_OF_CAMP_TYPES = 5;
+
     private const CUT_OFF_DATE = '2014-09-01';
 
     public function apply(EventActionInput $input): void
     {
         $action = new Action();
 
-        $action->points = 3;
+        $action->points = self::POINTS_STRAIGHT_FLUSH;
         $action->description = 'Straight flush';
         $action->date = $input->getEvent()->datum_start;
         $action->code = self::STRAIGHT_FLUSH_CODE;
@@ -48,10 +52,11 @@ final class EventStraightFlushActionApplicator implements EventActionApplicator
 
         $codes = array_unique($codes);
 
+        // Treat K and N camps the same; 'Kerst kamp' and Nieuwjaars kamp' are seen as the same type of camp
         if (in_array('K', $codes, true) && in_array('N', $codes, true)) {
             $codes = array_diff($codes, ['K']);
         }
 
-        return ! (count($codes) < 5);
+        return ! (count($codes) < self::REQUIRED_NUMBER_OF_CAMP_TYPES);
     }
 }

@@ -9,6 +9,12 @@ use App\Services\ActionGenerator\ValueObject\EventActionInput;
 
 final class EventSingleActionApplicator implements EventActionApplicator
 {
+    private const POINTS_TRAINING = 2;
+
+    private const POINTS_CAMP_FULL = 3;
+
+    private const POINTS_CAMP_PARTIAL = 1;
+
     public function shouldApply(EventActionInput $input): bool
     {
         return ! $input->getEvent()->cancelled
@@ -38,14 +44,14 @@ final class EventSingleActionApplicator implements EventActionApplicator
     private function getEventActionPoints(EventActionInput $input): int
     {
         if ($input->getEvent()->type === 'training') {
-            return 2;
+            return self::POINTS_TRAINING;
         }
 
         if ($input->isWissel()) {
-            return 1;
+            return self::POINTS_CAMP_PARTIAL;
         }
 
-        return 3;
+        return self::POINTS_CAMP_FULL;
     }
 
     private function getCode(EventActionInput $input): string

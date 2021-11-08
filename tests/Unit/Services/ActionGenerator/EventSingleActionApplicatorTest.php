@@ -31,7 +31,7 @@ final class EventSingleActionApplicatorTest extends TestCase
         self::assertFalse($this->subject->shouldApply($input));
     }
 
-    public function testItShouldNotApplyForCancalledEvent(): void
+    public function testItShouldNotApplyForCancelledEvent(): void
     {
         $input = EventActionInputFaker::create()
             ->withCancelledEvent()
