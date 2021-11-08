@@ -9,7 +9,6 @@ use Carbon\Carbon;
 use Collective\Html\Eloquent\FormAccessible;
 use Grimzy\LaravelMysqlSpatial\Eloquent\SpatialTrait;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Arr;
 
 class Member extends Model
 {
@@ -106,61 +105,10 @@ class Member extends Model
             ->withPivot('bericht');
     }
 
-    // Custom getter for the 'straight flush' - a member having done 5 or more unique types of camp (gets 3 bonus points)
-    public function getHasstraightflushAttribute()
-    {
-        $startDate = '2014-09-01';
-        $endDate = date('Y-m-d');
-
-        $camps = $this->events()
-            ->notCancelled()
-            ->where('type', 'kamp')
-            ->where('datum_start', '>', $startDate)
-            ->where('datum_eind', '<', $endDate)
-            ->where('wissel', 0)
-            ->get();
-
-        $list = [];
-        foreach ($camps as $camp) {
-            $list[] = substr($camp->code, 0, 1);
-        }
-
-        $ulist = array_unique($list);
-
-        // Filter K and N to 1
-        if (in_array('K', $ulist, true) && in_array('N', $ulist, true)) {
-            $ulist = array_diff($ulist, ['K']);
-        }
-
-        $result = (count($ulist) >= 5) ? true : false;
-
-        return $result;
-    }
-
     // Custom getter for amount of points for this member
     public function getPointsAttribute(): int
     {
-        $startDate = '2014-09-01';
-        $endDate = date('Y-m-d');
-
-        $base_query = $this->events()
-            ->notCancelled()
-            ->where('datum_start', '>', $startDate)
-            ->where('datum_eind', '<', $endDate);
-
-        $camps_full = (clone $base_query)->where('type', 'kamp')->where('wissel', 0)->count();
-        $camps_partial = (clone $base_query)->where('type', 'kamp')->where('wissel', 1)->count();
-        $trainings = (clone $base_query)->where('type', 'training')->count();
-
-        $other = $this->actions()->where('date', '<=', $endDate)->sum('points');
-
-        $points = $camps_full * 3 + $camps_partial * 1 + $trainings * 2 + $other;
-
-        if ($this->hasstraightflush) {
-            $points += 3;
-        }
-
-        return $points;
+        return (int) $this->actions()->sum('points');
     }
 
     // Custom getter for current rank (level in the points system) of this member
@@ -205,134 +153,23 @@ class Member extends Model
         return (int) round(($current - $start) / ($end - $start) * 100);
     }
 
-    // Custom getter for a list of all actions and their points
-    public function getListOfActionsAttribute()
-    {
-        $startDate = '2014-09-01';
-        $endDate = date('Y-m-d');
-        $data = [];
-
-        // First the event data
-        $events = $this->events()
-            ->notCancelled()
-            ->whereIn('type', ['kamp', 'training'])
-            ->where('datum_start', '>', $startDate)
-            ->where('datum_eind', '<', $endDate)
-            ->orderBy('datum_start', 'asc')
-            ->get();
-
-        foreach ($events as $event) {
-            $name = $event->naam . ' ' . $event->datum_start->format('Y');
-            if ($event->pivot->wissel) {
-                $name .= ' (w)';
-            }
-
-            if ($event->type === 'training') {
-                $points = 2;
-            } elseif ($event->pivot->wissel) {
-                $points = 1;
-            } else {
-                $points = 3;
-            }
-
-            $data[] = [
-                'date' => $event->datum_start,
-                'name' => $name,
-                'points' => $points,
-            ];
-        }
-
-        // Then the action data
-        $actions = $this->actions()->where('date', '<=', $endDate)->orderBy('date', 'asc')->get();
-
-        foreach ($actions as $action) {
-            $data[] = [
-                'date' => $action->date,
-                'name' => $action->description,
-                'points' => $action->points,
-            ];
-        }
-
-        // Then sort and return
-        $data = Arr::sort($data, function ($item) {
-            return $item['date'];
-        });
-
-        if ($this->hasstraightflush) {
-            $data[] = [
-                'date' => null,
-                'name' => 'Straight flush',
-                'points' => 3,
-            ];
-        }
-
-        return $data;
-    }
-
-    // Custom getter for most recent action
     public function getMostRecentActionAttribute()
     {
-        $startDate = '2014-09-01';
-        $endDate = date('Y-m-d');
-
-        $lastEvent = $this->events()
-            ->notCancelled()
-            ->whereIn('type', ['kamp', 'training'])
-            ->where('datum_start', '>', $startDate)
-            ->where('datum_eind', '<', $endDate)
-            ->orderBy('datum_start', 'desc')
+        $lastAction = $this->actions()
+            ->orderBy('date', 'desc')
             ->first();
 
-        $lastAction = $this->actions()->where('date', '<', $endDate)->orderBy('date', 'desc')->first();
-
-        $e = $lastEvent !== null;
-        $a = $lastAction !== null;
-
-        if ($e && $a) {
-            $result = ($lastEvent->datum_eind > $lastAction->date) ? 'e' : 'a';
-        } elseif ($e) {
-            $result = 'e';
-        } elseif ($a) {
-            $result = 'a';
-        } else {
-            $result = null;
-        }
-
-        switch ($result) {
-            case 'e':
-                if ($lastEvent->type === 'training') {
-                    $points = 2;
-                } elseif ($lastEvent->pivot->wissel === 0) {
-                    $points = 3;
-                } else {
-                    $points = 1;
-                }
-
-                $data = [
-                    'name' => $lastEvent->naam . ' ' . $lastEvent->datum_eind->format('Y'),
-                    'points' => $points,
-                ];
-                break;
-            case 'a':
-                $data = [
-                    'name' => $lastAction->description,
-                    'points' => $lastAction->points,
-                ];
-                break;
-            default:
-                $data = [
-                    'name' => '-',
-                    'points' => 0,
-                ];
-        }
-
-        return $data;
+        return $lastAction ?: Action::empty();
     }
 
     // Get list of unique other members that this person has been on camp with
     public function getFellowsAttribute()
     {
-        $events = $this->events()->where('type', 'kamp')->where('datum_eind', '<', date('Y-m-d'))->get();
+        $events = $this->events()
+            ->where('type', 'kamp')
+            ->where('datum_eind', '<', date('Y-m-d'))
+            ->get();
+
         $fellow_ids = [];
         foreach ($events as $event) {
             $fellow_ids = array_merge($fellow_ids, $event->members()->pluck('id')->toArray());

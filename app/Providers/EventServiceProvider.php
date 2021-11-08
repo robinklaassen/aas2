@@ -4,10 +4,15 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
+use App\Events\FinishedEvent;
 use App\Events\MemberUpdated;
+use App\Listeners\AddMemberActionForFinishedEvent;
 use App\Listeners\QueueMemberGeolocation;
 use App\Listeners\SetLastLoginDate;
+use App\Services\ActionGenerator\EventSingleActionApplicator;
+use App\Services\ActionGenerator\EventStraightFlushActionApplicator;
 use Illuminate\Auth\Events\Login;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
 class EventServiceProvider extends ServiceProvider
@@ -24,15 +29,21 @@ class EventServiceProvider extends ServiceProvider
         MemberUpdated::class => [
             QueueMemberGeolocation::class,
         ],
+        FinishedEvent::class => [
+            AddMemberActionForFinishedEvent::class,
+        ],
     ];
 
-    /**
-     * Register any other events for your application.
-     */
-    public function boot()
+    public function register()
     {
-        parent::boot();
+        parent::register();
 
-        //
+        $this->app->tag(
+            [EventSingleActionApplicator::class, EventStraightFlushActionApplicator::class],
+            'eventaction.applicator'
+        );
+        $this->app->bind(AddMemberActionForFinishedEvent::class, function (Application $app) {
+            return new AddMemberActionForFinishedEvent($app->tagged('eventaction.applicator'));
+        });
     }
 }

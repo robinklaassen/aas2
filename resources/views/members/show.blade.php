@@ -221,7 +221,7 @@ Mijn profiel
 		<div class="row">
 			<div class="col-md-7">
 				<br />
-				Meest recente actie: {{$member->most_recent_action['name']}} ({{$member->most_recent_action['points']}} pt)
+				Meest recente actie: {{$member->most_recent_action['description']}} ({{$member->most_recent_action['points']}} pt)
 			</div>
 			<div class="col-md-5 text-right">
 				<br />
@@ -517,10 +517,10 @@ Mijn profiel
 						</tr>
 					</thead>
 					<tbody>
-						@foreach ($member->list_of_actions as $item)
+						@foreach ($member->actions as $item)
 						<tr>
 							<td>{{ $item['date'] !== null ? $item['date']->format('d-m-Y') : '' }}</td>
-							<td>{{ $item['name'] }}</td>
+							<td>{{ $item['description'] }}</td>
 							<td>{{ $item['points'] }}</td>
 						</tr>
 						@endforeach

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit;
+namespace Tests\Feature;
 
 use App\Http\Controllers\CommentsController;
 use App\Models\Comment;

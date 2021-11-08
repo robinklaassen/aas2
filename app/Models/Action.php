@@ -10,10 +10,15 @@ class Action extends Model
 {
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
-    // Carbon dates
     protected $dates = ['date'];
 
-    // An action belongs to one member
+    public static function empty(): self
+    {
+        return new self([
+            'description' => '-',
+            'points' => 0,
+        ]);
+    }
 
     public function member()
     {
