@@ -18,6 +18,7 @@ final class EventSingleActionApplicator implements EventActionApplicator
     public function shouldApply(EventActionInput $input): bool
     {
         return ! $input->getEvent()->cancelled
+            && in_array($input->getEvent()->type, ['kamp', 'training'], true)
             && $input->getMember()->actions()->where('code', $this->getCode($input))->doesntExist();
     }
 
