@@ -6,6 +6,7 @@ namespace App\Services\ActionGenerator;
 
 use App\Models\Action;
 use App\Services\ActionGenerator\ValueObject\EventActionInput;
+use Carbon\Carbon;
 
 final class EventSingleActionApplicator implements EventActionApplicator
 {
@@ -15,10 +16,14 @@ final class EventSingleActionApplicator implements EventActionApplicator
 
     private const POINTS_CAMP_PARTIAL = 1;
 
+    private const CUTOFF_DATE = '2014-09-01';
+
     public function shouldApply(EventActionInput $input): bool
     {
         return ! $input->getEvent()->cancelled
             && in_array($input->getEvent()->type, ['kamp', 'training'], true)
+            && $input->getEvent()->datum_start > self::CUTOFF_DATE
+            && $input->getEvent()->datum_eind < Carbon::now()
             && $input->getMember()->actions()->where('code', $this->getCode($input))->doesntExist();
     }
 

@@ -57,11 +57,13 @@ final class EventActionInputFaker
         string $code = 'K2122',
         string $description = ':description:',
         string $dateStart = '2021-10-11',
+        string $dateEnd = '2021-10-11',
         string $type = 'kamp'
     ): self {
         $this->eventData['code'] = $code;
         $this->eventData['naam'] = $description;
         $this->eventData['datum_start'] = Carbon::create($dateStart);
+        $this->eventData['datum_eind'] = Carbon::create($dateEnd);
         $this->eventData['type'] = $type;
 
         return $this;

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Unit\Services\ActionGenerator;
 
 use App\Services\ActionGenerator\EventSingleActionApplicator;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
@@ -19,6 +20,26 @@ final class EventSingleActionApplicatorTest extends TestCase
         parent::setUp();
 
         $this->subject = new EventSingleActionApplicator();
+    }
+
+    public function testItShouldNotApplyForEventsBeforeSept2014(): void
+    {
+        $input = EventActionInputFaker::create()
+            ->withEventData('123', ':description:', '2014-07-30')
+            ->build();
+
+        self::assertFalse($this->subject->shouldApply($input));
+    }
+
+    public function testItShouldNotApplyForEventsEndingAfterToday(): void
+    {
+        $tomorrow = Carbon::tomorrow()->format('Y-m-d');
+
+        $input = EventActionInputFaker::create()
+            ->withEventData('123', ':description:', '2021-10-11', $tomorrow)
+            ->build();
+
+        self::assertFalse($this->subject->shouldApply($input));
     }
 
     public function testItShouldNotApplyForExistingCode(): void
@@ -94,7 +115,7 @@ final class EventSingleActionApplicatorTest extends TestCase
     public function testItAppliesTrainingAction(): void
     {
         $input = EventActionInputFaker::create()
-            ->withEventData('123', 'test event', '2021-10-11', 'training')
+            ->withEventData('123', 'test event', '2021-10-11', '2021-10-11', 'training')
             ->build();
 
         $this->subject->apply($input);
