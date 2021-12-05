@@ -87,7 +87,7 @@ final class ContactFormControllerTest extends TestCase
             ->assertSessionHasNoErrors()
             ->assertStatus(200)
             ->assertJson([
-                'messages' => ['Bericht successful verstuurd.'],
+                'messages' => ['Bericht succesvol verstuurd.'],
             ]);
 
         Mail::assertSent(ContactFormMessage::class);
