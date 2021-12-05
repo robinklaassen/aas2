@@ -1,9 +1,9 @@
 <p>
-	Beste kantoor ci,
+	Beste kantoorcommissie,
 </p>
 
 <p>
-	Er is een nieuw bericht binnen gekomen via het contact formulier op de website.
+	Er is een nieuw bericht binnengekomen via het contactformulier op de website.
 </p>
 
 <p>
