@@ -23,7 +23,7 @@ class ContactFormController extends Controller
     {
         if (! $this->recaptchaValidator->validate($request->input('recaptcha'))) {
             throw ValidationException::withMessages([
-                'recaptcha' => 'Recaptcha is ongeldig. Probeer het opnieuw',
+                'recaptcha' => 'Recaptcha is ongeldig. Probeer het opnieuw.',
             ]);
         }
 
@@ -38,7 +38,7 @@ class ContactFormController extends Controller
 
         return [
             'messages' => [
-                'Bericht successful verstuurd.',
+                'Bericht succesvol verstuurd.',
             ],
         ];
     }
