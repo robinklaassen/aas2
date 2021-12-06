@@ -10,9 +10,10 @@ class CORS
 {
     public function handle($request, Closure $next)
     {
-        $origins = config('cors.allowed-origins');
+        $origin = $_SERVER['HTTP_ORIGIN'] ?? 'dev';
+        $allowedOrigins = config('cors.allowed-origins');
 
-        if (in_array($_SERVER['HTTP_ORIGIN'], $origins, true)) {
+        if (in_array($origin, $allowedOrigins, true)) {
             return $next($request)
                 ->header('Access-Control-Allow-Origin', $_SERVER['HTTP_ORIGIN'])
                 ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
