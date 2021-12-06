@@ -10,14 +10,15 @@ class CORS
 {
     public function handle($request, Closure $next)
     {
-        if (! in_array(env('APP_ENV'), ['local', 'dev'], true)) {
-            return $next($request);
+        $origins = config('cors.allowed-origins');
+
+        if (in_array($_SERVER['HTTP_ORIGIN'], $origins, true)) {
+            return $next($request)
+                ->header('Access-Control-Allow-Origin', $_SERVER['HTTP_ORIGIN'])
+                ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+                ->header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
         }
 
-        return $next($request)
-            ->header('Access-Control-Allow-Origin', $_SERVER['HTTP_ORIGIN'])
-            ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
-            ->header('Access-Control-Max-Age', '1000')
-            ->header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With');
+        return $next($request);
     }
 }
