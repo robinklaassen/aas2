@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Pivots;
 
+use App\Models\Event;
+use App\Models\EventPackage;
+use App\Models\Participant;
 use Illuminate\Database\Eloquent\Relations\Pivot;
 
 class EventParticipant extends Pivot
@@ -12,16 +15,16 @@ class EventParticipant extends Pivot
 
     public function participant()
     {
-        return $this->belongsTo("App\Participant");
+        return $this->belongsTo(Participant::class);
     }
 
     public function event()
     {
-        return $this->belongsTo("App\Event");
+        return $this->belongsTo(Event::class);
     }
 
     public function package()
     {
-        return $this->belongsTo("App\EventPackage");
+        return $this->belongsTo(EventPackage::class);
     }
 }
