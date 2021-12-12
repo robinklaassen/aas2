@@ -1,0 +1,27 @@
+ip: 192.168.10.10
+memory: 2048
+cpus: 2
+provider: virtualbox
+authorize: ~/.ssh/id_rsa.pub
+keys:
+    - ~/.ssh/id_rsa
+folders:
+    -
+        map: /home/vincent/git/aas2
+        to: /home/vagrant/code
+sites:
+    -
+        map: aas2.local
+        to: /home/vagrant/code/public
+        php: "7.4"
+databases:
+    - homestead
+features:
+    -
+        mariadb: true
+    -
+        ohmyzsh: false
+    -
+        webdriver: false
+name: aas2
+hostname: aas2.local

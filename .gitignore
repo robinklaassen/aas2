@@ -83,8 +83,6 @@ _old/
 .modman/
 pkginfo
 nohup.out
-Homestead.yaml
-Homestead.json
 /.vagrant
 .phpunit.result.cache
 
