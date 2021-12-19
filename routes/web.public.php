@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+
 // iDeal integration
 Route::post('iDeal-webhook', 'iDealController@webhook');
 Route::get('iDeal-response/{participant}/{event}', 'iDealController@response');
@@ -21,3 +22,5 @@ Route::get('events/icalendar', 'EventsController@iCalendar');
 
 Route::get('updater/update', [\Updater\Http\Controllers\UpdateController::class, 'update']);
 Route::get('updater/version', [\Updater\Http\Controllers\UpdateController::class, 'version']);
+
+Route::post('api/contact-form', 'ContactFormController@send')->middleware('cors');

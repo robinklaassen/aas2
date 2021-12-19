@@ -16,6 +16,10 @@ use App\Services\Geocoder\GeocoderInterface;
 use App\Services\Geocoder\PositionstackGeocoder;
 use App\Services\ObjectManager\EloquentObjectManager;
 use App\Services\ObjectManager\ObjectManagerInterface;
+use App\Services\Recaptcha\GoogleRecaptchaV3Validator;
+use App\Services\Recaptcha\RecaptchaValidator;
+use GuzzleHttp\Client;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Validator;
@@ -85,5 +89,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ObjectManagerInterface::class, EloquentObjectManager::class);
         $this->app->bind(GeocoderInterface::class, PositionstackGeocoder::class);
         $this->app->bind(ChartServiceInterface::class, LavachartsChartService::class);
+        $this->app->bind(RecaptchaValidator::class, function (Application $app) {
+            return new GoogleRecaptchaV3Validator(new Client(), config('recaptcha.secret'));
+        });
     }
 }
