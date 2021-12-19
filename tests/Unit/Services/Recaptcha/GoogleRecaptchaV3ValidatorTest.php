@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Unit\Services\Recaptcha;
 
 use App\Services\Recaptcha\GoogleRecaptchaV3Validator;
+use App\ValueObjects\RecaptchaResult\Failure;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Psr7\Response;
 use Mockery;
@@ -37,18 +38,41 @@ final class GoogleRecaptchaV3ValidatorTest extends MockeryTestCase
         yield 'success: false' => [false];
     }
 
-    /**
-     * @dataProvider validResponseDataProvider
-     */
-    public function testValidateHappyPath(bool $success): void
+    public function testValidateHappyPath(): void
     {
         $this->expectRequestResponse(new Response(200, [], json_encode([
-            'success' => $success,
+            'success' => true,
         ])));
 
         $result = $this->subject->validate(self::TOKEN);
 
-        self::assertSame($success, $result);
+        self::assertTrue($result->isValid());
+    }
+
+    public function testValidateWithErrorResponse(): void
+    {
+        $this->expectRequestResponse(new Response(200, [], json_encode([
+            'success' => false,
+            'error-codes' => [':msg1:', ':msg2:'],
+        ])));
+
+        $result = $this->subject->validate(self::TOKEN);
+
+        self::assertFalse($result->isValid());
+        self::assertStringContainsString(':msg1:', $result->message());
+        self::assertStringContainsString(':msg2:', $result->message());
+    }
+
+    public function testValidateWithUnknownErrorResponse(): void
+    {
+        $this->expectRequestResponse(new Response(200, [], json_encode([
+            'success' => false,
+        ])));
+
+        $result = $this->subject->validate(self::TOKEN);
+
+        self::assertFalse($result->isValid());
+        self::assertStringContainsString(Failure::unknown()->message(), $result->message());
     }
 
     public function testValidateReturnsFalseOnError(): void
@@ -57,7 +81,8 @@ final class GoogleRecaptchaV3ValidatorTest extends MockeryTestCase
 
         $result = $this->subject->validate(self::TOKEN);
 
-        self::assertFalse($result);
+        self::assertFalse($result->isValid());
+        self::assertStringContainsString(':error:', $result->message());
     }
 
     private function expectRequestResponse(Response $response): void

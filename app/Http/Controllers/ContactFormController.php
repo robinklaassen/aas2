@@ -21,9 +21,10 @@ class ContactFormController extends Controller
 
     public function send(ContactFormRequest $request)
     {
-        if (! $this->recaptchaValidator->validate($request->input('recaptcha'))) {
+        $recaptchaResult = $this->recaptchaValidator->validate($request->input('recaptcha'));
+        if (! $recaptchaResult->isValid()) {
             throw ValidationException::withMessages([
-                'recaptcha' => 'Recaptcha is ongeldig. Probeer het opnieuw.',
+                'recaptcha' => 'Recaptcha is ongeldig. Probeer het opnieuw. Foutmelding: ' . $recaptchaResult->message(),
             ]);
         }
 

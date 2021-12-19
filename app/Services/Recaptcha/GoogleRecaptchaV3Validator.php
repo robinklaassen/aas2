@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Services\Recaptcha;
 
+use App\ValueObjects\RecaptchaResult\Failure;
+use App\ValueObjects\RecaptchaResult\RecaptchaResult;
+use App\ValueObjects\RecaptchaResult\Success;
 use GuzzleHttp\ClientInterface;
 
 final class GoogleRecaptchaV3Validator implements RecaptchaValidator
@@ -18,7 +21,7 @@ final class GoogleRecaptchaV3Validator implements RecaptchaValidator
         $this->secret = $secret;
     }
 
-    public function validate(string $token): bool
+    public function validate(string $token): RecaptchaResult
     {
         try {
             $response = $this->client->request(
@@ -35,9 +38,13 @@ final class GoogleRecaptchaV3Validator implements RecaptchaValidator
             $contents = $response->getBody()->getContents();
             $responseData = json_decode($contents, true, 5, JSON_THROW_ON_ERROR);
 
-            return ($responseData['success'] ?? false) === true;
+            if (($responseData['success'] ?? false) === true) {
+                return new Success();
+            }
+
+            return Failure::fromErrorCodes($responseData['error-codes'] ?? []);
         } catch (\Throwable $err) {
-            return false;
+            return Failure::fromException($err);
         }
     }
 }

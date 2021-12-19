@@ -6,6 +6,8 @@ namespace Tests\Feature;
 
 use App\Mail\ContactFormMessage;
 use App\Services\Recaptcha\RecaptchaValidator;
+use App\ValueObjects\RecaptchaResult\Failure;
+use App\ValueObjects\RecaptchaResult\Success;
 use Illuminate\Support\Facades\Mail;
 use Mockery;
 use Tests\TestCase;
@@ -66,7 +68,7 @@ final class ContactFormControllerTest extends TestCase
         $this->validator
             ->expects('validate')
             ->with(':recaptcha:')
-            ->andReturn(false);
+            ->andReturn(Failure::unknown());
 
         $this
             ->post('api/contact-form', self::CONTENT)
@@ -80,7 +82,7 @@ final class ContactFormControllerTest extends TestCase
         $this->validator
             ->expects('validate')
             ->with(':recaptcha:')
-            ->andReturn(true);
+            ->andReturn(new Success());
 
         $this
             ->post('api/contact-form', self::CONTENT)
