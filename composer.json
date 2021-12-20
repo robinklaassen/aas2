@@ -23,7 +23,9 @@
     "fideloper/proxy": "^4.1",
     "graham-campbell/markdown": "^13.0",
     "grimzy/laravel-mysql-spatial": "^5.0",
-    "ext-json": "*"
+    "ext-json": "*",
+    "guzzlehttp/guzzle": "^7.4",
+    "guzzlehttp/promises": "^1.5"
   },
   "require-dev": {
     "symfony/dom-crawler": "^5.0",
