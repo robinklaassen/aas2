@@ -251,7 +251,7 @@ class RegistrationController extends Controller
         $courseInfo = [$request->vakinfo0, $request->vakinfo1,  $request->vakinfo2, $request->vakinfo3, $request->vakinfo4, $request->vakinfo5];
 
         foreach (array_unique($courseInput) as $key => $course_id) {
-            if ($course_id !== 0) {
+            if ((int) $course_id !== 0) {
                 DB::table('course_event_participant')->insert(
                     [
                         'course_id' => $course_id,
