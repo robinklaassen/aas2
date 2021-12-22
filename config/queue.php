@@ -31,7 +31,6 @@ return [
     */
 
     'connections' => [
-
         'sync' => [
             'driver' => 'sync',
         ],
@@ -72,7 +71,6 @@ return [
             'queue' => 'default',
             'expire' => 60,
         ],
-
     ],
 
     /*
