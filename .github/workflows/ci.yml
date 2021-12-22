@@ -13,7 +13,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 7.4
+          php-version: 8.0
 
       - name: Install composer dependencies
         run: composer install --prefer-dist --ignore-platform-reqs
@@ -32,7 +32,7 @@ jobs:
 
     strategy:
       matrix:
-        php: ["7.4"]
+        php: ["8.0"]
         experimental: [false]
 
     services:
