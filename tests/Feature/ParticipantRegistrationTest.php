@@ -48,7 +48,7 @@ class ParticipantRegistrationTest extends TestCase
         'vakinfo2' => '',
         'vak3' => 0,
         'vakinfo3' => '',
-        'vak4' => 0,
+        'vak4' => '0',
         'vakinfo4' => '',
         'vak5' => 0,
         'vakinfo5' => '',
