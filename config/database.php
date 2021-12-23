@@ -46,7 +46,6 @@ return [
     */
 
     'connections' => [
-
         'sqlite' => [
             'driver' => 'sqlite',
             'database' => storage_path() . '/database.sqlite',
@@ -89,7 +88,6 @@ return [
             'password' => env('DB_PASSWORD', ''),
             'prefix' => '',
         ],
-
     ],
 
     /*
@@ -117,7 +115,6 @@ return [
     */
 
     'redis' => [
-
         'cluster' => false,
 
         'default' => [
@@ -125,6 +122,5 @@ return [
             'port' => 6379,
             'database' => 0,
         ],
-
     ],
 ];
