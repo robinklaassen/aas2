@@ -25,8 +25,9 @@ Mijn profiel
 				style="margin-top:21px;">Bewerken</a>
 			@endcan
 			@can("onEvent", $member)
-			<a class="btn btn-info" type="button" href="{{ url('/profile/on-camp') }}" style="margin-top:21px;">Op
-				kamp</a>
+			<a class="btn btn-info" type="button" href="{{ url('/profile/on-camp') }}" style="margin-top:21px;">
+				Op kamp
+			</a>
 			@endcan
 			@can("editFinance", $member)
 			<a class="btn btn-success" type="button" href="{{ url('/declarations') }}" style="margin-top:21px;">
