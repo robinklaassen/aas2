@@ -129,7 +129,7 @@ class ProfileController extends Controller
         $course = Course::find($course_id);
         $courseLevelFrom = 0;
 
-        $camp = $member->getNextCamp();
+        $camp = $member->getNextFutureCamp();
 
         if ($camp !== null) {
             $statusBefore = $this->courseCoverageHelper->getStatus($camp, $course);
