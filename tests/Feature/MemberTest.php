@@ -9,12 +9,15 @@ use Tests\TestCase;
 
 class MemberTest extends TestCase
 {
-    public $user;
+    public $admin;
+
+    public $member;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = User::findOrFail(1);
+        $this->admin = User::findOrFail(1); // Ranonkeltje
+        $this->member = User::findOrFail(4); // dkrijgsman
     }
 
     /**
@@ -23,7 +26,7 @@ class MemberTest extends TestCase
     public function testIndex()
     {
         $response = $this
-            ->actingAs($this->user)
+            ->actingAs($this->admin)
             ->get('/members')
             ->assertStatus(200)
             ->assertSee('Dingo', 'Ranonkeltje', '/members/1');
@@ -35,7 +38,7 @@ class MemberTest extends TestCase
     public function testShow()
     {
         $response = $this
-            ->actingAs($this->user)
+            ->actingAs($this->admin)
             ->get('/members/3')
             ->assertStatus(200)
             ->assertSee('Bewerken', 'Flipstoeje', 'Lijst met acties', 'Natuurkunde');
@@ -45,8 +48,21 @@ class MemberTest extends TestCase
     {
         $this->withoutJobs();
         $response = $this
-            ->actingAs($this->user)
+            ->actingAs($this->admin)
             ->get('/members/map')
             ->assertStatus(200);
+    }
+
+    public function testProfile()
+    {
+        $this
+            ->actingAs($this->member)
+            ->get('/profile')
+            ->assertStatus(200)
+            ->assertSee('Dingo Krijgsman')
+            ->assertSee('Bewerken')
+            ->assertSee('Op kamp')
+            ->assertSee('Declaraties')
+            ->assertSee('Nieuw wachtwoord');
     }
 }

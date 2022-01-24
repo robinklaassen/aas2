@@ -51,4 +51,17 @@ class ParticipantTest extends TestCase
             ->assertSee('Elst', 'Meikamp')
             ->assertDontSee('Bewerken'); // doesn't have edit right
     }
+
+    public function testProfile()
+    {
+        $response = $this
+            ->actingAs(\App\Models\User::where([
+                'username' => 'henk',
+            ])->firstOrFail())
+            ->get('/profile')
+            ->assertStatus(200)
+            ->assertSee('Bewerken')
+            ->assertSee('Op kamp')
+            ->assertSee('Nieuw wachtwoord');
+    }
 }

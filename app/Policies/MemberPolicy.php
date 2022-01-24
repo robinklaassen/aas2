@@ -215,6 +215,8 @@ class MemberPolicy
 
     private function ifSelf(string $capability, User $user, Member $member): bool
     {
-        return $user->hasCapability($capability) && $user->profile_type === "App\Member" && $user->profile_id === $member->id;
+        return $user->hasCapability($capability)
+            && $user->profile_type === Member::class
+            && $user->profile_id === $member->id;
     }
 }

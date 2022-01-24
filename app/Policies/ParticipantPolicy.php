@@ -175,6 +175,8 @@ class ParticipantPolicy
 
     private function ifSelf(string $capability, User $user, Participant $participant): bool
     {
-        return $user->hasCapability($capability) && $user->profile_type === "App\Participant" && $user->profile_id === $participant->id;
+        return $user->hasCapability($capability)
+            && $user->profile_type === Participant::class
+            && $user->profile_id === $participant->id;
     }
 }
