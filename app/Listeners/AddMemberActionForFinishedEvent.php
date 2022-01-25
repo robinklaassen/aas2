@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Listeners;
 
 use App\Events\FinishedEvent;
-use App\Member;
+use App\Models\Member;
 use App\Services\ActionGenerator\EventActionApplicator;
 use App\Services\ActionGenerator\ValueObject\EventActionInput;
 

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Policies;
 
+use App\Models\Member;
+use App\Models\Participant;
 use App\Models\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -42,13 +44,13 @@ class UserPolicy
 
     public function changePassword(User $user, User $model)
     {
-        return $model->profile_type === "App\Member" && $user->hasCapability('members::info::edit::password') ||
-            $model->profile_type === "App\Participant" && $user->hasCapability('participants::info::edit::password');
+        return $model->profile_type === Member::class && $user->hasCapability('members::info::edit::password') ||
+            $model->profile_type === Participant::class && $user->hasCapability('participants::info::edit::password');
     }
 
     public function changeAdmin(User $user, User $model)
     {
-        return $model->profile_type === "App\Member" && $user->hasCapability('members::account::update');
+        return $model->profile_type === Member::class && $user->hasCapability('members::account::update');
     }
 
     /**
@@ -58,8 +60,8 @@ class UserPolicy
      */
     public function delete(User $user, User $model)
     {
-        return $model->profile_type === "App\Member" && $user->hasCapability('members::account::delete') ||
-            $model->profile_type === "App\Participant" && $user->hasCapability('participants::account::delete');
+        return $model->profile_type === Member::class && $user->hasCapability('members::account::delete') ||
+            $model->profile_type === Participant::class && $user->hasCapability('participants::account::delete');
     }
 
     /**
@@ -69,8 +71,8 @@ class UserPolicy
      */
     public function restore(User $user, User $model)
     {
-        return $model->profile_type === "App\Member" && $user->hasCapability('members::account::create') ||
-            $model->profile_type === "App\Participant" && $user->hasCapability('participants::account::create');
+        return $model->profile_type === Member::class && $user->hasCapability('members::account::create') ||
+            $model->profile_type === Participant::class && $user->hasCapability('participants::account::create');
     }
 
     /**
@@ -80,7 +82,7 @@ class UserPolicy
      */
     public function forceDelete(User $user, User $model)
     {
-        return $model->profile_type === "App\Member" && $user->hasCapability('members::account::delete') ||
-            $model->profile_type === "App\Participant" && $user->hasCapability('participants::account::delete');
+        return $model->profile_type === Member::class && $user->hasCapability('members::account::delete') ||
+            $model->profile_type === Participant::class && $user->hasCapability('participants::account::delete');
     }
 }
