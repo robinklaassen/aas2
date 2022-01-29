@@ -25,7 +25,7 @@ class MemberProfileTest extends TestCase
         $response = $this->actingAs($this->member->user)->post(
             action('ProfileController@update'),
             [
-                'rijbewijs' => 1
+                'rijbewijs' => 1,
             ]
         );
 
