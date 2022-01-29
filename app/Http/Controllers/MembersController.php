@@ -74,8 +74,8 @@ class MembersController extends Controller
 
         $member->skills()->sync($skill_ids);
 
-        if (! $fromProfile) {
-            // Update roles
+        // Update roles
+        if ($request->has('roles')) {
             $user = $member->user()->first();
             if ($user) {
                 $user->roles()->sync($request->input('roles'));
