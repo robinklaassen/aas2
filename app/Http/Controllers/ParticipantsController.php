@@ -107,11 +107,11 @@ class ParticipantsController extends Controller
      * @param  int  $participant
      * @return Response
      */
-    public function update(Participant $participant, ParticipantRequest $request, string $successMessage = null)
+    public function update(Participant $participant, ParticipantRequest $request, bool $fromProfile = false)
     {
         $participant->update($request->all());
-        return redirect('participants/' . $participant->id)->with([
-            'flash_message' => $successMessage ?? 'De deelnemer is bewerkt!',
+        return redirect($fromProfile ? 'profile' : 'participants/' . $participant->id)->with([
+            'flash_message' => $fromProfile ? 'Je profiel is bewerkt!' : 'De deelnemer is bewerkt!',
         ]);
     }
 

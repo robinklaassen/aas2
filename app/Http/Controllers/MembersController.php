@@ -60,7 +60,7 @@ class MembersController extends Controller
     }
 
     // Update member in DB
-    public function update(Member $member, MemberRequest $request, string $successMessage = null)
+    public function update(Member $member, MemberRequest $request, bool $fromProfile = false)
     {
         $member->update($request->except(['skills', 'roles']));
 
@@ -74,14 +74,16 @@ class MembersController extends Controller
 
         $member->skills()->sync($skill_ids);
 
-        // Update roles
-        $user = $member->user()->first();
-        if ($user) {
-            $user->roles()->sync($request->input('roles'));
+        if (! $fromProfile) {
+            // Update roles
+            $user = $member->user()->first();
+            if ($user) {
+                $user->roles()->sync($request->input('roles'));
+            }
         }
 
-        return redirect('members/' . $member->id)->with([
-            'flash_message' => $successMessage ?? 'Het lid is bewerkt!',
+        return redirect($fromProfile ? 'profile' : 'members/' . $member->id)->with([
+            'flash_message' => $fromProfile ? 'Je profiel is bewerkt!' : 'Het lid is bewerkt!',
         ]);
     }
 

@@ -20,6 +20,20 @@ class MemberProfileTest extends TestCase
         $this->member = Member::findOrFail(2);  // jön snow
     }
 
+    public function testEditProfile()
+    {
+        $response = $this->actingAs($this->member->user)->post(
+            action('ProfileController@update'),
+            [
+                'rijbewijs' => 1
+            ]
+        );
+
+        $response->assertStatus(302);
+        $response->assertRedirect(action('ProfileController@show'));
+        $response->assertSessionHas('flash_message', 'Je profiel is bewerkt!');
+    }
+
     public function testAddCourse()
     {
         Mail::fake();
