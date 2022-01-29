@@ -22,16 +22,20 @@ class MemberProfileTest extends TestCase
 
     public function testEditProfile()
     {
-        $response = $this->actingAs($this->member->user)->post(
+        $fields = $this->member->toArray();
+        $fields['rijbewijs'] = 1;
+
+        $response = $this->actingAs($this->member->user)->patch(
             action('ProfileController@update'),
-            [
-                'rijbewijs' => 1,
-            ]
+            $fields
         );
 
         $response->assertStatus(302);
         $response->assertRedirect(action('ProfileController@show'));
         $response->assertSessionHas('flash_message', 'Je profiel is bewerkt!');
+
+        $this->member->refresh();
+        $this->assertSame(1, $this->member->rijbewijs);
     }
 
     public function testAddCourse()
