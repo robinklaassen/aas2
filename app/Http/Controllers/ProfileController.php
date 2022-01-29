@@ -58,8 +58,7 @@ class ProfileController extends Controller
     {
         // Get the related form request from the container, this automatically performs the validation
         $validatedRequest = ($request->user()->isMember()) ? app(MemberRequest::class) : app(ParticipantRequest::class);
-        $successMessage = 'Je profiel is bewerkt!';
-        return $this->getController($request)->update($request->user()->profile, $validatedRequest, $successMessage);
+        return $this->getController($request)->update($request->user()->profile, $validatedRequest, true);
     }
 
     // Upload photo
