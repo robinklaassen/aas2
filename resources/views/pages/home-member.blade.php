@@ -69,6 +69,10 @@
 		<h3>{{$c['camp']['naam']}}</h3>
 		@endcan
 
+		@if (Auth::user()->profile->events->contains($c['camp']))
+			<h5>Jij gaat mee op dit kamp, wat tof!</h5>
+		@endif
+
 		<div style="display:flex;">
 			<div class="progress-label-left">L</div>
 			<div class="progress">
