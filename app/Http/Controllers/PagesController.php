@@ -50,6 +50,7 @@ class PagesController extends Controller
             // Camp thermometer
             $camps = Event::ParticipantEvent()
                 ->ongoing()
+                ->notCancelled()
                 ->public()
                 ->orderBy('datum_start')
                 ->take(2)
