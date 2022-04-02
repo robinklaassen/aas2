@@ -7,7 +7,7 @@
 @section('content')
 	<div class="row" style="margin-top:50px;">
 		<div class="col-md-8 col-md-offset-2">
-			<h1>Krachtig Anderwijs Administratie Systeem (KAAS) 2.0</h1>
+			<h1>Anderwijs Administratie Systeem (AAS) 2.0</h1>
 			<p>Hier per toeval terechtgekomen en geen flauw idee waar je bent? <a href="http://www.anderwijs.nl">Ga naar onze website.</a></p>
 			<hr/>
 			<div class="panel panel-default">
@@ -32,7 +32,7 @@
 							<div class="col-md-6">
 								<input type="text" class="form-control" name="username" id ="username" value="{{ old('username') }}">
 							</div>
-
+							
 						</div>
 
 						<div class="form-group">
