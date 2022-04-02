@@ -5,8 +5,8 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>@yield('title') | KAAS 2.0</title>
-	<link rel="icon" type="image/png" href="{{ url('/icon-cheese.png') }}">
+	<title>@yield('title') | AAS 2.0</title>
+	<link rel="icon" type="image/png" href="{{ url('/icon-bait.png') }}">
 
 	{{ Html::style('css/app.css') }}
 
@@ -31,7 +31,7 @@
 		<!-- Footer -->
 		<div
 			style="display: inline-flex; float: right; flex-wrap: wrap; border-top: 1px solid #ddd; padding-top: 10px; margin-top: 10px;">
-			<span class="btn btn-sm" disabled="true">KAAS 2.0 is het Krachtig Anderwijs Administratie Systeem.</span>
+			<span class="btn btn-sm" disabled="true">AAS 2.0 is het Anderwijs Administratiesysteem.</span>
 			<button type="button" class="btn btn-link btn-sm" data-toggle="modal" data-target="#infoModal">Meer
 				informatie</button>
 			<button type="button" class="btn btn-link btn-sm"><a
