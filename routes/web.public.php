@@ -2,12 +2,15 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\iDealController;
 use Illuminate\Support\Facades\Route;
 use Updater\Http\Controllers\UpdateController;
 
 // iDeal integration
-Route::post('iDeal-webhook', 'iDealController@webhook');
-Route::get('iDeal-response/{participant}/{event}', 'iDealController@response');
+Route::post('iDeal-webhook', [iDealController::class, 'webhook']);
+Route::get('iDeal-response/{participant}/{event}', [iDealController::class, 'eventPaymentResponse']);
+Route::get('iDeal-response', [iDealController::class, 'genericResponse']);
+Route::get('doneer', 'DonateController');
 
 // Pages
 Route::get('privacy', 'PagesController@showPrivacyStatement');

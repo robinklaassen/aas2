@@ -33,7 +33,7 @@ iDeal betaling mislukt
 </p>
 @endif
 
-@if ($participant->events()->count() == 1)
+@if (isset($participant) && $participant->events()->count() == 1)
 	@if ($participant->inkomen)
 		<p>
 			U heeft een korting op de kampprijs aangevraagd. Daarvoor hebben wij een inkomensverklaring van u nodig. Kijk in de bevestigingsmail voor meer informatie hierover.

@@ -14,5 +14,5 @@ interface PaymentInterface
 
     public function getMetadata();
 
-    public function getKeys(): array;
+    public function getRedirectUrl(): string;
 }

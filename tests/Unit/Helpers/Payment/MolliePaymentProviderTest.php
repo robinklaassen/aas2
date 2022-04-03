@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit;
+namespace Tests\Unit\Helpers\Payment;
 
 use App\Facades\Mollie;
 use App\Helpers\Payment\PaymentInterface;
@@ -11,7 +11,7 @@ use App\Models\Participant;
 use Mockery;
 use Tests\TestCase;
 
-class TestPaymentPayment implements PaymentInterface
+final class TestPaymentPayment implements PaymentInterface
 {
     public function getTotalAmount(): float
     {
@@ -35,9 +35,9 @@ class TestPaymentPayment implements PaymentInterface
         ];
     }
 
-    public function getKeys(): array
+    public function getRedirectUrl(): string
     {
-        return ['test', 42];
+        return '/response-url';
     }
 }
 
@@ -73,7 +73,7 @@ class MolliePaymentProviderTest extends TestCase
                 && $arg['description'] === $this->payment->getDescription()
                 && $arg['metadata'] === $this->payment->getMetadata()
                 && $arg['webhookUrl'] === url('iDeal-webhook')
-                && $arg['redirectUrl'] === url('iDeal-response/test/42')
+                && $arg['redirectUrl'] === '/response-url'
                 && $arg['method'] === \Mollie\Api\Types\PaymentMethod::IDEAL;
         }))->andReturns(new class() {
             public function getCheckoutUrl()

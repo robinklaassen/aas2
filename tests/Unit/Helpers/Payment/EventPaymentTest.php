@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Tests\Unit;
+namespace Tests\Unit\Helpers\Payment;
 
 use App\Helpers\Payment\EventPayment;
 use App\Models\Event;
@@ -30,9 +30,6 @@ class EventPaymentTest extends TestCase
             ->existing(true);
     }
 
-    /**
-     * Tests if the metadata call
-     */
     public function testEventPaymentMetadata()
     {
         $meta = $this->payment->getMetadata();
@@ -46,25 +43,19 @@ class EventPaymentTest extends TestCase
         $this->assertSame('new', $meta['type']);
     }
 
-    /**
-     * Tests if the keys call
-     */
-    public function testEventPaymentKeys()
+    public function testEventPaymentRedirectUrl()
     {
-        $this->assertSame([$this->participant->id, $this->event->id], $this->payment->getKeys());
+        $this->assertSame(
+            action('iDealController@eventPaymentResponse', [$this->participant->id, $this->event->id]),
+            $this->payment->getRedirectUrl()
+        );
     }
 
-    /**
-     * Tests the currency
-     */
     public function testEventPaymentCurrenct()
     {
         $this->assertSame('EUR', $this->payment->getCurrency());
     }
 
-    /**
-     * Tests the description
-     */
     public function testEventPaymentDescription()
     {
         $this->assertStringContainsString($this->event->code, $this->payment->getDescription());
@@ -72,18 +63,12 @@ class EventPaymentTest extends TestCase
         $this->assertStringContainsString($this->participant->achternaam, $this->payment->getDescription());
     }
 
-    /**
-     * Tests the totalAmount call
-     */
     public function testEventPaymentPrice()
     {
         $this->assertSame((float) $this->event->prijs, $this->payment->getTotalAmount());
     }
 
-    /**
-     * Tests the totalAmount call with an income based discount
-     */
-    public function testEventPaymentPriceWithDiscount()
+    public function testEventPaymentPriceWithIncomeBasedDiscount()
     {
         $partWithDiscount = Participant::findOrFail(2);
         $this->payment->participant($partWithDiscount);

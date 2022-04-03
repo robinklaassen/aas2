@@ -40,7 +40,6 @@ class MolliePaymentProvider implements PaymentProvider
 
     public function process(PaymentInterface $payment)
     {
-        $keyString = implode('/', $payment->getKeys());
         $p = $this->api()->payments->create([
             'amount' => [
                 'currency' => $payment->getCurrency(),
@@ -49,7 +48,7 @@ class MolliePaymentProvider implements PaymentProvider
             'description' => $payment->getDescription(),
             'metadata' => $payment->getMetadata(),
             'webhookUrl' => $this->webhookUrl(),
-            'redirectUrl' => url("iDeal-response/{$keyString}"),
+            'redirectUrl' => $payment->getRedirectUrl(),
             'method' => \Mollie\Api\Types\PaymentMethod::IDEAL,
         ]);
 

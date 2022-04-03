@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Helpers\Payment\MolliePaymentProvider;
+use App\Helpers\Payment\PaymentProvider;
 use Illuminate\Support\ServiceProvider;
 
 class MollieServiceProvider extends ServiceProvider
@@ -22,8 +23,6 @@ class MollieServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('MolliePaymentProvider', function ($app) {
-            return new MolliePaymentProvider();
-        });
+        $this->app->bind(PaymentProvider::class, MolliePaymentProvider::class);
     }
 }
