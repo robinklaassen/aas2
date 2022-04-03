@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Facades\Route;
+use Updater\Http\Controllers\UpdateController;
 
 // iDeal integration
 Route::post('iDeal-webhook', 'iDealController@webhook');
@@ -20,7 +22,7 @@ Route::post('enquete/{event}', 'ReviewsController@reviewPost');
 // icalendar routes
 Route::get('events/icalendar', 'EventsController@iCalendar');
 
-Route::get('updater/update', [\Updater\Http\Controllers\UpdateController::class, 'update']);
-Route::get('updater/version', [\Updater\Http\Controllers\UpdateController::class, 'version']);
+Route::get('updater/update', [UpdateController::class, 'update']);
+Route::get('updater/version', [UpdateController::class, 'version']);
 
 Route::post('api/contact-form', 'ContactFormController@send')->middleware('cors');

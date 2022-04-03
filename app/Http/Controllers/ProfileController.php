@@ -93,7 +93,7 @@ class ProfileController extends Controller
     {
         $user = $request->user();
         $viewType = 'profile';
-        return view('users.password', compact('user', 'viewType'));
+        return view('profile.password', compact('user', 'viewType'));
     }
 
     // Save new password in database

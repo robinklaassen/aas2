@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use Illuminate\Support\Facades\Route;
+
 // Root page refers to login
 Route::get('/', 'Auth\LoginController@showLoginForm');
 

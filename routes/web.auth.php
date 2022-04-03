@@ -207,21 +207,3 @@ Route::post(
 );
 Route::get('participants/export', 'ParticipantsController@export');
 Route::resource('participants', 'ParticipantsController');
-
-// User things
-Route::get('users/{user}/admin', 'UsersController@admin');
-Route::put('users/{user}/admin', 'UsersController@adminSave');
-Route::get('users/{user}/password', 'UsersController@password');
-Route::put('users/{user}/password', 'UsersController@passwordSave');
-Route::get('users/{user}/delete', 'UsersController@delete');
-Route::get('users/create-for-member', 'UsersController@createForMember');
-Route::post('users/create-for-member', 'UsersController@storeForMember');
-Route::get(
-    'users/create-for-participant',
-    'UsersController@createForParticipant'
-);
-Route::post(
-    'users/create-for-participant',
-    'UsersController@storeForParticipant'
-);
-Route::resource('users', 'UsersController');
