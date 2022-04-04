@@ -7,7 +7,7 @@ use App\Http\Middleware\RedirectIfNotAParticipant;
 use Illuminate\Support\Facades\Route;
 
 Route::get('home', 'PagesController@home');
-Route::get('info', 'PagesController@info');
+Route::view('info', 'pages.info');
 
 // Profile things
 Route::get('profile', 'ProfileController@show');
@@ -150,8 +150,10 @@ Route::delete(
 );
 Route::get('members/{member}/delete', 'MembersController@delete');
 
-Route::get('lists', 'PagesController@lists');
-Route::get('graphs', 'PagesController@graphs');
+Route::middleware(RedirectIfNotAMember::class)->group(function () {
+    Route::get('lists', 'ListsController');
+    Route::get('graphs', 'GraphsController');
+});
 
 // Action things
 Route::get('actions/{action}/delete', 'ActionsController@delete');
