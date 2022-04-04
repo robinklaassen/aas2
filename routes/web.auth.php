@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('home', 'PagesController@home');
 Route::get('info', 'PagesController@info');
-Route::get('run-script', 'PagesController@runScript');
 
 // Profile things
 Route::get('profile', 'ProfileController@show');
