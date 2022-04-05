@@ -9,7 +9,7 @@ use App\Mail\participants\IDealConfirmation;
 use App\Models\Event;
 use App\Models\Participant;
 use Illuminate\Http\Request;
-use Mail;
+use Illuminate\Support\Facades\Mail;
 
 // The iDealController is for the Mollie API iDeal webhook and response routes
 class iDealController extends Controller
