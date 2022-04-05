@@ -70,12 +70,9 @@ class EventPayment implements PaymentInterface
         return 'EUR';
     }
 
-    public function getKeys(): array
+    public function getRedirectUrl(): string
     {
-        return [
-            $this->participant->id,
-            $this->event->id,
-        ];
+        return url("iDeal-response/{$this->participant->id}/{$this->event->id}");
     }
 
     public function getMetadata()

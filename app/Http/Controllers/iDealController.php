@@ -10,16 +10,31 @@ use App\Models\Event;
 use App\Models\Participant;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Mollie\Api\Resources\Payment;
 
-// The iDealController is for the Mollie API iDeal webhook and response routes
 class iDealController extends Controller
 {
-    // iDeal webhook
     public function webhook(Request $request)
     {
-
         // Retrieve payment info
+        /** @var Payment $payment */
         $payment = Mollie::api()->payments->get($request->id);
+        if (isset($payment->metadata->camp_id)) {
+            $this->handleCampPayment($payment);
+        }
+    }
+
+    // iDeal response page
+    public function eventPaymentResponse(Participant $participant, Event $event)
+    {
+        $camp = $participant->events()->whereId($event->id)->first();
+        $status = ($camp->pivot->datum_betaling === '0000-00-00') ? 'failed' : 'ok';
+
+        return view('registration.iDealResponse', compact('status', 'participant'));
+    }
+
+    private function handleCampPayment(Payment $payment): void
+    {
         $participant_id = $payment->metadata->participant_id;
         $camp_id = $payment->metadata->camp_id;
         $type = $payment->metadata->type;
@@ -32,8 +47,6 @@ class iDealController extends Controller
                 'datum_betaling' => date('Y-m-d'),
             ]);
 
-            // Send (yet another) confirmation email to parents
-
             Mail::send(
                 new IDealConfirmation(
                     $participant,
@@ -42,14 +55,5 @@ class iDealController extends Controller
                 )
             );
         }
-    }
-
-    // iDeal response page
-    public function response(Participant $participant, Event $event)
-    {
-        $camp = $participant->events()->whereId($event->id)->first();
-        $status = ($camp->pivot->datum_betaling === '0000-00-00') ? 'failed' : 'ok';
-
-        return view('registration.iDealResponse', compact('status', 'participant'));
     }
 }
