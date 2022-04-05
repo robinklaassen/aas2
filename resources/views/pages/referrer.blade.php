@@ -21,7 +21,7 @@ a.list-group-item h4.list-group-item-heading {
 <div class="row">
 <div class="col-md-offset-2 col-md-8 text-center">
 	
-	<img src="https://www.anderwijs.nl/wp-content/uploads/2016/03/Test-6-2.png" alt="Logo Anderwijs" style="width:60%;margin-top:100px;">
+	<img src="{{ url('images/anderwijs-logo.png') }}" alt="Logo Anderwijs" style="width:60%;margin-top:100px;">
 	
 	<h1 class="text-center" style="margin-top:50px; margin-bottom:20px; font-weight:400;">Leuk dat je mee wil op kamp!</h1>
 	
