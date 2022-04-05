@@ -32,7 +32,7 @@ Inschrijven deelnemer
 @section('content')
 <!-- Dit is het formulier voor het inschrijven van een nieuwe deelnemer -->
 
-<h1><img src="https://www.anderwijs.nl/wp-content/uploads/2016/03/Test-6-2.png" alt="Logo Anderwijs"
+<h1><img src="{{ url('images/anderwijs-logo.png') }}" alt="Logo Anderwijs"
 		style="height:2.5em;margin-right:30px;vertical-align:bottom;"> <span style="white-space:nowrap;">Nieuwe
 		deelnemer inschrijven</span></h1>
 
