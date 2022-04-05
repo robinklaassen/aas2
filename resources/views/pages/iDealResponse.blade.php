@@ -1,25 +1,25 @@
 @extends('master')
 
 @section('title')
-	iDeal testpagina
+	iDeal betaling
 @endsection
 
 @section('content')
 
-<h1>iDeal testpagina</h1>
+<h1>iDeal betaling</h1>
 
 <hr/>
 
 @if ($status == 'paid')
-	
-<p>De testbetaling is succesvol ontvangen!</p>
+
+<p>De betaling is succesvol ontvangen!</p>
 
 @elseif ($status == 'cancelled')
 
 <p>Je hebt de betaling afgebroken. Awww...</p>
 
 @else
-	
+
 <p>De betaling staat nog steeds open. Wat moeten we daar nou mee?</p>
 
 @endif

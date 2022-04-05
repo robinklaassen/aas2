@@ -12,6 +12,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Mollie\Api\Resources\Payment;
 use Tests\TestCase;
 
 class FakePaymentMetadata
@@ -28,12 +29,14 @@ class FakePaymentMetadata
         $this->participant_id = $part->id;
     }
 }
-class FakeEventPayment
+
+class FakeEventPayment extends Payment
 {
     public $metadata;
 
     public function __construct(Event $evt, Participant $part)
     {
+        parent::__construct(Mollie::api());
         $this->metadata = new FakePaymentMetadata($evt, $part);
     }
 
@@ -74,7 +77,7 @@ class IDealResponseTest extends TestCase
                 $this->user->profile->id,
             ]
         );
-        $response = $this->get(action('iDealController@response', [$this->user->profile, $this->event]));
+        $response = $this->get(action('iDealController@eventPaymentResponse', [$this->user->profile, $this->event]));
 
         $response->assertStatus(200);
         // See payment status
@@ -95,7 +98,7 @@ class IDealResponseTest extends TestCase
                 '2022-12-02',
             ]
         );
-        $response = $this->get(action('iDealController@response', [$this->user->profile, $this->event]));
+        $response = $this->get(action('iDealController@eventPaymentResponse', [$this->user->profile, $this->event]));
         $response->assertStatus(200);
         // See payment status
         $response->assertSee('U heeft uw kind succesvol ingeschreven');
