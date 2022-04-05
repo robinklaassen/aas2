@@ -18,8 +18,8 @@ Route::get('forgot-password', 'PasswordController@forgot');
 Route::post('forgot-password', 'PasswordController@reset');
 
 // Static pages (or things not related to CRUD)
-Route::get('referrer', 'PagesController@referrer');
-Route::get('inschrijven', 'PagesController@referrer');
+Route::view('referrer', 'pages.referrer');
+Route::view('inschrijven', 'pages.referrer');
 
 // Laravel standard registration and login things (customised)
 Route::get('password/forgot', 'Auth\PasswordController@forgot');
