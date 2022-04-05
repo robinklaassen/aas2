@@ -10,6 +10,6 @@
 
 <hr/>
 
-<p>Je donatie is ontvangen! Bedankt!</p>
+<p>Uw donatie is ontvangen! Bedankt!</p>
 
 @endsection
