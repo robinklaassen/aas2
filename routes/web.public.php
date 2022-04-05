@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\DonateController;
+use App\Http\Controllers\iDealController;
 use Illuminate\Support\Facades\Route;
 use Updater\Http\Controllers\UpdateController;
 
