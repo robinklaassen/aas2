@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Helpers\Payment;
 
+use App\Http\Controllers\DonateController;
+
 final class Donation implements PaymentInterface
 {
     private const DESCRIPTION = 'Donatie aan Anderwijs. Bedankt%s!';
@@ -44,6 +46,6 @@ final class Donation implements PaymentInterface
 
     public function getRedirectUrl(): string
     {
-        return action('iDealController@genericResponse');
+        return action([DonateController::class, 'response']);
     }
 }

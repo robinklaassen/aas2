@@ -6,6 +6,7 @@ namespace Tests\Unit\Helpers\Payment;
 
 use App\Helpers\Payment\Donation;
 use App\Helpers\Payment\PaymentInterface;
+use App\Http\Controllers\DonateController;
 use Tests\TestCase;
 
 class DonationTest extends TestCase
@@ -34,12 +35,12 @@ class DonationTest extends TestCase
     public function testRedirectUrl()
     {
         self::assertSame(
-            action('iDealController@genericResponse'),
+            action([DonateController::class, 'response']),
             $this->payment->getRedirectUrl()
         );
     }
 
-    public function testDonationCurrenct()
+    public function testDonationCurrency()
     {
         self::assertSame('EUR', $this->payment->getCurrency());
     }

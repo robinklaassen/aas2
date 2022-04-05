@@ -33,13 +33,6 @@ class iDealController extends Controller
         return view('registration.iDealResponse', compact('status', 'participant'));
     }
 
-    public function genericResponse()
-    {
-        return view('registration.iDealResponse', [
-            'status' => 'ok',
-        ]);
-    }
-
     private function handleCampPayment(Payment $payment): void
     {
         $participant_id = $payment->metadata->participant_id;

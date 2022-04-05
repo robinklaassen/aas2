@@ -17,9 +17,14 @@ final class DonateController
         $this->paymentProvider = $paymentProvider;
     }
 
-    public function __invoke(DonationRequest $donationRequest)
+    public function donate(DonationRequest $donationRequest)
     {
         $donation = new Donation($donationRequest->amount(), $donationRequest->name());
         return $this->paymentProvider->process($donation);
+    }
+
+    public function response()
+    {
+        return view('pages.donation-response');
     }
 }
