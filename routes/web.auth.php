@@ -2,13 +2,10 @@
 
 declare(strict_types=1);
 
-use App\Http\Middleware\RedirectIfNotAMember;
-use App\Http\Middleware\RedirectIfNotAParticipant;
 use Illuminate\Support\Facades\Route;
 
 Route::get('home', 'PagesController@home');
-Route::get('info', 'PagesController@info');
-Route::get('run-script', 'PagesController@runScript');
+Route::view('info', 'pages.info');
 
 // Profile things
 Route::get('profile', 'ProfileController@show');
@@ -20,7 +17,7 @@ Route::put('profile/password', 'ProfileController@passwordSave');
 Route::get('profile/on-camp', 'ProfileController@onCamp');
 Route::put('profile/on-camp', 'ProfileController@onCampSave');
 
-Route::middleware([RedirectIfNotAMember::class])->group(function () {
+Route::middleware('member')->group(function () {
     Route::get('profile/add-course', 'ProfileController@addCourse');
     Route::put('profile/add-course', 'ProfileController@addCourseSave');
     Route::get('profile/edit-course/{course}', 'ProfileController@editCourse');
@@ -33,7 +30,7 @@ Route::middleware([RedirectIfNotAMember::class])->group(function () {
     Route::get('profile/reviews/{event}', 'ProfileController@reviews');
 });
 
-Route::middleware([RedirectIfNotAParticipant::class])->group(function () {
+Route::middleware('participant')->group(function () {
     Route::get('profile/edit-camp/{event}', 'ProfileController@editCamp');
     Route::put('profile/edit-camp/{event}', 'ProfileController@editCampSave');
 });
@@ -151,8 +148,10 @@ Route::delete(
 );
 Route::get('members/{member}/delete', 'MembersController@delete');
 
-Route::get('lists', 'PagesController@lists');
-Route::get('graphs', 'PagesController@graphs');
+Route::middleware('member')->group(function () {
+    Route::get('lists', 'ListsController');
+    Route::get('graphs', 'GraphsController');
+});
 
 // Action things
 Route::get('actions/{action}/delete', 'ActionsController@delete');
