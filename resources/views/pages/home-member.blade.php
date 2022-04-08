@@ -43,8 +43,6 @@
 				<h5>Jij gaat mee op dit kamp, wat tof!</h5>
 			@endif
 
-			<div some-attr={{ 10 }}></div>
-
 			<camp-thermometer-bar label="L" :number-full="{{ $c['num_L_goed'] }}" :number-partial="{{ $c['num_L_bijna'] }}" :target-number="{{ $c['streef_L'] }}"></camp-thermometer-bar>
 			<camp-thermometer-bar label="D" :number-full="{{ $c['num_D_goed'] }}" :number-partial="{{ $c['num_D_bijna'] }}" :target-number="{{ $c['streef_D'] }}"></camp-thermometer-bar>
 		@endforeach
