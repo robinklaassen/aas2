@@ -21,7 +21,6 @@ Route::get('updater/update', [UpdateController::class, 'update']);
 Route::get('updater/version', [UpdateController::class, 'version']);
 
 // iDeal integration
-Route::post('iDeal-webhook', [iDealController::class, 'webhook']);
 Route::get('iDeal-response/{participant}/{event}', [iDealController::class, 'eventPaymentResponse']);
 Route::get('iDeal-response', [iDealController::class, 'genericResponse']);
 Route::get('donate', [DonateController::class, 'donate']);

@@ -15,3 +15,6 @@ Route::controller(ApiController::class)->group(function () {
 
 // Contact form on website
 Route::post('api/contact-form', [ContactFormController::class, 'send']);
+
+// iDeal webhook
+Route::post('iDeal-webhook', [iDealController::class, 'webhook']);
