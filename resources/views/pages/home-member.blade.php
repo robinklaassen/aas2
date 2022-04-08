@@ -4,36 +4,6 @@
 	Home
 @endsection
 
-@section('header')
-<style type="text/css">
-
-.progress {
-	height: 30px;
-	width: 100%;
-}
-
-.progress .progress-bar {
-	font-size: 140%;
-	line-height: normal;
-}
-
-.progress-label-left {
-	width: 20px;
-	margin-right: 10px;
-	font-size: 21px;
-	font-weight: 200;
-}
-
-.progress-label-right {
-	width: 4em;
-	margin-left: 10px;
-	font-size: 21px;
-	font-weight: 200;
-}
-
-</style>
-@endsection
-
 @section('content')
 
 <div class="jumbotron">
@@ -53,7 +23,7 @@
 			<h3>Vandaag jarig:</h3>
 			<ul style="font-size:120%;">
 				@foreach ($today as $member)
-					<li>{{$member->voornaam}} {{$member->tussenvoegsel}} {{$member->achternaam}} ({{$member->leeftijd}}) @if ($member->ikjarig) <strong>&larr; dat ben jij! Gefeliciteerd!</strong> <span class="glyphicon glyphicon-gift"></span> @endif
+					<li>{{$member->volnaam}} ({{$member->leeftijd}}) @if ($member->ikjarig) <strong>&larr; dat ben jij! Gefeliciteerd!</strong> <span class="glyphicon glyphicon-gift"></span> @endif
 				@endforeach
 			</ul>
 		@endif
@@ -61,42 +31,22 @@
 	<div class="col-md-4 progress-container">
 		@foreach ($thermo as $c)
 
-		@can('view', $c['camp'])
-		<a href="{{ url('/events', $c['camp']['id']) }}">
+			@can('view', $c['camp'])
+			<a href="{{ url('/events', $c['camp']['id']) }}">
+				<h3>{{$c['camp']['naam']}}</h3>
+			</a>
+			@else
 			<h3>{{$c['camp']['naam']}}</h3>
-		</a>
-		@else
-		<h3>{{$c['camp']['naam']}}</h3>
-		@endcan
+			@endcan
 
-		@if (Auth::user()->profile->events->contains($c['camp']))
-			<h5>Jij gaat mee op dit kamp, wat tof!</h5>
-		@endif
+			@if (Auth::user()->profile->events->contains($c['camp']))
+				<h5>Jij gaat mee op dit kamp, wat tof!</h5>
+			@endif
 
-		<div style="display:flex;">
-			<div class="progress-label-left">L</div>
-			<div class="progress">
-				@if ($c['num_L_goed'] > 0)
-				<div class="progress-bar progress-bar-success" role="progressbar" style="width: {{$c['perc_L_goed']}}%;">{{$c['num_L_goed']}}</div>
-				@endif
-				@if ($c['num_L_bijna'] > 0)
-				<div class="progress-bar progress-bar-warning" role="progressbar" style="width: {{$c['perc_L_bijna']}}%;">{{$c['num_L_bijna']}}</div>
-				@endif
-			</div>
-			<div class="progress-label-right">{{ $c['num_L_goed'] + $c['num_L_bijna'] }} /  {{$c['streef_L']}}</div>
-		</div>
-		<div style="display:flex;">
-			<div class="progress-label-left">D</div>
-			<div class="progress">
-				@if ($c['num_D_goed'] > 0)
-				<div class="progress-bar progress-bar-success" role="progressbar" style="width: {{$c['perc_D_goed']}}%;">{{$c['num_D_goed']}}</div>
-				@endif
-				@if ($c['num_D_bijna'] > 0)
-				<div class="progress-bar progress-bar-warning" role="progressbar" style="width: {{$c['perc_D_bijna']}}%;">{{$c['num_D_bijna']}}</div>
-				@endif
-			</div>
-			<div class="progress-label-right">{{ $c['num_D_goed'] + $c['num_D_bijna'] }} / {{$c['streef_D']}}</div>
-		</div>
+			<div some-attr={{ 10 }}></div>
+
+			<camp-thermometer-bar label="L" :number-full="{{ $c['num_L_goed'] }}" :number-partial="{{ $c['num_L_bijna'] }}" :target-number="{{ $c['streef_L'] }}"></camp-thermometer-bar>
+			<camp-thermometer-bar label="D" :number-full="{{ $c['num_D_goed'] }}" :number-partial="{{ $c['num_D_bijna'] }}" :target-number="{{ $c['streef_D'] }}"></camp-thermometer-bar>
 		@endforeach
 	</div>
 	</div>
