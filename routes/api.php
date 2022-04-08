@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\ContactFormController;
+use App\Http\Controllers\iDealController;
 use Illuminate\Support\Facades\Route;
 
 // JSON API's for website
