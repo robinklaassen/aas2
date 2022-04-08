@@ -23,5 +23,5 @@ Route::get('updater/version', [UpdateController::class, 'version']);
 // iDeal integration
 Route::get('iDeal-response/{participant}/{event}', [iDealController::class, 'eventPaymentResponse']);
 Route::get('iDeal-response', [iDealController::class, 'genericResponse']);
-Route::get('donate', [DonateController::class, 'donate']);
+
 Route::get('donate/done', [DonateController::class, 'response']);
