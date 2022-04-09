@@ -108,6 +108,11 @@ class Event extends Model
         return substr((string) $startYear, -2) . '-' . substr((string) $endYear, -2);
     }
 
+    public function getStreeftalDeelnemersAttribute(): int
+    {
+        return ($this->streeftal - 1) * 3;
+    }
+
     /**
      * Event is publicly visible
      */

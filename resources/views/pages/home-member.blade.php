@@ -23,28 +23,41 @@
 			<h3>Vandaag jarig:</h3>
 			<ul style="font-size:120%;">
 				@foreach ($today as $member)
-					<li>{{$member->volnaam}} ({{$member->leeftijd}}) @if ($member->ikjarig) <strong>&larr; dat ben jij! Gefeliciteerd!</strong> <span class="glyphicon glyphicon-gift"></span> @endif
+					<li>
+						{{$member->volnaam}} ({{$member->leeftijd}}) 
+						@if ($member->ikjarig) <strong>&larr; dat ben jij! Gefeliciteerd!</strong> <span class="glyphicon glyphicon-gift"></span> @endif
+					</li>
 				@endforeach
 			</ul>
 		@endif
 	</div>
 	<div class="col-md-4 progress-container">
-		@foreach ($thermo as $c)
+		@foreach ($thermometerCamps as $c)
 
-			@can('view', $c['camp'])
-			<a href="{{ url('/events', $c['camp']['id']) }}">
-				<h3>{{$c['camp']['naam']}}</h3>
+			@can('view', $c)
+			<a href="{{ url('/events', $c->id) }}">
+				<h3>{{ $c->naam }}</h3>
 			</a>
 			@else
-			<h3>{{$c['camp']['naam']}}</h3>
+			<h3>{{ $c->naam }}</h3>
 			@endcan
 
-			@if (Auth::user()->profile->events->contains($c['camp']))
+			@if (Auth::user()->profile->events->contains($c))
 				<h5>Jij gaat mee op dit kamp, wat tof!</h5>
 			@endif
 
-			<camp-thermometer-bar label="L" :number-full="{{ $c['num_L_goed'] }}" :number-partial="{{ $c['num_L_bijna'] }}" :target-number="{{ $c['streef_L'] }}"></camp-thermometer-bar>
-			<camp-thermometer-bar label="D" :number-full="{{ $c['num_D_goed'] }}" :number-partial="{{ $c['num_D_bijna'] }}" :target-number="{{ $c['streef_D'] }}"></camp-thermometer-bar>
+			<camp-thermometer-bar 
+				label="L" 
+				:number-full="{{ $c->members()->wherePivot('wissel', 0)->where('vog', 1)->count() }}" 
+				:number-partial="{{ $c->members()->wherePivot('wissel', 0)->where('vog', 0)->count() }}" 
+				:target-number="{{ $c->streeftal }}">
+			</camp-thermometer-bar>
+			<camp-thermometer-bar 
+				label="D" 
+				:number-full="{{ $c->participants()->wherePivot('datum_betaling', '>', '0000-00-00')->count() }}" 
+				:number-partial="{{ $c->participants()->wherePivot('datum_betaling', '0000-00-00')->count() }}" 
+				:target-number="{{ $c->streeftal_deelnemers }}">
+			</camp-thermometer-bar>
 		@endforeach
 	</div>
 	</div>

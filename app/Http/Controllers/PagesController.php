@@ -38,40 +38,15 @@ class PagesController extends Controller
             }
 
             // Camp thermometer
-            $camps = Event::ParticipantEvent()
+            $thermometerCamps = Event::ParticipantEvent()
                 ->ongoing()
                 ->notCancelled()
                 ->public()
                 ->orderBy('datum_start')
                 ->take(2)
                 ->get();
-            $thermo = [];
-            foreach ($camps as $camp) {
-                $streef_L = $camp->streeftal;
-                $streef_D = ($streef_L - 1) * 3;
 
-                // Hack for 'double camp' event (Winterkampen 2017-2018)
-                if ($id === 129) {
-                    $streef_L = 12;
-                    $streef_D = 28;
-                }
-
-                $num_L_goed = $camp->members()->wherePivot('wissel', 0)->where('vog', 1)->count();
-                $num_L_bijna = $camp->members()->wherePivot('wissel', 0)->where('vog', 0)->count();
-
-                $num_D_goed = $camp->participants()->wherePivot('datum_betaling', '>', '0000-00-00')->count();
-                $num_D_bijna = $camp->participants()->wherePivot('datum_betaling', '0000-00-00')->count();
-
-                $perc_L_goed = ($num_L_goed > $streef_L) ? 100 : ($num_L_goed / $streef_L) * 100;
-                $perc_D_goed = ($num_D_goed > $streef_D) ? 100 : ($num_D_goed / $streef_D) * 100;
-
-                $perc_L_bijna = ($num_L_goed + $num_L_bijna > $streef_L) ? 100 - $perc_L_goed : ($num_L_bijna / $streef_L) * 100;
-                $perc_D_bijna = ($num_D_goed + $num_D_bijna > $streef_D) ? 100 - $perc_D_goed : ($num_D_bijna / $streef_D) * 100;
-
-                $thermo[] = compact('camp', 'streef_L', 'streef_D', 'num_L_goed', 'perc_L_goed', 'num_L_bijna', 'perc_L_bijna', 'num_D_goed', 'perc_D_goed', 'num_D_bijna', 'perc_D_bijna');
-            }
-
-            return view('pages.home-member', compact('today', 'thermo'));
+            return view('pages.home-member', compact('today', 'thermometerCamps'));
         } elseif ($request->user()->isParticipant()) {
             // Participant homepage
 
