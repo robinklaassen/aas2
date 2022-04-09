@@ -18,14 +18,14 @@
 				Ga je weer een keer mee op kamp?
 			@endif
 		</p>
-		@if ($today)
+		@if ($birthdays->isNotEmpty())
 			<hr/>
 			<h3>Vandaag jarig:</h3>
 			<ul style="font-size:120%;">
-				@foreach ($today as $member)
+				@foreach ($birthdays as $m)
 					<li>
-						{{$member->volnaam}} ({{$member->leeftijd}}) 
-						@if ($member->ikjarig) <strong>&larr; dat ben jij! Gefeliciteerd!</strong> <span class="glyphicon glyphicon-gift"></span> @endif
+						{{$m->volnaam}} ({{$m->geboortedatum->age}}) 
+						@if (Auth::user()->profile == $m) <strong>&larr; dat ben jij! Gefeliciteerd!</strong> <span class="glyphicon glyphicon-gift"></span> @endif
 					</li>
 				@endforeach
 			</ul>

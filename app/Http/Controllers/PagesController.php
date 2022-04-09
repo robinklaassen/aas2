@@ -18,26 +18,8 @@ class PagesController extends Controller
         if ($request->user()->isMember()) {
             // Member homepage
 
-            // Today's birthdays
-            $bdates = Member::where('soort', '<>', 'oud')->where('publish_birthday', 1)->pluck('geboortedatum', 'id')->toArray();
-            $today = [];
-            foreach ($bdates as $id => $date) {
-                if ($date->isBirthday()) {
-                    $today[] = $id;
-                }
-            }
+            $birthdays = Member::where('soort', '<>', 'oud')->where('publish_birthday', 1)->birthday()->get();
 
-            foreach ($today as $k => $id) {
-                $member = Member::find($id);
-                $member->leeftijd = date('Y') - $member->geboortedatum->year;
-                $member->ikjarig = false;
-                if ($request->user()->profile->id === $id) {
-                    $member->ikjarig = true;
-                }
-                $today[$k] = $member;
-            }
-
-            // Camp thermometer
             $thermometerCamps = Event::ParticipantEvent()
                 ->ongoing()
                 ->notCancelled()
@@ -46,7 +28,7 @@ class PagesController extends Controller
                 ->take(2)
                 ->get();
 
-            return view('pages.home-member', compact('today', 'thermometerCamps'));
+            return view('pages.home-member', compact('birthdays', 'thermometerCamps'));
         } elseif ($request->user()->isParticipant()) {
             // Participant homepage
 
