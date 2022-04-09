@@ -25,7 +25,9 @@
 				@foreach ($birthdays as $m)
 					<li>
 						{{$m->volnaam}} ({{$m->geboortedatum->age}}) 
-						@if (Auth::user()->profile == $m) <strong>&larr; dat ben jij! Gefeliciteerd!</strong> <span class="glyphicon glyphicon-gift"></span> @endif
+						@if (Auth::user()->profile == $m) 
+							<strong>&larr; dat ben jij! Gefeliciteerd!</strong> <span class="glyphicon glyphicon-gift"></span> 
+						@endif
 					</li>
 				@endforeach
 			</ul>
@@ -48,14 +50,14 @@
 
 			<camp-thermometer-bar 
 				label="L" 
-				:number-full="{{ $c->members()->wherePivot('wissel', 0)->where('vog', 1)->count() }}" 
-				:number-partial="{{ $c->members()->wherePivot('wissel', 0)->where('vog', 0)->count() }}" 
+				:number-full="{{ $c->getFulltimeMembersWhereVOG(true)->count() }}" 
+				:number-partial="{{ $c->getFullTimeMembersWhereVOG(false)->count() }}" 
 				:target-number="{{ $c->streeftal }}">
 			</camp-thermometer-bar>
 			<camp-thermometer-bar 
 				label="D" 
-				:number-full="{{ $c->participants()->wherePivot('datum_betaling', '>', '0000-00-00')->count() }}" 
-				:number-partial="{{ $c->participants()->wherePivot('datum_betaling', '0000-00-00')->count() }}" 
+				:number-full="{{ $c->getParticipantsWherePaid(true)->count() }}" 
+				:number-partial="{{ $c->getParticipantsWherePaid(false)->count() }}" 
 				:target-number="{{ $c->streeftal_deelnemers }}">
 			</camp-thermometer-bar>
 		@endforeach

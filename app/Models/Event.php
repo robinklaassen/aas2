@@ -173,4 +173,15 @@ class Event extends Model
         $this->finalized_at = Carbon::now();
         $this->save();
     }
+
+    public function getFulltimeMembersWhereVOG(bool $vog)
+    {
+        return $this->members()->wherePivot('wissel', 0)->where('vog', $vog)->get();
+    }
+
+    public function getParticipantsWherePaid(bool $paid)
+    {
+        $operator = $paid ? '>' : '=';
+        return $this->participants()->wherePivot('datum_betaling', $operator, '0000-00-00')->get();
+    }
 }
