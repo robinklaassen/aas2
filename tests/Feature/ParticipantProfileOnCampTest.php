@@ -80,7 +80,7 @@ class ParticipantProfileOnCampTest extends TestCase
                         && $contains($this->user->profile->voornaam, $descr)
                         && $contains($this->user->profile->achternaam, $descr);
                 }))
-                ->andReturns(redirect('https://mollie-backend'));
+                ->andReturns('https://mollie-backend');
         }));
 
         $this->data['iDeal'] = 1;
@@ -125,7 +125,7 @@ class ParticipantProfileOnCampTest extends TestCase
                         && $contains($this->user->profile->voornaam, $descr)
                         && $contains($this->user->profile->achternaam, $descr);
                 }))
-                ->andReturns(redirect('https://mollie-backend'));
+                ->andReturns('https://mollie-backend');
         }));
 
         $response = $this->actingAs($this->user)->put(action('ProfileController@onCampSave'), $this->data);

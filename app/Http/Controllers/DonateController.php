@@ -20,7 +20,10 @@ final class DonateController
     public function donate(DonationRequest $donationRequest)
     {
         $donation = new Donation($donationRequest->amount(), $donationRequest->name());
-        return $this->paymentProvider->process($donation);
+        $redirectUrl = $this->paymentProvider->process($donation);
+        return response()->json([
+            'url' => $redirectUrl,
+        ]);
     }
 
     public function response()
