@@ -108,6 +108,11 @@ class Event extends Model
         return substr((string) $startYear, -2) . '-' . substr((string) $endYear, -2);
     }
 
+    public function getStreeftalDeelnemersAttribute(): int
+    {
+        return ($this->streeftal - 1) * 3;
+    }
+
     /**
      * Event is publicly visible
      */
@@ -167,5 +172,16 @@ class Event extends Model
         FinishedEvent::dispatch($this);
         $this->finalized_at = Carbon::now();
         $this->save();
+    }
+
+    public function getFulltimeMembersWhereVOG(bool $vog)
+    {
+        return $this->members()->wherePivot('wissel', 0)->where('vog', $vog)->get();
+    }
+
+    public function getParticipantsWherePaid(bool $paid)
+    {
+        $operator = $paid ? '>' : '=';
+        return $this->participants()->wherePivot('datum_betaling', $operator, '0000-00-00')->get();
     }
 }

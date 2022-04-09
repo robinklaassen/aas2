@@ -11,6 +11,7 @@ Vue.component('declaration-input-row', require('./components/declarations/Declar
 Vue.component('file-dropzone', require('./components/FileDropzone.vue').default);
 Vue.component('roles-table', require('./components/RolesTable/RolesTable.vue').default);
 Vue.component('errors', require('./components/Errors.vue').default);
+Vue.component('camp-thermometer-bar', require('./components/CampThermometer/CampThermometerBar.vue').default);
 
 const app = new Vue({
     el: '#vue-root',

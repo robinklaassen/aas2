@@ -223,4 +223,11 @@ class Member extends Model
             $q->where('id', $event->id);
         });
     }
+
+    public function scopeBirthday($query)
+    {
+        return $query
+            ->whereMonth('geboortedatum', Carbon::now()->month)
+            ->whereDay('geboortedatum', Carbon::now()->day);
+    }
 }
