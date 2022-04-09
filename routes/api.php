@@ -22,4 +22,4 @@ Route::post('api/contact-form', [ContactFormController::class, 'send']);
 Route::post('iDeal-webhook', [iDealController::class, 'webhook']);
 
 // Donate route
-Route::get('donate', [DonateController::class, 'donate']);
+Route::post('donate', [DonateController::class, 'donate']);

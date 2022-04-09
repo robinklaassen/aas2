@@ -323,7 +323,8 @@ class RegistrationController extends Controller
 
         // If they want to pay with iDeal, set up the payment now
         if ($iDeal === '1' && $toPay > 0) {
-            return Mollie::process($payment);
+            $redirectUrl = Mollie::process($payment);
+            return redirect($redirectUrl);
         }
         // Return closing view
         return view('registration.participantStored', compact('participant', 'camp', 'toPay', 'incomeTable', 'package'));

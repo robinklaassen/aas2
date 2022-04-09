@@ -123,7 +123,7 @@ class ParticipantRegistrationTest extends TestCase
                         && $contains($this->data['voornaam'], $descr)
                         && $contains($this->data['achternaam'], $descr);
                 }))
-                ->andReturns(redirect('https://mollie-backend'));
+                ->andReturns('https://mollie-backend');
         }));
 
         $this->data['iDeal'] = '1';
@@ -187,7 +187,7 @@ class ParticipantRegistrationTest extends TestCase
                         && $contains($this->data['voornaam'], $descr)
                         && $contains($this->data['achternaam'], $descr);
                 }))
-                ->andReturns(redirect('https://mollie-backend'));
+                ->andReturns('https://mollie-backend');
         }));
 
         $this->data['iDeal'] = '1';

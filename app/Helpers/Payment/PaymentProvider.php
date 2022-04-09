@@ -6,5 +6,5 @@ namespace App\Helpers\Payment;
 
 interface PaymentProvider
 {
-    public function process(PaymentInterface $payment);
+    public function process(PaymentInterface $payment): string;
 }

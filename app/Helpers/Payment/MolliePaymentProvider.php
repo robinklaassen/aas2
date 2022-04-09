@@ -38,7 +38,7 @@ class MolliePaymentProvider implements PaymentProvider
         return $this->mollie->payments;
     }
 
-    public function process(PaymentInterface $payment)
+    public function process(PaymentInterface $payment): string
     {
         $p = $this->api()->payments->create([
             'amount' => [
@@ -52,7 +52,7 @@ class MolliePaymentProvider implements PaymentProvider
             'method' => \Mollie\Api\Types\PaymentMethod::IDEAL,
         ]);
 
-        return redirect($p->getCheckoutUrl());
+        return $p->getCheckoutUrl();
     }
 
     public function webhookUrl(): ?string
