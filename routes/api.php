@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Controllers\ApiController;
 use App\Http\Controllers\ContactFormController;
+use App\Http\Controllers\DonateController;
 use App\Http\Controllers\iDealController;
 use Illuminate\Support\Facades\Route;
 
@@ -19,3 +20,6 @@ Route::post('api/contact-form', [ContactFormController::class, 'send']);
 
 // iDeal webhook
 Route::post('iDeal-webhook', [iDealController::class, 'webhook']);
+
+// Donate route
+Route::get('donate', [DonateController::class, 'donate']);

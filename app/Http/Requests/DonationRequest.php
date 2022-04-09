@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
-final class DonationRequest extends Request
+use Illuminate\Foundation\Http\FormRequest;
+
+final class DonationRequest extends FormRequest
 {
     public function authorize()
     {
@@ -27,5 +29,13 @@ final class DonationRequest extends Request
     public function name(): ?string
     {
         return $this->get('name');
+    }
+
+    public function attributes()
+    {
+        return [
+            'amount' => 'Bedrag',
+            'name' => 'Naam',
+        ];
     }
 }
