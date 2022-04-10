@@ -6,7 +6,6 @@ namespace Tests\Unit\Helpers\Payment;
 
 use App\Helpers\Payment\Donation;
 use App\Helpers\Payment\PaymentInterface;
-use App\Http\Controllers\DonateController;
 use Tests\TestCase;
 
 class DonationTest extends TestCase
@@ -35,7 +34,7 @@ class DonationTest extends TestCase
     public function testRedirectUrl()
     {
         self::assertSame(
-            action([DonateController::class, 'response']),
+            'https://anderwijs.nl/bedankt-voor-uw-donatie/',
             $this->payment->getRedirectUrl()
         );
     }
