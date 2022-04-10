@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Pivots;
 
+use App\Helpers\Payment\EventPayment;
 use App\Models\Event;
 use App\Models\EventPackage;
 use App\Models\Participant;
@@ -13,7 +14,7 @@ class EventParticipant extends Pivot
 {
     protected $guarded = ['created_at', 'updated_at'];
 
-    protected $dates = ['datum_betaling'];
+    // protected $dates = ['datum_betaling'];  // TODO this breaks some stuff! mainly checks for equal to 0000-00-00
 
     public function participant()
     {
@@ -33,5 +34,14 @@ class EventParticipant extends Pivot
     public function isPaid(): bool
     {
         return $this->datum_betaling !== '0000-00-00';
+    }
+
+    public function getPayment(bool $existing = true): EventPayment
+    {
+        return (new EventPayment())
+            ->event($this->event)
+            ->participant($this->participant)
+            ->package($this->package)
+            ->existing($existing);
     }
 }

@@ -24,15 +24,16 @@
 		</div> --}}
 		<div class="panel-body">
 			<h2>
-				Status inschrijving <a href="{{ url('events', $c->id) }}">{{ $c->naam }}</a> ({{ DateHelper::Format($c->datum_start) }} t/m {{ DateHelper::Format($c->datum_eind) }})
+				Status inschrijving <a href="{{ url('events', $c->id) }}">{{ $c->naam }}</a> ({{ DateHelper::Format($c->datum_start) }} t/m {{ DateHelper::Format($c->datum_eind) }}):
 			</h2>
+			<hr/>
 			<p>
 				@if ($c->pivot->isPaid())
 					<span class="glyphicon glyphicon-ok" aria-hidden="true"></span> &nbsp;
 					Betaling ontvangen op {{ DateHelper::Format($c->pivot->datum_betaling) }}.
 				@else
 					<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span> &nbsp;
-					Betaling nog niet ontvangen! Betaal direct € xxx via iDeal.
+					Betaling nog niet ontvangen! <a>Betaal direct @money($c->pivot->getPayment()->getTotalAmount()) via iDeal.</a>
 				@endif
 			</p>
 			<p>
@@ -53,7 +54,7 @@
 					Geplaatst voor het kamp. Veel plezier!
 				@else
 					<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span> &nbsp;
-					Nog niet geplaatst &mdash; dit gebeurt doorgaans twee weken voor het kamp.
+					Nog niet geplaatst &mdash; dit gebeurt ongeveer twee weken voor het kamp.
 				@endif
 			</p>
 		</div>
