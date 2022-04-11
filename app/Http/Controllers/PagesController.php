@@ -32,9 +32,8 @@ class PagesController extends Controller
         } elseif ($request->user()->isParticipant()) {
             // Participant homepage
             $participant = $request->user()->profile;
-            $isBirthday = $participant->geboortedatum->isBirthday();
-            $nextCamps = $participant->events()->onGoing()->notCancelled()->get();
-            return view('pages.home-participant', compact('participant', 'isBirthday', 'nextCamps'));
+            $registeredCamps = $participant->events()->onGoing()->notCancelled()->get();
+            return view('pages.home-participant', compact('participant', 'registeredCamps'));
         }
     }
 

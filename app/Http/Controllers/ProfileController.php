@@ -472,6 +472,15 @@ class ProfileController extends Controller
         ]);
     }
 
+    // Setup payment for an existing registration
+    public function setupExistingPayment(Request $request, Event $event)
+    {
+        $participant = $request->user()->profile;
+        $payment = $participant->events()->findOrFail($event->id)->pivot->getPayment($existing = true);
+        $redirectUrl = Mollie::process($payment);
+        return redirect($redirectUrl);
+    }
+
     // Show reviews of specified camp
     public function reviews(Request $request, $event_id, ChartServiceInterface $chartService)
     {

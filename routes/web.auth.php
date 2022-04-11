@@ -33,6 +33,7 @@ Route::middleware('member')->group(function () {
 Route::middleware('participant')->group(function () {
     Route::get('profile/edit-camp/{event}', 'ProfileController@editCamp');
     Route::put('profile/edit-camp/{event}', 'ProfileController@editCampSave');
+    Route::get('pay/{event}', 'ProfileController@setupExistingPayment');
 });
 
 // Comments
