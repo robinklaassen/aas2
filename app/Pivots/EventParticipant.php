@@ -14,8 +14,6 @@ class EventParticipant extends Pivot
 {
     protected $guarded = ['created_at', 'updated_at'];
 
-    // protected $dates = ['datum_betaling'];  // TODO this breaks some stuff! mainly checks for equal to 0000-00-00
-
     public function participant()
     {
         return $this->belongsTo(Participant::class);
