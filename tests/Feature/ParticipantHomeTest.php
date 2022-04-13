@@ -15,7 +15,9 @@ class ParticipantHomeTest extends TestCase
     use DatabaseTransactions;
 
     private $participant;
+
     private $user;
+
     private $event;
 
     protected function setUp(): void
@@ -33,8 +35,8 @@ class ParticipantHomeTest extends TestCase
     {
         $this->actingAs($this->user)
             ->get('/home')
-            ->assertSee("Schrijf je direct in!")
-            ->assertDontSee(["Betaling", "Inkomensverklaring", "Geplaatst"]);
+            ->assertSee('Schrijf je direct in!')
+            ->assertDontSee(['Betaling', 'Inkomensverklaring', 'Geplaatst']);
     }
 
     public function testCampPaymentStatus(): void
@@ -43,15 +45,17 @@ class ParticipantHomeTest extends TestCase
 
         $this->actingAs($this->user)
             ->get('/home')
-            ->assertSee(["Betaling nog niet ontvangen!", "&euro; 350"], false)
-            ->assertDontSee(["Betaling ontvangen op"]);
+            ->assertSee(['Betaling nog niet ontvangen!', '&euro; 350'], false)
+            ->assertDontSee(['Betaling ontvangen op']);
 
-        $this->participant->events()->updateExistingPivot($this->event->id, ['datum_betaling' => '2000-01-01']);
+        $this->participant->events()->updateExistingPivot($this->event->id, [
+            'datum_betaling' => '2000-01-01',
+        ]);
 
         $this->actingAs($this->user)
             ->get('/home')
-            ->assertSee("Betaling ontvangen op 01-01-2000")
-            ->assertDontSee(["Betaling nog niet ontvangen!"]);
+            ->assertSee('Betaling ontvangen op 01-01-2000')
+            ->assertDontSee(['Betaling nog niet ontvangen!']);
     }
 
     public function testIncomeStatementStatus(): void
@@ -60,8 +64,8 @@ class ParticipantHomeTest extends TestCase
 
         $this->actingAs($this->user)
             ->get('/home')
-            ->assertSee("Inkomensverklaring nog niet ontvangen!")
-            ->assertDontSee(["Inkomensverklaring ontvangen", "Geen inkomensverklaring nodig"]);
+            ->assertSee('Inkomensverklaring nog niet ontvangen!')
+            ->assertDontSee(['Inkomensverklaring ontvangen', 'Geen inkomensverklaring nodig']);
 
         $this->participant->inkomensverklaring = new Carbon('2015-01-01');
         $this->participant->save();
@@ -69,8 +73,8 @@ class ParticipantHomeTest extends TestCase
 
         $this->actingAs($this->user)
             ->get('/home')
-            ->assertSee("Inkomensverklaring ontvangen op 01-01-2015")
-            ->assertDontSee(["Inkomensverklaring nog niet ontvangen!", "Geen inkomensverklaring nodig"]);
+            ->assertSee('Inkomensverklaring ontvangen op 01-01-2015')
+            ->assertDontSee(['Inkomensverklaring nog niet ontvangen!', 'Geen inkomensverklaring nodig']);
 
         $this->participant->inkomen = 0;
         $this->participant->save();
@@ -78,8 +82,8 @@ class ParticipantHomeTest extends TestCase
 
         $this->actingAs($this->user)
             ->get('/home')
-            ->assertSee("Geen inkomensverklaring nodig")
-            ->assertDontSee(["Inkomensverklaring nog niet ontvangen!", "Inkomensverklaring ontvangen op"]);
+            ->assertSee('Geen inkomensverklaring nodig')
+            ->assertDontSee(['Inkomensverklaring nog niet ontvangen!', 'Inkomensverklaring ontvangen op']);
     }
 
     public function testPlacedStatus(): void
@@ -88,14 +92,16 @@ class ParticipantHomeTest extends TestCase
 
         $this->actingAs($this->user)
             ->get('/home')
-            ->assertSee("Nog niet geplaatst")
-            ->assertDontSee("Geplaatst voor het kamp");
+            ->assertSee('Nog niet geplaatst')
+            ->assertDontSee('Geplaatst voor het kamp');
 
-        $this->participant->events()->updateExistingPivot($this->event->id, ['geplaatst' => true]);
+        $this->participant->events()->updateExistingPivot($this->event->id, [
+            'geplaatst' => true,
+        ]);
 
         $this->actingAs($this->user)
             ->get('/home')
-            ->assertSee("Geplaatst voor het kamp")
-            ->assertDontSee("Nog niet geplaatst");
+            ->assertSee('Geplaatst voor het kamp')
+            ->assertDontSee('Nog niet geplaatst');
     }
 }
