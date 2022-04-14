@@ -108,9 +108,13 @@ class EventPolicy
     public function viewParticipants(User $user, Event $event)
     {
         return $this->showAdvanced($user, $event) || (
-            $user->hasCapability('event::show::participating' &&
-            $event->hasUser($user) &&
-            $event->participants()->find($user->profile)->pivot->geplaatst)
+            $user->hasCapability(
+                'event::show::participating' &&
+            $event->hasUser($user) && (
+                $user->isMember() ||
+                $event->participants()->find($user->profile)->pivot->geplaatst
+            )
+            )
         );
     }
 
