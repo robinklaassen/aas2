@@ -277,23 +277,23 @@
 			<thead>
 				<tr>
 					@can("viewParticipantsAdvanced", $event)
-					<th data-orderable>Naam</th>
-					<th data-orderable>Niveau</th>
-					<th></th>
-					@if($event->package_type != null)
-					<th data-orderable>Pakket</th>
-					@endif
-					<th>Vakken</th>
-					<th data-orderable>Aanmelding</th>
-					<th data-orderable>Betaling</th>
-					<th data-orderable>Inkomensverklaring</th>
-					<th data-orderable>Geplaatst</th>
+						<th data-orderable>Naam</th>
+						<th data-orderable>Niveau</th>
+						<th></th>
+						@if($event->package_type != null)
+							<th data-orderable>Pakket</th>
+						@endif
+						<th>Vakken</th>
+						<th data-orderable>Aanmelding</th>
+						<th data-orderable>Betaling</th>
+						<th data-orderable>Inkomensverklaring</th>
+						<th data-orderable>Geplaatst</th>
 					@else
-					<th data-orderable>Naam</th>
-					<th data-orderable>Niveau</th>
-					<th>Telefoon ouder(s)</th>
-					<th data-orderable>Woonplaats</th>
-					<th data-orderable>Aanmelding</th>
+						<th data-orderable>Naam</th>
+						<th data-orderable>Niveau</th>
+						<th>Telefoon ouder(s)</th>
+						<th data-orderable>Woonplaats</th>
+						<th data-orderable>Aanmelding</th>
 					@endcan
 					<th></th>
 					<th></th>
@@ -302,17 +302,16 @@
 			</thead>
 			@endif
 			@foreach($event->participants()->orderBy('voornaam')->get() as $participant)
-			@if( \Auth::user()->can("viewParticipantsAdvanced", $event) || $participant->pivot->geplaatst )
+			@if( Auth::user()->can("viewParticipantsAdvanced", $event) || $participant->pivot->geplaatst )
 			<tr>
 				<td>
 					@can("view", $participant)
-					<a href="{{ url('/participants', $participant->id) }}">
-						{{ $participant->volnaam }}
-					</a>
+						<a href="{{ url('/participants', $participant->id) }}">
+							{{ $participant->volnaam }}
+						</a>
 					@else
-					{{ $participant->volnaam }}
+						{{ $participant->volnaam }}
 					@endcan
-
 				</td>
 
 				<td>
@@ -320,73 +319,72 @@
 				</td>
 
 				@can("viewParticipantsAdvanced", $event)
-				<td>
-					@if ($participantIsNew[$participant->id] == 1)
-					<span class="glyphicon glyphicon-baby-formula" data-toggle="tooltip" title="Nieuw dit kamp"></span>
-					@endif
-				</td>
+					<td>
+						@if ($participantIsNew[$participant->id] == 1)
+							<span class="glyphicon glyphicon-baby-formula" data-toggle="tooltip" title="Nieuw dit kamp"></span>
+						@endif
+					</td>
 				@endcan
 
 				@if($event->package_type != null)
-				<td>{{ $participant->pivot->package ? $participant->pivot->package->title : 'GEEN' }}</td>
+					<td>{{ $participant->pivot->package ? $participant->pivot->package->title : 'GEEN' }}</td>
 				@endif
 
-				<td>{{ $participantCourseString[$participant->id] }}</td>
+				@can("viewParticipantsAdvanced", $event)
+					<td>{{ $participantCourseString[$participant->id] }}</td>
+				@endcan
 
 				@cannot("viewParticipantsAdvanced", $event)
-
-				<td>{{ $participant->telefoon_ouder_vast }}</td>
-
-				<td>{{ $participant->plaats }}</td>
-
+					<td>{{ $participant->telefoon_ouder_vast }}</td>
+					<td>{{ $participant->plaats }}</td>
 				@endcannot
 
 				<td>{{ $participant->pivot->created_at->format('Y-m-d') }}</td>
 
 				@can("viewParticipantsAdvanced", $event)
-				<td>
-					@unless ($participant->pivot->datum_betaling == '0000-00-00')
-					{{ substr((string)$participant->pivot->datum_betaling,0,4) .'-'.substr((string)$participant->pivot->datum_betaling,5,2).'-'.substr((string)$participant->pivot->datum_betaling,8,2) }}
-					@else
-					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" data-toggle="tooltip"
-						title="Deze deelnemer heeft nog niet betaald!"></span>
-					@endunless
-				</td>
+					<td>
+						@unless ($participant->pivot->datum_betaling == '0000-00-00')
+						{{ substr((string)$participant->pivot->datum_betaling,0,4) .'-'.substr((string)$participant->pivot->datum_betaling,5,2).'-'.substr((string)$participant->pivot->datum_betaling,8,2) }}
+						@else
+						<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" data-toggle="tooltip"
+							title="Deze deelnemer heeft nog niet betaald!"></span>
+						@endunless
+					</td>
 
-				<td>
-					@unless ($participant->inkomen == 0)
-					@if ($participant->inkomensverklaring != null)
-					{{ $participant->inkomensverklaring->format('Y-m-d') }}
-					@else
-					<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" data-toggle="tooltip"
-						title="Inkomensverklaring nog niet binnen!"></span>
-					@endif
-					@else
-					<span class="glyphicon glyphicon-ok" aria-hidden="true" data-toggle="tooltip"
-						title="Inkomensverklaring niet nodig"></span>
-					@endunless
-				</td>
-				<td>{{ ($participant->pivot->geplaatst) ? 'Ja' : 'Nee' }}</td>
+					<td>
+						@unless ($participant->inkomen == 0)
+						@if ($participant->inkomensverklaring != null)
+						{{ $participant->inkomensverklaring->format('Y-m-d') }}
+						@else
+						<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true" data-toggle="tooltip"
+							title="Inkomensverklaring nog niet binnen!"></span>
+						@endif
+						@else
+						<span class="glyphicon glyphicon-ok" aria-hidden="true" data-toggle="tooltip"
+							title="Inkomensverklaring niet nodig"></span>
+						@endunless
+					</td>
+					<td>{{ ($participant->pivot->geplaatst) ? 'Ja' : 'Nee' }}</td>
 				@endcan
 
 				@can("editParticipant", [$event, $participant])
-				<td><a href="{{ url('/events', [$event->id, 'edit-participant', $participant->id]) }}"><span
-							class="glyphicon glyphicon-edit" aria-hidden="true" data-toggle="tooltip"
-							title="Inschrijving bewerken"></span></a></td>
-				<td><a href="{{ url('/events', [$event->id, 'move-participant', $participant->id]) }}"><span
-							class="glyphicon glyphicon-arrow-right" aria-hidden="true" data-toggle="tooltip"
-							title="Verplaatsen naar ander kamp"></span></a></td>
+					<td><a href="{{ url('/events', [$event->id, 'edit-participant', $participant->id]) }}"><span
+								class="glyphicon glyphicon-edit" aria-hidden="true" data-toggle="tooltip"
+								title="Inschrijving bewerken"></span></a></td>
+					<td><a href="{{ url('/events', [$event->id, 'move-participant', $participant->id]) }}"><span
+								class="glyphicon glyphicon-arrow-right" aria-hidden="true" data-toggle="tooltip"
+								title="Verplaatsen naar ander kamp"></span></a></td>
 				@else
-				<td></td>
-				<td></td>
+					<td></td>
+					<td></td>
 				@endcan
 
 				@can("removeParticipant", [$event, $participant])
-				<td><a href="{{ url('/events', [$event->id, 'remove-participant', $participant->id]) }}"><span
-							class="glyphicon glyphicon-remove" aria-hidden="true" data-toggle="tooltip"
-							title="Inschrijving verwijderen"></span></a></td>
+					<td><a href="{{ url('/events', [$event->id, 'remove-participant', $participant->id]) }}"><span
+								class="glyphicon glyphicon-remove" aria-hidden="true" data-toggle="tooltip"
+								title="Inschrijving verwijderen"></span></a></td>
 				@else
-				<td></td>
+					<td></td>
 				@endcan
 
 			</tr>
