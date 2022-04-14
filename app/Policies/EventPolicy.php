@@ -139,7 +139,11 @@ class EventPolicy
 
     public function editParticipantCourses(User $user, Event $event, Participant $participant)
     {
-        return $user->hasCapability('event::participants::edit') || ($event->datum_start->gt(Carbon::now()) && $participant->isUser($user) && $user->hasCapability('participants::info::edit::self'));
+        return $this->editParticipant($user, $event, $participant) || (
+            $event->datum_start->gt(Carbon::now()) &&
+            $participant->isUser($user) &&
+            $user->hasCapability('participants::info::edit::self')
+        );
     }
 
     public function removeParticipant(User $user, Event $event, Participant $participant)
