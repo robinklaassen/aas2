@@ -7,6 +7,7 @@ namespace App\Models;
 use App\Events\FinishedEvent;
 use App\Pivots\EventParticipant;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
 
 class Event extends Model
@@ -163,7 +164,7 @@ class Event extends Model
         return $query->where('cancelled_at', null);
     }
 
-    public function finalize()
+    public function finalize(): void
     {
         if ($this->finalized_at !== null) {
             return;
@@ -174,12 +175,12 @@ class Event extends Model
         $this->save();
     }
 
-    public function getFulltimeMembersWhereVOG(bool $vog)
+    public function getFulltimeMembersWhereVOG(bool $vog): EloquentCollection
     {
         return $this->members()->wherePivot('wissel', 0)->where('vog', $vog)->get();
     }
 
-    public function getParticipantsWherePaid(bool $paid)
+    public function getParticipantsWherePaid(bool $paid): EloquentCollection
     {
         $operator = $paid ? '>' : '=';
         return $this->participants()->wherePivot('datum_betaling', $operator, '0000-00-00')->get();
@@ -194,8 +195,7 @@ class Event extends Model
         return self::where('type', 'training')->where('code', sprintf('T%s', $this->code))->first();
     }
 
-    // Note: this returns a collection, not a query builder!
-    public function camps()
+    public function camps(): EloquentCollection
     {
         if ($this->type !== 'training') {
             return null;
