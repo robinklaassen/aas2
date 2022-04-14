@@ -6,7 +6,6 @@ namespace Tests\Feature;
 
 use App\Models\Event;
 use App\Models\Participant;
-use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
@@ -67,7 +66,7 @@ class ParticipantHomeTest extends TestCase
             ->assertSee('Inkomensverklaring nog niet ontvangen!')
             ->assertDontSee(['Inkomensverklaring ontvangen', 'Geen inkomensverklaring nodig']);
 
-        $this->participant->inkomensverklaring = new Carbon('2015-01-01');
+        $this->participant->inkomensverklaring = '2015-01-01';
         $this->participant->save();
         $this->user->refresh();
 
