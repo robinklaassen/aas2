@@ -367,7 +367,7 @@
 					<td>{{ ($participant->pivot->geplaatst) ? 'Ja' : 'Nee' }}</td>
 				@endcan
 
-				@can("editParticipant", [$event, $participant])  {{-- FIXME deze knoppen moet een geplaatste dln niet kunnen zien, dit zijn formulieren voor de organisatie, maar editParticipant wordt ook gebruikt op profielpagina om vakken te bewerken en dat moet wel blijven kunnen --}}
+				@can("editParticipant", [$event, $participant])
 					<td><a href="{{ url('/events', [$event->id, 'edit-participant', $participant->id]) }}"><span
 								class="glyphicon glyphicon-edit" aria-hidden="true" data-toggle="tooltip"
 								title="Inschrijving bewerken"></span></a></td>
