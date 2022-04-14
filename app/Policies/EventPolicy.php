@@ -134,6 +134,11 @@ class EventPolicy
 
     public function editParticipant(User $user, Event $event, Participant $participant)
     {
+        return $user->hasCapability('event::participants::edit');
+    }
+
+    public function editParticipantCourses(User $user, Event $event, Participant $participant)
+    {
         return $user->hasCapability('event::participants::edit') || ($event->datum_start->gt(Carbon::now()) && $participant->isUser($user) && $user->hasCapability('participants::info::edit::self'));
     }
 
