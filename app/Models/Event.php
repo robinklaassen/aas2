@@ -184,4 +184,23 @@ class Event extends Model
         $operator = $paid ? '>' : '=';
         return $this->participants()->wherePivot('datum_betaling', $operator, '0000-00-00')->get();
     }
+
+    public function training(): ?self
+    {
+        if ($this->type !== 'kamp') {
+            return null;
+        }
+
+        return self::where('type', 'training')->where('code', sprintf('T%s', $this->code))->first();
+    }
+
+    // Note: this returns a collection, not a query builder!
+    public function camps()
+    {
+        if ($this->type !== 'training') {
+            return null;
+        }
+
+        return self::where('type', 'kamp')->where('code', 'like', substr($this->code, 1) . '%')->get();
+    }
 }
