@@ -103,7 +103,7 @@ class EventTest extends TestCase
         $camp1 = Event::find(11); // zomerkamp 1 2016
         $camp2 = Event::find(12); // zomerkamp 2 2016
         $training = Event::find(15);  // training zomer 2016
-        
+
         $this->assertEquals(collect([$camp1, $camp2]), $training->camps()->toBase());
     }
 
