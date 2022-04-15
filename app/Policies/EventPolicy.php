@@ -107,7 +107,13 @@ class EventPolicy
 
     public function viewParticipants(User $user, Event $event)
     {
-        return $this->showAdvanced($user, $event) || ($user->hasCapability('event::show::participating') && $event->hasUser($user));
+        return $this->showAdvanced($user, $event) || (
+            $user->hasCapability('event::show::participating') &&
+            $event->hasUser($user) && (
+                $user->isMember() ||
+                $event->participants()->find($user->profile)->pivot->geplaatst
+            )
+        );
     }
 
     public function viewParticipantsAdvanced(User $user, Event $event)
@@ -130,7 +136,16 @@ class EventPolicy
 
     public function editParticipant(User $user, Event $event, Participant $participant)
     {
-        return $user->hasCapability('event::participants::edit') || ($event->datum_start->gt(Carbon::now()) && $participant->isUser($user) && $user->hasCapability('participants::info::edit::self'));
+        return $user->hasCapability('event::participants::edit');
+    }
+
+    public function editParticipantCourses(User $user, Event $event, Participant $participant)
+    {
+        return $this->editParticipant($user, $event, $participant) || (
+            $event->datum_start->gt(Carbon::now()) &&
+            $participant->isUser($user) &&
+            $user->hasCapability('participants::info::edit::self')
+        );
     }
 
     public function removeParticipant(User $user, Event $event, Participant $participant)

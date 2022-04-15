@@ -30,6 +30,7 @@
 						</li>
 						@endcan
 
+						@role("member")
 						<li class="dropdown" >
 							<a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Overig <span class="caret"></span></a>
 							<ul class="dropdown-menu">
@@ -44,13 +45,9 @@
 								</li>
 								@endrole
 
-								@role(["member"])
 								<li class="{{ substr(Request::path(),0,6) == 'graphs' ? 'active' : ''}}"><a href="{{ url('/graphs') }}">Grafieken</a></li>
-								@endrole
 
-								@role(["member"])
 								<li class="{{ substr(Request::path(),0,5) == 'lists' ? 'active' : ''}}"><a href="{{ url('/lists') }}">Lijsten</a></li>
-								@endrole
 
 								@can("viewAny", \App\Models\Course::class)
 									<li class="{{ substr(Request::path(),0,7) == 'courses' ? 'active' : ''}}"><a href="{{ url('/courses') }}">Vakken</a></li>
@@ -63,6 +60,7 @@
 								<li class="{{ substr(Request::path(),0,5) == 'roles' ? 'active' : ''}}"><a href="{{ url('/roles/explain') }}">Rollen en rechten</a></li>
 							</ul>
 						</li>
+						@endrole
 					</ul>
 
 					<ul class="nav navbar-nav navbar-right">
