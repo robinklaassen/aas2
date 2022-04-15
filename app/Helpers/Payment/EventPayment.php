@@ -41,7 +41,7 @@ class EventPayment implements PaymentInterface
         return $this;
     }
 
-    public function existing(bool $existing)
+    public function existing(bool $existing = true)
     {
         $this->existing = $existing;
         return $this;

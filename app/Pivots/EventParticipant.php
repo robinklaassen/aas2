@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Pivots;
 
+use App\Helpers\Payment\EventPayment;
 use App\Models\Event;
 use App\Models\EventPackage;
 use App\Models\Participant;
@@ -26,5 +27,19 @@ class EventParticipant extends Pivot
     public function package()
     {
         return $this->belongsTo(EventPackage::class);
+    }
+
+    public function isPaid(): bool
+    {
+        return $this->datum_betaling !== '0000-00-00';
+    }
+
+    public function createPayment(): EventPayment
+    {
+        return (new EventPayment())
+            ->event($this->event)
+            ->participant($this->participant)
+            ->package($this->package)
+            ->existing();
     }
 }

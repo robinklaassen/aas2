@@ -31,12 +31,9 @@ class PagesController extends Controller
             return view('pages.home-member', compact('birthdays', 'thermometerCamps'));
         } elseif ($request->user()->isParticipant()) {
             // Participant homepage
-
-            // Birthday check!
-            $bday = $request->user()->profile->geboortedatum;
-            $congrats = ($bday->isBirthday()) ? 1 : 0;
-
-            return view('pages.home-participant', compact('congrats'));
+            $participant = $request->user()->profile;
+            $registeredCamps = $participant->events()->onGoing()->notCancelled()->get();
+            return view('pages.home-participant', compact('participant', 'registeredCamps'));
         }
     }
 
