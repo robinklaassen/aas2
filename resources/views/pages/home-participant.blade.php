@@ -34,7 +34,7 @@
 					Betaling ontvangen op {{ DateHelper::Format(new Carbon($c->pivot->datum_betaling)) }}.
 				@else
 					<span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span> &nbsp;
-					Betaling nog niet ontvangen! <a href="{{ url('pay', $c->id) }}">Betaal direct @money($c->pivot->getPayment()->getTotalAmount()) via iDeal.</a>
+					Betaling nog niet ontvangen! <a href="{{ url('pay', $c->id) }}">Betaal direct @money($c->pivot->createPayment()->getTotalAmount()) via iDeal.</a>
 				@endif
 			</p>
 			<p>

@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('home', 'PagesController@home');
@@ -33,7 +34,7 @@ Route::middleware('member')->group(function () {
 Route::middleware('participant')->group(function () {
     Route::get('profile/edit-camp/{event}', 'ProfileController@editCamp');
     Route::put('profile/edit-camp/{event}', 'ProfileController@editCampSave');
-    Route::get('pay/{event}', 'ProfileController@setupExistingPayment');
+    Route::get('pay/{event}', [ProfileController::class, 'payRegisteredEvent']);
 });
 
 // Comments

@@ -34,12 +34,12 @@ class EventParticipant extends Pivot
         return $this->datum_betaling !== '0000-00-00';
     }
 
-    public function getPayment(bool $existing = true): EventPayment
+    public function createPayment(): EventPayment
     {
         return (new EventPayment())
             ->event($this->event)
             ->participant($this->participant)
             ->package($this->package)
-            ->existing($existing);
+            ->existing();
     }
 }

@@ -472,11 +472,10 @@ class ProfileController extends Controller
         ]);
     }
 
-    // Setup payment for an existing registration
-    public function setupExistingPayment(Request $request, Event $event)
+    public function payRegisteredEvent(Request $request, Event $event)
     {
         $participant = $request->user()->profile;
-        $payment = $participant->events()->findOrFail($event->id)->pivot->getPayment($existing = true);
+        $payment = $participant->events()->findOrFail($event->id)->pivot->createPayment();
         $redirectUrl = Mollie::process($payment);
         return redirect($redirectUrl);
     }
