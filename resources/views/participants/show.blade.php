@@ -214,7 +214,7 @@ Mijn profiel
 					@endif
 				</td>
 				<td>
-					@can("editParticipant", [$event, $participant])
+					@can("editParticipantCourses", [$event, $participant])
 					<a href="{{ $viewType == 'admin' ? url('/participants', [$participant->id, 'edit-event', $event->id]) : url('/profile/edit-camp', $event->id)}}">
 						<span class="glyphicon glyphicon-edit" data-toggle="tooltip" title="Vakken bewerken" aria-hidden="true"></span></a>
 					@endcan
