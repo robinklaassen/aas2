@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Events\FinishedEvent;
+use App\Exceptions\MethodNotAllowedException;
 use App\Pivots\EventParticipant;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -189,7 +190,7 @@ class Event extends Model
     public function training(): ?self
     {
         if ($this->type !== 'kamp') {
-            return null;
+            throw new MethodNotAllowedException('Cannot call training() on event not of type `kamp`.');
         }
 
         return self::where('type', 'training')->where('code', sprintf('T%s', $this->code))->first();
@@ -198,7 +199,7 @@ class Event extends Model
     public function camps(): EloquentCollection
     {
         if ($this->type !== 'training') {
-            return null;
+            throw new MethodNotAllowedException('Cannot call camps() on event not of type `training`.');
         }
 
         return self::where('type', 'kamp')->where('code', 'like', substr($this->code, 1) . '%')->get();
