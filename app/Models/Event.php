@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Events\FinishedEvent;
+use App\Exceptions\MethodNotAllowedException;
 use App\Pivots\EventParticipant;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
 
 class Event extends Model
@@ -163,7 +165,7 @@ class Event extends Model
         return $query->where('cancelled_at', null);
     }
 
-    public function finalize()
+    public function finalize(): void
     {
         if ($this->finalized_at !== null) {
             return;
@@ -174,14 +176,32 @@ class Event extends Model
         $this->save();
     }
 
-    public function getFulltimeMembersWhereVOG(bool $vog)
+    public function getFulltimeMembersWhereVOG(bool $vog): EloquentCollection
     {
         return $this->members()->wherePivot('wissel', 0)->where('vog', $vog)->get();
     }
 
-    public function getParticipantsWherePaid(bool $paid)
+    public function getParticipantsWherePaid(bool $paid): EloquentCollection
     {
         $operator = $paid ? '>' : '=';
         return $this->participants()->wherePivot('datum_betaling', $operator, '0000-00-00')->get();
+    }
+
+    public function training(): ?self
+    {
+        if ($this->type !== 'kamp') {
+            throw new MethodNotAllowedException('Cannot call training() on event not of type `kamp`.');
+        }
+
+        return self::where('type', 'training')->where('code', sprintf('T%s', $this->code))->first();
+    }
+
+    public function camps(): EloquentCollection
+    {
+        if ($this->type !== 'training') {
+            throw new MethodNotAllowedException('Cannot call camps() on event not of type `training`.');
+        }
+
+        return self::where('type', 'kamp')->where('code', 'like', substr($this->code, 1) . '%')->get();
     }
 }

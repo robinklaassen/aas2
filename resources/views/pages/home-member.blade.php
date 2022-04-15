@@ -48,6 +48,16 @@
 				<h5>Jij gaat mee op dit kamp, wat tof!</h5>
 			@endif
 
+			@if ($c->training() !== null)
+				<camp-thermometer-bar 
+					label="T" 
+					:number-full="{{ $c->training()->members()->where('ervaren_trainer', true)->count() }}" 
+					:number-partial="{{ $c->training()->members()->where('ervaren_trainer', false)->count() }}" 
+					:target-number="{{ $c->training()->camps()->count() * 2 }}">
+				</camp-thermometer-bar>
+			@else
+				<small><span class="glyphicon glyphicon-warning-sign"></span> Geen training gevonden voor dit kamp.</small>
+			@endif
 			<camp-thermometer-bar 
 				label="L" 
 				:number-full="{{ $c->getFulltimeMembersWhereVOG(true)->count() }}" 

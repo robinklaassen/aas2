@@ -30,4 +30,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         __DIR__ . '/node_modules',
         __DIR__ . '/storage',
     ]);
+
+    $parameters->set(Option::SKIP, [
+        PhpCsFixer\Fixer\PhpUnit\PhpUnitStrictFixer::class,
+    ]);
 };

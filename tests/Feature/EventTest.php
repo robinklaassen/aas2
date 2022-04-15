@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use App\Exceptions\MethodNotAllowedException;
+use App\Models\Event;
+use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
@@ -16,7 +19,7 @@ class EventTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
-        $this->user = \App\Models\User::findOrFail(1);
+        $this->user = User::findOrFail(1);
     }
 
     /**
@@ -85,5 +88,48 @@ class EventTest extends TestCase
         $databaseData['tijd_eind'] = '12:00:00';
 
         $this->assertDatabaseHas('events', $databaseData);
+    }
+
+    public function testExistingCampTrainingRelation()
+    {
+        $camp = Event::find(1);  // meikamp 2015
+        $training = Event::find(3);  // training meikamp 2015
+
+        self::assertEquals($training, $camp->training());
+        self::assertEquals($camp, $training->camps()->first());
+    }
+
+    public function testMultipleCampsPerTrainingRelation()
+    {
+        $camp1 = Event::find(11); // zomerkamp 1 2016
+        $camp2 = Event::find(12); // zomerkamp 2 2016
+        $training = Event::find(15);  // training zomer 2016
+
+        self::assertEquals(collect([$camp1, $camp2]), $training->camps()->toBase());
+    }
+
+    public function testMissingCampTrainingRelation()
+    {
+        $camp = Event::find(13);  // yee-oldy-kamp
+        $training = Event::find(14);  // training voor niks
+
+        self::assertNull($camp->training());
+        self::assertEmpty($training->camps());
+    }
+
+    public function testBadTrainingCallThrowsException()
+    {
+        $event = Event::find(4);  // VW
+
+        $this->expectException(MethodNotAllowedException::class);
+        $event->training();
+    }
+
+    public function testBadCampsCallThrowsException()
+    {
+        $event = Event::find(4);  // VW
+
+        $this->expectException(MethodNotAllowedException::class);
+        $event->camps();
     }
 }

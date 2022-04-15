@@ -185,5 +185,23 @@ class EventTableSeeder extends Seeder
             'vol' => '1',
             'beschrijving' => 'Ga mee op kamp!',
         ]);
+
+        Event::create([
+            'naam' => 'Training voor niks',
+            'code' => 'T1337',
+            'type' => 'training',
+            'datum_start' => '1337-01-01',
+            'datum_eind' => '1337-01-03',
+            'location_id' => 1,
+        ]);
+
+        Event::create([
+            'naam' => 'Training zomerkampen',
+            'code' => 'TZ1516',
+            'type' => 'training',
+            'datum_start' => '2016-07-18',
+            'datum_eind' => '2016-07-20',
+            'location_id' => 2,
+        ]);
     }
 }

@@ -37,7 +37,7 @@
 					class="badge">{{ $event->reviews->count() }}</span></a>
 			@endif
 			@endcan
-			@can("delete")
+			@can("delete", $event)
 			<a class="btn btn-danger" type="button" href="{{ url('/events', [$event->id, 'delete']) }}"
 				style="margin-top:21px;">Verwijderen</a>
 			@endcan
