@@ -20,19 +20,17 @@ class Course extends Model
     // Get participants on a specific camp that have this course
     public function participantsOnCamp(Event $camp, bool $onlyPlacedParticipants = false)
     {
-        $participants = DB::table('course_event_participant')
-            ->where('event_id', $camp->id)
-            ->where('course_id', $this->id)
-            ->join('participants', 'course_event_participant.participant_id', '=', 'participants.id')
-            ->orderBy('voornaam')
-            ->get();
-
-        if ($onlyPlacedParticipants) {
-            $participants = $participants->filter(
-                fn ($p) => $camp->participants()->find($p->id)->pivot->geplaatst
-            );
-        }
-
-        return $participants;
+        return Participant::whereIn(
+            'id',
+            DB::table('course_event_participant')
+                ->where('event_id', $camp->id)
+                ->where('course_id', $this->id)
+                ->pluck('participant_id')
+        )
+            ->orderBy('klas', 'desc')
+            ->get()
+            ->filter(function ($p) use ($camp, $onlyPlacedParticipants) {
+                return ! $onlyPlacedParticipants || $p->events()->find($camp->id)->pivot->geplaatst;
+            });
     }
 }

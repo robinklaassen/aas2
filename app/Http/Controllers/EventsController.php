@@ -26,11 +26,6 @@ class EventsController extends Controller
         $this->authorizeResource(Event::class, 'event');
     }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return Response
-     */
     public function index()
     {
         $camps = Event::where('type', 'kamp')->get();
@@ -40,21 +35,11 @@ class EventsController extends Controller
         return view('events.index', compact('camps', 'trainings', 'onlineEvents', 'others'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return Response
-     */
     public function create()
     {
         return view('events.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @return Response
-     */
     public function store(EventRequest $request)
     {
         Event::create($request->all());
@@ -63,12 +48,6 @@ class EventsController extends Controller
         ]);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $request
-     * @return Response
-     */
     public function show(Request $request, Event $event)
     {
 
@@ -107,24 +86,12 @@ class EventsController extends Controller
         return view('events.show', compact('event', 'participantCourseString', 'participantIsNew', 'numberOfParticipants'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $event
-     * @return Response
-     */
     public function edit(Event $event)
     {
         $this->authorize('update', $event);
         return view('events.edit', compact('event'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  int  $event
-     * @return Response
-     */
     public function update(Event $event, EventRequest $request)
     {
         $this->authorize('update', $event);
@@ -141,12 +108,6 @@ class EventsController extends Controller
         ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $event
-     * @return Response
-     */
     public function delete(Event $event)
     {
         $this->authorize('delete', $event);
@@ -347,17 +308,24 @@ class EventsController extends Controller
             return redirect('events');
         }
 
-        $onlyPlacedParticipants = $type === 'placed';
+        $onlyPlaced = $type === 'placed';
 
         $courses = Course::orderBy('naam')->get();
         $coverageInfo = $courses->map(fn ($c) => [
             'naam' => $c->naam,
-            'participants' => $c->participantsOnCamp($event, $onlyPlacedParticipants),
-            'members' => $c->members()->onEvent($event)->orderBy('voornaam')->get(),
-            'status' => $courseCoverageHelper->getStatus($event, $c, $onlyPlacedParticipants),
+            'participants' => $c->participantsOnCamp($event, $onlyPlaced),
+            'members' => $c->members()->onEvent($event)->orderBy('klas', 'desc')->orderBy('voornaam')->get(),
+            'rowClass' => strtr(
+                $courseCoverageHelper->getStatus($event, $c, $onlyPlaced),
+                [
+                    'ok' => 'success',
+                    'badlevel' => 'warning',
+                    'badquota' => 'danger',
+                ]
+            ),
         ]);
 
-        return view('events.check', compact('event', 'type', 'coverageInfo'));
+        return view('events.check', compact('event', 'onlyPlaced', 'coverageInfo'));
     }
 
     // Calculate camp budget
