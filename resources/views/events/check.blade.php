@@ -15,6 +15,13 @@
 
 <hr/>
 
+<p class="small">
+	Legenda: 
+	<span class="text-success">groen = in orde</span>,
+	<span class="text-danger">rood = niet genoeg leiding</span>, 
+	<span class="text-warning">oranje = onvoldoende niveau</span>.
+</p>
+
 <div class="row">
 <div class="col-md-8">
 <table class="table table-hover">
@@ -27,7 +34,7 @@
 	</thead>
 	<tbody>
 		@foreach ($coverageInfo as $c)
-			<tr @class([$c['rowClass'] => $c['participants']->count() > 0])>
+			<tr @class([$c['rowClass'] => $c['participants']->isNotEmpty()])>
 				<td>
 					{{ $c['naam'] }}
 				</td>
