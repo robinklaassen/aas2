@@ -13,7 +13,7 @@ export default Vue.extend({
           return Math.min(this.numberFull / this.targetNumber, 1) * 100;
       },
       percentagePartial(): number {
-          return Math.min(this.numberPartial / this.targetNumber, 1) * 100
+          return Math.min(this.numberPartial / this.targetNumber, 1 - this.percentageFull) * 100
       },
       styleBarFull(): string {
           return `width: ${this.percentageFull}%`
