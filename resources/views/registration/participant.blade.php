@@ -38,20 +38,14 @@ Inschrijven deelnemer
 
 <hr />
 
-<!--
-<div class="alert alert-danger alert-important" role="alert">
-	<b>Let op!</b> Er wordt op dit moment technisch onderhoud gepleegd aan dit formulier. Gelieve het pas weer te gebruiken wanneer deze melding weg is. Dank voor uw begrip.
-</div>
--->
-
 <p>Vul het onderstaande formulier zo volledig mogelijk in. Benieuwd hoe het na inschrijving verder gaat? Bekijk dan het
-	<a href="http://www.anderwijs.nl/kampen/stappenplan-inschrijving/" target="_blank">stappenplan voor de
+	<a href="https://anderwijs.nl/inschrijven/inschrijven-scholieren/" target="_blank">stappenplan voor de
 		inschrijving</a> (link opent in een nieuw venster). De informatie die je opgeeft wordt alleen door Anderwijs
 	verwerkt en bewaard, en zal <b>nooit</b> worden gedeeld met derden.</p>
 
 <div class="well">
 	<strong>Let op: is uw kind al eerder met ons op kamp geweest?</strong> Schrijf hem/haar dan niet hier opnieuw in,
-	maar log in op ons <a href="http://aas2.anderwijs.nl">administratiesysteem</a>. Daar kunt u de bij ons bekende
+	maar log in op ons <a href="{{ url('/') }}">administratiesysteem</a>. Daar kunt u de bij ons bekende
 	gegevens controleren en aanvullen en uw kind eenvoudig op een nieuw kamp sturen. Heeft u nog geen account, of bent u
 	uw inloggegevens vergeten, stuur dan een mail naar de <a href="mailto:kantoor@anderwijs.nl">kantoorcommissie</a>.
 </div>
@@ -128,14 +122,12 @@ Inschrijven deelnemer
 <div class="row">
 	<div class="col-sm-4 form-group">
 		{!! Form::label('telefoon_ouder_vast', 'Telefoonnummer vast:') !!}
-		{!! Form::text('telefoon_ouder_vast', null, ['class' => 'form-control', 'maxlength' => 10, 'placeholder' => '10
-		cijfers']) !!}
+		{!! Form::text('telefoon_ouder_vast', null, ['class' => 'form-control', 'maxlength' => 10, 'placeholder' => '10 cijfers']) !!}
 	</div>
 
 	<div class="col-sm-4 form-group">
 		{!! Form::label('telefoon_ouder_mobiel', 'Telefoonnummer mobiel:') !!}
-		{!! Form::text('telefoon_ouder_mobiel', null, ['class' => 'form-control', 'maxlength' => 10, 'placeholder' =>
-		'10 cijfers']) !!}
+		{!! Form::text('telefoon_ouder_mobiel', null, ['class' => 'form-control', 'maxlength' => 10, 'placeholder' => '10 cijfers']) !!}
 	</div>
 
 	<div class="col-sm-4 form-group">
@@ -168,7 +160,7 @@ Inschrijven deelnemer
 	<div class="col-sm-5">
 		<h3>Kamp selecteren</h3>
 		<div class="well well-sm">
-			Zie ook de <a href="http://www.anderwijs.nl/kampen/kampagenda/" target="_blank">kampagenda</a> (link wordt
+			Zie ook de <a href="https://anderwijs.nl/onze-bijleskampen/kampagenda/" target="_blank">kampagenda</a> (link wordt
 			geopend in nieuw venster).<br /><br />
 			<strong>Let op!</strong> De deelnemer moet het volledige kamp beschikbaar zijn. Later komen of eerder
 			weggaan is niet toegestaan.
@@ -200,11 +192,9 @@ Inschrijven deelnemer
 	<div class="col-sm-7">
 		<h3>Kosten</h3>
 		<div class="well well-sm">
-			Klik <a href="http://www.anderwijs.nl/kampen/kampagenda/" target="_blank">hier</a> voor de actuele
-			kampprijzen. Anderwijs kent een kortingsregeling op de kampprijs afhankelijk van het bruto maandelijks
-			gezinsinkomen. Controleer ook de <a href="http://www.anderwijs.nl/algemene-voorwaarden/"
-				target="_blank">voorwaarden</a> om voor korting in aanmerking te komen (links worden geopend in een
-			nieuw venster). Als u in aanmerking komt voor korting, stuur dan ook een inkomensverklaring van u en uw
+			De actuele kampprijzen staan in de <a href="https://anderwijs.nl/onze-bijleskampen/kampagenda/" target="_blank">kampagenda</a>.
+			Anderwijs kent een <a href="https://www.anderwijs.nl/onze-bijleskampen/kosten/" target="_blank">kortingsregeling</a> op de kampprijs afhankelijk van het bruto maandelijks
+			gezinsinkomen. Als u in aanmerking komt voor korting, stuur dan ook een inkomensverklaring van u en uw
 			(eventuele) partner naar onze postbus t.a.v. de penningmeester.
 		</div>
 		<div class="form-group">
@@ -313,8 +303,8 @@ Inschrijven deelnemer
 
 	<div class="form-group">
 		{!! Form::label('opmerkingen', 'Overige informatie:') !!}
-		{!! Form::textarea('opmerkingen', null, ['class' => 'form-control', 'placeholder' => 'Denk bijvoorbeeld aan
-		speciale diëten, allergieën, medicijnen of andere dingen waar rekening mee gehouden moet worden op kamp.' ]) !!}
+		{!! Form::textarea('opmerkingen', null, ['class' => 'form-control', 
+		'placeholder' => 'Denk bijvoorbeeld aan speciale diëten, allergieën, medicijnen of andere dingen waar rekening mee gehouden moet worden op kamp.' ]) !!}
 	</div>
 
 	<div class="row">
@@ -322,14 +312,14 @@ Inschrijven deelnemer
 			<div class="checkbox">
 				<label>
 					{!! Form::checkbox('voorwaarden', 1) !!} Ik ga akkoord met de <a
-						href="http://www.anderwijs.nl/algemene-voorwaarden/" target="_blank">algemene voorwaarden</a>
+						href="https://www.anderwijs.nl/onze-bijleskampen/algemene-voorwaarden/" target="_blank">algemene voorwaarden</a>
 					voor deelname aan dit Anderwijskamp.
 				</label>
 			</div>
 			<div class="checkbox">
 				<label>
 					{!! Form::checkbox('privacy', 1) !!} Ik geef Anderwijs toestemming om deze gegevens te verwerken
-					zoals beschreven in het <a href="http://www.anderwijs.nl/anderwijs/privacy/"
+					zoals beschreven in het <a href="{{ url('privacy') }}"
 						target="_blank">privacystatement</a>.
 				</label>
 			</div>

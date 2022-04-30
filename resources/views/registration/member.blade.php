@@ -38,7 +38,7 @@ Inschrijven vrijwilliger
 
 <p>Wat leuk dat je met ons op kamp wil gaan. Vul het onderstaande formulier zo volledig mogelijk in en wij nemen zo spoedig mogelijk contact met je op over het verdere proces. De informatie die je opgeeft wordt alleen door Anderwijs verwerkt en bewaard, en zal <b>nooit</b> worden gedeeld met derden.</p>
 
-<div class="well"><strong>Let op! </strong>Ben je al eens eerder met ons op kamp geweest? Meld je dan niet hier opnieuw aan, maar log in op <a href="http://aas2.anderwijs.nl">AAS 2.0</a> of stuur een mailtje naar de <a href="mailto:kamp@anderwijs.nl">kampcommissie</a>.</div>
+<div class="well"><strong>Let op! </strong>Ben je al eens eerder met ons op kamp geweest? Meld je dan niet hier opnieuw aan, maar log in op <a href="{{ url('/') }}">AAS 2.0</a> of stuur een mailtje naar de <a href="mailto:kamp@anderwijs.nl">kampcommissie</a>.</div>
 
 @include ('errors.list')
 
@@ -112,7 +112,7 @@ Inschrijven vrijwilliger
 <div class="row">
 	<div class="col-sm-5">
 		<div class="well well-sm">
-			Zie ook het <a href="http://www.anderwijs.nl/agenda" target="_blank">kampschema</a> (link wordt geopend in nieuw venster).
+			Zie ook het <a href="https://anderwijs.nl/onze-bijleskampen/kampagenda/" target="_blank">kampschema</a> (link wordt geopend in nieuw venster).
 		</div>
 	</div>
 </div>
@@ -211,7 +211,7 @@ Inschrijven vrijwilliger
 		<div class="checkbox">
 			<label>
 				{!! Form::checkbox('privacy', 1) !!} Ik geef Anderwijs toestemming om deze gegevens te verwerken zoals beschreven in het
-				<a href="http://www.anderwijs.nl/anderwijs/privacy/" target="_blank">privacystatement</a>.
+				<a href="{{ url('privacy') }}" target="_blank">privacystatement</a>.
 			</label>
 		</div>
 	</div>

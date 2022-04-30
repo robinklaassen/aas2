@@ -26,7 +26,7 @@
 @endif
 
 <p>
-	Er is ook automatisch een account aangemaakt. Hiermee kunt u inloggen op ons <a href="https://aas2.anderwijs.nl">administratiesysteem</a> om de gegevens van uw kind te beheren. De details staan in de bevestigingsmail.
+	Er is ook automatisch een account aangemaakt. Hiermee kunt u inloggen op ons <a href="{{ url('/') }}">administratiesysteem</a> om de gegevens van uw kind te beheren. De details staan in de bevestigingsmail.
 </p>
 
 <p>
