@@ -6,13 +6,15 @@ namespace App\Http\Controllers;
 
 use App\Facades\Mollie;
 use App\Helpers\Payment\EventPayment;
-use App\Http\Requests;
+use App\Http\Requests\MemberRequest;
+use App\Http\Requests\NewParticipantRequest;
 use App\Mail\internal\NewMemberNotification;
 use App\Mail\internal\NewParticipantNotification;
 use App\Mail\members\MemberRegistrationConfirmation;
 use App\Mail\participants\ParticipantRegistrationConfirmation;
 use App\Models\Course;
 use App\Models\Event;
+use App\Models\EventPackage;
 use App\Models\Member;
 use App\Models\Participant;
 use App\Models\Role;
@@ -33,18 +35,6 @@ class RegistrationController extends Controller
             ->orderBy('datum_start', 'asc')
             ->get();
 
-        $camp_options = [];
-        $camp_full = [];
-        foreach ($camps as $camp) {
-            $camp_options[$camp->id] = $camp->naam . ' ' . substr((string) $camp->datum_start, 0, 4) . ' te ' . $camp->location->plaats . ' (' . $camp->datum_voordag->format('d-m-Y') . ')';
-            if ($camp->vol) {
-                $camp_options[$camp->id] .= ' - VOL';
-                $camp_full[$camp->id] = 1;
-            } else {
-                $camp_full[$camp->id] = 0;
-            }
-        }
-
         // List of courses
         $course_options = Course::orderBy('naam')->pluck('naam', 'id')->toArray();
         $course_options = [
@@ -63,11 +53,11 @@ class RegistrationController extends Controller
             'Nieuwsbrief school',
         ];
 
-        return view('registration.member', compact('camp_options', 'camp_full', 'course_options', 'hoebij_options'));
+        return view('registration.member', compact('camps', 'course_options', 'hoebij_options'));
     }
 
     // Member registration handler
-    public function storeMember(Requests\MemberRequest $request)
+    public function storeMember(MemberRequest $request)
     {
         // Validation specific for registration (one time)
         $this->validate($request, [
@@ -127,7 +117,7 @@ class RegistrationController extends Controller
         $password = User::generatePassword();
 
         // Attach account
-        $user = new \App\Models\User();
+        $user = new User();
         $user->username = $username;
         $user->password = bcrypt($password);
         $user->privacy = Carbon::now();
@@ -177,7 +167,7 @@ class RegistrationController extends Controller
             ];
         });
 
-        $packages = \App\Models\EventPackage::all()->groupBy('type');
+        $packages = EventPackage::all()->groupBy('type');
 
         // List of 'hoe bij Anderwijs' options (without 'anders, namelijk'!)
         $hoebij_options = [
@@ -200,7 +190,7 @@ class RegistrationController extends Controller
     }
 
     // Participant registration handler
-    public function storeParticipant(Requests\NewParticipantRequest $request)
+    public function storeParticipant(NewParticipantRequest $request)
     {
         // Validation done in Request\NewParticipantRequest
         // Additional one-time validation items here
@@ -209,7 +199,7 @@ class RegistrationController extends Controller
             'privacy' => 'required',
         ]);
 
-        $package = \App\Models\EventPackage::find($request->selected_package);
+        $package = EventPackage::find($request->selected_package);
         $camp = Event::findOrFail($request->selected_camp);
 
         // Check given package for camp
@@ -281,7 +271,7 @@ class RegistrationController extends Controller
         $password = User::generatePassword();
 
         // Attach account
-        $user = new \App\Models\User();
+        $user = new User();
         $user->username = $username;
         $user->password = bcrypt($password);
         $user->privacy = Carbon::now();

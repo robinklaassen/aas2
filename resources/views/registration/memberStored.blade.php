@@ -15,11 +15,11 @@
 </p>
 
 <p>
-	Er is ook automatisch een account voor je aangemaakt. Hiermee kun je inloggen op ons <a href="http://aas2.anderwijs.nl">administratiesysteem</a> om je gegevens te beheren. De details staan in de bevestigingsmail.
+	Er is ook automatisch een account voor je aangemaakt. Hiermee kun je inloggen op ons <a href="{{ url('/') }}">administratiesysteem</a> om je gegevens te beheren. De details staan in de bevestigingsmail.
 </p>
 
 <p>
-	<a href="http://www.anderwijs.nl">Terug naar de website van Anderwijs</a>
+	<a href="https://www.anderwijs.nl">Terug naar de website van Anderwijs</a>
 </p>
 
 @endsection

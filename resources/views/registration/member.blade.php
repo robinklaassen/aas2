@@ -36,15 +36,9 @@ Inschrijven vrijwilliger
 
 <hr />
 
-
-{{-- <div class="alert alert-danger alert-important" role="alert">
-	<b>Let op!</b> Er wordt op dit moment technisch onderhoud gepleegd aan dit formulier. Gelieve het pas weer te gebruiken wanneer deze melding weg is. Dank voor uw begrip.
-</div> --}}
-
-
 <p>Wat leuk dat je met ons op kamp wil gaan. Vul het onderstaande formulier zo volledig mogelijk in en wij nemen zo spoedig mogelijk contact met je op over het verdere proces. De informatie die je opgeeft wordt alleen door Anderwijs verwerkt en bewaard, en zal <b>nooit</b> worden gedeeld met derden.</p>
 
-<div class="well"><strong>Let op! </strong>Ben je al eens eerder met ons op kamp geweest? Meld je dan niet hier opnieuw aan, maar log in op <a href="http://aas2.anderwijs.nl">AAS 2.0</a> of stuur een mailtje naar de <a href="mailto:kamp@anderwijs.nl">kampcommissie</a>.</div>
+<div class="well"><strong>Let op! </strong>Ben je al eens eerder met ons op kamp geweest? Meld je dan niet hier opnieuw aan, maar log in op <a href="{{ url('/') }}">AAS 2.0</a> of stuur een mailtje naar de <a href="mailto:kamp@anderwijs.nl">kampcommissie</a>.</div>
 
 @include ('errors.list')
 
@@ -118,7 +112,7 @@ Inschrijven vrijwilliger
 <div class="row">
 	<div class="col-sm-5">
 		<div class="well well-sm">
-			Zie ook het <a href="http://www.anderwijs.nl/agenda" target="_blank">kampschema</a> (link wordt geopend in nieuw venster).
+			Zie ook het <a href="https://anderwijs.nl/onze-bijleskampen/kampagenda/" target="_blank">kampschema</a> (link wordt geopend in nieuw venster).
 		</div>
 	</div>
 </div>
@@ -126,9 +120,9 @@ Inschrijven vrijwilliger
 	<div class="col-sm-5 form-group">
 		{!! Form::label('selected_camp', 'Kamp:') !!}
 		<select class="form-control" id="selected_camp" name="selected_camp">
-			<?php foreach ($camp_options as $id => $name) { ?>
-				<option value="{{$id}}" {{ ($camp_full[$id]) ? 'disabled' : '' }}>{{$name}}</option>
-			<?php } ?>
+			@foreach($camps as $c)
+				<option value="{{ $c->id }}" @if($c->vol) disabled @endif>{{ $c->full_title }}</option>
+			@endforeach
 		</select>
 	</div>
 </div>
@@ -176,65 +170,59 @@ Inschrijven vrijwilliger
 		{!! Form::input('number', 'klas'.((2*$i)+1), null, ['class' => 'form-control', 'min' => 1, 'max' => 6, 'step' => 1]) !!}
 	</div>
 	</div>
-	@endfor
+@endfor
 
-	<h3>Overige informatie</h3>
-	<div class="row">
-		<div class="col-sm-12 form-group">
-			<b>Hoe ben je bij Anderwijs terechtgekomen?</b><br />
-			<small>Meerdere antwoorden mogelijk</small>
-			@foreach ($hoebij_options as $i => $option)
-			<div class="checkbox">
-				<label>
-					{!! Form::checkbox('hoebij[]', $option) !!} {{ $option }}
-				</label>
-			</div>
-			@endforeach
-
-			<div class="checkbox form-inline">
-				<label>
-					{!! Form::checkbox('hoebij[]', '0') !!} Anders, namelijk:
-				</label>
-
-				{!! Form::text('hoebij_anders', null, ['class' => ['form-control', 'input-sm']]) !!}
-			</div>
-
+<h3>Overige informatie</h3>
+<div class="row">
+	<div class="col-sm-12 form-group">
+		<b>Hoe ben je bij Anderwijs terechtgekomen?</b><br />
+		<small>Meerdere antwoorden mogelijk</small>
+		@foreach ($hoebij_options as $i => $option)
+		<div class="checkbox">
+			<label>
+				{!! Form::checkbox('hoebij[]', $option) !!} {{ $option }}
+			</label>
 		</div>
-	</div>
+		@endforeach
 
-	<div class="form-group">
-		{!! Form::label('opmerkingen', 'Overige informatie:') !!}
-		{!! Form::textarea('opmerkingen', null, ['class' => 'form-control', 'placeholder' => 'Denk bijvoorbeeld aan speciale diëten, allergieën, medicijnen of andere dingen waar rekening mee gehouden moet worden op kamp.' ]) !!}
-	</div>
+		<div class="checkbox form-inline">
+			<label>
+				{!! Form::checkbox('hoebij[]', '0') !!} Anders, namelijk:
+			</label>
 
-	<div class="row">
-		<div class="col-sm-12">
-			<div class="checkbox">
-				<label>
-					{!! Form::checkbox('vog', 1) !!} Ik ga akkoord dat ik een <strong>Verklaring Omtrent het Gedrag (VOG)</strong> moet aanvragen en inleveren om mee te mogen op kamp. Anderwijs vergoedt eventuele kosten die hieraan verbonden zijn (over de aanvraagprocedure volgt apart bericht).
-				</label>
-			</div>
-			<div class="checkbox">
-				<label>
-					{!! Form::checkbox('privacy', 1) !!} Ik geef Anderwijs toestemming om deze gegevens te verwerken zoals beschreven in het
-					<a href="http://www.anderwijs.nl/anderwijs/privacy/" target="_blank">privacystatement</a>.
-				</label>
-			</div>
+			{!! Form::text('hoebij_anders', null, ['class' => ['form-control', 'input-sm']]) !!}
 		</div>
-	</div>
 
-	<!--
-<div class="well">
-	<strong>Let op! </strong>Door je in te schrijven ga je ermee akkoord dat je een <strong>Verklaring Omtrent het Gedrag (VOG)</strong> moet aanvragen en inleveren om mee te mogen op kamp. Anderwijs vergoedt de kosten die hieraan verbonden zijn. Over de aanvraagprocedure ontvang je een apart bericht.
+	</div>
 </div>
--->
 
-	<br>
+<div class="form-group">
+	{!! Form::label('opmerkingen', 'Overige informatie:') !!}
+	{!! Form::textarea('opmerkingen', null, ['class' => 'form-control', 'placeholder' => 'Denk bijvoorbeeld aan speciale diëten, allergieën, medicijnen of andere dingen waar rekening mee gehouden moet worden op kamp.' ]) !!}
+</div>
 
-	<div class="form-group">
-		{!! Form::submit('Inschrijven', ['class' => 'btn btn-primary form-control']) !!}
+<div class="row">
+	<div class="col-sm-12">
+		<div class="checkbox">
+			<label>
+				{!! Form::checkbox('vog', 1) !!} Ik ga akkoord dat ik een <strong>Verklaring Omtrent het Gedrag (VOG)</strong> moet aanvragen en inleveren om mee te mogen op kamp. Anderwijs vergoedt eventuele kosten die hieraan verbonden zijn (over de aanvraagprocedure volgt apart bericht).
+			</label>
+		</div>
+		<div class="checkbox">
+			<label>
+				{!! Form::checkbox('privacy', 1) !!} Ik geef Anderwijs toestemming om deze gegevens te verwerken zoals beschreven in het
+				<a href="{{ url('privacy') }}" target="_blank">privacystatement</a>.
+			</label>
+		</div>
 	</div>
+</div>
 
-	{!! Form::close() !!}
+<br>
 
-	@endsection
+<div class="form-group">
+	{!! Form::submit('Inschrijven', ['class' => 'btn btn-primary form-control']) !!}
+</div>
+
+{!! Form::close() !!}
+
+@endsection
