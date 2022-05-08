@@ -109,6 +109,8 @@ bootstrap/cache
 # AAS2 specifics
 /public/img
 /public/uploads
+/public/.ftp-deploy-sync-state.json
+/config/updater.php
 
 # Ignore the composer archive
 # It's required on server (can't install globally) but updating interferes with git pull
