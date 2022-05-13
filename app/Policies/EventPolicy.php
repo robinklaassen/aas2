@@ -190,8 +190,8 @@ class EventPolicy
 
     public function viewReviewResults(User $user, Event $event)
     {
-        // TODO: check if the user participated
-        return $user->hasCapability('event::show::review');
+        // User must be member but this is ascertained by route middleware
+        return $user->hasCapability('event::show::review') || $event->hasUser($user);
     }
 
     public function cancel(User $user, Event $event)
