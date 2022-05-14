@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Middleware\RedirectIfNotAMember;
 use Illuminate\Support\Facades\Route;
 
 Route::get('home', 'PagesController@home');
@@ -118,7 +119,7 @@ Route::put('events/{event}/join-members', 'EventsController@joinMembersSave');
 Route::get('events/{event}/move-participant/{participant}', 'EventsController@moveParticipant');
 Route::put('events/{event}/move-participant/{participant}', 'EventsController@moveParticipantSave');
 
-Route::get('events/{event}/reviews', 'EventsController@reviews');
+Route::get('events/{event}/reviews', 'EventsController@reviews')->middleware(RedirectIfNotAMember::class);
 Route::get('events/{event}', 'EventsController@show');
 
 // Member things

@@ -100,6 +100,7 @@ class LavachartsChartService implements ChartServiceInterface
         ],
         'fontSize' => 14,
         'hAxis' => [
+            'format' => '0',
             'minValue' => 0,
             'gridlines' => [
                 'count' => -1,
