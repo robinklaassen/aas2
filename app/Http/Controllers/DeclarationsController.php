@@ -128,18 +128,9 @@ class DeclarationsController extends Controller
         ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $declaration
-     * @return Response
-     */
     public function delete(Declaration $declaration)
     {
-        $member = \Auth::user()->profile;
-        if ($member !== $declaration->member) {
-            return redirect()->back();
-        }
+        $this->authorize('delete', $declaration);
 
         return view('declarations.delete', compact('declaration'));
     }
