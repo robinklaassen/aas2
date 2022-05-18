@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Database\Seeders;
 
 use App\Models\Location;
-use DB;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 
 class LocationTableSeeder extends Seeder
 {
