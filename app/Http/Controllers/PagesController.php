@@ -63,4 +63,23 @@ class PagesController extends Controller
         $user->save();
         return redirect('home');
     }
+
+    // TODO consider own controller?
+    public function campsVisualisation(Request $request)
+    {
+        $camps = Event::where('type', 'kamp')
+            ->where('datum_eind', '<', Carbon::now())
+            ->notCancelled()
+            ->get()
+            ->map(function ($c) {
+                return [
+                    'id' => $c->id,
+                    // TODO I don't think our locations have coordinates yet...
+                    // 'lon' => $c->location->
+                    'size' => $c->members()->count() + $c->participants()->count(),
+                ];
+            })
+            ->toArray();
+        return view('pages.camps-visualisation', compact('camps'));
+    }
 }
