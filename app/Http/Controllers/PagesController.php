@@ -72,14 +72,14 @@ class PagesController extends Controller
             ->notCancelled()
             ->get()
             ->map(function ($c) {
+                $loc = $c->location;
                 return [
                     'id' => $c->id,
-                    // TODO I don't think our locations have coordinates yet...
-                    // 'lon' => $c->location->
+                    'latlng' => [$loc->geolocatie->getLat(), $loc->geolocatie->getLng()],
                     'size' => $c->members()->count() + $c->participants()->count(),
                 ];
             })
-            ->toArray();
+            ->values();
         return view('pages.camps-visualisation', compact('camps'));
     }
 }
