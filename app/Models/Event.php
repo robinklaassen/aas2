@@ -158,6 +158,14 @@ class Event extends Model
     }
 
     /**
+     * Events which are ended
+     */
+    public function scopeEnded($query)
+    {
+        return $query->where('datum_eind', '<', Carbon::now());
+    }
+
+    /**
      * Events which are not cancelled
      */
     public function scopeNotCancelled($query)

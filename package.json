@@ -39,6 +39,7 @@
         "typescript": "^3.9.7",
         "vue": "^2.6.12",
         "vue-loader": "^15.9.5",
+        "vue-slider-component": "^3.2.15",
         "vue-template-compiler": "^2.6.12",
         "vue2-leaflet": "^2.7.1",
         "webshim": "^1.16.0",
