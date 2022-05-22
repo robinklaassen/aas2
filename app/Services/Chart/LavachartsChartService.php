@@ -119,6 +119,7 @@ class LavachartsChartService implements ChartServiceInterface
 
         $entity = $member ?? $event;
         $q = $entity->reviews()
+            ->where('event_id', $event->id)
             ->select($question, DB::raw('count(*) as total'))
             ->groupBy($question)
             ->pluck('total', $question)->toArray();
