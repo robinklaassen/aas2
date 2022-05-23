@@ -55,7 +55,7 @@ Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('roles/explain', 'RolesController@explain')->name('roles.explain');
 
 // TODO maybe make public?
-Route::get('camps-visualisation', [PagesController::class, 'campsVisualisation'])->middleware(RedirectIfNotAMember::class);
+Route::get('camp-year-map', [PagesController::class, 'campYearMap'])->middleware(RedirectIfNotAMember::class);
 
 // Declaration things
 Route::get(

@@ -1,12 +1,12 @@
 @extends('master')
 
 @section('title')
-Kampvisualisatie
+Kampen door de jaren heen
 @endsection
 
 @section('content')
 
-<h1>Kampvisualisatie</h1>
+<h1>Kampen door de jaren heen</h1>
 
 <hr />
 

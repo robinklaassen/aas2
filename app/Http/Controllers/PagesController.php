@@ -66,7 +66,7 @@ class PagesController extends Controller
     }
 
     // TODO consider own controller?
-    public function campsVisualisation(Request $request)
+    public function campYearMap(Request $request)
     {
         $camps = Event::where('type', 'kamp')->ended()->notCancelled()
             ->whereHas('location', function (Builder $query) {
@@ -84,6 +84,6 @@ class PagesController extends Controller
                 ];
             })->values();
 
-        return view('pages.camps-visualisation', compact('camps'));
+        return view('pages.camp-year-map', compact('camps'));
     }
 }

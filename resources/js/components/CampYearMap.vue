@@ -1,10 +1,16 @@
 <template>
   <div id="camp-year-map-root">
-    <vue-slider v-model="selectedYear" :data="sliderData"></vue-slider>
+    <div class="form-group">
+      <label for="yearSlider">Verenigingsjaar</label>
+      <vue-slider
+        id="yearSlider"
+        v-model="selectedYear"
+        :data="sliderData"
+        :marks="true"
+      ></vue-slider>
+    </div>
 
-    <hr />
-
-    <l-map style="height: 900px" :zoom="zoom" :center="center">
+    <l-map class="main-map" :zoom="zoom" :center="center">
       <l-tile-layer :url="mapUrl" :attribution="attribution"></l-tile-layer>
       <l-circle-marker
         v-for="x in filteredCampData"
@@ -23,6 +29,13 @@
     </ul>
   </div>
 </template>
+
+<style scoped>
+.main-map {
+  height: 900px;
+  margin-top: 30px;
+}
+</style>
 
 <script lang="ts">
 import Vue from "vue";
@@ -63,11 +76,13 @@ export default Vue.extend({
   },
   computed: {
     filteredCampData(): CampData[] {
-      return this.campData.filter(x => x.verenigingsjaar == this.selectedYear);
+      return this.campData.filter(
+        (x) => x.verenigingsjaar == this.selectedYear
+      );
     },
     sliderData(): string[] {
-        return _.uniq(this.campData.map(x => x.verenigingsjaar)).sort();
-    }
+      return _.uniq(this.campData.map((x) => x.verenigingsjaar)).sort();
+    },
   },
 });
 </script>
