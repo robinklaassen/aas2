@@ -18,7 +18,10 @@
         :lat-lng="x.latlng"
         :radius="x.size * 2"
         color="red"
-      ></l-circle-marker>
+        ><l-tooltip>
+          {{ x.titel }}
+        </l-tooltip>
+      </l-circle-marker>
     </l-map>
   </div>
 </template>
@@ -32,7 +35,7 @@
 
 <script lang="ts">
 import Vue from "vue";
-import { LMap, LTileLayer, LCircleMarker } from "vue2-leaflet";
+import { LMap, LTileLayer, LCircleMarker, LTooltip } from "vue2-leaflet";
 import VueSlider from "vue-slider-component";
 import "vue-slider-component/theme/default.css";
 import _ from "lodash";
@@ -53,6 +56,7 @@ export default Vue.extend({
     LMap,
     LTileLayer,
     LCircleMarker,
+    LTooltip,
     VueSlider,
   },
   data() {
