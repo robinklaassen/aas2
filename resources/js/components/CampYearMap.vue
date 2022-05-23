@@ -20,13 +20,6 @@
         color="red"
       ></l-circle-marker>
     </l-map>
-
-    <hr />
-
-    <h6>Debug</h6>
-    <ul id="some-list">
-      <li v-for="x in filteredCampData" :key="x.id">{{ x }}</li>
-    </ul>
   </div>
 </template>
 
