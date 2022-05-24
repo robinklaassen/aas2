@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use App\Http\Controllers\PagesController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Middleware\RedirectIfNotAMember;
 use Illuminate\Support\Facades\Route;
@@ -53,9 +52,6 @@ Route::post('accept-privacy', 'PagesController@storePrivacyStatement')->name('st
 
 Route::get('logout', 'Auth\LoginController@logout')->name('logout');
 Route::get('roles/explain', 'RolesController@explain')->name('roles.explain');
-
-// TODO maybe make public?
-Route::get('camp-year-map', [PagesController::class, 'campYearMap'])->middleware(RedirectIfNotAMember::class);
 
 // Declaration things
 Route::get(

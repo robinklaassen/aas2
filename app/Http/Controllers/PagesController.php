@@ -7,7 +7,6 @@ namespace App\Http\Controllers;
 use App\Models\Event;
 use App\Models\Member;
 use Carbon\Carbon;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 // The PagesController is for static pages that do not fall under any other type of controller, like members or events.
@@ -63,27 +62,5 @@ class PagesController extends Controller
         $user->privacy = Carbon::now();
         $user->save();
         return redirect('home');
-    }
-
-    // TODO consider own controller?
-    public function campYearMap(Request $request)
-    {
-        $camps = Event::where('type', 'kamp')->ended()->notCancelled()
-            ->whereHas('location', function (Builder $query) {
-                return $query->whereNotNull('geolocatie');
-            })
-            ->orderBy('datum_start')
-            ->get()->map(function ($c) {
-                $loc = $c->location;
-                return [
-                    'id' => $c->id,
-                    'titel' => $c->full_title,
-                    'verenigingsjaar' => $c->verenigingsjaar,
-                    'latlng' => [$loc->geolocatie->getLat(), $loc->geolocatie->getLng()],
-                    'size' => $c->members()->count() + $c->participants()->count(),
-                ];
-            })->values();
-
-        return view('pages.camp-year-map', compact('camps'));
     }
 }
