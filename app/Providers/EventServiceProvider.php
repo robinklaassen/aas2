@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\Providers;
 
 use App\Events\FinishedEvent;
+use App\Events\LocationUpdated;
 use App\Events\MemberUpdated;
 use App\Listeners\AddMemberActionForFinishedEvent;
+use App\Listeners\QueueLocationGeolocation;
 use App\Listeners\QueueMemberGeolocation;
 use App\Listeners\SetLastLoginDate;
 use App\Services\ActionGenerator\EventSingleActionApplicator;
@@ -28,6 +30,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         MemberUpdated::class => [
             QueueMemberGeolocation::class,
+        ],
+        LocationUpdated::class => [
+            QueueLocationGeolocation::class,
         ],
         FinishedEvent::class => [
             AddMemberActionForFinishedEvent::class,
