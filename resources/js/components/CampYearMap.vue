@@ -40,7 +40,7 @@ import VueSlider from "vue-slider-component";
 import "vue-slider-component/theme/default.css";
 import _ from "lodash";
 
-type CampData = {
+type CampMapData = {
   id: number;
   titel: string;
   verenigingsjaar: string;
@@ -50,7 +50,7 @@ type CampData = {
 
 export default Vue.extend({
   props: {
-    campData: Array as () => CampData[],
+    campData: Array as () => CampMapData[],
   },
   components: {
     LMap,
@@ -67,12 +67,11 @@ export default Vue.extend({
         'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       zoom: 8,
       center: [52.1, 5.4],
-      markerLatLng: [51.504, -0.159],
       selectedYear: this.campData[0].verenigingsjaar,
     };
   },
   computed: {
-    filteredCampData(): CampData[] {
+    filteredCampData(): CampMapData[] {
       return this.campData.filter(
         (x) => x.verenigingsjaar == this.selectedYear
       );
