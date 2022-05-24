@@ -40,6 +40,8 @@ import VueSlider from "vue-slider-component";
 import "vue-slider-component/theme/default.css";
 import _ from "lodash";
 
+import { STAMEN_TERRAIN_BG_MAP_URL, STAMEN_TERRAIN_BG_MAP_ATTRIBUTION } from "../mapConstants";
+
 type CampMapData = {
   id: number;
   titel: string;
@@ -47,6 +49,9 @@ type CampMapData = {
   latlng: Array<number>;
   size: number;
 };
+
+const NETHERLANDS_CENTER_LAT_LNG = [52.1, 5.4];
+const NETHERLANDS_ZOOM_LEVEL = 8;
 
 export default Vue.extend({
   props: {
@@ -61,12 +66,10 @@ export default Vue.extend({
   },
   data() {
     return {
-      mapUrl:
-        "https://stamen-tiles-{s}.a.ssl.fastly.net/terrain-background/{z}/{x}/{y}{r}.png",
-      attribution:
-        'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      zoom: 8,
-      center: [52.1, 5.4],
+      mapUrl: STAMEN_TERRAIN_BG_MAP_URL,
+      attribution: STAMEN_TERRAIN_BG_MAP_ATTRIBUTION,
+      zoom: NETHERLANDS_ZOOM_LEVEL,
+      center: NETHERLANDS_CENTER_LAT_LNG,
       selectedYear: this.campData[0].verenigingsjaar,
     };
   },

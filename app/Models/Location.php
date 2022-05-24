@@ -20,8 +20,7 @@ class Location extends Model
         'updated' => LocationUpdated::class,
     ];
 
-    // Full address as single string
-    public function getVolledigAdresAttribute()
+    public function getVolledigAdresAttribute(): string
     {
         return $this->adres . ', ' . $this->postcode . ' ' . $this->plaats;
     }

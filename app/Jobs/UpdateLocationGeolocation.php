@@ -26,17 +26,11 @@ class UpdateLocationGeolocation implements ShouldQueue
 
     private $location;
 
-    /**
-     * Create a new job instance.
-     */
     public function __construct(Location $location)
     {
         $this->location = $location;
     }
 
-    /**
-     * Execute the job.
-     */
     public function handle(GeocoderInterface $geocoder)
     {
         try {

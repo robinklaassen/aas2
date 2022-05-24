@@ -26,17 +26,11 @@ class UpdateMemberGeolocation implements ShouldQueue
 
     private $member;
 
-    /**
-     * Create a new job instance.
-     */
     public function __construct(Member $member)
     {
         $this->member = $member;
     }
 
-    /**
-     * Execute the job.
-     */
     public function handle(GeocoderInterface $geocoder)
     {
         try {
