@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Http\Controllers;
 
 use App\Models\Event;
+use App\ValueObjects\CampMapData;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
@@ -23,14 +24,7 @@ class CampYearMapController extends Controller
             })
             ->orderBy('datum_start')
             ->get()->map(function ($c) {
-                $loc = $c->location;
-                return [
-                    'id' => $c->id,
-                    'titel' => $c->full_title,
-                    'verenigingsjaar' => $c->verenigingsjaar,
-                    'latlng' => [$loc->geolocatie->getLat(), $loc->geolocatie->getLng()],
-                    'size' => $c->members()->count() + $c->participants()->count(),
-                ];
+                return CampMapData::fromEvent($c);
             })->values();
 
         return view('pages.camp-year-map', compact('camps'));
