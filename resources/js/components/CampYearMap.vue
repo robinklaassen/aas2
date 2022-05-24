@@ -19,7 +19,7 @@
         :radius="x.size * 2"
         color="red"
         ><l-tooltip>
-          {{ x.titel }}
+          {{ x.title }}
         </l-tooltip>
       </l-circle-marker>
     </l-map>
@@ -44,7 +44,7 @@ import { STAMEN_TERRAIN_BG_MAP_URL, STAMEN_TERRAIN_BG_MAP_ATTRIBUTION } from "..
 
 type CampMapData = {
   id: number;
-  titel: string;
+  title: string;
   verenigingsjaar: string;
   latlng: Array<number>;
   size: number;
