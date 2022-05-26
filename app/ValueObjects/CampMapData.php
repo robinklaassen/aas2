@@ -16,18 +16,22 @@ final class CampMapData
 
     public array $latlng;
 
-    public int $num_members;
+    public int $numMembers;
 
-    public int $num_participants;
+    public int $numParticipants;
 
-    public function __construct(int $id, string $title, string $verenigingsjaar, array $latlng, int $num_members, int $num_participants)
+    public int $size;
+
+    public function __construct(int $id, string $title, string $verenigingsjaar, array $latlng, int $numMembers, int $numParticipants)
     {
         $this->id = $id;
         $this->title = $title;
         $this->verenigingsjaar = $verenigingsjaar;
         $this->latlng = $latlng;
-        $this->num_members = $num_members;
-        $this->num_participants = $num_participants;
+        $this->numMembers = $numMembers;
+        $this->numParticipants = $numParticipants;
+
+        $this->size = $numMembers + $numParticipants;
     }
 
     public static function fromEvent(Event $event): static
