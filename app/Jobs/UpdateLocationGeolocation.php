@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Jobs;
 
 use App\Exceptions\GeocoderException;
-use App\Models\Member;
+use App\Models\Location;
 use App\Services\Geocoder\GeocoderInterface;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -14,7 +14,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Log;
 
-class UpdateMemberGeolocation implements ShouldQueue
+class UpdateLocationGeolocation implements ShouldQueue
 {
     use Dispatchable;
 
@@ -24,24 +24,24 @@ class UpdateMemberGeolocation implements ShouldQueue
 
     use SerializesModels;
 
-    private $member;
+    private $location;
 
-    public function __construct(Member $member)
+    public function __construct(Location $location)
     {
-        $this->member = $member;
+        $this->location = $location;
     }
 
     public function handle(GeocoderInterface $geocoder)
     {
         try {
-            $geolocation = $geocoder->geocode($this->member->volledigAdres);
-            $this->member->geolocatie = $geolocation->toPoint();
-            $this->member->geolocatie_error = null;
+            $geolocation = $geocoder->geocode($this->location->volledigAdres);
+            $this->location->geolocatie = $geolocation->toPoint();
+            $this->location->geolocatie_error = null;
         } catch (GeocoderException $e) {
-            Log::warning("Exception when geocoding address for member {$this->member->volnaam}: {$e->getMessage()}");
-            $this->member->geolocatie_error = $e->getMessage();
+            Log::warning("Exception when geocoding address for location {$this->location->naam}: {$e->getMessage()}");
+            $this->location->geolocatie_error = $e->getMessage();
         } finally {
-            $this->member->save();
+            $this->location->save();
         }
     }
 }

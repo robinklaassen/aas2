@@ -31,7 +31,7 @@ mix.ts('resources/js/app.ts', 'public/js')
        "webshim",
        "datatables.net-responsive-bs",
        "datatables.net-bs",
-       "L"
+       "leaflet",
     ])
     .modernizr()
     .sourceMaps();

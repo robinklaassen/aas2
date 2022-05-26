@@ -25,3 +25,5 @@ Route::get('iDeal-response/{participant}/{event}', [iDealController::class, 'eve
 Route::get('iDeal-response', [iDealController::class, 'genericResponse']);
 
 Route::get('donate/done', [DonateController::class, 'response']);
+
+Route::get('camp-year-map', 'CampYearMapController');
