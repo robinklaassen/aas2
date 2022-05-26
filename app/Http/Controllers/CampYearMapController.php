@@ -15,7 +15,7 @@ class CampYearMapController extends Controller
     {
         $camps = Event::where('type', 'kamp')->ended()->notCancelled()
             ->whereHas('location', function (Builder $query) {
-                return $query->whereNotNull('geolocatie');
+                return $query->where('naam', '<>', 'Onbekend')->whereNotNull('geolocatie');
             })
             ->orderBy('datum_start')
             ->get()
