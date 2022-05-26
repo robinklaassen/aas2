@@ -9,17 +9,10 @@ use App\Jobs\UpdateLocationGeolocation;
 
 class QueueLocationGeolocation
 {
-    /**
-     * Create the event listener.
-     */
     public function __construct()
     {
-        //
     }
 
-    /**
-     * Handle the event.
-     */
     public function handle(LocationUpdated $event)
     {
         if ($event->location->wasChanged(['adres', 'postcode', 'plaats'])) {

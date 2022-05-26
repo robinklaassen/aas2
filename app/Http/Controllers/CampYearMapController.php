@@ -11,11 +11,6 @@ use Illuminate\Http\Request;
 
 class CampYearMapController extends Controller
 {
-    /**
-     * Handle the incoming request.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function __invoke(Request $request)
     {
         $camps = Event::where('type', 'kamp')->ended()->notCancelled()
@@ -23,9 +18,9 @@ class CampYearMapController extends Controller
                 return $query->whereNotNull('geolocatie');
             })
             ->orderBy('datum_start')
-            ->get()->map(function ($c) {
-                return CampMapData::fromEvent($c);
-            })->values();
+            ->get()
+            ->map(fn ($c) => CampMapData::fromEvent($c))
+            ->values();
 
         return view('pages.camp-year-map', compact('camps'));
     }
