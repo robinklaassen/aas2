@@ -16,15 +16,22 @@ final class CampMapData
 
     public array $latlng;
 
+    public int $numMembers;
+
+    public int $numParticipants;
+
     public int $size;
 
-    public function __construct(int $id, string $title, string $verenigingsjaar, array $latlng, int $size)
+    public function __construct(int $id, string $title, string $verenigingsjaar, array $latlng, int $numMembers, int $numParticipants)
     {
         $this->id = $id;
         $this->title = $title;
         $this->verenigingsjaar = $verenigingsjaar;
         $this->latlng = $latlng;
-        $this->size = $size;
+        $this->numMembers = $numMembers;
+        $this->numParticipants = $numParticipants;
+
+        $this->size = $numMembers + $numParticipants;
     }
 
     public static function fromEvent(Event $event): static
@@ -35,7 +42,8 @@ final class CampMapData
             $event->full_title,
             $event->verenigingsjaar,
             [$loc->geolocatie->getLat(), $loc->geolocatie->GetLng()],
-            $event->members()->count() + $event->participants()->count()
+            $event->members()->wherePivot('wissel', 0)->count(),
+            $event->participants()->count()
         );
     }
 }

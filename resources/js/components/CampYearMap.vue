@@ -16,10 +16,12 @@
         v-for="x in filteredCampData"
         :key="x.id"
         :lat-lng="x.latlng"
-        :radius="x.size * 2"
-        color="red"
+        :radius="x.size * 2" 
+        color="#95184d"
+        fill-color="#95184d"
         ><l-tooltip>
-          {{ x.title }}
+          {{ x.title }}<br/>
+          {{ x.numParticipants }} deelnemers, {{ x.numMembers }} leiding
         </l-tooltip>
       </l-circle-marker>
     </l-map>
@@ -47,6 +49,8 @@ type CampMapData = {
   title: string;
   verenigingsjaar: string;
   latlng: Array<number>;
+  numMembers: number;
+  numParticipants: number;
   size: number;
 };
 
