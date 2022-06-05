@@ -57,6 +57,8 @@
 									<li class="{{ substr(Request::path(),0,7) == 'actions' ? 'active' : ''}}"><a href="{{ url('/actions') }}">Punten</a></li>
 								@endcan
 
+								<li class="{{ substr(Request::path(),0,13) == 'camp-year-map' ? 'active' : ''}}"><a href="{{ url('/camp-year-map') }}">Kampen op de kaart!</a></li>
+
 								<li class="{{ substr(Request::path(),0,5) == 'roles' ? 'active' : ''}}"><a href="{{ url('/roles/explain') }}">Rollen en rechten</a></li>
 							</ul>
 						</li>
