@@ -17,7 +17,7 @@ final class EventSaved extends Event
 
     use SerializesModels;
 
-    private const PUBLIC_AVAILABLE_FIELDS = [
+    public const PUBLIC_AVAILABLE_FIELDS = [
         'naam',
         'type',
         'datum_start',
