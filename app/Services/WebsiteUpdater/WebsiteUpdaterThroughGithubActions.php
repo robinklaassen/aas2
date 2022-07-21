@@ -9,7 +9,7 @@ use RuntimeException;
 
 final class WebsiteUpdaterThroughGithubActions implements WebsiteUpdater
 {
-    private const BASE_URI = 'https://api.github.com/repos/';
+    private const URI = 'https://api.github.com/repos/%s/dispatches';
 
     public function __construct(
         private HttpClientInterface $httpClient,
@@ -22,7 +22,7 @@ final class WebsiteUpdaterThroughGithubActions implements WebsiteUpdater
     {
         $response = $this->httpClient->request(
             'POST',
-            self::BASE_URI . $this->githubRepo . '/dispatches',
+            sprintf(self::URI, $this->githubRepo),
             [
                 'body' => json_encode([
                     'event_type' => 'AAS',

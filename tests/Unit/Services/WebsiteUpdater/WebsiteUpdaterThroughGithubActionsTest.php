@@ -9,6 +9,7 @@ use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Psr7\Response;
 use Hamcrest\Arrays\IsArrayContainingKeyValuePair;
 use Hamcrest\Core\AllOf;
+use Hamcrest\Text\StringContains;
 use Mockery;
 use Mockery\Adapter\Phpunit\MockeryTestCase;
 use Mockery\MockInterface;
@@ -41,7 +42,7 @@ final class WebsiteUpdaterThroughGithubActionsTest extends MockeryTestCase
             ->expects('request')
             ->with(
                 'POST',
-                self::REPOSITORY . '/dispatches',
+                StringContains::containsString(self::REPOSITORY),
                 AllOf::allOf(
                     IsArrayContainingKeyValuePair::hasKeyValuePair('body', json_encode([
                         'event_type' => 'AAS',
