@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace App\Services\WebsiteUpdater;
 
-use GuzzleHttp\ClientInterface;
+use GuzzleHttp\ClientInterface as HttpClientInterface;
 use RuntimeException;
 
 final class WebsiteUpdaterThroughGithubActions implements WebsiteUpdater
 {
+    private const BASE_URI = 'https://api.github.com/repos/';
+
     public function __construct(
-        private ClientInterface $client,
+        private HttpClientInterface $httpClient,
         private string $githubRepo,
         private string $githubToken
     ) {
@@ -18,9 +20,9 @@ final class WebsiteUpdaterThroughGithubActions implements WebsiteUpdater
 
     public function update(): void
     {
-        $response = $this->client->request(
+        $response = $this->httpClient->request(
             'POST',
-            $this->githubRepo . '/dispatches',
+            self::BASE_URI . $this->githubRepo . '/dispatches',
             [
                 'body' => json_encode([
                     'event_type' => 'AAS',

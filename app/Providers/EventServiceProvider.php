@@ -17,7 +17,7 @@ use App\Services\ActionGenerator\EventSingleActionApplicator;
 use App\Services\ActionGenerator\EventStraightFlushActionApplicator;
 use App\Services\WebsiteUpdater\WebsiteUpdater;
 use App\Services\WebsiteUpdater\WebsiteUpdaterThroughGithubActions;
-use GuzzleHttp\Client;
+use GuzzleHttp\Client as HttpClient;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -56,9 +56,7 @@ class EventServiceProvider extends ServiceProvider
 
         $this->app->bind(WebsiteUpdater::class, function (Application $app) {
             return new WebsiteUpdaterThroughGithubActions(
-                new Client([
-                    'base_uri' => config('website.github.base_uri'),
-                ]),
+                new HttpClient(),
                 config('website.github.repository'),
                 config('website.github.token'),
             );
