@@ -22,13 +22,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $parameters = $containerConfigurator->parameters();
     $parameters->set(Option::PATHS, [
-        __DIR__,
-    ]);
-
-    $parameters->set(Option::SKIP, [
-        __DIR__ . '/vendor',
-        __DIR__ . '/node_modules',
-        __DIR__ . '/storage',
+        __DIR__ . '/app/',
+        __DIR__ . '/config/',
+        __DIR__ . '/database/',
+        __DIR__ . '/routes/',
+        __DIR__ . '/tests/',
+        __DIR__ . '/public/index.php',
+        __DIR__ . '/ecs.php',
     ]);
 
     $parameters->set(Option::SKIP, [
