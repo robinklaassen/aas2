@@ -223,7 +223,7 @@ class DeclarationsController extends Controller
         ]);
     }
 
-    private function applyFileData(array &$data, ?FileData $filedata)
+    private function applyFileData(array & $data, ?FileData $filedata)
     {
         if ($filedata) {
             $data['original_filename'] = $filedata->originalFilepath;

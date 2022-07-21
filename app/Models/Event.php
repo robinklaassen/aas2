@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Models;
 
+use App\Events\EventSaved;
 use App\Events\FinishedEvent;
 use App\Exceptions\MethodNotAllowedException;
 use App\Pivots\EventParticipant;
@@ -35,6 +36,10 @@ class Event extends Model
 
     // Carbon dates
     protected $dates = ['created_at', 'updated_at', 'datum_voordag', 'datum_start', 'datum_eind'];
+
+    protected $dispatchesEvents = [
+        'saved' => EventSaved::class,
+    ];
 
     // A camp belongs to many members
     public function members()
