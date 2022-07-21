@@ -57,7 +57,7 @@ class EventServiceProvider extends ServiceProvider
         $this->app->bind(WebsiteUpdater::class, function (Application $app) {
             return new WebsiteUpdaterThroughGithubActions(
                 new Client([
-                    'base_uri' => 'https://api.github.com/repos/',
+                    'base_uri' => config('website.github.base_uri'),
                 ]),
                 config('website.github.repository'),
                 config('website.github.token'),

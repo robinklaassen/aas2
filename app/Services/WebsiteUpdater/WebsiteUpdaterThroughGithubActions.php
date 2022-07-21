@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Services\WebsiteUpdater;
 
 use GuzzleHttp\ClientInterface;
-use Illuminate\Support\Facades\Log;
+use RuntimeException;
 
 final class WebsiteUpdaterThroughGithubActions implements WebsiteUpdater
 {
@@ -30,13 +30,15 @@ final class WebsiteUpdaterThroughGithubActions implements WebsiteUpdater
                     'Content-Type' => 'application/json',
                     'Authorization' => 'bearer ' . $this->githubToken,
                 ],
+                'http_errors' => false,
             ]
         );
 
-        if ($response->getStatusCode() !== 200) {
-            Log::warning(
+        if ($response->getStatusCode() > 299 || $response->getStatusCode() < 200) {
+            throw new RuntimeException(
                 sprintf(
-                    'Trigger of github action failed. For repo %s. Error: %s',
+                    'Trigger of github action failed with status %d. For repo %s. Error: %s',
+                    $response->getStatusCode(),
                     $this->githubRepo,
                     $response->getBody()->getContents()
                 )
