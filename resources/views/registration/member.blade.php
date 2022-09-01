@@ -70,10 +70,12 @@ Inschrijven vrijwilliger
 	</div>
 
 	<div class="col-sm-7 form-group">
-		{!! Form::label('geslacht', 'Geslacht:') !!}<br />
+		{!! Form::label('geslacht', 'Geslacht/gender:') !!}<br />
 		<div style="margin-top:10px;">
 			{!! Form::radio('geslacht', 'M', 0) !!} Man
 			{!! Form::radio('geslacht', 'V', 0, ['style' => 'margin-left:20px;']) !!} Vrouw
+			{!! Form::radio('geslacht', 'X', 0, ['style' => 'margin-left:20px;']) !!} X
+			{!! Form::radio('geslacht', 'N', 0, ['style' => 'margin-left:20px;']) !!} Zeg ik liever niet
 		</div>
 	</div>
 </div>

@@ -82,11 +82,13 @@ Inschrijven deelnemer
 		{!! Form::input('date', 'geboortedatum', null, ['class' => 'form-control']) !!}
 	</div>
 
-	<div class="col-sm-4 form-group">
-		{!! Form::label('geslacht', 'Geslacht:') !!}<br />
+	<div class="col-sm-6 form-group">
+		{!! Form::label('geslacht', 'Geslacht/gender:') !!} <span class="glyphicon glyphicon-question-sign" data-toggle="tooltip" title="Dit gebruiken we bijvoorbeeld voor het indelen van slaapzalen."></span><br />
 		<div style="margin-top:10px;">
 			{!! Form::radio('geslacht', 'M', 0) !!} Man
 			{!! Form::radio('geslacht', 'V', 0, ['style' => 'margin-left:20px;']) !!} Vrouw
+			{!! Form::radio('geslacht', 'X', 0, ['style' => 'margin-left:20px;']) !!} X
+			{!! Form::radio('geslacht', 'N', 0, ['style' => 'margin-left:20px;']) !!} Zeg ik liever niet
 		</div>
 	</div>
 </div>
@@ -94,8 +96,7 @@ Inschrijven deelnemer
 <div class="row">
 	<div class="col-sm-4 form-group">
 		{!! Form::label('telefoon_deelnemer', 'Telefoonnummer:') !!}
-		{!! Form::text('telefoon_deelnemer', null, ['class' => 'form-control', 'maxlength' => 10, 'placeholder' => '10
-		cijfers']) !!}
+		{!! Form::text('telefoon_deelnemer', null, ['class' => 'form-control', 'maxlength' => 10, 'placeholder' => '10 cijfers']) !!}
 	</div>
 
 	<div class="col-sm-6 form-group">
