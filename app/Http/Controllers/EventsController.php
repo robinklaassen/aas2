@@ -14,7 +14,7 @@ use App\Models\Event;
 use App\Models\Member;
 use App\Models\Participant;
 use App\Services\Chart\ChartServiceInterface;
-use Barryvdh\DomPDF\Facade as PDF;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Maatwebsite\Excel\Facades\Excel;
@@ -294,7 +294,7 @@ class EventsController extends Controller
         }
 
         // Generate and output PDF
-        $pdf = PDF::loadView('events.export', compact('event', 'participants', 'num_participants_placed', 'participantCourses', 'stats', 'age_freq'))->setPaper('a4')->setWarnings(true);
+        $pdf = Pdf::loadView('events.export', compact('event', 'participants', 'num_participants_placed', 'participantCourses', 'stats', 'age_freq'))->setPaper('a4')->setWarnings(true);
         return $pdf->stream();
     }
 

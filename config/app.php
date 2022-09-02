@@ -201,7 +201,7 @@ return [
         'View' => 'Illuminate\Support\Facades\View',
         'Form' => 'Collective\Html\FormFacade',
         'Html' => 'Collective\Html\HtmlFacade',
-        'PDF' => 'Barryvdh\DomPDF\Facade',
+        'Pdf' => 'Barryvdh\DomPDF\Facade\Pdf',
         'Excel' => 'Maatwebsite\Excel\Facades\Excel',
         'Lava' => 'Khill\Lavacharts\Laravel\LavachartsFacade',
         'Arr' => 'Illuminate\Support\Arr',
