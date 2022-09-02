@@ -161,7 +161,7 @@ export default Vue.extend({
                 );
 
                 window.location.href = this.redirectTarget;
-            } catch(err) {
+            } catch(err: any) {
                 if (err.request.status === 413) {
                     this.errorMessage = "Een van de bestanden is te groot"
                 } else if (
