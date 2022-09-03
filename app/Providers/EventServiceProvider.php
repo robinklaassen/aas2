@@ -16,7 +16,7 @@ use App\Listeners\SetLastLoginDate;
 use App\Services\ActionGenerator\EventSingleActionApplicator;
 use App\Services\ActionGenerator\EventStraightFlushActionApplicator;
 use App\Services\WebsiteUpdater\WebsiteUpdater;
-use App\Services\WebsiteUpdater\WebsiteUpdaterThroughGithubActions;
+use App\Services\WebsiteUpdater\WebsiteUpdaterThroughWebhook;
 use GuzzleHttp\Client as HttpClient;
 use Illuminate\Auth\Events\Login;
 use Illuminate\Contracts\Foundation\Application;
@@ -55,10 +55,9 @@ class EventServiceProvider extends ServiceProvider
         });
 
         $this->app->bind(WebsiteUpdater::class, function (Application $app) {
-            return new WebsiteUpdaterThroughGithubActions(
+            return new WebsiteUpdaterThroughWebhook(
                 new HttpClient(),
-                config('website.github.repository'),
-                config('website.github.token'),
+                config('website.webhook.url'),
             );
         });
     }
