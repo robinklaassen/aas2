@@ -57,7 +57,7 @@ class EventServiceProvider extends ServiceProvider
         $this->app->bind(WebsiteUpdater::class, function (Application $app) {
             return new WebsiteUpdaterThroughWebhook(
                 new HttpClient(),
-                config('website.webhook.url'),
+                config('website.webhook.uri'),
             );
         });
     }

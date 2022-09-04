@@ -30,7 +30,7 @@ final class WebsiteUpdaterThroughWebhookTest extends MockeryTestCase
         );
     }
 
-    public function testItCallsGithub(): void
+    public function testItCallsToURI(): void
     {
         $response = new Response(200);
         $this->client
