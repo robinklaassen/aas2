@@ -48,7 +48,10 @@
 	const infoIcon = getColoredIcon('#b12e62');  // roze
 
 	// Setup map
-	var map = L.map('mapdiv').setView([51.505, 5.4], 7);
+	var map = L.map('mapdiv', {
+		minZoom: 0,
+		maxZoom: 13,
+	}).setView([51.505, 5.4], 7);
 
 	L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 		attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'

@@ -10,6 +10,7 @@ use App\Models\Course;
 use App\Models\Member;
 use App\Models\Skill;
 use App\Models\User;
+use Grimzy\LaravelMysqlSpatial\Types\Point;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -203,12 +204,18 @@ class MembersController extends Controller
 
         $markers = $members
             ->map(
-                fn ($m) => [
-                    'latlng' => [$m->geolocatie->getLat(), $m->geolocatie->getLng()],
-                    'name' => $m->volnaam,
-                    'type' => $m->soort,
-                    'link' => "<a href='" . url('members', $m->id) . "'>{$m->volnaam}</a>",
-                ]
+                static function ($m): array {
+                    $rounded = new Point(
+                        round($m->geolocatie->getLat(), 3),
+                        round($m->geolocatie->getLng(), 3)
+                    );
+                    return [
+                        'latlng' => [$rounded->getLat(), $rounded->getLng()],
+                        'name' => $m->volnaam,
+                        'type' => $m->soort,
+                        'link' => "<a href='" . url('members', $m->id) . "'>{$m->volnaam}</a>",
+                    ];
+                }
             )->values();
 
         return view('members.map', compact('markers'));
