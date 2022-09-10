@@ -4,6 +4,17 @@
 	Ledenkaart
 @endsection
 
+@section('header')
+	<style scoped>
+		.leaflet-tooltip-pane {
+			font-size: 12px;
+		}
+
+		.leaflet-popup-content {
+			font-size: 12px;
+		}
+	</style>
+@endsection
 
 @section('content')
 
@@ -12,6 +23,8 @@
 	<hr/>
 
 	<p>Legenda: donkergroen = normaal lid, lichtgroen = aspirant lid, roze = infolid.</p>
+
+	<p>NB: de locaties zijn niet exact. Dat is bewust.</p>
 
 	<div id="mapdiv" style="width:100%; height:750px; margin-bottom:10px;"></div>
 
