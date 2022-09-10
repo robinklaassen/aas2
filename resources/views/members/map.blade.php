@@ -4,6 +4,17 @@
 	Ledenkaart
 @endsection
 
+@section('header')
+	<style scoped>
+		.leaflet-tooltip-pane {
+			font-size: 12px;
+		}
+
+		.leaflet-popup-content {
+			font-size: 12px;
+		}
+	</style>
+@endsection
 
 @section('content')
 
@@ -12,6 +23,8 @@
 	<hr/>
 
 	<p>Legenda: donkergroen = normaal lid, lichtgroen = aspirant lid, roze = infolid.</p>
+
+	<p>NB: de locaties zijn niet exact. Dat is bewust.</p>
 
 	<div id="mapdiv" style="width:100%; height:750px; margin-bottom:10px;"></div>
 
@@ -48,7 +61,10 @@
 	const infoIcon = getColoredIcon('#b12e62');  // roze
 
 	// Setup map
-	var map = L.map('mapdiv').setView([51.505, 5.4], 7);
+	var map = L.map('mapdiv', {
+		minZoom: 0,
+		maxZoom: 13,
+	}).setView([51.505, 5.4], 7);
 
 	L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
 		attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
