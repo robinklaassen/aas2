@@ -26,6 +26,7 @@ final class EventSaved extends Event
         'location_id',
         'vol',
         'openbaar',
+        'cancelled',
     ];
 
     public function __construct(
