@@ -124,7 +124,7 @@
 <div class="row">
 	<div class="col-sm-4 form-group">
 		{!! Form::label('inkomen', 'Bruto maandinkomen:') !!}
-		{!! Form::select('inkomen', ['Meer dan € 3400 (geen korting)', 'Tussen € 2200 en € 3400 (korting: 15%)', 'Tussen € 1300 en € 2200 (korting: 30%)', 'Minder dan € 1300 (korting: 50%)'], null, ['class' => 'form-control']) !!}
+		{!! Form::select('inkomen', Participant::INCOME_DESCRIPTION_TABLE, null, ['class' => 'form-control']) !!}
 	</div>
 </div>
 @endcanany

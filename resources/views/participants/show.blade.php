@@ -113,7 +113,7 @@ Mijn profiel
 			@can("showFinance", $participant)
 			<tr>
 				<td>Inkomen</td>
-				<td>{{ $income[$participant->inkomen] }}</td>
+				<td>{{ Participant::INCOME_DESCRIPTION_TABLE[$participant->inkomen] }}</td>
 			</tr>
 			@endcan
 			@can("showPractical", $participant)
