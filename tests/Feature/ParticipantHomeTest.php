@@ -44,7 +44,7 @@ class ParticipantHomeTest extends TestCase
 
         $this->actingAs($this->user)
             ->get('/home')
-            ->assertSee(['Betaling nog niet ontvangen!', '&euro; 350'], false)
+            ->assertSee(['Betaling nog niet ontvangen!', '&euro; 300'], false)
             ->assertDontSee(['Betaling ontvangen op']);
 
         $this->participant->events()->updateExistingPivot($this->event->id, [
