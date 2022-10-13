@@ -12,16 +12,16 @@ class Participant extends Model
 {
     public const INCOME_DESCRIPTION_TABLE = [
         0 => 'Meer dan € 3400 (geen korting)',
-        1 => 'Tussen € 2200 en € 3400 (korting: 15%)',
-        2 => 'Tussen € 1300 en € 2200 (korting: 30%)',
-        3 => 'Minder dan € 1300 (korting: 50%)',
+        1 => 'Tussen € 2400 en € 3400 (korting: 25%)',
+        2 => 'Tussen € 1600 en € 2400 (korting: 40%)',
+        3 => 'Minder dan € 1600 (korting: 60%)',
     ];
 
     public const INCOME_DISCOUNT_TABLE = [
         0 => 1.0,
-        1 => 0.85,
-        2 => 0.7,
-        3 => 0.5,
+        1 => 0.75,
+        2 => 0.6,
+        3 => 0.4,
     ];
 
     public const INFORMATION_CHANNEL_DESCRIPTION_TABLE = [

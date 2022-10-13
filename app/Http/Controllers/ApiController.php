@@ -67,9 +67,9 @@ class ApiController extends Controller
                 $prijs_html = '';
             } elseif ($event->prijs > 0) {
                 $prijs_html = "<td style='white-space: nowrap;'>Prijs<br />
-                    - 15&percnt; korting<br/>
-                    - 30&percnt; korting<br/>
-                    - 50&percnt; korting</td><td>";
+                    - 25&percnt; korting<br/>
+                    - 40&percnt; korting<br/>
+                    - 60&percnt; korting</td><td>";
                 $prijs_html .= implode('', array_map(function (float $disc) use ($event) {
                     return '&euro; ' . EventPayment::calculate_price($event->prijs, $disc) . '<br/>';
                 }, Participant::INCOME_DISCOUNT_TABLE));

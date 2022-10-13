@@ -13,17 +13,6 @@ class ViewComposerServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // Composer for the 'show participant', includes income table
-        view()->composer('participants.show', function ($view) {
-            $income = [
-                0 => 'Meer dan € 3400',
-                1 => 'Tussen € 2200 en € 3400',
-                2 => 'Tussen € 1300 en € 2200',
-                3 => 'Minder dan € 1300',
-            ];
-            $view->with('income', $income);
-        });
-
         // Composer for the create/edit event form (includes possible locations and 'streeftal')
         view()->composer('events.form', function ($view) {
             $locations = \App\Models\Location::all();
