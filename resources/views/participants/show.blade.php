@@ -1,5 +1,9 @@
 @extends('master')
 
+@php
+	use App\Models\Participant;
+@endphp
+
 @section('title')
 @if ($viewType == 'admin')
 {{ $participant->volnaam }}
@@ -113,7 +117,7 @@ Mijn profiel
 			@can("showFinance", $participant)
 			<tr>
 				<td>Inkomen</td>
-				<td>{{ \App\Models\Participant::INCOME_DESCRIPTION_TABLE[$participant->inkomen] }}</td>
+				<td>{{ Participant::INCOME_DESCRIPTION_TABLE[$participant->inkomen] }}</td>
 			</tr>
 			@endcan
 			@can("showPractical", $participant)

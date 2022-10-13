@@ -1,5 +1,9 @@
 @extends('master')
 
+@php
+	use App\Models\Participant;
+@endphp
+
 @section('title')
 Inschrijven deelnemer
 @endsection
