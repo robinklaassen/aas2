@@ -8,6 +8,7 @@
     Weet je zeker dat je {{ count($participants) }} deelnemers wil anonimiseren?
 
     <form method="post">
+        @csrf
         <ul>
             @foreach ($participants as $participant)
                 <input type="hidden" name="participants[]" value="{{$participant->id}}" />

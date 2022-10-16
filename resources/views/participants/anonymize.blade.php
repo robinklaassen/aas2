@@ -7,6 +7,7 @@
 
 @section('content')
     <form action="{{ action('ParticipantsController@anonymizeConfirm') }}">
+        @csrf
         <table class="table table-hover">
             <thead>
                 <tr>
