@@ -11,7 +11,7 @@ final class Gender
     private const DESCRIPTIONS = [
         'M' => 'Man',
         'V' => 'Vrouw',
-        'X' => 'Non binair',
+        'X' => 'Non-binair',
         'N' => 'Zeg ik liever niet',
     ];
 
