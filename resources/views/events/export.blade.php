@@ -110,9 +110,17 @@
 			<td>Mannen</td>
 			<td>{{ $stats['num_males'] }}</td>
 		</tr>
-		<tr class="table-margin-after">
+		<tr>
 			<td>Vrouwen</td>
 			<td>{{ $stats['num_females'] }}</td>
+		</tr>
+		<tr>
+			<td>Non-binairen</td>
+			<td>{{ $stats['num_non-binaries'] }}</td>
+		</tr>
+		<tr class="table-margin-after">
+			<td>Onbekent</td>
+			<td>{{ $stats['num_unknown'] }}</td>
 		</tr>
 		<tr>
 			<td>VMBO</td>

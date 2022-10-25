@@ -8,11 +8,19 @@ use Webmozart\Assert\Assert;
 
 final class Gender
 {
-    private const DESCRIPTIONS = [
-        'M' => 'Man',
-        'V' => 'Vrouw',
-        'X' => 'Non-binair',
-        'N' => 'Zeg ik liever niet',
+    public const OPTION_MALE = 'M';
+
+    public const OPTION_FEMALE = 'V';
+
+    public const OPTION_NON_BINARY = 'X';
+
+    public const OPTION_UNKNOWN = 'N';
+
+    public const DESCRIPTIONS = [
+        self::OPTION_MALE => 'Man',
+        self::OPTION_FEMALE => 'Vrouw',
+        self::OPTION_NON_BINARY => 'Non-binair',
+        self::OPTION_UNKNOWN => 'Zeg ik liever niet',
     ];
 
     private function __construct(

@@ -249,19 +249,6 @@ Grafieken
     var chart = new google.visualization.LineChart(document.getElementById('ave_num_per_camp_chart'));
     chart.draw(data, options);
     
-    // Male to female members and participants on camp ratio
-    var data = google.visualization.arrayToDataTable(<?php echo json_encode($data['maleFemaleRatio']); ?>);
-
-    var options = {
-          title: 'Ratio geslacht op kamp (M/V)',
-          colors: ['purple', 'cyan'],
-          legend: { position: 'bottom' },
-          pointSize: pointSize
-        };
-
-    var chart = new google.visualization.LineChart(document.getElementById('male_female_ratio_chart'));
-    chart.draw(data, options);
-    
     // Trainer growth per year
     var data = google.visualization.arrayToDataTable(<?php echo json_encode($data['trainerGrowth']); ?>);
 
