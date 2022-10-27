@@ -91,8 +91,8 @@
 							<img src="/img/profile/full/{{$member->id}}.jpg" height="300" @if($viewType=='profile' )
 								data-toggle="tooltip" title="Klik om te wijzigen" @endif />
 						@else
-							<img src="/img/profile/no-profile-{{ ($member->geslacht === 'V') ? 'f' : 'm' }}.gif"
-								 height="300"
+							<img src="{{ asset('images/no-profile.jpg')  }}"
+								 height="168"
 								 @if($viewType=='profile' ) data-toggle="tooltip" title="Klik om te wijzigen" @endif />
 						@endif
 						@if ($viewType == 'profile')
