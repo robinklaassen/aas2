@@ -121,7 +121,7 @@
 		<td>{{ $stats['num_non-binaries'] }}</td>
 	</tr>
 	<tr class="table-margin-after">
-		<td>Onbekent</td>
+		<td>Onbekend</td>
 		<td>{{ $stats['num_unknown'] }}</td>
 	</tr>
 	<tr>
