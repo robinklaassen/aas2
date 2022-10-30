@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace App\Http\Requests;
 
+use App\ValueObjects\Gender;
+use Illuminate\Validation\Rule;
+
 class MemberRequest extends Request
 {
     /**
@@ -27,7 +30,7 @@ class MemberRequest extends Request
             'voornaam' => 'required',
             'achternaam' => 'required',
             'geboortedatum' => 'required|regex:/\d{4}-\d{2}-\d{2}/',
-            'geslacht' => 'required',
+            'geslacht' => ['required', Rule::in(Gender::Values())],
             'adres' => 'required',
             'postcode' => ['required', 'regex:/\d{4}\s?[A-z]{2}/'],
             'plaats' => 'required',

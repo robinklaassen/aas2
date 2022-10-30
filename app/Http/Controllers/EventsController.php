@@ -14,6 +14,7 @@ use App\Models\Event;
 use App\Models\Member;
 use App\Models\Participant;
 use App\Services\Chart\ChartServiceInterface;
+use App\ValueObjects\Gender;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -266,8 +267,10 @@ class EventsController extends Controller
         }
 
         // Some more or less useful statistics
-        $stats['num_males'] = $event->participants()->where('geslacht', 'M')->count();
-        $stats['num_females'] = $event->participants()->where('geslacht', 'V')->count();
+        $stats['num_males'] = $event->participants()->where('geslacht', Gender::OPTION_MALE)->count();
+        $stats['num_females'] = $event->participants()->where('geslacht', Gender::OPTION_FEMALE)->count();
+        $stats['num_non-binaries'] = $event->participants()->where('geslacht', Gender::OPTION_NON_BINARY)->count();
+        $stats['num_unknown'] = $event->participants()->where('geslacht', Gender::OPTION_UNKNOWN)->count();
         $stats['num_VMBO'] = $event->participants()->where('niveau', 'VMBO')->count();
         $stats['num_HAVO'] = $event->participants()->where('niveau', 'HAVO')->count();
         $stats['num_VWO'] = $event->participants()->where('niveau', 'VWO')->count();

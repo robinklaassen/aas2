@@ -16,13 +16,13 @@
 <div class="row">
 
 	<div class="col-md-6">
-		<h4>Hoe legt {{ ($member->geslacht == "M") ? 'hij' : 'zij' }} de stof uit?</h4>
+		<h4>Hoe legt de Anderwijzer de stof uit?</h4>
 		<div id="stof-div"></div>
 		@barchart('stof', 'stof-div')
 	</div>
 	
 	<div class="col-md-6">
-		<h4>Hoeveel aandacht gaf {{ ($member->geslacht == "M") ? 'hij' : 'zij' }} je tijdens de blokjes?</h4>
+		<h4>Hoeveel aandacht gaf de Anderwijzer je tijdens de blokjes?</h4>
 		<div id="aandacht-div"></div>
 		@barchart('aandacht', 'aandacht-div')
 	</div>
@@ -32,13 +32,13 @@
 <div class="row">
 
 	<div class="col-md-6">
-		<h4>Hoe vond je het om door {{ ($member->geslacht == "M") ? 'hem' : 'haar' }} bijgespijkerd te worden?</h4>
+		<h4>Hoe vond je het om door de Anderwijzer bijgespijkerd te worden?</h4>
 		<div id="mening-div"></div>
 		@barchart('mening', 'mening-div')
 	</div>
 	
 	<div class="col-md-6">
-		<h4>Hoe tevreden ben je over wat je met {{ ($member->geslacht == "M") ? 'hem' : 'haar' }} hebt bereikt?</h4>
+		<h4>Hoe tevreden ben je over wat je met de Anderwijzer hebt bereikt?</h4>
 		<div id="tevreden-div"></div>
 		@barchart('tevreden', 'tevreden-div')
 	</div>

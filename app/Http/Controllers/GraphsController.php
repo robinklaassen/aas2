@@ -54,17 +54,23 @@ class GraphsController extends Controller
             ->orderBy('datum_start')
             ->get();
         $num_members = [];
+
+        $num_participants = [];
+        $num_members_new = [];
+        $num_participants_new = [];
+        $num_camps = [];
+        $member_ids = [];
+        $participant_ids = [];
+        $num_trainers = [];
+        $num_trainers_new = [];
+
         foreach ($camps as $camp) {
             preg_match('/\d{4}/', $camp->code, $matches); // obtains the year string from the camp code, e.g. '1415'
             $year = $matches[0];
             $m = $camp->members()->count();
-            $m_m = $camp->members()->where('geslacht', 'M')->count();
-            $m_f = $camp->members()->where('geslacht', 'V')->count();
             $mids = $camp->members()->pluck('id')->toArray();
             $pids = $camp->participants()->pluck('id')->toArray();
             $p = $camp->participants()->count();
-            $p_m = $camp->participants()->where('geslacht', 'M')->count();
-            $p_f = $camp->participants()->where('geslacht', 'V')->count();
 
             // New members
             $m_n = 0;
@@ -87,24 +93,16 @@ class GraphsController extends Controller
             if (array_key_exists($year, $num_members)) {
                 $num_members[$year] += $m;
                 $num_members_new[$year] += $m_n;
-                $num_members_male[$year] += $m_m;
-                $num_members_female[$year] += $m_f;
                 $num_participants[$year] += $p;
                 $num_participants_new[$year] += $p_n;
-                $num_participants_male[$year] += $p_m;
-                $num_participants_female[$year] += $p_f;
                 $member_ids[$year] = array_merge($member_ids[$year], $mids);
                 $participant_ids[$year] = array_merge($participant_ids[$year], $pids);
                 ++$num_camps[$year];
             } else {
                 $num_members[$year] = $m;
                 $num_members_new[$year] = $m_n;
-                $num_members_male[$year] = $m_m;
-                $num_members_female[$year] = $m_f;
                 $num_participants[$year] = $p;
                 $num_participants_new[$year] = $p_n;
-                $num_participants_male[$year] = $p_m;
-                $num_participants_female[$year] = $p_f;
                 $member_ids[$year] = $mids;
                 $participant_ids[$year] = $pids;
                 $num_camps[$year] = 1;
@@ -128,9 +126,6 @@ class GraphsController extends Controller
                 $data['membPartRatio'][] = [$year, round($num_members[$k] / $num_participants[$k], 2)];
                 $data['aveNumCamps'][] = [$year, round(count($member_ids[$k]) / count(array_unique($member_ids[$k])), 2), round(count($participant_ids[$k]) / count(array_unique($participant_ids[$k])), 2)];
                 $data['aveNumPerCamp'][] = [$year, count($member_ids[$k]) / $num_camps[$k], count($participant_ids[$k]) / $num_camps[$k]];
-                if ($num_members_female[$k] > 0 && $num_participants_female[$k] > 0) {
-                    $data['maleFemaleRatio'][] = [$year, round($num_members_male[$k] / $num_members_female[$k], 2), round($num_participants_male[$k] / $num_participants_female[$k], 2)];
-                }
             }
         }
 
