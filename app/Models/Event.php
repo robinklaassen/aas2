@@ -120,6 +120,22 @@ class Event extends Model
         return ($this->streeftal - 1) * 3;
     }
 
+    public function getHasEarlybirdDiscountAttribute(): bool
+    {
+        return $this->vroegboek_korting_percentage !== null
+            && $this->vroegboek_korting_datum_eind !== null
+            && Carbon::now()->lessThan($this->vroegboek_korting_datum_eind);
+    }
+
+    public function getEarlybirdDiscountFactorAttribute(): float
+    {
+        if (! $this->hasEarlybirdDiscount) {
+            return 1.0;
+        }
+
+        return (100 - $this->vroegboek_korting_percentage) / 100;
+    }
+
     /**
      * Event is publicly visible
      */
