@@ -34,6 +34,8 @@ class EventRequest extends Request
             'location_id' => 'required',
             'tijd_start' => 'required|regex:/\d{2}:\d{2}/',
             'tijd_eind' => 'required|regex:/\d{2}:\d{2}/',
+            'vroegboek_korting_percentage' => 'required_with:vroegboek_korting_datum_eind|min:0|max:100',
+            'vroegboek_korting_datum_eind' => ['required_with:vroegboek_korting_percentage', 'nullable', 'regex:/\d{4}-\d{2}-\d{2}/'],
         ];
     }
 }

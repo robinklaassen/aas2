@@ -35,7 +35,7 @@ class Event extends Model
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
     // Carbon dates
-    protected $dates = ['created_at', 'updated_at', 'datum_voordag', 'datum_start', 'datum_eind'];
+    protected $dates = ['created_at', 'updated_at', 'datum_voordag', 'datum_start', 'datum_eind', 'vroegboek_korting_datum_eind'];
 
     protected $dispatchesEvents = [
         'saved' => EventSaved::class,
