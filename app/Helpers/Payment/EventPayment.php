@@ -52,14 +52,14 @@ class EventPayment implements PaymentInterface
         return $this->package === null ? 0 : $this->package->price;
     }
 
-    public function getDiscount(): float
+    public function getDiscountFactor(): float
     {
         return min($this->participant->incomeBasedDiscountFactor, $this->event->earlybirdDiscountFactor);
     }
 
     public function getTotalAmount(): float
     {
-        return self::calculatePrice($this->event->prijs + $this->getPackagePrice(), $this->getDiscount());
+        return self::calculatePrice($this->event->prijs + $this->getPackagePrice(), $this->getDiscountFactor());
     }
 
     public function getDescription(): string
