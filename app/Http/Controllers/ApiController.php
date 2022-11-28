@@ -146,7 +146,7 @@ class ApiController extends Controller
             'prijs' => $camp->prijs,
             'vroegboek_korting' => $camp->hasEarlybirdDiscount ? [
                 'percentage' => $camp->vroegboek_korting_percentage,
-                'eind_datum' => $camp->vroegboek_korting_datum_eind,
+                'datum_eind' => $camp->vroegboek_korting_datum_eind,
             ] : null,
         ];
 

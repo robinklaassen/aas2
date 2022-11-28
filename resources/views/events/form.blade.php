@@ -101,7 +101,7 @@
 			{!! Form::input('number', 'vroegboek_korting_percentage', null, [ 'class' => 'form-control', 'min' => 0, 'max' => 100]) !!}
 		</div>
 		<div class="input-group">
-			<span class="input-group-addon">Eind datum</span>
+			<span class="input-group-addon">Einddatum</span>
 			{!! Form::date('vroegboek_korting_datum_eind', null, [ 'class' => 'form-control' ]) !!}
 		</div>
 	</div>
