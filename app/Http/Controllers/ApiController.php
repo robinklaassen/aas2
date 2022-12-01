@@ -124,6 +124,11 @@ class ApiController extends Controller
                 'prijs' => $prijs_html,
                 'beschrijving' => $event->beschrijving,
                 'kleur' => $color,
+                'vroegboek_korting' => $event->hasEarlybirdDiscount ? [
+                    'percentage' => $event->vroegboek_korting_percentage,
+                    'prijs' => EventPayment::calculatePrice($event->prijs, $event->earlybirdDiscountFactor),
+                    'datum_eind' => $event->vroegboek_korting_datum_eind,
+                ] : null,
             ];
             $k++;
         }
