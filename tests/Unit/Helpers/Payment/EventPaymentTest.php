@@ -7,10 +7,14 @@ namespace Tests\Unit\Helpers\Payment;
 use App\Helpers\Payment\EventPayment;
 use App\Models\Event;
 use App\Models\Participant;
+use Carbon\Carbon;
+use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
 class EventPaymentTest extends TestCase
 {
+    use DatabaseTransactions;
+
     private $payment;
 
     private $event;
@@ -72,6 +76,25 @@ class EventPaymentTest extends TestCase
     {
         $partWithDiscount = Participant::findOrFail(2);
         $this->payment->participant($partWithDiscount);
-        $this->assertSame($this->event->prijs * $partWithDiscount->incomeBasedDiscount, $this->payment->getTotalAmount());
+        $this->assertSame($this->event->prijs * $partWithDiscount->incomeBasedDiscountFactor, $this->payment->getTotalAmount());
+    }
+
+    public function testEventPaymentPriceWithEarlybirdDiscount()
+    {
+        $this->event->vroegboek_korting_percentage = 5;
+        $this->event->vroegboek_korting_datum_eind = Carbon::tomorrow();
+
+        $this->payment->event($this->event);
+        $this->assertSame($this->event->prijs * 0.95, $this->payment->getTotalAmount());
+    }
+
+    public function testEventPaymentPriceHigherDiscountWins()
+    {
+        $this->event->vroegboek_korting_percentage = 5;
+        $this->event->vroegboek_korting_datum_eind = Carbon::tomorrow();
+
+        $partWithDiscount = Participant::findOrFail(2);
+        $this->payment->participant($partWithDiscount)->event($this->event);
+        $this->assertSame($this->event->prijs * $partWithDiscount->incomeBasedDiscountFactor, $this->payment->getTotalAmount());
     }
 }

@@ -39,7 +39,7 @@ class EventTest extends TestCase
      */
     public function testShow()
     {
-        $response = $this
+        $this
             ->actingAs($this->user)
             ->get('/events/1')
             ->assertStatus(200)

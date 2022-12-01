@@ -9,11 +9,14 @@ use App\Events\FinishedEvent;
 use App\Exceptions\MethodNotAllowedException;
 use App\Pivots\EventParticipant;
 use Carbon\Carbon;
+use Collective\Html\Eloquent\FormAccessible;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
 
 class Event extends Model
 {
+    use FormAccessible;
+
     public const TYPE_DESCRIPTIONS = [
         'kamp' => 'Kamp',
         'training' => 'Training',
@@ -35,7 +38,7 @@ class Event extends Model
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
     // Carbon dates
-    protected $dates = ['created_at', 'updated_at', 'datum_voordag', 'datum_start', 'datum_eind'];
+    protected $dates = ['created_at', 'updated_at', 'datum_voordag', 'datum_start', 'datum_eind', 'vroegboek_korting_datum_eind'];
 
     protected $dispatchesEvents = [
         'saved' => EventSaved::class,
@@ -107,6 +110,15 @@ class Event extends Model
         $this->attributes['cancelled_at'] = ($value) ? Carbon::now() : null;
     }
 
+    public function formVroegboekKortingDatumEindAttribute(null|Carbon $date): string
+    {
+        if ($date === null) {
+            return '';
+        }
+
+        return $date->format('Y-m-d');
+    }
+
     // The association year ('verenigingsjaar') starts at September 1st. This returns a string e.g. '14-15'
     public function getVerenigingsjaarAttribute(): string
     {
@@ -118,6 +130,22 @@ class Event extends Model
     public function getStreeftalDeelnemersAttribute(): int
     {
         return ($this->streeftal - 1) * 3;
+    }
+
+    public function getHasEarlybirdDiscountAttribute(): bool
+    {
+        return $this->vroegboek_korting_percentage !== null
+            && $this->vroegboek_korting_datum_eind !== null
+            && Carbon::now()->lessThan($this->vroegboek_korting_datum_eind);
+    }
+
+    public function getEarlybirdDiscountFactorAttribute(): float
+    {
+        if (! $this->hasEarlybirdDiscount) {
+            return 1.0;
+        }
+
+        return (100 - $this->vroegboek_korting_percentage) / 100;
     }
 
     /**

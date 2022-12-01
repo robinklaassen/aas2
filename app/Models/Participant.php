@@ -95,7 +95,7 @@ class Participant extends Model
         return $this::INCOME_DESCRIPTION_TABLE[$this->inkomen];
     }
 
-    public function getIncomeBasedDiscountAttribute(): float
+    public function getIncomeBasedDiscountFactorAttribute(): float
     {
         return $this::INCOME_DISCOUNT_TABLE[$this->inkomen];
     }

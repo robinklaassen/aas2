@@ -32,6 +32,7 @@ class PublicJSONApiTest extends TestCase
                 'id' => 1,
                 'naam' => 'Meikamp',
                 'prijs' => 400,
+                'vroegboek_korting' => null,
             ]);
     }
 

@@ -106,6 +106,12 @@
 				<td>Kampprijs (zonder korting)</td>
 				<td>€ {{ $event->prijs }}</td>
 			</tr>
+			<tr>
+				<td>Vroegboek korting</td>
+				@if ($event->vroegboek_korting_percentage && $event->vroegboek_korting_datum_eind)
+					<td>{{ $event->vroegboek_korting_percentage }} % tot {{ Date::Format($event->vroegboek_korting_datum_eind)  }}</td>
+				@endif
+			</tr>
 			@endcan
 			@can("showBasic", $event)
 			<tr>

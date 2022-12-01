@@ -18,7 +18,7 @@ class EventPayment implements PaymentInterface
 
     private $existing;
 
-    public static function calculate_price(?int $fullprice, float $discount = 1.0)
+    public static function calculatePrice(?int $fullprice, float $discount = 1.0)
     {
         return round(($discount * $fullprice) / 5) * 5;
     }
@@ -52,9 +52,14 @@ class EventPayment implements PaymentInterface
         return $this->package === null ? 0 : $this->package->price;
     }
 
+    public function getDiscountFactor(): float
+    {
+        return min($this->participant->incomeBasedDiscountFactor, $this->event->earlybirdDiscountFactor);
+    }
+
     public function getTotalAmount(): float
     {
-        return self::calculate_price($this->event->prijs + $this->getPackagePrice(), $this->participant->incomeBasedDiscount);
+        return self::calculatePrice($this->event->prijs + $this->getPackagePrice(), $this->getDiscountFactor());
     }
 
     public function getDescription(): string

@@ -71,7 +71,7 @@ class ApiController extends Controller
                     - 40&percnt; korting<br/>
                     - 60&percnt; korting</td><td>";
                 $prijs_html .= implode('', array_map(function (float $disc) use ($event) {
-                    return '&euro; ' . EventPayment::calculate_price($event->prijs, $disc) . '<br/>';
+                    return '&euro; ' . EventPayment::calculatePrice($event->prijs, $disc) . '<br/>';
                 }, Participant::INCOME_DISCOUNT_TABLE));
                 $prijs_html .= '</td>';
             }
@@ -124,6 +124,11 @@ class ApiController extends Controller
                 'prijs' => $prijs_html,
                 'beschrijving' => $event->beschrijving,
                 'kleur' => $color,
+                'vroegboek_korting' => $event->hasEarlybirdDiscount ? [
+                    'percentage' => $event->vroegboek_korting_percentage,
+                    'prijs' => EventPayment::calculatePrice($event->prijs, $event->earlybirdDiscountFactor),
+                    'datum_eind' => $event->vroegboek_korting_datum_eind,
+                ] : null,
             ];
             $k++;
         }
@@ -144,6 +149,11 @@ class ApiController extends Controller
             'id' => $camp->id,
             'naam' => $camp->naam,
             'prijs' => $camp->prijs,
+            'vroegboek_korting' => $camp->hasEarlybirdDiscount ? [
+                'percentage' => $camp->vroegboek_korting_percentage,
+                'prijs' => EventPayment::calculatePrice($camp->prijs, $camp->earlybirdDiscountFactor),
+                'datum_eind' => $camp->vroegboek_korting_datum_eind,
+            ] : null,
         ];
 
         return response()->json($data);
