@@ -9,11 +9,14 @@ use App\Events\FinishedEvent;
 use App\Exceptions\MethodNotAllowedException;
 use App\Pivots\EventParticipant;
 use Carbon\Carbon;
+use Collective\Html\Eloquent\FormAccessible;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
 use Illuminate\Database\Eloquent\Model;
 
 class Event extends Model
 {
+    use FormAccessible;
+
     public const TYPE_DESCRIPTIONS = [
         'kamp' => 'Kamp',
         'training' => 'Training',
@@ -105,6 +108,15 @@ class Event extends Model
     public function setCancelledAttribute($value)
     {
         $this->attributes['cancelled_at'] = ($value) ? Carbon::now() : null;
+    }
+
+    public function formVroegboekKortingDatumEindAttribute(null|Carbon $date): string
+    {
+        if ($date === null) {
+            return '';
+        }
+
+        return $date->format('Y-m-d');
     }
 
     // The association year ('verenigingsjaar') starts at September 1st. This returns a string e.g. '14-15'
