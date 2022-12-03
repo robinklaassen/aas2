@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Pivots\EventParticipant;
+use App\ValueObjects\Pricing\Discount;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -18,10 +19,10 @@ class Participant extends Model
     ];
 
     public const INCOME_DISCOUNT_TABLE = [
-        0 => 1.0,
-        1 => 0.75,
-        2 => 0.6,
-        3 => 0.4,
+        0 => 0,
+        1 => 25,
+        2 => 40,
+        3 => 60,
     ];
 
     public const INFORMATION_CHANNEL_DESCRIPTION_TABLE = [
@@ -95,9 +96,9 @@ class Participant extends Model
         return $this::INCOME_DESCRIPTION_TABLE[$this->inkomen];
     }
 
-    public function getIncomeBasedDiscountFactorAttribute(): float
+    public function getIncomeBasedDiscountAttribute(): Discount
     {
-        return $this::INCOME_DISCOUNT_TABLE[$this->inkomen];
+        return Discount::fromPercentage($this::INCOME_DISCOUNT_TABLE[$this->inkomen]);
     }
 
     public function getInformationChannelDescriptionAttribute()

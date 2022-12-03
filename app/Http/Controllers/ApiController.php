@@ -8,6 +8,7 @@ use App\Helpers\DateHelper;
 use App\Helpers\Payment\EventPayment;
 use App\Models\Event;
 use App\Models\Participant;
+use App\ValueObjects\Pricing\Discount;
 
 class ApiController extends Controller
 {
@@ -66,12 +67,15 @@ class ApiController extends Controller
             } elseif ($event->prijs === 0) {
                 $prijs_html = '';
             } elseif ($event->prijs > 0) {
-                $prijs_html = "<td style='white-space: nowrap;'>Prijs<br />
-                    - 25&percnt; korting<br/>
-                    - 40&percnt; korting<br/>
-                    - 60&percnt; korting</td><td>";
-                $prijs_html .= implode('', array_map(function (float $disc) use ($event) {
-                    return '&euro; ' . EventPayment::calculatePrice($event->prijs, $disc) . '<br/>';
+                $prijs_html = "<td style='white-space: nowrap;'>Prijs<br />";
+
+                $prijs_html .= implode('', array_map(function (int $disc) {
+                    return sprintf('- %s korting<br />', (string) Discount::fromPercentage($disc));
+                }, Participant::INCOME_DISCOUNT_TABLE));
+                $prijs_html .= '</td>';
+
+                $prijs_html .= implode('', array_map(function (int $disc) use ($event) {
+                    return sprintf('&euro; %d<br />', EventPayment::calculatePrice($event->prijs, Discount::fromPercentage($disc)));
                 }, Participant::INCOME_DISCOUNT_TABLE));
                 $prijs_html .= '</td>';
             }
@@ -124,11 +128,40 @@ class ApiController extends Controller
                 'prijs' => $prijs_html,
                 'beschrijving' => $event->beschrijving,
                 'kleur' => $color,
-                'vroegboek_korting' => $event->hasEarlybirdDiscount ? [
-                    'percentage' => $event->vroegboek_korting_percentage,
-                    'prijs' => EventPayment::calculatePrice($event->prijs, $event->earlybirdDiscountFactor),
-                    'datum_eind' => $event->vroegboek_korting_datum_eind,
-                ] : null,
+                'prijzen' => [
+                    [
+                        'type' => 'Standaard prijs',
+                        'prijzen' => [
+                            [
+                                'omschrijving' => 'Standaard kampprijs',
+                                'prijs' => $event->prijs,
+                            ],
+                        ],
+                    ],
+                    [
+                        'type' => 'Inkomen afhankelijke korting',
+                        'prijzen' => [
+                            array_map(static function (int $key) use ($event): array {
+                                $discount = Discount::fromPercentage(Participant::INCOME_DISCOUNT_TABLE[$key]);
+                                return [
+                                    'omschrijving' => Participant::INCOME_DESCRIPTION_TABLE[$key],
+                                    'korting' => (string) $discount,
+                                    'prijs' => EventPayment::calculatePrice($event->prijs, $discount),
+                                ];
+                            }, array_keys(Participant::INCOME_DISCOUNT_TABLE)),
+                        ],
+                    ],
+                    $event->hasEarlybirdDiscount ? [
+                        'type' => 'Vroegboek korting',
+                        'prijzen' => [
+                            [
+                                'omschrijving' => sprintf('Vroegboek korting tot %s', $event->vroegboek_korting_datum_eind->format('d-m-Y')),
+                                'korting' => (string) $event->earlybirdDiscount,
+                                'prijs' => EventPayment::calculatePrice($event->prijs, $event->earlybirdDiscount),
+                            ],
+                        ],
+                    ] : null,
+                ],
             ];
             $k++;
         }
@@ -151,7 +184,7 @@ class ApiController extends Controller
             'prijs' => $camp->prijs,
             'vroegboek_korting' => $camp->hasEarlybirdDiscount ? [
                 'percentage' => $camp->vroegboek_korting_percentage,
-                'prijs' => EventPayment::calculatePrice($camp->prijs, $camp->earlybirdDiscountFactor),
+                'prijs' => EventPayment::calculatePrice($camp->prijs, $camp->earlybirdDiscount),
                 'datum_eind' => $camp->vroegboek_korting_datum_eind,
             ] : null,
         ];

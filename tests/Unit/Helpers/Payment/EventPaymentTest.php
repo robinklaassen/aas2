@@ -76,7 +76,7 @@ class EventPaymentTest extends TestCase
     {
         $partWithDiscount = Participant::findOrFail(2);
         $this->payment->participant($partWithDiscount);
-        $this->assertSame($this->event->prijs * $partWithDiscount->incomeBasedDiscountFactor, $this->payment->getTotalAmount());
+        $this->assertSame($this->event->prijs * 0.6, $this->payment->getTotalAmount());
     }
 
     public function testEventPaymentPriceWithEarlybirdDiscount()
@@ -95,6 +95,6 @@ class EventPaymentTest extends TestCase
 
         $partWithDiscount = Participant::findOrFail(2);
         $this->payment->participant($partWithDiscount)->event($this->event);
-        $this->assertSame($this->event->prijs * $partWithDiscount->incomeBasedDiscountFactor, $this->payment->getTotalAmount());
+        $this->assertSame($this->event->prijs * 0.6, $this->payment->getTotalAmount());
     }
 }

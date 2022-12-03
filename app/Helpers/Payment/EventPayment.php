@@ -7,6 +7,7 @@ namespace App\Helpers\Payment;
 use App\Models\Event;
 use App\Models\EventPackage;
 use App\Models\Participant;
+use App\ValueObjects\Pricing\Discount;
 
 class EventPayment implements PaymentInterface
 {
@@ -18,9 +19,9 @@ class EventPayment implements PaymentInterface
 
     private $existing;
 
-    public static function calculatePrice(?int $fullprice, float $discount = 1.0)
+    public static function calculatePrice(?int $fullprice, Discount $discount): float
     {
-        return round(($discount * $fullprice) / 5) * 5;
+        return round(($discount->asFactor() * $fullprice) / 5) * 5;
     }
 
     public function event(Event $event)
@@ -52,14 +53,14 @@ class EventPayment implements PaymentInterface
         return $this->package === null ? 0 : $this->package->price;
     }
 
-    public function getDiscountFactor(): float
+    public function getDiscount(): Discount
     {
-        return min($this->participant->incomeBasedDiscountFactor, $this->event->earlybirdDiscountFactor);
+        return Discount::max($this->participant->incomeBasedDiscount, $this->event->earlybirdDiscount);
     }
 
     public function getTotalAmount(): float
     {
-        return self::calculatePrice($this->event->prijs + $this->getPackagePrice(), $this->getDiscountFactor());
+        return self::calculatePrice($this->event->prijs + $this->getPackagePrice(), $this->getDiscount());
     }
 
     public function getDescription(): string
