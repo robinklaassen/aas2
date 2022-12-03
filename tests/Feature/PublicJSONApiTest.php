@@ -7,6 +7,9 @@ namespace Tests\Feature;
 use App\Models\Event;
 use Tests\TestCase;
 
+/**
+ * @covers \App\Http\Controllers\ApiController
+ */
 class PublicJSONApiTest extends TestCase
 {
     private $kampDataFragment = [

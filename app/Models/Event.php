@@ -8,6 +8,7 @@ use App\Events\EventSaved;
 use App\Events\FinishedEvent;
 use App\Exceptions\MethodNotAllowedException;
 use App\Pivots\EventParticipant;
+use App\ValueObjects\Pricing\Discount;
 use Carbon\Carbon;
 use Collective\Html\Eloquent\FormAccessible;
 use Illuminate\Database\Eloquent\Collection as EloquentCollection;
@@ -139,13 +140,13 @@ class Event extends Model
             && Carbon::now()->lessThan($this->vroegboek_korting_datum_eind);
     }
 
-    public function getEarlybirdDiscountFactorAttribute(): float
+    public function getEarlybirdDiscountAttribute(): Discount
     {
         if (! $this->hasEarlybirdDiscount) {
-            return 1.0;
+            return Discount::none();
         }
 
-        return (100 - $this->vroegboek_korting_percentage) / 100;
+        return Discount::fromPercentage($this->vroegboek_korting_percentage);
     }
 
     /**
