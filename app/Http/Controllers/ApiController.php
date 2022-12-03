@@ -139,7 +139,7 @@ class ApiController extends Controller
                         ],
                     ],
                     [
-                        'type' => 'Inkomen afhankelijke korting',
+                        'type' => 'Inkomensafhankelijke korting',
                         'prijzen' => [
                             array_map(static function (int $key) use ($event): array {
                                 $discount = Discount::fromPercentage(Participant::INCOME_DISCOUNT_TABLE[$key]);
