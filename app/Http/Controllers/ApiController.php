@@ -140,16 +140,14 @@ class ApiController extends Controller
                     ],
                     [
                         'type' => 'Inkomensafhankelijke korting',
-                        'prijzen' => [
-                            array_map(static function (int $key) use ($event): array {
-                                $discount = Discount::fromPercentage(Participant::INCOME_DISCOUNT_TABLE[$key]);
-                                return [
-                                    'omschrijving' => Participant::INCOME_DESCRIPTION_TABLE[$key],
-                                    'korting' => (string) $discount,
-                                    'prijs' => EventPayment::calculatePrice($event->prijs, $discount),
-                                ];
-                            }, array_keys(Participant::INCOME_DISCOUNT_TABLE)),
-                        ],
+                        'prijzen' => array_map(static function (int $key) use ($event): array {
+                            $discount = Discount::fromPercentage(Participant::INCOME_DISCOUNT_TABLE[$key]);
+                            return [
+                                'omschrijving' => Participant::INCOME_DESCRIPTION_TABLE[$key],
+                                'korting' => (string) $discount,
+                                'prijs' => EventPayment::calculatePrice($event->prijs, $discount),
+                            ];
+                        }, array_keys(Participant::INCOME_DISCOUNT_TABLE)),
                     ],
                     $event->hasEarlybirdDiscount ? [
                         'type' => 'Vroegboek korting',
