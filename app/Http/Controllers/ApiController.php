@@ -172,7 +172,7 @@ class ApiController extends Controller
     {
         $camp = Event::find($camp_id);
 
-        if ($camp->type !== 'kamp') {
+        if (! in_array($camp, ['kamp', 'online'], true)) {
             return null;
         }
 
@@ -185,6 +185,7 @@ class ApiController extends Controller
                 'prijs' => EventPayment::calculatePrice($camp->prijs, $camp->earlybirdDiscount),
                 'datum_eind' => $camp->vroegboek_korting_datum_eind,
             ] : null,
+            'structured_data' => getStructuredData($camp),
         ];
 
         return response()->json($data);
@@ -223,5 +224,48 @@ class ApiController extends Controller
         }
 
         return response()->json($data);
+    }
+
+    // Construct event data as JSON-LD to please our Google overlords
+    // https://developers.google.com/search/docs/appearance/structured-data/event
+    private function getStructuredData(Event $event): string
+    {
+        $location = $event->location;
+
+        return json_encode([
+            '@context' => 'https://schema.org',
+            '@type' => 'Event',
+            'name' => $event->full_title,
+            'startDate' => $event->datum_start->toIso8601String(),
+            'endDate' => $event->datum_eind->toIso8601String(),
+            'eventAttendanceMode' => 'https://schema.org/OfflineEventAttendanceMode',
+            'eventStatus' => $event->cancelled ? 'https://schema.org/EventCancelled' : 'https://schema.org/EventScheduled',
+            'location' => [
+                '@type' => 'Place',
+                'name' => $location->naam,
+                'address' => [
+                    '@type' => 'PostalAddress',
+                    'streetAddress' => $location->adres,
+                    'adressLocality' => $location->plaats,
+                    'postalCode' => $location->postcode,
+                    'addressRegion' => null,
+                    // TODO provincie?
+                    'addressCountry',
+                    'NL',
+                ],
+            ],
+            'image' => [
+                // todo ??
+            ],
+            'description' => $event->omschrijving,
+            'offers' => [
+                // todo prijzen enzo
+            ],
+            'organizer' => [
+                '@type' => 'Organization',
+                'name' => 'Anderwijs',
+                'url' => 'https://anderwijs.nl',
+            ],
+        ]);
     }
 }
