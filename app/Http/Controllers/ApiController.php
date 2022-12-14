@@ -192,6 +192,7 @@ class ApiController extends Controller
     }
 
     // Expose list of all previous camps as report, for website integration
+    // TODO this can probably be removed, was used for ANBI status but we are not eligible
     public function campsReport()
     {
         $camps = Event::where('type', 'kamp')
@@ -249,9 +250,7 @@ class ApiController extends Controller
                     'adressLocality' => $location->plaats,
                     'postalCode' => $location->postcode,
                     'addressRegion' => null,
-                    // TODO provincie?
-                    'addressCountry',
-                    'NL',
+                    'addressCountry' => 'NL',
                 ],
             ],
             'image' => [
