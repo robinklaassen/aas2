@@ -89,7 +89,11 @@ final class EmailListAdapter implements Contracts\EmailListAdapter
         $toRemove = array_diff($existingSubscribers->subscribers(), $emailListSubscribers->subscribers());
         $toAdd = array_diff($emailListSubscribers->subscribers(), $existingSubscribers->subscribers());
 
-        $this->removeEmailListSubscribers(new EmailListSubscribers($emailListSubscribers->list(), $toRemove));
-        $this->addEmailListSubscribers(new EmailListSubscribers($emailListSubscribers->list(), $toAdd));
+        if (count($toRemove) > 0) {
+            $this->removeEmailListSubscribers(new EmailListSubscribers($emailListSubscribers->list(), $toRemove));
+        }
+        if (count($toAdd) > 0) {
+            $this->addEmailListSubscribers(new EmailListSubscribers($emailListSubscribers->list(), $toAdd));
+        }
     }
 }

@@ -32,7 +32,7 @@ class Member extends Model
     ];
 
     protected $dispatchesEvents = [
-        'updated' => MemberUpdated::class,
+        'saved' => MemberUpdated::class,
     ];
 
     // Full name

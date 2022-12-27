@@ -130,6 +130,24 @@ final class EmailListAdapterTest extends MockeryTestCase
         $this->subject->setEmailListSubscribers($toSet);
     }
 
+    public function testSetDoesntDoAnythingForTheSameAddresses(): void
+    {
+        $toSet = new EmailListSubscribers($this->emailList, ['piet@anderwijs.nl', 'vincent@anderwijs.nl', 'robin@anderwijs.nl']);
+
+        $this->expectsCommand(
+            command: Command::create(EmailListAdapter::CMD)
+                ->asPost([
+                    'name' => $this->emailList->name(),
+                    'domain' => $this->emailList->domain(),
+                    'action' => 'view',
+                    'type' => 'list',
+                ]),
+            asJson: false
+        )->andReturn('s%30=piet%40anderwijs%2Enl&s%31=vincent%40anderwijs%2Enl&s%32=robin%40anderwijs%2Enl');
+
+        $this->subject->setEmailListSubscribers($toSet);
+    }
+
     private function expectsCommand(Command $command, bool $asJson): CompositeExpectation
     {
         return $this->client
