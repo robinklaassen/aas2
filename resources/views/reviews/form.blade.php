@@ -244,7 +244,7 @@
 			<h2>Vragen over {{$m->volnaam}}</h2>
 
 			<div class="form-group form-group-lg">
-				<h4>Hoe legt {{ ($m->geslacht == 'M') ? 'hij' : 'zij' }} de stof uit? *</h4>
+				<h4>Hoe legt deze leiding de stof uit? *</h4>
 				<div class="radio-buttons">
 					<label>
 						<input type="radio" name="stof-{{$m->id}}" value="1"
@@ -280,7 +280,7 @@
 			</div>
 
 			<div class="form-group form-group-lg">
-				<h4>Hoeveel aandacht gaf {{ ($m->geslacht == 'M') ? 'hij' : 'zij' }} je tijdens de blokjes? *</h4>
+				<h4>Hoeveel aandacht gaf deze leiding je tijdens de blokjes? *</h4>
 				<div class="radio-buttons">
 					<label>
 						<input type="radio" name="aandacht-{{$m->id}}" value="1"
@@ -310,7 +310,7 @@
 			</div>
 
 			<div class="form-group form-group-lg">
-				<h4>Hoe vond je het om door {{ ($m->geslacht == 'M') ? 'hem' : 'haar' }} bijgespijkerd te worden? *</h4>
+				<h4>Hoe vond je het om door deze leiding bijgespijkerd te worden? *</h4>
 				<div class="radio-buttons">
 					<label>
 						<input type="radio" name="mening-{{$m->id}}" value="1"
@@ -346,7 +346,7 @@
 			</div>
 
 			<div class="form-group form-group-lg">
-				<h4>Hoe tevreden ben je over wat je met {{ ($m->geslacht == 'M') ? 'hem' : 'haar' }} hebt bereikt? *
+				<h4>Hoe tevreden ben je over wat je met deze leiding hebt bereikt? *
 				</h4>
 				<div class="radio-buttons">
 					<label>
@@ -377,9 +377,7 @@
 			</div>
 
 			<div class="form-group form-group-lg">
-				<label for="bericht-{{$m->id}}">Wil je nog iets persoonlijk kwijt aan
-					{{$m->voornaam}}?<br /><small>Alleen {{ ($m->geslacht == 'M') ? 'hij' : 'zij' }} kan dit bericht
-						zien.</small></label>
+				<label for="bericht-{{$m->id}}">Wil je nog iets persoonlijk kwijt wat alleen {{$m->voornaam}} kan zien?
 				<input type="text" class="form-control" id="bericht-{{$m->id}}" name="bericht-{{$m->id}}"
 					value="{{ old('bericht-'.$m->id) }}">
 			</div>
