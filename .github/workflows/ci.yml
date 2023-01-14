@@ -21,6 +21,27 @@ jobs:
       - name: Easy coding Standard
         run: vendor/bin/ecs check --config=ecs.php --no-progress-bar
 
+  frontend:
+    name: Front-end test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: "19"
+
+      - name: Install yarn dependencies
+        run: yarn install
+
+      - name: Compile assets
+        #        Runs prod complication 2 times, because webpack paralises compilation and doesnt wait for all stylesheets
+        #        to be compiled before combining them
+        run: |
+          yarn prod
+
   tests:
     name: Tests ${{ matrix.php }}
     runs-on: ubuntu-latest
@@ -78,6 +99,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: [tests, codestyle]
     if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/feature/github-actions'
+    concurrency:
+      group: ${{ github.head_ref }}
+      cancel-in-progress: true
 
     steps:
       - name: Checkout code
@@ -86,7 +110,7 @@ jobs:
       - name: Setup NodeJS
         uses: actions/setup-node@v3
         with:
-          node-version: "14"
+          node-version: "19"
 
       - name: Install yarn dependencies
         run: yarn install
