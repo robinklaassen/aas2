@@ -24,7 +24,6 @@ class EventPaymentReport implements FromArray, WithHeadings
         // Fill data array
         $data = [];
         foreach ($this->event->participants()->orderBy('voornaam')->get() as $p) {
-
             // Payment amount
             switch ($p->inkomen) {
                 case 0:

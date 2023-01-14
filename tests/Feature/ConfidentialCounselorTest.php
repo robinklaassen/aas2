@@ -16,7 +16,6 @@ class EventTest extends TestCase
 
     public function testPhoneIsVisibleForMembers()
     {
-
         // dkrijgsman a normal member
         $user = User::findOrFail(4);
 
@@ -31,7 +30,6 @@ class EventTest extends TestCase
 
     public function testPhoneIsNotVisibleForParticipants()
     {
-
         // henk: a participant
         $user = User::findOrFail(12);
 

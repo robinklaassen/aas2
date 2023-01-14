@@ -82,7 +82,7 @@ class AnonymizeParticipantFeatureTest extends TestCase
             ->assertStatus(200)
             ->assertSee('Jan Janssen')
             ->assertDontSee('Jaap')
-            ;
+        ;
 
         $this->actingAs($user)->get(action('ParticipantsController@anonymizeConfirm', [
             'participant' => [1],
@@ -100,7 +100,7 @@ class AnonymizeParticipantFeatureTest extends TestCase
         ])
             ->assertStatus(302)
             ->assertRedirect(action('ParticipantsController@index'))
-            ;
+        ;
 
         // Dont see Jan after anonymization
         $this->actingAs($user)->get(action('ParticipantsController@anonymize'))

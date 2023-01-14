@@ -32,7 +32,7 @@ class MemberPolicy
         return ($member->soort === 'oud' && $user->hasCapability('members::oud::show'))
             || ($member->soort !== 'oud' && $user->hasCapability('members::info::show::basic'))
             || ($this->ifSelf('members::info::show::self', $user, $member))
-            ;
+        ;
     }
 
     /**

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9d96ec3df387b5d4a6946351bc9e2b98",
+    "content-hash": "c40322e91cbe5695b80e70579ca55d4b",
     "packages": [
         {
             "name": "barryvdh/laravel-dompdf",
@@ -9039,20 +9039,20 @@
         },
         {
             "name": "symplify/easy-coding-standard",
-            "version": "9.4.70",
+            "version": "11.2.2.72",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symplify/easy-coding-standard.git",
-                "reference": "9276b0c7a1a5671fc4a067656ab40d0aea42aaca"
+                "reference": "efef2606b8c1b9117aeb9d547c582eb12d66bc0a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symplify/easy-coding-standard/zipball/9276b0c7a1a5671fc4a067656ab40d0aea42aaca",
-                "reference": "9276b0c7a1a5671fc4a067656ab40d0aea42aaca",
+                "url": "https://api.github.com/repos/symplify/easy-coding-standard/zipball/efef2606b8c1b9117aeb9d547c582eb12d66bc0a",
+                "reference": "efef2606b8c1b9117aeb9d547c582eb12d66bc0a",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.1"
+                "php": ">=7.2"
             },
             "conflict": {
                 "friendsofphp/php-cs-fixer": "<3.0",
@@ -9062,11 +9062,6 @@
                 "bin/ecs"
             ],
             "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-main": "9.5-dev"
-                }
-            },
             "autoload": {
                 "files": [
                     "bootstrap.php"
@@ -9076,9 +9071,10 @@
             "license": [
                 "MIT"
             ],
-            "description": "Prefixed scoped version of ECS package",
+            "description": "Use Coding Standard with 0-knowledge of PHP-CS-Fixer and PHP_CodeSniffer",
             "support": {
-                "source": "https://github.com/symplify/easy-coding-standard/tree/9.4.70"
+                "issues": "https://github.com/symplify/easy-coding-standard/issues",
+                "source": "https://github.com/symplify/easy-coding-standard/tree/11.2.2.72"
             },
             "funding": [
                 {
@@ -9090,7 +9086,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-10-02T16:09:04+00:00"
+            "time": "2023-01-11T14:42:18+00:00"
         },
         {
             "name": "theseer/tokenizer",
