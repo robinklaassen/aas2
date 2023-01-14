@@ -34,7 +34,7 @@
     "phpspec/phpspec": "^7.0",
     "filp/whoops": "~2.0",
     "mockery/mockery": "^1.2",
-    "laravel/homestead": "^13.0",
+    "laravel/homestead": "^14.0",
     "barryvdh/laravel-debugbar": "^3.3",
     "laravel/ui": "^3.0",
     "symplify/easy-coding-standard": "^9.4"
