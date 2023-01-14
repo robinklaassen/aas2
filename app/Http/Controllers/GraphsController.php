@@ -180,7 +180,6 @@ class GraphsController extends Controller
         $registration_series = [];
 
         foreach ($camps as $camp) {
-
             // Make an array of the registration days for this camp
             $daysArray = [];
             foreach ($camp->participants()->get() as $participant) {

@@ -94,7 +94,6 @@ class Comments extends Migration
      */
     public function down()
     {
-
         // Return the member comments
         Schema::table('members', function ($table) {
             $table->string('opmerkingen_admin')->nullable();

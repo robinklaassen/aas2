@@ -14,7 +14,6 @@ class ReviewsController extends Controller
     // Display review form
     public function review(Event $event)
     {
-
         // No access if the given id is not a camp
         if ($event->type !== 'kamp') {
             return redirect('/');
