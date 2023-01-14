@@ -24,7 +24,7 @@
         "laravel-mix": "^6.0.19",
         "laravel-mix-modernizr": "^1.0.2",
         "leaflet": "^1.7.1",
-        "less": "^3.13.1",
+        "less": "^4.0.0",
         "less-loader": "^6.2.0",
         "lint-staged": "^13.0.0",
         "moment": "^2.29.2",
