@@ -69,9 +69,6 @@
     ]
   },
   "config": {
-    "preferred-install": "dist",
-    "platform": {
-      "php": "8.0"
-    }
+    "preferred-install": "dist"
   }
 }
