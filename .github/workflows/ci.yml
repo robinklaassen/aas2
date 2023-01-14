@@ -102,7 +102,7 @@ jobs:
         run: "mkdir deploy-unit && mv -t deploy-unit public/css public/js public/fonts"
 
       - name: Upload assets
-        uses: SamKirkland/FTP-Deploy-Action@4.0.0
+        uses: SamKirkland/FTP-Deploy-Action@4.3.3
         with:
           server: ${{ secrets.FTP_HOSTNAME }}
           username: ${{ secrets.FTP_USERNAME }}
