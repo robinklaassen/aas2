@@ -254,11 +254,16 @@ class ApiController extends Controller
                 ],
             ],
             'image' => [
-                // todo ??
+                // TODO link to static images on main website?
             ],
             'description' => $event->omschrijving,
             'offers' => [
-                // todo prijzen enzo
+                '@type' => 'Offer',
+                'url' => 'https://anderwijs.nl/inschrijven/inschrijven-scholieren/',
+                'price' => $event->prijs,
+                'priceCurrency' => 'EUR',
+                'availability' => $event->voll ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock',
+                // TODO add discounts and early bird offers
             ],
             'organizer' => [
                 '@type' => 'Organization',
