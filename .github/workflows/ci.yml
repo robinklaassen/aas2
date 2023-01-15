@@ -100,7 +100,7 @@ jobs:
     needs: [tests, codestyle]
     if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/feature/github-actions'
     concurrency:
-      group: ${{ github.head_ref }}
+      group: ${{ github.ref }}
       cancel-in-progress: true
 
     steps:
