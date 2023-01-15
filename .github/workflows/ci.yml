@@ -2,38 +2,59 @@ name: CI
 
 on: [push]
 
+env:
+  PHP_VERSION: "8.1"
+  PHP_EXTENSIONS: "xdebug, zip, xmlwriter, xmlreader, xml, tokenizer, pdo, phar, openssl, pcre, simplexml, gd, dom, curl"
+
 jobs:
   codestyle:
     name: Code style
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.0
+          php-version: ${{env.PHP_VERSION}}
+          extensions:  ${{env.PHP_EXTENSIONS}}
 
       - name: Install composer dependencies
-        run: composer install --prefer-dist --ignore-platform-reqs
+        run: composer install --prefer-dist
 
       - name: Easy coding Standard
         run: vendor/bin/ecs check --config=ecs.php --no-progress-bar
 
+  frontend:
+    name: Front-end test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup NodeJS
+        uses: actions/setup-node@v3
+        with:
+          node-version: "19"
+
+      - name: Install yarn dependencies
+        run: yarn install
+
+      - name: Compile assets
+        #        Runs prod complication 2 times, because webpack paralises compilation and doesnt wait for all stylesheets
+        #        to be compiled before combining them
+        run: |
+          yarn prod
+
   tests:
-    name: Tests ${{ matrix.php }}
+    name: PHP tests
     runs-on: ubuntu-latest
     env:
       MYSQL_USER: ranonkeltje
       MYSQL_PASSWORD: ranonkeltje
       MYSQL_DATABASE: aas2
       MYSQL_ROOT_PASSWORD: ranonkeltje
-
-    strategy:
-      matrix:
-        php: ["8.0"]
-        experimental: [false]
 
     services:
       mariadb:
@@ -49,16 +70,17 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: ${{ matrix.php }}
+          php-version: ${{env.PHP_VERSION}}
+          extensions: ${{env.PHP_EXTENSIONS}}
           coverage: xdebug
 
       - name: Install composer dependencies
-        run: composer install --prefer-dist --ignore-platform-reqs
+        run: composer install --prefer-dist
 
       - name: Setup project
         env:
@@ -76,17 +98,20 @@ jobs:
   deploy:
     name: Deploy
     runs-on: ubuntu-latest
-    needs: [tests, codestyle]
+    needs: [tests, codestyle, frontend]
     if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/feature/github-actions'
+    concurrency:
+      group: ${{ github.ref }}
+      cancel-in-progress: true
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Setup NodeJS
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
-          node-version: "14"
+          node-version: "19"
 
       - name: Install yarn dependencies
         run: yarn install
@@ -102,7 +127,7 @@ jobs:
         run: "mkdir deploy-unit && mv -t deploy-unit public/css public/js public/fonts"
 
       - name: Upload assets
-        uses: SamKirkland/FTP-Deploy-Action@4.0.0
+        uses: SamKirkland/FTP-Deploy-Action@4.3.3
         with:
           server: ${{ secrets.FTP_HOSTNAME }}
           username: ${{ secrets.FTP_USERNAME }}

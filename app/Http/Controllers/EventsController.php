@@ -51,7 +51,6 @@ class EventsController extends Controller
 
     public function show(Request $request, Event $event)
     {
-
         // Obtain participant course information
         $participantCourseString = [];
         foreach ($event->participants->all() as $p) {

@@ -45,7 +45,7 @@ final class EventSingleActionApplicatorTest extends TestCase
     public function testItShouldNotApplyForExistingCode(): void
     {
         $input = EventActionInputFaker::create()
-            ->withAction('123', )
+            ->withAction('123')
             ->withEventData('123')
             ->build();
 
