@@ -16,7 +16,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: $PHP_VERSION
+          php-version: ${{env.PHP_VERSION}}
 
       - name: Install composer dependencies
         run: composer install --prefer-dist --ignore-platform-reqs
@@ -73,7 +73,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: $PHP_VERSION
+          php-version: ${{env.PHP_VERSION}}
           coverage: xdebug
 
       - name: Install composer dependencies
