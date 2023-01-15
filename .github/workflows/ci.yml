@@ -4,6 +4,7 @@ on: [push]
 
 env:
   PHP_VERSION: "8.1"
+  PHP_EXTENSIONS: "xdebug, zip, xmlwriter, xmlreader, xml, tokenizer, pdo, phar, openssl, pcre, simplexml, gd, dom, curl"
 
 jobs:
   codestyle:
@@ -17,9 +18,10 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{env.PHP_VERSION}}
+          extentions:  ${{env.PHP_EXTENSIONS}}
 
       - name: Install composer dependencies
-        run: composer install --prefer-dist --ignore-platform-reqs
+        run: composer install --prefer-dist
 
       - name: Easy coding Standard
         run: vendor/bin/ecs check --config=ecs.php --no-progress-bar
@@ -74,10 +76,11 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{env.PHP_VERSION}}
+          extensions: ${{env.PHP_EXTENSIONS}}
           coverage: xdebug
 
       - name: Install composer dependencies
-        run: composer install --prefer-dist --ignore-platform-reqs
+        run: composer install --prefer-dist
 
       - name: Setup project
         env:
