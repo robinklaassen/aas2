@@ -172,7 +172,7 @@ class ApiController extends Controller
     {
         $camp = Event::find($camp_id);
 
-        if (! in_array($camp, ['kamp', 'online'], true)) {
+        if (! in_array($camp->type, ['kamp', 'online'], true)) {
             return null;
         }
 
@@ -185,7 +185,7 @@ class ApiController extends Controller
                 'prijs' => EventPayment::calculatePrice($camp->prijs, $camp->earlybirdDiscount),
                 'datum_eind' => $camp->vroegboek_korting_datum_eind,
             ] : null,
-            'structured_data' => getStructuredData($camp),
+            'structured_data' => $this->getStructuredData($camp),
         ];
 
         return response()->json($data);
@@ -229,11 +229,11 @@ class ApiController extends Controller
 
     // Construct event data as JSON-LD to please our Google overlords
     // https://developers.google.com/search/docs/appearance/structured-data/event
-    private function getStructuredData(Event $event): string
+    private function getStructuredData(Event $event): array
     {
         $location = $event->location;
 
-        return json_encode([
+        return [
             '@context' => 'https://schema.org',
             '@type' => 'Event',
             'name' => $event->full_title,
@@ -265,6 +265,6 @@ class ApiController extends Controller
                 'name' => 'Anderwijs',
                 'url' => 'https://anderwijs.nl',
             ],
-        ]);
+        ];
     }
 }

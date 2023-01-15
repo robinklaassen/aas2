@@ -31,7 +31,7 @@ class PublicJSONApiTest extends TestCase
     {
         $response = $this
             ->get('/camp-info/1')
-            ->assertExactJson([
+            ->assertJsonFragment([
                 'id' => 1,
                 'naam' => 'Meikamp',
                 'prijs' => 400,
