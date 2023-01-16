@@ -13,7 +13,7 @@ require('laravel-mix-modernizr');
  */
 
 mix.ts('resources/js/app.ts', 'public/js')
-    .vue({version: 2})
+    .vue({version: 3})
     .sass('resources/sass/app.sass', 'public/css/_app.scss.css')
     .less('resources/less/app.less', 'public/css/_app.less.css')
     .styles([

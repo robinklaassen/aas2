@@ -36,8 +36,7 @@
 </style>
 
 <script lang="ts">
-import Vue from "vue";
-import { LMap, LTileLayer, LCircleMarker, LTooltip } from "vue2-leaflet";
+import { LMap, LTileLayer, LCircleMarker, LTooltip } from "@vue-leaflet/vue-leaflet";
 import VueSlider from "vue-slider-component";
 import "vue-slider-component/theme/default.css";
 import _ from "lodash";
@@ -57,7 +56,7 @@ type CampMapData = {
 const NETHERLANDS_CENTER_LAT_LNG = [52.1, 5.4];
 const NETHERLANDS_ZOOM_LEVEL = 8;
 
-export default Vue.extend({
+export default {
   props: {
     campData: Array as () => CampMapData[],
   },
@@ -74,7 +73,7 @@ export default Vue.extend({
       attribution: STAMEN_TERRAIN_BG_MAP_ATTRIBUTION,
       zoom: NETHERLANDS_ZOOM_LEVEL,
       center: NETHERLANDS_CENTER_LAT_LNG,
-      selectedYear: this.campData[0].verenigingsjaar,
+      selectedYear: this.campData[0]?.verenigingsjaar,
     };
   },
   computed: {
@@ -87,5 +86,5 @@ export default Vue.extend({
       return _.uniq(this.campData.map((x) => x.verenigingsjaar)).sort();
     },
   },
-});
+};
 </script>
