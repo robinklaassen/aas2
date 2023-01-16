@@ -42,9 +42,9 @@ jobs:
         run: yarn install
 
       - name: Compile assets
-        #        Runs prod complication 2 times, because webpack paralises compilation and doesnt wait for all stylesheets
-        #        to be compiled before combining them
         run: |
+          touch public/css/_app.scss.css 
+          touch public/css/_app.less.css 
           yarn prod
 
   tests:
@@ -120,6 +120,8 @@ jobs:
 #        Runs prod complication 2 times, because webpack paralises compilation and doesnt wait for all stylesheets
 #        to be compiled before combining them
         run: |
+          touch public/css/_app.scss.css 
+          touch public/css/_app.less.css 
           yarn prod
           yarn prod
 
