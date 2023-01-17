@@ -16,7 +16,7 @@ mix.ts('resources/js/app.ts', 'public/js')
     .vue({version: 3})
     .sass('resources/sass/app.sass', 'public/css/_app.scss.css')
     .less('resources/less/app.less', 'public/css/_app.less.css')
-    .styles([
+    .combine([
         "public/css/_app.less.css",
         "public/css/_app.scss.css",
         "resources/css/custom.css",
