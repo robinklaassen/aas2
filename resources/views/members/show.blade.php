@@ -333,8 +333,7 @@
 							<div style="float:left;">Vakken</div>
 							@can("editPractical", $member)
 								<div style="float:right;">
-									<a
-											href="{{ $viewType == 'admin' ? url('/members', [$member->id, 'add-course']) : url('/profile', ['add-course'])  }}">
+									<a href="{{ $viewType == 'admin' ? url('/members', [$member->id, 'add-course']) : url('/profile', ['add-course'])  }}">
 							<span class="glyphicon glyphicon-plus" aria-hidden="true" data-toggle="tooltip"
 								  title="Vak toevoegen"></span>
 									</a>
@@ -408,8 +407,7 @@
 			<!-- Kampen van dit lid -->
 			<table class="table table-hover">
 				<caption>Kampen ({{ $member->events()->whereIn('type',['kamp', 'online' ])->count() }})</caption>
-				@forelse ($member->events()->whereIn('type',['kamp', 'online'])->orderBy('datum_start', 'desc')->get() as
-                $event)
+				@forelse ($member->events()->whereIn('type',['kamp', 'online'])->orderBy('datum_start', 'desc')->get() as $event)
 					<tr>
 						<td>
 							@can("view", $event)
