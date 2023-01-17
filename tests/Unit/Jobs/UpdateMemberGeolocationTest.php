@@ -35,7 +35,7 @@ class UpdateMemberGeolocationTest extends TestCase
 
         $member->refresh();
 
-        $this->assertSame(10.0, $member->geolocatie->getLat());
-        $this->assertSame(20.0, $member->geolocatie->getLng());
+        $this->assertSame(10.0, $member->geolocatie->latitude);
+        $this->assertSame(20.0, $member->geolocatie->longitude);
     }
 }

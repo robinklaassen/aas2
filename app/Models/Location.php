@@ -5,16 +5,22 @@ declare(strict_types=1);
 namespace App\Models;
 
 use App\Events\LocationUpdated;
-use Grimzy\LaravelMysqlSpatial\Eloquent\SpatialTrait;
 use Illuminate\Database\Eloquent\Model;
+use MatanYadaev\EloquentSpatial\Objects\Point;
+use MatanYadaev\EloquentSpatial\Traits\HasSpatial;
 
+/**
+ * @property Point $geolocatie
+ */
 class Location extends Model
 {
-    use SpatialTrait;
+    use HasSpatial;
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
-    protected $spatialFields = ['geolocatie'];
+    protected $casts = [
+        'geolocatie' => Point::class,
+    ];
 
     protected $dispatchesEvents = [
         'updated' => LocationUpdated::class,

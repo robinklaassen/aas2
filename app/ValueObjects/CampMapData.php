@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\ValueObjects;
 
 use App\Models\Event;
+use App\Models\Location;
 
 final class CampMapData
 {
@@ -36,12 +37,13 @@ final class CampMapData
 
     public static function fromEvent(Event $event): static
     {
+        /** @var Location $loc */
         $loc = $event->location;
         return new self(
             $event->id,
             $event->full_title,
             $event->verenigingsjaar,
-            [$loc->geolocatie->getLat(), $loc->geolocatie->GetLng()],
+            [$loc->geolocatie->latitude, $loc->geolocatie->longitude],
             $event->members()->wherePivot('wissel', 0)->count(),
             $event->participants()->count()
         );
