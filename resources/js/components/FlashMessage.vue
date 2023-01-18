@@ -9,8 +9,7 @@
 
 </style>
 <script lang="ts">
-import Vue from 'vue'
-export default Vue.extend({
+export default {
     props: {
         type: String,
         showTime: Number
@@ -18,5 +17,5 @@ export default Vue.extend({
     mounted() {
         $(this.$el).delay(this.showTime).slideUp(300);
     }
-})
+};
 </script>

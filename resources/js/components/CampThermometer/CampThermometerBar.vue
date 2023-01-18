@@ -1,7 +1,5 @@
 <script lang="ts">
-import Vue from "vue";
-
-export default Vue.extend({
+export default {
   props: {
     label: String,
     numberFull: Number,
@@ -22,7 +20,7 @@ export default Vue.extend({
           return `width: ${this.percentagePartial}%`
       }
   }
-});
+}
 </script>
 
 <style scoped>

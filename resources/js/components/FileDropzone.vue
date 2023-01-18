@@ -40,8 +40,7 @@
 
 </style>
 <script lang="ts">
-import Vue from 'vue'
-export default Vue.extend({
+export default {
     props: {
         listing: {
             type: Boolean,
@@ -114,5 +113,5 @@ export default Vue.extend({
             this.$emit('files-uploaded', files);
         }
     },
-});
+};
 </script>
