@@ -10,26 +10,28 @@
       ></vue-slider>
     </div>
 
-    <l-map class="main-map" :zoom="zoom" :center="center">
-      <l-tile-layer :url="mapUrl" :attribution="attribution"></l-tile-layer>
-      <l-circle-marker
-        v-for="x in filteredCampData"
-        :key="x.id"
-        :lat-lng="x.latlng"
-        :radius="x.size * 2" 
-        color="#95184d"
-        fill-color="#95184d"
-        ><l-tooltip>
-          {{ x.title }}<br/>
-          {{ x.numParticipants }} deelnemers, {{ x.numMembers }} leiding
-        </l-tooltip>
-      </l-circle-marker>
-    </l-map>
+    <div class="map-container">
+      <l-map :zoom="zoom" :center="center">
+        <l-tile-layer :url="mapUrl" :attribution="attribution"></l-tile-layer>
+        <l-circle-marker
+          v-for="x in filteredCampData"
+          :key="x.id"
+          :lat-lng="x.latlng"
+          :radius="x.size * 2" 
+          color="#95184d"
+          fill-color="#95184d"
+          ><l-tooltip>
+            {{ x.title }}<br/>
+            {{ x.numParticipants }} deelnemers, {{ x.numMembers }} leiding
+          </l-tooltip>
+        </l-circle-marker>
+      </l-map>
+    </div>
   </div>
 </template>
 
 <style scoped>
-.main-map {
+.map-container {
   height: 900px;
   margin-top: 30px;
 }
