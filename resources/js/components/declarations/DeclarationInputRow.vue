@@ -3,11 +3,10 @@
     margin-top: 0.5em
 </style>
 <script lang="ts">
-import Vue from 'vue'
 import {Errors} from '../../form/errors';
 import {DeclarationRow} from './data/DeclarationRow';
 
-export default Vue.extend({
+export default {
     props: {
         row: DeclarationRow,
         errors: Errors,
@@ -17,7 +16,7 @@ export default Vue.extend({
         return {};
     },
     methods: {}
-})
+};
 </script>
 <template>
     <div class="row">
@@ -73,7 +72,7 @@ export default Vue.extend({
                     class="form-control"
                     v-model="row.description"
                     id="description"
-                    @input="this.errors.clear('data.' + index + '.description')"
+                    @input="errors.clear('data.' + index + '.description')"
                 />
             </div>
             <span class="help-block">

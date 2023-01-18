@@ -102,12 +102,11 @@
 
 </style>
 <script lang="ts">
-import Vue from 'vue'
 import Axios from 'axios';
 import { Errors } from "../../form/errors"
 import { DeclarationRow } from "./data/DeclarationRow";
 
-export default Vue.extend({
+export default {
     props: {
         target: String,
         redirectTarget: String,
@@ -199,5 +198,5 @@ export default Vue.extend({
             return formData;
         }
     }
-})
+};
 </script>

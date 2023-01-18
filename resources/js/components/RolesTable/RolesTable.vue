@@ -29,13 +29,11 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue'
-
 type Capability = {
   description: string;
 }
 
-export default Vue.extend({
+export default {
   props: {
     roles: Array,
     capabilities: Array as () => Capability[],
@@ -56,5 +54,5 @@ export default Vue.extend({
       return this.capabilities.filter((c) => c.description.toLowerCase().includes(filterValue));
     }
   }
-});
+};
 </script>
