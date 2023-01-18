@@ -290,7 +290,7 @@
 					@if(\Auth::user()->hasRole("aasbaas") || \App::environment("local"))
 						<tr>
 							<td>Rechten</td>
-							<td>
+							<td style="word-break: break-word">
 								@foreach ($member->user()->first()->capabilities() as $capa)
 									<span class="label label-default ">{{ $capa->name }}</span>
 								@endforeach
