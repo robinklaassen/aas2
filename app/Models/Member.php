@@ -7,14 +7,18 @@ namespace App\Models;
 use App\Events\MemberUpdated;
 use Carbon\Carbon;
 use Collective\Html\Eloquent\FormAccessible;
-use Grimzy\LaravelMysqlSpatial\Eloquent\SpatialTrait;
 use Illuminate\Database\Eloquent\Model;
+use MatanYadaev\EloquentSpatial\Objects\Point;
+use MatanYadaev\EloquentSpatial\Traits\HasSpatial;
 
+/**
+ * @property Point $geolocatie
+ */
 class Member extends Model
 {
     use FormAccessible;
 
-    use SpatialTrait;
+    use HasSpatial;
 
     // Number of points needed for every level in the points system
     public const RANK_POINTS = [0, 3, 10, 20, 35, 50, 70, 100];
@@ -23,7 +27,9 @@ class Member extends Model
 
     protected $dates = ['created_at', 'updated_at', 'geboortedatum'];
 
-    protected $spatialFields = ['geolocatie'];
+    protected $casts = [
+        'geolocatie' => Point::class,
+    ];
 
     protected $dispatchesEvents = [
         'updated' => MemberUpdated::class,
