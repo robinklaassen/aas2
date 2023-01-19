@@ -22,13 +22,8 @@
 	<div class="row">
 		<div class="col-sm-5 form-group">
 			{!! Form::label('geboortedatum', 'Geboortedatum:') !!}
-			@if (isset($member))
-				{!! Form::input('date', 'geboortedatum', $member->geboortedatum->format('Y-m-d'), ['class' => 'form-control',
-                'placeholder' => 'Format: jjjj-mm-dd']) !!}
-			@else
-				{!! Form::input('date', 'geboortedatum', null, ['class' => 'form-control', 'placeholder' => 'Format:
-                jjjj-mm-dd']) !!}
-			@endif
+			{!! Form::input('date', 'geboortedatum', isset($member) ? $member->geboortedatum->format('Y-m-d') : null, 
+			['class' => 'form-control', 'placeholder' => 'Format: jjjj-mm-dd']) !!}
 		</div>
 
 		<div class="col-sm-2 form-group">
@@ -41,7 +36,8 @@
 
 		<div class="col-sm-5 form-group">
 			{!! Form::label('geslacht', 'Geslacht/gender:') !!}<br/>
-			{!! Form::select('geslacht', iterator_to_array(Gender::All()), $member->geslacht, ['class' => 'form-control']) !!}
+			{!! Form::select('geslacht', iterator_to_array(Gender::All()), isset($member) ? $member->geslacht : null, 
+			['class' => 'form-control']) !!}
 		</div>
 	</div>
 @endcanany

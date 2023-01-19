@@ -26,16 +26,14 @@
 	@canany("editPrivate", Participant::class, $participant)
 		<div class="col-sm-4 form-group">
 			{!! Form::label('geboortedatum', 'Geboortedatum:') !!}
-			@if (isset($participant))
-				{!! Form::input('date', 'geboortedatum', $participant->geboortedatum->format('Y-m-d'), ['class' => 'form-control', 'placeholder' => 'Format: jjjj-mm-dd']) !!}
-			@else
-				{!! Form::input('date', 'geboortedatum', null, ['class' => 'form-control', 'placeholder' => 'Format: jjjj-mm-dd']) !!}
-			@endif
+			{!! Form::input('date', 'geboortedatum', isset($participant) ? $participant->geboortedatum->format('Y-m-d') : null, 
+			['class' => 'form-control', 'placeholder' => 'Format: jjjj-mm-dd']) !!}
 		</div>
 
 		<div class="col-sm-7 form-group">
 			{!! Form::label('geslacht', 'Geslacht/gender:') !!}<br/>
-			{!! Form::select('geslacht', iterator_to_array(Gender::All()), $participant->geslacht, ['class' => 'form-control']) !!}
+			{!! Form::select('geslacht', iterator_to_array(Gender::All()), isset($participant) ? $participant->geslacht : null, 
+			['class' => 'form-control']) !!}
 		</div>
 </div>
 
