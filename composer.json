@@ -36,7 +36,7 @@
     "mockery/mockery": "^1.2",
     "laravel/homestead": "^14.0",
     "barryvdh/laravel-debugbar": "^3.3",
-    "laravel/ui": "^3.0",
+    "laravel/ui": "^4.0",
     "symplify/easy-coding-standard": "^11.0"
   },
   "autoload": {
