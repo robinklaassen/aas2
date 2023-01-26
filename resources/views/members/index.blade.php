@@ -9,28 +9,23 @@ Leden
 
 <!-- Titelbalk met knoppen -->
 <div class="row">
-	<div class="col-sm-6">
+	<div class="col-sm-4">
 		<h1>Leden</h1>
 	</div>
-	<div class="col-sm-6">
+	<div class="col-sm-8">
 		<p class="text-right">
 			@can("create", \App\Models\Member::class)
-			<a class="btn btn-primary" type="button" href="{{ url('members/create') }}" style="margin-top:21px;">Nieuw
-				lid</a>
+			<a class="btn btn-primary" type="button" href="{{ url('members/create') }}" style="margin-top:21px;">Nieuw lid</a>
 			@endcan
 			@can("showPracticalAny", \App\Models\Member::class)
-			<a class="btn btn-info" type="button" href="{{ url('members/search')}}" style="margin-top:21px;">Zoeken op
-				vakdekking</a>
+			<a class="btn btn-info" type="button" href="{{ url('members/search')}}" style="margin-top:21px;">Zoeken op vakdekking</a>
 			@endcan
 			@can("viewAny", \App\Models\Member::class)
-			<a class="btn btn-info" type="button" href="{{ url('members/search-skills')}}" style="margin-top:21px;">Zoeken op
-				vaardigheden</a>
-			<a class="btn btn-warning" type="button" href="{{ url('members/map') }}"
-			style="margin-top:21px;">Kaart</a>
+			<a class="btn btn-info" type="button" href="{{ url('members/search-skills')}}" style="margin-top:21px;">Zoeken op vaardigheden</a>
+			<a class="btn btn-warning" type="button" href="{{ url('members/map') }}" style="margin-top:21px;">Kaart</a>
 			@endcan
 			@can("showAdministrativeAny", \App\Models\Member::class)
-			<a class="btn btn-success" type="button" href="{{ url('members/export') }}"
-				style="margin-top:21px;">Exporteren</a>
+			<a class="btn btn-success" type="button" href="{{ url('members/export') }}" style="margin-top:21px;">Exporteren</a>
 			@endcan
 		</p>
 	</div>

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Data;
 
-use Grimzy\LaravelMysqlSpatial\Types\Point;
+use MatanYadaev\EloquentSpatial\Objects\Point;
 
 /**
  * Value object for a geolocation (point).

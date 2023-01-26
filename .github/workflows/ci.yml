@@ -42,8 +42,6 @@ jobs:
         run: yarn install
 
       - name: Compile assets
-        #        Runs prod complication 2 times, because webpack paralises compilation and doesnt wait for all stylesheets
-        #        to be compiled before combining them
         run: |
           yarn prod
 
@@ -117,10 +115,7 @@ jobs:
         run: yarn install
 
       - name: Compile assets
-#        Runs prod complication 2 times, because webpack paralises compilation and doesnt wait for all stylesheets
-#        to be compiled before combining them
         run: |
-          yarn prod
           yarn prod
 
       - name: Move assets for transport

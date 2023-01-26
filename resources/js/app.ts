@@ -1,19 +1,21 @@
 require('./bootstrap');
-import Vue from "vue";
+import Vue, {createApp} from "vue";
 import makeTableSortable from "./helpers/tableSortable.js";
 
 (window as any).Vue = Vue;
 (window as any).makeTableSortable = makeTableSortable;
 
-Vue.component('flash-message', require('./components/FlashMessage.vue').default);
-Vue.component('declarations-form', require('./components/declarations/DeclarationsForm.vue').default);
-Vue.component('declaration-input-row', require('./components/declarations/DeclarationInputRow.vue').default);
-Vue.component('file-dropzone', require('./components/FileDropzone.vue').default);
-Vue.component('roles-table', require('./components/RolesTable/RolesTable.vue').default);
-Vue.component('errors', require('./components/Errors.vue').default);
-Vue.component('camp-thermometer-bar', require('./components/CampThermometer/CampThermometerBar.vue').default);
-Vue.component('camp-year-map', require('./components/CampYearMap.vue').default);
 
-const app = new Vue({
-    el: '#vue-root',
-});
+const app = createApp({})
+
+
+app.component('flash-message', require('./components/FlashMessage.vue').default);
+app.component('declarations-form', require('./components/declarations/DeclarationsForm.vue').default);
+app.component('declaration-input-row', require('./components/declarations/DeclarationInputRow.vue').default);
+app.component('file-dropzone', require('./components/FileDropzone.vue').default);
+app.component('roles-table', require('./components/RolesTable/RolesTable.vue').default);
+app.component('errors', require('./components/Errors.vue').default);
+app.component('camp-thermometer-bar', require('./components/CampThermometer/CampThermometerBar.vue').default);
+app.component('camp-year-map', require('./components/CampYearMap.vue').default);
+
+app.mount('#vue-root');
