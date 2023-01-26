@@ -160,6 +160,7 @@ class ApiController extends Controller
                         ],
                     ] : null,
                 ],
+                'structured_data' => json_encode($this->getStructuredData($event)),
             ];
             $k++;
         }
@@ -168,6 +169,7 @@ class ApiController extends Controller
     }
 
     // Exposes information about one camp (by ID) for website integration
+    // TODO I think this can be removed too, check gatsby configs
     public function campInfo($camp_id)
     {
         $camp = Event::find($camp_id);
@@ -185,7 +187,6 @@ class ApiController extends Controller
                 'prijs' => EventPayment::calculatePrice($camp->prijs, $camp->earlybirdDiscount),
                 'datum_eind' => $camp->vroegboek_korting_datum_eind,
             ] : null,
-            'structured_data' => $this->getStructuredData($camp),
         ];
 
         return response()->json($data);
@@ -229,8 +230,12 @@ class ApiController extends Controller
 
     // Construct event data as JSON-LD to please our Google overlords
     // https://developers.google.com/search/docs/appearance/structured-data/event
-    private function getStructuredData(Event $event): array
+    private function getStructuredData(Event $event): ?array
     {
+        if (! in_array($event->type, ['kamp', 'online'], true)) {
+            return null;
+        }
+
         $location = $event->location;
 
         return [
