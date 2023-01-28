@@ -199,22 +199,33 @@ class ApiController extends Controller
                 ],
             ],
             'image' => [
-                // TODO link to static images on main website?
+                'https://anderwijs.nl/static/kamp-1-c9492e85528942e71e4a76e6322463d0.jpg',
+                'https://anderwijs.nl/static/kamp-2-444fdbaa3a159f91c29524462162996b.jpg',
             ],
             'description' => $event->omschrijving,
             'offers' => [
-                '@type' => 'Offer',
-                'url' => 'https://anderwijs.nl/inschrijven/inschrijven-scholieren/',
-                'price' => $event->prijs,
-                'priceCurrency' => 'EUR',
-                'availability' => $event->vol ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock',
-                // TODO add discounts and early bird offers
+                array_map(function (int $key) use ($event): array {
+                    $discount = Discount::fromPercentage(Participant::INCOME_DISCOUNT_TABLE[$key]);
+                    return $this->getCampOffer($event, $discount);
+                }, array_keys(Participant::INCOME_DISCOUNT_TABLE)),
+                $event->hasEarlybirdDiscount ? $this->getCampOffer($event, $event->earlybirdDiscount) : null,
             ],
             'organizer' => [
                 '@type' => 'Organization',
                 'name' => 'Anderwijs',
                 'url' => 'https://anderwijs.nl',
             ],
+        ];
+    }
+
+    private function getCampOffer(Event $event, Discount $discount): array
+    {
+        return [
+            '@type' => 'Offer',
+            'url' => 'https://anderwijs.nl/inschrijven/inschrijven-scholieren/',
+            'price' => EventPayment::calculatePrice($event->prijs, $discount),
+            'priceCurrency' => 'EUR',
+            'availability' => $event->vol ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock',
         ];
     }
 }
