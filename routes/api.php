@@ -10,11 +10,7 @@ use App\Http\Controllers\iDealController;
 use Illuminate\Support\Facades\Route;
 
 // JSON API's for website
-Route::controller(ApiController::class)->group(function () {
-    Route::get('cal/{type}', 'cal');
-    Route::get('camp-info/{camp}', 'campInfo');
-    Route::get('camps-report', 'campsReport');
-});
+Route::get('cal/{type}', [ApiController::class, 'websiteCalendar']);
 
 // Contact form on website
 Route::post('api/contact-form', [ContactFormController::class, 'send']);

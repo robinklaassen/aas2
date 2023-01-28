@@ -13,7 +13,7 @@ use App\ValueObjects\Pricing\Discount;
 class ApiController extends Controller
 {
     // Exposes upcoming events as JSON for website integration
-    public function cal($type)
+    public function websiteCalendar($type)
     {
         $data = [];
 
@@ -168,66 +168,6 @@ class ApiController extends Controller
         return response()->json($data);
     }
 
-    // Exposes information about one camp (by ID) for website integration
-    // TODO I think this can be removed too, check gatsby configs
-    public function campInfo($camp_id)
-    {
-        $camp = Event::find($camp_id);
-
-        if (! in_array($camp->type, ['kamp', 'online'], true)) {
-            return null;
-        }
-
-        $data = [
-            'id' => $camp->id,
-            'naam' => $camp->naam,
-            'prijs' => $camp->prijs,
-            'vroegboek_korting' => $camp->hasEarlybirdDiscount ? [
-                'percentage' => $camp->vroegboek_korting_percentage,
-                'prijs' => EventPayment::calculatePrice($camp->prijs, $camp->earlybirdDiscount),
-                'datum_eind' => $camp->vroegboek_korting_datum_eind,
-            ] : null,
-        ];
-
-        return response()->json($data);
-    }
-
-    // Expose list of all previous camps as report, for website integration
-    // TODO this can probably be removed, was used for ANBI status but we are not eligible
-    public function campsReport()
-    {
-        $camps = Event::where('type', 'kamp')
-            ->where('datum_eind', '<', date('Y-m-d'))
-            ->public()
-            ->orderBy('datum_start', 'desc')
-            ->get();
-
-        $data = [];
-        foreach ($camps as $c) {
-            $aantal_leiding_vol = $c->members()->where('wissel', 0)->count();
-            $aantal_leiding_wissel = $c->members()->where('wissel', 1)->count();
-            $leiding_string = (string) $aantal_leiding_vol;
-            if ($aantal_leiding_wissel > 0) {
-                $leiding_string .= ' + ' . $aantal_leiding_wissel;
-            }
-
-            $data[] = [
-                'id' => $c->id,
-                'naam' => $c->naam,
-                'jaar' => $c->datum_start->format('Y'),
-                'datum_start' => $c->datum_start->format('d-m-Y'),
-                'datum_eind' => $c->datum_eind->format('d-m-Y'),
-                'plaats' => $c->location->plaats,
-                'aantal_leiding_vol' => $c->members()->where('wissel', 0)->count(),
-                'aantal_leiding_wissel' => $c->members()->where('wissel', 1)->count(),
-                'aantal_leiding_string' => $leiding_string,
-                'aantal_deelnemers' => $c->participants()->where('geplaatst', 1)->count(),
-            ];
-        }
-
-        return response()->json($data);
-    }
-
     // Construct event data as JSON-LD to please our Google overlords
     // https://developers.google.com/search/docs/appearance/structured-data/event
     private function getStructuredData(Event $event): ?array
@@ -267,7 +207,7 @@ class ApiController extends Controller
                 'url' => 'https://anderwijs.nl/inschrijven/inschrijven-scholieren/',
                 'price' => $event->prijs,
                 'priceCurrency' => 'EUR',
-                'availability' => $event->voll ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock',
+                'availability' => $event->vol ? 'https://schema.org/SoldOut' : 'https://schema.org/InStock',
                 // TODO add discounts and early bird offers
             ],
             'organizer' => [

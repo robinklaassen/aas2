@@ -25,21 +25,6 @@ class PublicJSONApiTest extends TestCase
     ];
 
     /**
-     * Test the camp info API
-     */
-    public function testCampInfo()
-    {
-        $response = $this
-            ->get('/camp-info/1')
-            ->assertJsonFragment([
-                'id' => 1,
-                'naam' => 'Meikamp',
-                'prijs' => 400,
-                'vroegboek_korting' => null,
-            ]);
-    }
-
-    /**
      * Test the calendar API for participants
      */
     public function testPartCal()
