@@ -13,7 +13,7 @@ use App\ValueObjects\Pricing\Discount;
 class ApiController extends Controller
 {
     // Exposes upcoming events as JSON for website integration
-    public function websiteCalendar($type)
+    public function websiteUpcomingEvents($type)
     {
         $data = [];
 
