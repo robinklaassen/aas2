@@ -15,44 +15,22 @@ class ApiController extends Controller
     // Exposes upcoming events as JSON for website integration
     public function websiteUpcomingEvents($type)
     {
-        $data = [];
-
-        if ($type === 'part') {
-            // Only coming camps, for participants and their parents
-            $events = Event::whereIn('type', ['kamp', 'online'])
-                ->where('datum_eind', '>=', date('Y-m-d'))
-                ->public()
-                ->orderBy('datum_start', 'asc')
-                ->get();
-        } elseif ($type === 'full') {
-            // All coming events, for members
-            $events = Event::where('datum_eind', '>=', date('Y-m-d'))
-                ->orderBy('datum_start', 'asc')
-                ->public()
-                ->get();
-        } else {
+        if (! in_array($type, ['part', 'full'], true)) {
             return null;
         }
 
+        $events = Event::public()
+            ->when($type === 'part', function ($q) {
+                return $q->participantEvent();
+            })
+            ->where('datum_eind', '>=', date('Y-m-d'))
+            ->orderBy('datum_start', 'asc')
+            ->get();
+
+        $data = [];
         $k = 1;
 
         foreach ($events as $event) {
-            // Determine background color
-            switch ($event->type) {
-                case 'kamp':
-                    $color = '#50B848';
-                    break;
-                case 'online':
-                    $color = '#1eaa97';
-                    break;
-                case 'training':
-                    $color = '#1E5027';
-                    break;
-                case 'overig':
-                    $color = '#AA1E58';
-                    break;
-            }
-
             // Add '(VOL)' to camp name if camp is full
             $naam = $event->naam;
             if ($type === 'part' && $event->vol) {
@@ -127,7 +105,6 @@ class ApiController extends Controller
                 'kamphuis_mapslink' => $kamphuis_link,
                 'prijs' => $prijs_html,
                 'beschrijving' => $event->beschrijving,
-                'kleur' => $color,
                 'prijzen' => [
                     [
                         'type' => 'Standaard prijs',
