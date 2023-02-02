@@ -9,7 +9,6 @@ use App\Models\Participant;
 use App\Models\Review;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
 
 class ListsController extends Controller
@@ -95,29 +94,12 @@ class ListsController extends Controller
         $aspirantList = Member::where('soort', 'aspirant')->orderBy('voornaam')->get();
 
         // Verjaardagen
-        $members = Member::whereIn('soort', ['normaal', 'aspirant'])->where('publish_birthday', 1)->get();
-        foreach ($members as $member) {
-            $datum = $member->geboortedatum;
-            $dag = $datum->day;
-            $maand = $datum->month;
-
-            $vandaag = ($dag === date('d') && $maand === date('m')) ? 1 : 0;
-            $leeftijd = $datum->age;
-
-            $birthdayList[] = [
-                'id' => $member->id,
-                'naam' => str_replace('  ', ' ', $member->voornaam . ' ' . $member->tussenvoegsel . ' ' . $member->achternaam),
-                'email' => $member->email,
-                'dag' => $dag,
-                'maand' => $maand,
-                'vandaag' => $vandaag,
-                'leeftijd' => $leeftijd,
-            ];
-        }
-
-        $birthdayList = array_values(Arr::sort($birthdayList, function ($member) {
-            return 100 * $member['maand'] + $member['dag'];
-        }));
+        $birthdayMembers = Member::whereIn('soort', ['normaal', 'aspirant'])
+            ->where('publish_birthday', 1)
+            ->get()
+            ->sortBy(function ($member, $key) {
+                return 100 * $member->geboortedatum->month + $member->geboortedatum->day;
+            });
 
         // Maanden (voor verjaardagen)
         $monthName = [
@@ -192,7 +174,8 @@ class ListsController extends Controller
             'unpaidList',
             'kmgList',
             'aspirantList',
-            'birthdayList',
+            //'birthdayList',
+            'birthdayMembers',
             'monthName',
             'membersWithoutEvents',
             'inschrijvingen_deelnemers',
