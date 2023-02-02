@@ -174,7 +174,6 @@ class ListsController extends Controller
             'unpaidList',
             'kmgList',
             'aspirantList',
-            //'birthdayList',
             'birthdayMembers',
             'monthName',
             'membersWithoutEvents',
