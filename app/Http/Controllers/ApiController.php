@@ -81,7 +81,7 @@ class ApiController extends Controller
             ];
 
             // Create data array to return
-            $data[] = [
+            $record = [
                 'id' => $k,
                 'naam' => $naam,
                 'code' => $event->code,
@@ -137,8 +137,13 @@ class ApiController extends Controller
                         ],
                     ] : null,
                 ],
-                'structured_data' => json_encode($this->getStructuredData($event)),
             ];
+
+            if (! in_array($event->type, ['kamp', 'online'], true)) {
+                $record['structured_data'] = json_encode($this->getStructuredData($event));
+            }
+
+            $data[] = $record;
             $k++;
         }
 
@@ -147,12 +152,8 @@ class ApiController extends Controller
 
     // Construct event data as JSON-LD to please our Google overlords
     // https://developers.google.com/search/docs/appearance/structured-data/event
-    private function getStructuredData(Event $event): ?array
+    private function getStructuredData(Event $event): array
     {
-        if (! in_array($event->type, ['kamp', 'online'], true)) {
-            return null;
-        }
-
         $location = $event->location;
 
         return [
