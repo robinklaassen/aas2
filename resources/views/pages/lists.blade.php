@@ -524,12 +524,12 @@ Lijsten
 						</tr>
 					</thead>
 					<tbody>
-						@foreach ($birthdayList as $member)
-						<tr class="{{ ($member['vandaag']) ? 'info' : '' }}">
-							<td><a href="{{ url('/members', $member['id']) }}">{{ $member['naam'] }}</a></td>
-							<td>{{ $member['dag'] }}</td>
-							<td>{{ $monthName[$member['maand']] }}</td>
-							<td>{{ $member['leeftijd']}}</td>
+						@foreach ($birthdayMembers as $m)
+						<tr class="{{ ($m->geboortedatum->isBirthday()) ? 'info' : '' }}">
+							<td><a href="{{ url('/members', $m->id) }}">{{ $m->volnaam }}</a></td>
+							<td>{{ $m->geboortedatum->day }}</td>
+							<td>{{ $m->geboortedatum->translatedFormat('F') }}</td>
+							<td>{{ $m->geboortedatum->age }}</td>
 						</tr>
 						@endforeach
 					</tbody>
