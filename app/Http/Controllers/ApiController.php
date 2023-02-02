@@ -139,7 +139,7 @@ class ApiController extends Controller
                 ],
             ];
 
-            if (! in_array($event->type, ['kamp', 'online'], true)) {
+            if (in_array($event->type, ['kamp', 'online'], true)) {
                 $record['structured_data'] = json_encode($this->getStructuredData($event));
             }
 
