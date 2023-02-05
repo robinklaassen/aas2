@@ -180,7 +180,7 @@ class ApiController extends Controller
                 'https://anderwijs.nl/static/kamp-1-c9492e85528942e71e4a76e6322463d0.jpg',
                 'https://anderwijs.nl/static/kamp-2-444fdbaa3a159f91c29524462162996b.jpg',
             ],
-            'description' => $event->omschrijving,
+            'description' => $event->beschrijving,
             'offers' => [
                 array_map(function (int $key) use ($event): array {
                     $discount = Discount::fromPercentage(Participant::INCOME_DISCOUNT_TABLE[$key]);

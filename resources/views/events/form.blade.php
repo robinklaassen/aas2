@@ -1,6 +1,6 @@
 <div class="row">
 	<div class="col-md-3 form-group">
-		{!! Form::label('naam', 'Naam evenement:') !!}
+		{!! Form::label('naam', 'Naam evenement (zonder jaartal):') !!}
 		{!! Form::text('naam', null, ['class' => 'form-control']) !!}
 	</div>
 
