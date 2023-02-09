@@ -10,4 +10,9 @@ return [
         'name' => env('DA_SUBSCRIBER_LIST_NAME'),
         'domain' => env('DA_SUBSCRIBER_LIST_DOMAIN'),
     ],
+    'lists' => [
+        'all' => [
+            'memberTypes' => ['normaal', 'info', 'aspirant'],
+        ],
+    ],
 ];

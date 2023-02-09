@@ -38,16 +38,16 @@ final class ClientUsingGuzzle implements Client
         if ($command->body() !== null) {
             $options['body'] = json_encode($command->body(), JSON_THROW_ON_ERROR);
         }
-        $resp = $this->client->request(
+        $response = $this->client->request(
             $command->method(),
             sprintf('/%s?json=%s', strtoupper($command->command()), $asJson ? 'yes' : 'no'),
             $options,
         );
 
-        if ($resp->getStatusCode() !== 200) {
-            throw new \Exception(sprintf('Invalid response from DirectAdmin, got %d: %s', $resp->getStatusCode(), $resp->getBody()->getContents()));
+        if ($response->getStatusCode() !== 200) {
+            throw new \Exception(sprintf('Invalid response from DirectAdmin, got %d: %s', $response->getStatusCode(), $response->getBody()->getContents()));
         }
 
-        return $resp->getBody()->getContents();
+        return $response->getBody()->getContents();
     }
 }

@@ -14,13 +14,14 @@ final class EmailListUpdaterUsingDirectAdmin implements EmailListUpdater
     public function __construct(
         private EmailList $list,
         private EmailListAdapter $emailListAdapter,
+        private array $subscriberMemberTypes
     ) {
     }
 
     public function update(): void
     {
         $emails = Member::query()
-            ->whereIn('soort', ['normaal', 'info'])
+            ->whereIn('soort', $this->subscriberMemberTypes)
             ->pluck('email')
             ->toArray();
 

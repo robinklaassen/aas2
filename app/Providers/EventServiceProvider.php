@@ -76,7 +76,8 @@ class EventServiceProvider extends ServiceProvider
                     config('emaillist.directadmin.name'),
                     config('emaillist.directadmin.domain'),
                 ),
-                $app->get(EmailListAdapter::class)
+                $app->get(EmailListAdapter::class),
+                config('emaillist.lists.all.memberTypes'),
             );
         });
         $this->app->bind(EmailListAdapterContract::class, EmailListAdapter::class);
