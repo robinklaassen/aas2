@@ -6,13 +6,13 @@ namespace Database\Seeders;
 
 use App\Models\Member;
 use DB;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class MemberTableSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     */
+    use WithoutModelEvents;
+
     public function run()
     {
         DB::table('members')->delete();

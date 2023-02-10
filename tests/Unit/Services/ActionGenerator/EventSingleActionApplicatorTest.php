@@ -7,11 +7,13 @@ namespace Tests\Unit\Services\ActionGenerator;
 use App\Services\ActionGenerator\EventSingleActionApplicator;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\WithoutEvents;
 use Tests\TestCase;
 
 final class EventSingleActionApplicatorTest extends TestCase
 {
     use DatabaseTransactions;
+    use WithoutEvents;
 
     private EventSingleActionApplicator $subject;
 

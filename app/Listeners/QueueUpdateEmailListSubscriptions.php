@@ -11,7 +11,7 @@ final class QueueUpdateEmailListSubscriptions
 {
     public function handle(MemberUpdated $event)
     {
-        if (! $event->member->wasChanged(['email', 'soort'])) {
+        if (! $event->member->wasRecentlyCreated && ! $event->member->wasChanged(['email', 'soort'])) {
             return;
         }
 

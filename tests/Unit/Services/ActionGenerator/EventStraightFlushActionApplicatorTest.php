@@ -8,11 +8,13 @@ use App\Models\Event;
 use App\Models\Member;
 use App\Services\ActionGenerator\EventStraightFlushActionApplicator;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\WithoutEvents;
 use Tests\TestCase;
 
 final class EventStraightFlushActionApplicatorTest extends TestCase
 {
     use DatabaseTransactions;
+    use WithoutEvents;
 
     private EventStraightFlushActionApplicator $subject;
 
