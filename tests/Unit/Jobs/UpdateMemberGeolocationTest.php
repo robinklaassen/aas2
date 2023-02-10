@@ -9,12 +9,14 @@ use App\Jobs\UpdateMemberGeolocation;
 use App\Models\Member;
 use App\Services\Geocoder\GeocoderInterface;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Foundation\Testing\WithoutEvents;
 use Mockery;
 use Tests\TestCase;
 
 class UpdateMemberGeolocationTest extends TestCase
 {
     use DatabaseTransactions;
+    use WithoutEvents;
 
     protected function tearDown(): void
     {

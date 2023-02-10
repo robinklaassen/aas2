@@ -4,7 +4,9 @@ declare(strict_types=1);
 
 namespace Tests\Feature;
 
+use App\Events\MemberUpdated;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
@@ -57,6 +59,8 @@ class MemberRegistrationTest extends TestCase
             'username' => 'bzuid',
             'is_admin' => 0,
         ];
+
+        Event::fake([MemberUpdated::class]);
     }
 
     /**
@@ -89,5 +93,6 @@ class MemberRegistrationTest extends TestCase
             'member_id' => \App\Models\Member::latest()->first()->id,
             'event_id' => $this->postData['selected_camp'],
         ]);
+        Event::assertDispatched(MemberUpdated::class);
     }
 }

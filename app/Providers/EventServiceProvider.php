@@ -11,10 +11,18 @@ use App\Events\MemberUpdated;
 use App\Listeners\AddMemberActionForFinishedEvent;
 use App\Listeners\QueueLocationGeolocation;
 use App\Listeners\QueueMemberGeolocation;
+use App\Listeners\QueueUpdateEmailListSubscriptions;
 use App\Listeners\QueueUpdateWebsite;
 use App\Listeners\SetLastLoginDate;
 use App\Services\ActionGenerator\EventSingleActionApplicator;
 use App\Services\ActionGenerator\EventStraightFlushActionApplicator;
+use App\Services\DirectAdmin\ClientUsingGuzzle;
+use App\Services\DirectAdmin\Contracts\Client;
+use App\Services\DirectAdmin\Contracts\EmailListAdapter as EmailListAdapterContract;
+use App\Services\DirectAdmin\EmailListAdapter;
+use App\Services\DirectAdmin\ValueObjects\EmailList;
+use App\Services\EmailListUpdater\EmailListUpdater;
+use App\Services\EmailListUpdater\EmailListUpdaterUsingDirectAdmin;
 use App\Services\WebsiteUpdater\WebsiteUpdater;
 use App\Services\WebsiteUpdater\WebsiteUpdaterThroughWebhook;
 use GuzzleHttp\Client as HttpClient;
@@ -30,6 +38,7 @@ class EventServiceProvider extends ServiceProvider
         ],
         MemberUpdated::class => [
             QueueMemberGeolocation::class,
+            QueueUpdateEmailListSubscriptions::class,
         ],
         LocationUpdated::class => [
             QueueLocationGeolocation::class,
@@ -42,7 +51,7 @@ class EventServiceProvider extends ServiceProvider
         ],
     ];
 
-    public function register()
+    public function register(): void
     {
         parent::register();
 
@@ -58,6 +67,27 @@ class EventServiceProvider extends ServiceProvider
             return new WebsiteUpdaterThroughWebhook(
                 new HttpClient(),
                 config('website.webhook.uri'),
+            );
+        });
+
+        $this->app->bind(EmailListUpdater::class, function (Application $app) {
+            return new EmailListUpdaterUsingDirectAdmin(
+                new EmailList(
+                    config('emaillist.directadmin.name'),
+                    config('emaillist.directadmin.domain'),
+                ),
+                $app->get(EmailListAdapter::class),
+                config('emaillist.lists.all.memberTypes'),
+            );
+        });
+        $this->app->bind(EmailListAdapterContract::class, EmailListAdapter::class);
+        $this->app->bind(Client::class, function () {
+            return new ClientUsingGuzzle(
+                config('emaillist.directadmin.username'),
+                config('emaillist.directadmin.accesstoken'),
+                new HttpClient([
+                    'base_uri' => config('emaillist.directadmin.uri'),
+                ]),
             );
         });
     }
