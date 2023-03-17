@@ -8,6 +8,7 @@ use App\Events\FinishedEvent;
 use App\Models\Event;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
+use Illuminate\Support\Facades\Event as EventFacade;
 use Tests\TestCase;
 
 final class EventFinalizeTest extends TestCase
@@ -16,10 +17,12 @@ final class EventFinalizeTest extends TestCase
 
     public function testItEmitsFinalizeEvent(): void
     {
-        $this->expectsEvents([FinishedEvent::class]);
-        $event = new Event();
+        EventFacade::fake();
 
+        $event = new Event();
         $event->finalize();
+
+        EventFacade::assertDispatched(FinishedEvent::class);
     }
 
     public function testItSetsFinished(): void
@@ -34,13 +37,15 @@ final class EventFinalizeTest extends TestCase
 
     public function testItDoesntDoAnythingWhenAlreadyFinished(): void
     {
-        $this->doesntExpectEvents(FinishedEvent::class);
+        EventFacade::fake();
+
         $originalDate = Carbon::create('2021-10-10');
         $event = new Event();
         $event->finalized_at = $originalDate;
 
         $event->finalize();
 
+        EventFacade::assertNotDispatched(FinishedEvent::class);
         self::assertSame($originalDate, $event->finalized_at);
     }
 }

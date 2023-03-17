@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Tests\Feature;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
 
 class MemberTest extends TestCase
@@ -46,7 +47,7 @@ class MemberTest extends TestCase
 
     public function testMap()
     {
-        $this->withoutJobs();
+        Queue::fake();
         $response = $this
             ->actingAs($this->admin)
             ->get('/members/map')
