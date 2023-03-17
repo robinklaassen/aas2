@@ -17,8 +17,10 @@ class Declaration extends Model
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
-    // Carbon dates
-    protected $dates = ['created_at', 'updated_at', 'closed_at', 'date'];
+    protected $casts = [
+        'closed_at' => 'datetime',
+        'date' => 'datetime',
+    ];
 
     // A declaration belongs to one member
     public function member()

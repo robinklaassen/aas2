@@ -33,7 +33,10 @@ class Participant extends Model
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
     // Carbon dates
-    protected $dates = ['geboortedatum', 'inkomensverklaring'];
+    protected $casts = [
+        'geboortedatum' => 'datetime',
+        'inkomensverklaring' => 'datetime',
+    ];
 
     // Full name
     public function getVolnaamAttribute()
