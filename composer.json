@@ -25,7 +25,7 @@
     "ext-json": "*",
     "guzzlehttp/guzzle": "^7.4",
     "guzzlehttp/promises": "^1.5",
-    "matanyadaev/laravel-eloquent-spatial": "^2.9"
+    "matanyadaev/laravel-eloquent-spatial": "^3.0"
   },
   "require-dev": {
     "symfony/dom-crawler": "^6.0",
