@@ -25,26 +25,24 @@ class GraphsController extends Controller
         $minDate = '2009-09-01';
         $maxDate = $maxYear . '-08-31';
 
-        $avg_days_before_event = DB::select(
-            DB::raw("
-				SELECT s.* 
-					 , e.code as code
-				  FROM (
-					SELECT e.id
-					, AVG(DATEDIFF(e.datum_start, CAST(ep.created_at as date))) AS avg_participants_days
-					, AVG(DATEDIFF(e.datum_start, CAST(em.created_at as date))) AS avg_members_days
-					FROM events e 
-					LEFT JOIN event_participant ep on ep.event_id = e.id
-					LEFT JOIN event_member em on em.event_id = e.id
-				   WHERE e.type in ('kamp')
-					 AND e.datum_start > '2015-09-01'
-					GROUP BY e.id DESC
-					LIMIT 10
-				) s
-				join events e on s.id = e.id
-				ORDER BY e.datum_start ASC
-			")
-        );
+        $avg_days_before_event = DB::select("
+            SELECT s.* 
+                    , e.code as code
+                FROM (
+                SELECT e.id
+                , AVG(DATEDIFF(e.datum_start, CAST(ep.created_at as date))) AS avg_participants_days
+                , AVG(DATEDIFF(e.datum_start, CAST(em.created_at as date))) AS avg_members_days
+                FROM events e 
+                LEFT JOIN event_participant ep on ep.event_id = e.id
+                LEFT JOIN event_member em on em.event_id = e.id
+                WHERE e.type in ('kamp')
+                    AND e.datum_start > '2015-09-01'
+                GROUP BY e.id DESC
+                LIMIT 10
+            ) s
+            join events e on s.id = e.id
+            ORDER BY e.datum_start ASC
+		");
 
         // Construct arrays with statistics per year (e.g. '1415')
         $camps = Event::where('type', 'kamp')
@@ -241,7 +239,7 @@ class GraphsController extends Controller
 
         $newUserStart = Carbon::now()->subYear(1);
         $raw_new_users_per_source = DB::select(
-            DB::raw("
+            "
 			select *
 				from ( 
 					select count(*) as amount
@@ -259,7 +257,7 @@ class GraphsController extends Controller
 					group by hoebij
 				) x
 				order by amount desc, type
-			"),
+			",
             [
                 $newUserStart,
                 $newUserStart,
@@ -278,7 +276,7 @@ class GraphsController extends Controller
         $new_users_per_source = array_values($new_users_per_source);
 
         $camp_prices = DB::select(
-            DB::raw("
+            "
 			select cast(year(datum_start) as CHAR(4)) as year
 				, code
 				, prijs as price
@@ -302,7 +300,7 @@ class GraphsController extends Controller
 			where type = 'kamp'
 			  and datum_start > '2015-01-01'	
 			  order by datum_start asc   
-			"),
+			",
             []
         );
 
