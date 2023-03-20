@@ -25,9 +25,8 @@ class Member extends Model
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
-    protected $dates = ['created_at', 'updated_at', 'geboortedatum'];
-
     protected $casts = [
+        'geboortedatum' => 'datetime',
         'geolocatie' => Point::class,
     ];
 

@@ -30,8 +30,9 @@ class User extends Model implements AuthenticatableContract, CanResetPasswordCon
      */
     protected $table = 'users';
 
-    // Add last login to Carbon dates
-    protected $dates = ['last_login'];
+    protected $casts = [
+        'last_login' => 'datetime',
+    ];
 
     /**
      * The attributes that are mass assignable.

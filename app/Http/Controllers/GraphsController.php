@@ -26,24 +26,24 @@ class GraphsController extends Controller
         $maxDate = $maxYear . '-08-31';
 
         $avg_days_before_event = DB::select(
-            DB::raw("
-				SELECT s.* 
-					 , e.code as code
-				  FROM (
-					SELECT e.id
-					, AVG(DATEDIFF(e.datum_start, CAST(ep.created_at as date))) AS avg_participants_days
-					, AVG(DATEDIFF(e.datum_start, CAST(em.created_at as date))) AS avg_members_days
-					FROM events e 
-					LEFT JOIN event_participant ep on ep.event_id = e.id
-					LEFT JOIN event_member em on em.event_id = e.id
-				   WHERE e.type in ('kamp')
-					 AND e.datum_start > '2015-09-01'
-					GROUP BY e.id DESC
-					LIMIT 10
-				) s
-				join events e on s.id = e.id
-				ORDER BY e.datum_start ASC
-			")
+            "
+            SELECT s.* 
+                    , e.code as code
+                FROM (
+                SELECT e.id
+                , AVG(DATEDIFF(e.datum_start, CAST(ep.created_at as date))) AS avg_participants_days
+                , AVG(DATEDIFF(e.datum_start, CAST(em.created_at as date))) AS avg_members_days
+                FROM events e 
+                LEFT JOIN event_participant ep on ep.event_id = e.id
+                LEFT JOIN event_member em on em.event_id = e.id
+                WHERE e.type in ('kamp')
+                    AND e.datum_start > '2015-09-01'
+                GROUP BY e.id DESC
+                LIMIT 10
+            ) s
+            join events e on s.id = e.id
+            ORDER BY e.datum_start ASC
+            "
         );
 
         // Construct arrays with statistics per year (e.g. '1415')
@@ -241,25 +241,25 @@ class GraphsController extends Controller
 
         $newUserStart = Carbon::now()->subYear(1);
         $raw_new_users_per_source = DB::select(
-            DB::raw("
-			select *
-				from ( 
-					select count(*) as amount
-						, hoebij as source
-						, 'members' as type 
-					from members 
-					where created_at > :1
-					group by hoebij 
-				union all
-					select count(*) as amount
-						, hoebij as source
-						, 'participants' as type
-					from participants
-					where created_at > :2
-					group by hoebij
-				) x
-				order by amount desc, type
-			"),
+            "
+            select *
+                from ( 
+                    select count(*) as amount
+                        , hoebij as source
+                        , 'members' as type 
+                    from members 
+                    where created_at > :1
+                    group by hoebij 
+                union all
+                    select count(*) as amount
+                        , hoebij as source
+                        , 'participants' as type
+                    from participants
+                    where created_at > :2
+                    group by hoebij
+                ) x
+                order by amount desc, type
+            ",
             [
                 $newUserStart,
                 $newUserStart,
@@ -278,31 +278,31 @@ class GraphsController extends Controller
         $new_users_per_source = array_values($new_users_per_source);
 
         $camp_prices = DB::select(
-            DB::raw("
-			select cast(year(datum_start) as CHAR(4)) as year
-				, code
-				, prijs as price
-				, naam as name
-				, REGEXP_SUBSTR(code, '[A-Za-z]+') as type
-				, REGEXP_SUBSTR(code, '[0-9]{4}') as commissie_year
-				, case 
-					when REGEXP_SUBSTR(code, '[A-Za-z]+') in ('N', 'K', 'W') then 'Winterkamp'
-					when REGEXP_SUBSTR(code, '[A-Za-z]+') in ('P') then 'Paaskamp'
-					when REGEXP_SUBSTR(code, '[A-Za-z]+') in ('V') then 'Voorjaarskamp'
-					when REGEXP_SUBSTR(code, '[A-Za-z]+') in ('Z') then 'Zomerkamp'
-					when REGEXP_SUBSTR(code, '[A-Za-z]+') in ('L') then 'Lentekamp'
-					when REGEXP_SUBSTR(code, '[A-Za-z]+') in ('M') then 'Meikamp'
-					when REGEXP_SUBSTR(code, '[A-Za-z]+') in ('H') then 'Herfstkamp'
-					else 'Unknown'
-				  end as label
-				, DATEDIFF(datum_eind, datum_start) as days
-				, cast(round(prijs / DATEDIFF(datum_eind, datum_start)) as int) as price_norm
-				
-			from events e
-			where type = 'kamp'
-			  and datum_start > '2015-01-01'	
-			  order by datum_start asc   
-			"),
+            "
+            select cast(year(datum_start) as CHAR(4)) as year
+                , code
+                , prijs as price
+                , naam as name
+                , REGEXP_SUBSTR(code, '[A-Za-z]+') as type
+                , REGEXP_SUBSTR(code, '[0-9]{4}') as commissie_year
+                , case 
+                    when REGEXP_SUBSTR(code, '[A-Za-z]+') in ('N', 'K', 'W') then 'Winterkamp'
+                    when REGEXP_SUBSTR(code, '[A-Za-z]+') in ('P') then 'Paaskamp'
+                    when REGEXP_SUBSTR(code, '[A-Za-z]+') in ('V') then 'Voorjaarskamp'
+                    when REGEXP_SUBSTR(code, '[A-Za-z]+') in ('Z') then 'Zomerkamp'
+                    when REGEXP_SUBSTR(code, '[A-Za-z]+') in ('L') then 'Lentekamp'
+                    when REGEXP_SUBSTR(code, '[A-Za-z]+') in ('M') then 'Meikamp'
+                    when REGEXP_SUBSTR(code, '[A-Za-z]+') in ('H') then 'Herfstkamp'
+                    else 'Unknown'
+                  end as label
+                , DATEDIFF(datum_eind, datum_start) as days
+                , cast(round(prijs / DATEDIFF(datum_eind, datum_start)) as int) as price_norm
+                
+            from events e
+            where type = 'kamp'
+              and datum_start > '2015-01-01'	
+              order by datum_start asc   
+            ",
             []
         );
 

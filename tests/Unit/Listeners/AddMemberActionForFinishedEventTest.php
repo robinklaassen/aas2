@@ -11,13 +11,18 @@ use App\Models\Member;
 use App\Services\ActionGenerator\EventActionApplicator;
 use App\Services\ActionGenerator\ValueObject\EventActionInput;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Foundation\Testing\WithoutEvents;
+use Illuminate\Support\Facades\Queue;
 use Tests\TestCase;
 
 final class AddMemberActionForFinishedEventTest extends TestCase
 {
     use DatabaseTransactions;
-    use WithoutEvents;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        Queue::fake();
+    }
 
     public function testItCallsMultipleApplicators(): void
     {

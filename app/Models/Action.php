@@ -10,7 +10,9 @@ class Action extends Model
 {
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
-    protected $dates = ['date'];
+    protected $casts = [
+        'date' => 'datetime',
+    ];
 
     public static function empty(): self
     {
