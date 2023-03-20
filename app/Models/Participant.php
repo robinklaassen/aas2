@@ -32,7 +32,6 @@ class Participant extends Model
 
     protected $guarded = ['id', 'created_at', 'updated_at'];
 
-    // Carbon dates
     protected $casts = [
         'geboortedatum' => 'datetime',
         'inkomensverklaring' => 'datetime',
