@@ -8,7 +8,7 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Tests\TestCase;
 
-class EventTest extends TestCase
+class ConfidentialCounselorTest extends TestCase
 {
     use DatabaseTransactions;
 
