@@ -29,8 +29,7 @@
   "require-dev": {
     "symfony/dom-crawler": "^6.0",
     "symfony/css-selector": "^6.0",
-    "phpunit/phpunit": "^9.0",
-    "phpspec/phpspec": "^7.0",
+    "phpunit/phpunit": "^10.0",
     "filp/whoops": "~2.0",
     "mockery/mockery": "^1.2",
     "laravel/homestead": "^14.0",

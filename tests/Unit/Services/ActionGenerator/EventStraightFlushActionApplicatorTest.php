@@ -57,7 +57,7 @@ final class EventStraightFlushActionApplicatorTest extends TestCase
         self::assertSame($expected, $this->subject->shouldApply($input));
     }
 
-    public function eventCodesDataProvider(): \Generator
+    public static function eventCodesDataProvider(): \Generator
     {
         yield 'should apply' => [
             ['V1920', 'K1920', 'Z2021', 'H2021', 'M2021'], true,

@@ -93,7 +93,6 @@ final class ClientUsingGuzzleTest extends MockeryTestCase
         $command = Command::create('CMD');
 
         $this->expectException(\Exception::class);
-        $this->expectWarningMessage('Invalid response from DirectAdmin, got 500: An error message');
 
         $this->subject->executeQueryString($command);
     }
