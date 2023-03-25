@@ -137,7 +137,7 @@ jobs:
         with:
           url: https://aas2.anderwijs.nl/updater/update?secret=${{ secrets.UPDATER_SECRET }}
           method: GET
-          timeout: 30000
+          timeout: 60000
           preventFailureOnNoResponse: true
 
       - name: Show response
