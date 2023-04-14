@@ -115,13 +115,13 @@ class Event extends Model
         $this->attributes['cancelled_at'] = ($value) ? Carbon::now() : null;
     }
 
-    public function formVroegboekKortingDatumEindAttribute(null|Carbon $date): string
+    public function formVroegboekKortingDatumEindAttribute(?string $value): string
     {
-        if ($date === null) {
+        if ($value === null) {
             return '';
         }
 
-        return $date->format('Y-m-d');
+        return Carbon::parse($value)->format('Y-m-d');
     }
 
     // The association year ('verenigingsjaar') starts at September 1st. This returns a string e.g. '14-15'

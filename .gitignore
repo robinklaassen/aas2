@@ -87,6 +87,7 @@ Homestead.yaml
 Homestead.json
 /.vagrant
 .phpunit.result.cache
+.phpunit.cache
 
 # Laravel specific files
 /node_modules
