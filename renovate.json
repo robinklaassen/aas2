@@ -6,16 +6,22 @@
     "prHourlyLimit": 12,
     "lockFileMaintenance": {
         "enabled": true,
-        "automerge": true
+        "automerge": true,
+        "automergeType": "pr",
+        "platformAutomerge": true
     },
     "packageRules": [
         {
             "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
-            "automerge": true
+            "automerge": true,
+            "automergeType": "pr",
+            "platformAutomerge": true
         },
         {
             "matchDepTypes": ["devDependencies"],
-            "automerge": true
+            "automerge": true,
+            "automergeType": "pr",
+            "platformAutomerge": true
         }
     ]  
 }
