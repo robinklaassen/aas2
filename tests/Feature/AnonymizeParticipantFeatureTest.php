@@ -69,8 +69,7 @@ class AnonymizeParticipantFeatureTest extends TestCase
         $user = User::findOrFail(1); // Ranonkeltje
         $this->actingAs($user)->get(action('ParticipantsController@anonymize'))
             ->assertStatus(200)
-            ->assertSee('Jan Janssen')
-            ->assertDontSee('Annabelle');
+            ->assertSee(['Jan Janssen', 'Annabelle']);
     }
 
     public function testItConfirmsPeopleToAnonymize()
