@@ -23,7 +23,7 @@
     "graham-campbell/markdown": "^15.0",
     "ext-json": "*",
     "guzzlehttp/guzzle": "^7.4",
-    "guzzlehttp/promises": "^1.5",
+    "guzzlehttp/promises": "^2.0",
     "matanyadaev/laravel-eloquent-spatial": "^3.0"
   },
   "require-dev": {
