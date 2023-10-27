@@ -20,9 +20,9 @@ class Participant extends Model
 
     public const INCOME_DISCOUNT_TABLE = [
         0 => 0,
-        1 => 25,
+        1 => 20,
         2 => 40,
-        3 => 60,
+        3 => 100,
     ];
 
     public const INFORMATION_CHANNEL_DESCRIPTION_TABLE = [
