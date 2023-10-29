@@ -58,6 +58,16 @@ class EventPayment implements PaymentInterface
         return Discount::max($this->participant->incomeBasedDiscount, $this->event->earlybirdDiscount);
     }
 
+    public function isFree(): bool
+    {
+        return $this->event->prijs !== null && $this->getTotalAmount() === 0.0;
+    }
+
+    public function isUndetermined(): bool
+    {
+        return $this->event->prijs === null;
+    }
+
     public function getTotalAmount(): float
     {
         return self::calculatePrice($this->event->prijs + $this->getPackagePrice(), $this->getDiscount());

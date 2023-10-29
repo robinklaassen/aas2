@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Mail\participants;
 
+use App\Helpers\Payment\EventPayment;
 use App\Models\Event;
 use App\Models\EventPackage;
 use App\Models\Participant;
@@ -18,29 +19,29 @@ class ParticipantRegistrationConfirmation extends Mailable
 
     use SerializesModels;
 
-    public $package;
+    public ?EventPackage $package;
 
-    public $participant;
+    public Participant $participant;
 
-    public $event;
+    public Event $event;
+
+    public EventPayment $payment;
 
     public $givenCourses;
 
     public $password;
 
-    public $toPay;
-
     public $iDeal;
 
-    public function __construct(Participant $participant, Event $event, ?EventPackage $package, $givenCourses, $password, $toPay, $iDeal)
+    public function __construct(Participant $participant, Event $event, ?EventPackage $package, EventPayment $payment, $givenCourses, $password, $iDeal)
     {
         $this->participant = $participant;
         $this->event = $event;
         $this->givenCourses = $givenCourses;
         $this->password = $password;
-        $this->toPay = $toPay;
         $this->iDeal = $iDeal;
         $this->package = $package;
+        $this->payment = $payment;
     }
 
     public function build()
