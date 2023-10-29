@@ -32,18 +32,23 @@
 			vastgesteld.</strong> Zodra het kampgeld bekend is, ontvangt u daarover per e-mail bericht.
 	</p>
 @else
-	@if ($iDeal == 0)
+	@if ($payment->isFree())
+		<p>
+			Uw kind staat op dit moment voorlopig ingeschreven voor het kamp.
+			Er is geen betaling nodig voor deze inschrijving.
+		</p>
+	@elseif ($iDeal == 0)
 		<p>
 			Uw kind staat op dit moment voorlopig ingeschreven voor het kamp. Om de inschrijving definitief te maken,
 			dient u het kampgeld zoals hieronder vermeld over te maken op onze rekening. Beschikbare plaatsen op een
-			kamp worden vegeven op volgorde van betaling, dus wacht hier niet te lang mee. Uiterlijk twee weken nadat u
+			kamp worden vergeven op volgorde van betaling, dus wacht hier niet te lang mee. Uiterlijk twee weken nadat u
 			het kampgeld heeft overgemaakt, ontvangt u per e-mail een bevestiging van de inschrijving.
 		</p>
 	@else
 		<p>
 			U heeft aangegeven het kampgeld direct via iDeal te betalen. Wanneer dit succesvol ontvangen is, ontvangt u
 			een aparte bevestiging daarvan. Is er onverhoopt toch iets misgegaan, dan dient u het kampgeld zoals
-			hieronder vermeld over te maken op onze rekening. Beschikbare plaatsen op een kamp worden vegeven op
+			hieronder vermeld over te maken op onze rekening. Beschikbare plaatsen op een kamp worden vergeven op
 			volgorde van betaling, dus wacht hier niet te lang mee. Uiterlijk twee weken nadat u het kampgeld heeft
 			overgemaakt, ontvangt u per e-mail een bevestiging van de inschrijving.
 		</p>
@@ -51,7 +56,7 @@
 
 	<p>
 		BETALINGSINFORMATIE<br/>
-		Te betalen bedrag: € {{ $toPay }}<br/>
+		Te betalen bedrag: € {{ $payment->getTotalAmount() }}<br/>
 		Rekeningnummer: NL68 TRIO 0198 4197 83 t.n.v. Vereniging Anderwijs te Utrecht<br/>
 		Onder vermelding van: naam deelnemer + deze kampcode: {{ $event->code }}
 	</p>

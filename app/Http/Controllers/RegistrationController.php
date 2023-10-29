@@ -289,7 +289,6 @@ class RegistrationController extends Controller
             ->participant($participant)
             ->package($package)
             ->existing(false);
-        $toPay = $payment->getTotalAmount();
         $iDeal = $request->iDeal;
 
         // Send update to office committee
@@ -304,19 +303,19 @@ class RegistrationController extends Controller
                 $participant,
                 $camp,
                 $package,
+                $payment,
                 $givenCourses,
                 $password,
-                $toPay,
                 $iDeal
             )
         );
 
         // If they want to pay with iDeal, set up the payment now
-        if ($iDeal === '1' && $toPay > 0) {
+        if ($iDeal === '1' && $payment->getTotalAmount() > 0) {
             $redirectUrl = Mollie::process($payment);
             return redirect($redirectUrl);
         }
         // Return closing view
-        return view('registration.participantStored', compact('participant', 'camp', 'toPay', 'incomeTable', 'package'));
+        return view('registration.participantStored', compact('participant', 'camp', 'incomeTable', 'package', 'payment'));
     }
 }
