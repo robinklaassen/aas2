@@ -291,6 +291,12 @@ class RegistrationController extends Controller
             ->existing(false);
         $iDeal = $request->iDeal;
 
+        if ($payment->isFree()) {
+            $camp->participants()->updateExistingPivot($participant->id, [
+                'datum_betaling' => Carbon::now(),
+            ]);
+        }
+
         // Send update to office committee
         Mail::send(new NewParticipantNotification(
             $participant,
