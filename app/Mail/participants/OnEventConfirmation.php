@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Mail\participants;
 
+use App\Helpers\Payment\EventPayment;
 use App\Models\Event;
 use App\Models\Participant;
 use Illuminate\Bus\Queueable;
@@ -17,26 +18,26 @@ class OnEventConfirmation extends Mailable
 
     use SerializesModels;
 
-    public $participant;
+    public Participant $participant;
 
-    public $event;
+    public Event $event;
+
+    public EventPayment $payment;
 
     public $givenCourses;
-
-    public $toPay;
 
     public $iDeal;
 
     public $type;
 
-    public function __construct(Participant $participant, Event $event, $givenCourses, $toPay, $iDeal, $type)
+    public function __construct(Participant $participant, Event $event, EventPayment $payment, $givenCourses, $iDeal, $type)
     {
         $this->participant = $participant;
         $this->event = $event;
         $this->givenCourses = $givenCourses;
-        $this->toPay = $toPay;
         $this->iDeal = $iDeal;
         $this->type = $type;
+        $this->payment = $payment;
     }
 
     public function build()

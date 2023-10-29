@@ -21,6 +21,7 @@ use App\Models\EventPackage;
 use App\Models\Member;
 use App\Services\Chart\ChartServiceInterface;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
@@ -387,6 +388,12 @@ class ProfileController extends Controller
             $iDeal = $request->iDeal;
             $type = 'existing';
 
+            if ($payment->isFree()) {
+                $camp->participants()->updateExistingPivot($participant->id, [
+                    'datum_betaling' => Carbon::now(),
+                ]);
+            }
+
             // Send update to office committee
             Mail::send(new ParticipantOnEventNotification(
                 $participant,
@@ -397,8 +404,8 @@ class ProfileController extends Controller
             Mail::send(new ParticipantOnEventConfirmationMail(
                 $participant,
                 $camp,
+                $payment,
                 $givenCourses,
-                $toPay,
                 $iDeal,
                 $type
             ));
