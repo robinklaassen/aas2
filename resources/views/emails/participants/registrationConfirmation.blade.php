@@ -25,19 +25,19 @@
 	Anderwijskamp.
 </p>
 
-@if ($event->prijs === null)
+@if ($payment->isUndetermined())
 	<p>
 		Uw kind staat op dit moment voorlopig ingeschreven voor het kamp. Om de inschrijving definitief te maken, dient
 		u het kampgeld over te maken op onze rekening. <strong>Voor dit kamp is de prijs echter nog niet definitief
 			vastgesteld.</strong> Zodra het kampgeld bekend is, ontvangt u daarover per e-mail bericht.
 	</p>
+@elseif($payment->isFree())
+	<p>
+		Uw kind staat op dit moment voorlopig ingeschreven voor het kamp.
+		Er is geen betaling nodig voor deze inschrijving.
+	</p>
 @else
-	@if ($payment->isFree())
-		<p>
-			Uw kind staat op dit moment voorlopig ingeschreven voor het kamp.
-			Er is geen betaling nodig voor deze inschrijving.
-		</p>
-	@elseif ($iDeal == 0)
+	@if ($iDeal == 0)
 		<p>
 			Uw kind staat op dit moment voorlopig ingeschreven voor het kamp. Om de inschrijving definitief te maken,
 			dient u het kampgeld zoals hieronder vermeld over te maken op onze rekening. Beschikbare plaatsen op een
@@ -53,6 +53,7 @@
 			overgemaakt, ontvangt u per e-mail een bevestiging van de inschrijving.
 		</p>
 	@endif
+
 
 	<p>
 		BETALINGSINFORMATIE<br/>

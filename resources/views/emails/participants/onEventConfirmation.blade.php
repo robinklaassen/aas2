@@ -37,13 +37,14 @@
 			U heeft aangegeven het kampgeld direct via iDeal te betalen. Wanneer dit succesvol ontvangen is, ontvangt u een aparte bevestiging daarvan. Is er onverhoopt toch iets misgegaan, dan dient u het kampgeld zoals hieronder vermeld over te maken op onze rekening. Beschikbare plaatsen op een kamp worden vergeven op volgorde van betaling, dus wacht hier niet te lang mee. Uiterlijk twee weken nadat u het kampgeld heeft overgemaakt, ontvangt u per e-mail een bevestiging van de inschrijving.
 		</p>
 	@endif
-	
+
 	<p>
 		BETALINGSINFORMATIE<br/>
 		Te betalen bedrag: € {{ $payment->getTotalAmount() }}<br/>
 		Rekeningnummer: NL68 TRIO 0198 4197 83 t.n.v. Vereniging Anderwijs te Utrecht<br/>
 		Onder vermelding van: naam deelnemer + deze kampcode: {{ $event->code }}
 	</p>
+
 @endif
 
 @if ($type == 'new' && $participant->inkomen)

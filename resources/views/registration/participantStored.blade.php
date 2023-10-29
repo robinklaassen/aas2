@@ -12,9 +12,10 @@
 
 <p>
 	U heeft uw kind succesvol ingeschreven voor een Anderwijskamp.
+	U ontvangt een automatische bevestigingsmail op het opgegeven emailadres.
 
 	@if (!$payment->isFree())
-		U ontvangt een automatische bevestigingsmail op het opgegeven emailadres. Om de inschrijving definitief te maken, dient u het kampgeld over te maken op onze rekening.
+		Om de inschrijving definitief te maken, dient u het kampgeld over te maken op onze rekening.
 		@if ($payment->isUndetermined())
 			<strong>Voor dit kamp is de prijs echter nog niet definitief vastgesteld.</strong> Zodra dat is gebeurd, ontvangt u daarover per email bericht.
 		@else
