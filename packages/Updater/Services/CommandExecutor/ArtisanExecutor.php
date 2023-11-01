@@ -11,6 +11,7 @@ class ArtisanExecutor implements ExecutorInterface
 {
     public function execute(string $cmd, array $args = []): string
     {
+        $args['--no-interaction'] = true;  // programmatic calling
         $result = Artisan::call($cmd, $args);
         if ($result !== 0) {
             throw ExecutorException::artisanResult($cmd, $result);

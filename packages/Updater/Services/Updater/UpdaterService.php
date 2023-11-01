@@ -58,17 +58,13 @@ class UpdaterService implements UpdaterServiceInterface
 
     protected function preUpdate()
     {
-        $this->artisanExecutor->execute('down', [
-'--force' => true
-]);
+        $this->artisanExecutor->execute('down');
         PreUpdateEvent::dispatch();
     }
 
     protected function postUpdate()
     {
         PostUpdateEvent::dispatch();
-        $this->artisanExecutor->execute('up', [
-'--force' => true
-]);
+        $this->artisanExecutor->execute('up');
     }
 }
