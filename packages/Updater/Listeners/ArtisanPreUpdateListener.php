@@ -17,6 +17,8 @@ class ArtisanPreUpdateListener
 
     public function handle()
     {
-        $this->artisanExecutor->execute('optimize:clear');
+        $this->artisanExecutor->execute('optimize:clear', [
+'--force' => true
+]);
     }
 }

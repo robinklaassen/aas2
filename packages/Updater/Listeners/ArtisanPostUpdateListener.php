@@ -17,8 +17,14 @@ class ArtisanPostUpdateListener
 
     public function handle()
     {
-        $this->artisanExecutor->execute('clear-compiled');
-        $this->artisanExecutor->execute('migrate --force');
-        $this->artisanExecutor->execute('optimize');
+        $this->artisanExecutor->execute('clear-compiled', [
+'--force' => true
+]);
+        $this->artisanExecutor->execute('migrate', [
+'--force' => true
+]);
+        $this->artisanExecutor->execute('optimize', [
+'--force' => true
+]);
     }
 }
