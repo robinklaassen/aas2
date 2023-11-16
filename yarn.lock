@@ -2620,11 +2620,11 @@ csstype@^3.1.2:
   integrity sha512-I7K1Uu0MBPzaFKg4nI5Q7Vs2t+3gWWW648spaF+Rg7pI9ds18Ugn+lvg4SHczUdKlHI5LWBXyqfS8+DufyBsgQ==
 
 datatables.net-bs@>=1.13.4, datatables.net-bs@^1.10.23:
-  version "1.13.7"
-  resolved "https://registry.yarnpkg.com/datatables.net-bs/-/datatables.net-bs-1.13.7.tgz#109258dff647455dedb490572de737e1f55b32ec"
-  integrity sha512-F9NBlnMN3V9IBebEFRYnMHuF4PX9c8Q2ObXtGdWUcgseQV+sN8NuqBLFTF7H0ItP/6AjeUjhdo4v4gCXNurhpw==
+  version "1.13.8"
+  resolved "https://registry.yarnpkg.com/datatables.net-bs/-/datatables.net-bs-1.13.8.tgz#59e541e7d3399f42bc5b7f1f592f7343c33e83f3"
+  integrity sha512-KJ1ePUXVHi/l3qP+r2uan3NJPIwtHP2hep9H7oP2UrEEq9Ibkhm5HHr6Pce+qpQbMd1x0584Grxydz4Zx/SqBg==
   dependencies:
-    datatables.net "1.13.7"
+    datatables.net "1.13.8"
     jquery ">=1.7"
 
 datatables.net-responsive-bs@^2.2.7:
@@ -2644,7 +2644,14 @@ datatables.net-responsive@>=2.4.1:
     datatables.net ">=1.13.4"
     jquery ">=1.7"
 
-datatables.net@1.13.7, datatables.net@>=1.13.4:
+datatables.net@1.13.8:
+  version "1.13.8"
+  resolved "https://registry.yarnpkg.com/datatables.net/-/datatables.net-1.13.8.tgz#05a2fb5a036b0b65b66d1bb1eae0ba018aaea8a3"
+  integrity sha512-2pDamr+GUwPTby2OgriVB9dR9ftFKD2AQyiuCXzZIiG4d9KkKFQ7gqPfNmG7uj9Tc5kDf+rGj86do4LAb/V71g==
+  dependencies:
+    jquery ">=1.7"
+
+datatables.net@>=1.13.4:
   version "1.13.7"
   resolved "https://registry.yarnpkg.com/datatables.net/-/datatables.net-1.13.7.tgz#8b130845a59ab16fedd760ecf4b96d96418aca1b"
   integrity sha512-lbmcCSrMU8VTaGwgCxWs/jbP8NVJlzXaUkK3SiiZY7tTjRp7XJw4InlOU+XUVZ4i4B2GBxue02/P5iVto1CGDg==
