@@ -1233,9 +1233,9 @@
     "@types/node" "*"
 
 "@types/jquery@^3.5.5":
-  version "3.5.28"
-  resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-3.5.28.tgz#ce70ef8360ece723e7a40b887d1c373cdc979530"
-  integrity sha512-2o/vlzaDXiGWFrHz/PhX88cy68UDc8NBBT9i1nU+EtRkKgRxMWLTlUkEJb+MRfhIw6wKK8RDmfoEXClH2PsIyA==
+  version "3.5.29"
+  resolved "https://registry.yarnpkg.com/@types/jquery/-/jquery-3.5.29.tgz#3c06a1f519cd5fc3a7a108971436c00685b5dcea"
+  integrity sha512-oXQQC9X9MOPRrMhPHHOsXqeQDnWeCDT3PelUIg/Oy8FAbzSZtFHRjc7IpbfFVmpLtJ+UOoywpRsuO5Jxjybyeg==
   dependencies:
     "@types/sizzle" "*"
 
@@ -1349,9 +1349,9 @@
     "@types/node" "*"
 
 "@types/sizzle@*":
-  version "2.3.7"
-  resolved "https://registry.yarnpkg.com/@types/sizzle/-/sizzle-2.3.7.tgz#ab5744eceb30daea3e0c6a9c2d9e1a3817ef7656"
-  integrity sha512-sU5MNKvSFdbT97qLSabU6jxceY9BfYQe9uF+b8E1rdTecpq9ROkkKoiHlblUlhgfaz9bdCByWjAI40Y3mHf1iQ==
+  version "2.3.8"
+  resolved "https://registry.yarnpkg.com/@types/sizzle/-/sizzle-2.3.8.tgz#518609aefb797da19bf222feb199e8f653ff7627"
+  integrity sha512-0vWLNK2D5MT9dg0iOo8GlKguPAU02QjmZitPEsXRuJXU/OGIOt9vT9Fc26wtYuavLxtO45v9PGleoL9Z0k1LHg==
 
 "@types/sockjs@^0.3.33":
   version "0.3.36"
