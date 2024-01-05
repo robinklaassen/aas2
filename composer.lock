@@ -2757,16 +2757,16 @@
         },
         {
             "name": "matanyadaev/laravel-eloquent-spatial",
-            "version": "3.2.0",
+            "version": "3.2.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/MatanYadaev/laravel-eloquent-spatial.git",
-                "reference": "30e0a854f382a9d65497b7eed97c34846f0e04b3"
+                "reference": "1dc6ce646bde4e5cdbc07f61d69e1fe7786f1b0a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/MatanYadaev/laravel-eloquent-spatial/zipball/30e0a854f382a9d65497b7eed97c34846f0e04b3",
-                "reference": "30e0a854f382a9d65497b7eed97c34846f0e04b3",
+                "url": "https://api.github.com/repos/MatanYadaev/laravel-eloquent-spatial/zipball/1dc6ce646bde4e5cdbc07f61d69e1fe7786f1b0a",
+                "reference": "1dc6ce646bde4e5cdbc07f61d69e1fe7786f1b0a",
                 "shasum": ""
             },
             "require": {
@@ -2812,9 +2812,9 @@
             "homepage": "https://github.com/matanyadaev/laravel-eloquent-spatial",
             "support": {
                 "issues": "https://github.com/MatanYadaev/laravel-eloquent-spatial/issues",
-                "source": "https://github.com/MatanYadaev/laravel-eloquent-spatial/tree/3.2.0"
+                "source": "https://github.com/MatanYadaev/laravel-eloquent-spatial/tree/3.2.2"
             },
-            "time": "2023-06-25T20:45:11+00:00"
+            "time": "2024-01-05T07:50:54+00:00"
         },
         {
             "name": "mollie/mollie-api-php",
