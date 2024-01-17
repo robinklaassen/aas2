@@ -46,8 +46,6 @@ class FakeEventPayment extends Payment
     }
 }
 
-
-
 class IDealResponseTest extends TestCase
 {
     use DatabaseTransactions;

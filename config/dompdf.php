@@ -256,7 +256,6 @@ return [
          */
         'DOMPDF_ENABLE_CSS_FLOAT' => false,
 
-
         /**
          * Use the more-than-experimental HTML5 Lib parser
          */
