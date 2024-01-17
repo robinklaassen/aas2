@@ -3,7 +3,7 @@ name: CI
 on: [push]
 
 env:
-  PHP_VERSION: "8.1"
+  PHP_VERSION: "8.2"
   PHP_EXTENSIONS: "xdebug, zip, xmlwriter, xmlreader, xml, tokenizer, pdo, phar, openssl, pcre, simplexml, gd, dom, curl"
   NODE_VERSION: "19"
 
