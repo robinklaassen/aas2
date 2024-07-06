@@ -8,10 +8,10 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', 'Auth\LoginController@showLoginForm');
 
 // New registration things
-Route::get('register-member', 'RegistrationController@registerMember');
-Route::post('register-member', 'RegistrationController@storeMember');
-Route::get('register-participant', 'RegistrationController@registerParticipant');
-Route::post('register-participant', 'RegistrationController@storeParticipant');
+// Route::get('register-member', 'RegistrationController@registerMember');
+// Route::post('register-member', 'RegistrationController@storeMember');
+// Route::get('register-participant', 'RegistrationController@registerParticipant');
+// Route::post('register-participant', 'RegistrationController@storeParticipant');
 
 // Custom password reset
 Route::get('forgot-password', 'PasswordController@forgot');
