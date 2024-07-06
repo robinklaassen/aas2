@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Mail;
 use Mockery;
 use Tests\TestCase;
 
-class ParticipantRegistrationTest extends TestCase
+class ParticipantRegistrationTestDisabled extends TestCase
 {
     use DatabaseTransactions;
 

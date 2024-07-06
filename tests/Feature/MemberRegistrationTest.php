@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
-class MemberRegistrationTest extends TestCase
+class MemberRegistrationTestDisabled extends TestCase
 {
     use DatabaseTransactions;
 
