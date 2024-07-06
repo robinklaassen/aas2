@@ -70,6 +70,8 @@ class ParticipantRegistrationTest extends TestCase
 
     protected function setUp(): void
     {
+        $this->markTestSkipped('Registration pages are disabled.');
+
         parent::setUp();
         $this->event = Event::findOrFail($this->data['selected_camp']);
         $this->participantData = [

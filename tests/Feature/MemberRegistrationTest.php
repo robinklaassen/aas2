@@ -45,6 +45,8 @@ class MemberRegistrationTest extends TestCase
 
     protected function setUp(): void
     {
+        $this->markTestSkipped('Registration pages are disabled.');
+
         parent::setUp();
 
         // Create member data to test for in DB
