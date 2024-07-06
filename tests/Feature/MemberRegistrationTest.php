@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Mail;
 use Tests\TestCase;
 
-class MemberRegistrationTestDisabled extends TestCase
+class MemberRegistrationTest extends TestCase
 {
     use DatabaseTransactions;
 
@@ -45,6 +45,8 @@ class MemberRegistrationTestDisabled extends TestCase
 
     protected function setUp(): void
     {
+        $this->markTestSkipped('Registration pages are disabled.');
+
         parent::setUp();
 
         // Create member data to test for in DB

@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\Mail;
 use Mockery;
 use Tests\TestCase;
 
-class ParticipantRegistrationTestDisabled extends TestCase
+class ParticipantRegistrationTest extends TestCase
 {
     use DatabaseTransactions;
 
@@ -70,6 +70,8 @@ class ParticipantRegistrationTestDisabled extends TestCase
 
     protected function setUp(): void
     {
+        $this->markTestSkipped('Registration pages are disabled.');
+
         parent::setUp();
         $this->event = Event::findOrFail($this->data['selected_camp']);
         $this->participantData = [
