@@ -18,7 +18,7 @@
     "barryvdh/laravel-dompdf": "^2.0",
     "maatwebsite/excel": "~3.1.0",
     "mollie/mollie-api-php": "^2.0",
-    "intervention/image": "^2.3",
+    "intervention/image": "^3.0",
     "khill/lavacharts": "^3.1",
     "graham-campbell/markdown": "^15.0",
     "ext-json": "*",
