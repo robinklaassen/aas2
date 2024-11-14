@@ -32,7 +32,7 @@
     "phpunit/phpunit": "^10.0",
     "filp/whoops": "~2.0",
     "mockery/mockery": "^1.2",
-    "laravel/homestead": "^14.0",
+    "laravel/homestead": "^15.0",
     "barryvdh/laravel-debugbar": "^3.3",
     "laravel/ui": "^4.0",
     "symplify/easy-coding-standard": "^12.0"
