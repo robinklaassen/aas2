@@ -2720,33 +2720,26 @@ datatables.net-bs@^2, datatables.net-bs@^2.0.0:
     jquery ">=1.7"
 
 datatables.net-responsive-bs@^3.0.0:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/datatables.net-responsive-bs/-/datatables.net-responsive-bs-3.0.3.tgz#460e55b0b2b445bd90a41546319af27cf961393d"
-  integrity sha512-hnwS87KMXJrcwZzRPK/WlKFCk7FWM+5QhqFsYZPiUrgA5Px5WGi1IrqIc7jDTK56OkB0+GoyfuBHro2pGjUjVQ==
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/datatables.net-responsive-bs/-/datatables.net-responsive-bs-3.0.4.tgz#ec8061af7c0a884aaa7586b22c43ba1d81dcc826"
+  integrity sha512-LsNcP1ywcTg/AZ4Yk8rxavd+nBsUWzOLOCCWx2iOWv4Myo4dqsyKcxzefsNjDevIRdgg+0ERD+EYkVl3HgtoDA==
   dependencies:
     datatables.net-bs "^2"
-    datatables.net-responsive "3.0.3"
+    datatables.net-responsive "3.0.4"
     jquery ">=1.7"
 
-datatables.net-responsive@3.0.3:
-  version "3.0.3"
-  resolved "https://registry.yarnpkg.com/datatables.net-responsive/-/datatables.net-responsive-3.0.3.tgz#3adb8de628c01aaa84e1b3cc469286599fe6e8ed"
-  integrity sha512-/VU5U3P+l3GSdo92Mclt5YlrETNkfIZZU1MOk0aHNt0VqQOE0dORhx5Nwa8pYVsBuQBYzzyROZLru6UivEWv3Q==
+datatables.net-responsive@3.0.4:
+  version "3.0.4"
+  resolved "https://registry.yarnpkg.com/datatables.net-responsive/-/datatables.net-responsive-3.0.4.tgz#9e8d354f3b4016b60fe0aa588094ef0b31e9c61b"
+  integrity sha512-d1JKaWPRp81xydZrTDqrzGTloXthDtyvwbqiSKYUhDBKWTL4wN5IW5WYr4OBPwu21Ctpi/QgOl7mt9MfyF8KxA==
   dependencies:
     datatables.net "^2"
     jquery ">=1.7"
 
-datatables.net@2.2.2:
+datatables.net@2.2.2, datatables.net@^2:
   version "2.2.2"
   resolved "https://registry.yarnpkg.com/datatables.net/-/datatables.net-2.2.2.tgz#de45c9ef18775499481ffdae81a8de6a10d264a0"
   integrity sha512-gfODIKE3gpgbVeZy2QGj2Dq9roO6hy00S+k1knklrqlMyAMrh1wt0Q6ryBUM7gU96U77ysbq8dYhxFdmcC/oPQ==
-  dependencies:
-    jquery ">=1.7"
-
-datatables.net@^2:
-  version "2.1.8"
-  resolved "https://registry.yarnpkg.com/datatables.net/-/datatables.net-2.1.8.tgz#9b020f18e927cc924d72411f62dc595cc688669b"
-  integrity sha512-47ULt+U4bcjbuGTpTlT6SnCuSFVRBxxdWa6X3NfvTObBJ2BZU0o+JUIl05wQ6cABNIavjbAV51gpgvFsMHL9zA==
   dependencies:
     jquery ">=1.7"
 
